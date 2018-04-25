@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!--import [lodash]-->
+    <!--import [app-main-header]-->
+</head>
+<body>
+
+<test-fixture id="app-main-header-fixture">
+    <template>
+        <app-main-header></app-main-header>
+    </template>
+</test-fixture>
+
+<script>
+    describe('<app-main-header>', function () {
+        let myEl;
+
+        beforeEach(function () {
+            myEl = fixture('app-main-header-fixture');
+        });
+
+        describe('method openDrawer()', function () {
+            it('fires "drawer" event', function () {
+                let spy = sinon.spy(myEl, 'fire');
+
+                assert.isFalse(spy.called);
+                myEl.openDrawer();
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly('drawer'));
+            });
+        });
+
+        describe('method _refresh_page(event)', function () {
+            let event = {stopImmediatePropagation: function () {}};
+
+            it('stops event propagation', function () {
+                let spy = sinon.spy(event, 'stopImmediatePropagation');
+
+                assert.isFalse(spy.called);
+                myEl._refresh_page(event);
+                assert.isTrue(spy.calledOnce);
+            });
+
+            it('calls refresh() method of <etools-page-refresh> element', function () {
+                let spy = sinon.spy(myEl.$.refresh, 'refresh');
+
+                assert.isFalse(spy.called);
+                myEl._refresh_page(event);
+                assert.isTrue(spy.calledOnce);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

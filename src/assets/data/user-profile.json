@@ -1,0 +1,67 @@
+{
+  "id": 3739,
+  "profile": {
+    "office": "Tyre",
+    "section": "Operations",
+    "country_name": "Lebanon",
+    "countries_available": [
+      {
+        "id": 9,
+        "name": "Lebanon",
+        "business_area_code": "780"
+      },
+      {
+        "id": 6,
+        "name": "Nepal",
+        "business_area_code": "777"
+      },
+      {
+        "id": 2,
+        "name": "UAT",
+        "business_area_code": "780"
+      }
+    ],
+    "guid": null,
+    "partner_staff_member": null,
+    "job_title": "",
+    "phone_number": "",
+    "staff_id": null,
+    "org_unit_code": "",
+    "org_unit_name": "",
+    "post_number": "",
+    "post_title": "",
+    "vendor_number": null,
+    "section_code": "",
+    "country": 9,
+    "country_override": 9,
+    "supervisor": null,
+    "oic": null
+  },
+  "full_name": "Mr Smith",
+  "t2f": {
+    "roles": [
+      "Anyone"
+    ],
+    "travel_count": 0,
+    "business_area": null
+  },
+  "last_login": "2018-04-19T11:03:54.482821Z",
+  "is_superuser": true,
+  "username": "admin",
+  "first_name": "Mr",
+  "last_name": "Smith",
+  "email": "admin@razortheory.com",
+  "is_staff": true,
+  "is_active": true,
+  "date_joined": "2017-06-26T12:20:29Z",
+  "groups": [
+    {
+      "id": 47,
+      "name": "UNICEF Audit Focal Point"
+    },
+    {
+      "id": 48,
+      "name": "PME"
+    }
+  ]
+}

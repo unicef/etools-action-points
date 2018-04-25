@@ -1,0 +1,43 @@
+<!--import [polymer]-->
+<!--import [shared-styles, page-layout-styles, etools-app-config]-->
+
+<dom-module id="not-found-page-view">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            a.link {
+                color: #40c4ff;
+            }
+        </style>
+        <style include="page-layout-styles shared-styles"></style>
+
+        <div id="pageContent">
+            <paper-material elevation="1">
+                404 <a href$="[[getLink()]]" class="link">Head back home.</a>
+            </paper-material>
+        </div>
+    </template>
+
+    <script>
+        'use strict';
+
+        Polymer({
+            is: 'not-found-page-view',
+
+            behaviors: [
+                etoolsAppConfig.globals
+            ],
+
+            getLink: function() {
+                return this.getAbsolutePath('action-points');
+            },
+
+            openDrawer: function() {
+                this.fire('drawer');
+            }
+        });
+    </script>
+</dom-module>

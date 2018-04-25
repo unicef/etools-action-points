@@ -1,0 +1,118 @@
+<!--import [polymer, iron-collapse, iron-icon, paper-tooltip]-->
+<!--import [module-styles]-->
+
+<dom-module id="side-bar-item">
+    <template>
+        <style include="module-styles">
+            :host {
+                display: block;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            :host([hidden]) {
+                display: none;
+            }
+
+            :host([nested-nav]) iron-collapse {
+                display: block;
+            }
+
+            :host(.iron-selected) #main {
+                background-color: #eeeeee;
+            }
+
+            :host(.iron-selected) #main:active {
+                background-color: #eeeeee;
+            }
+
+            :host(.iron-selected:not([nested-nav])) #main > * {
+                color: #4c6f80;
+            }
+
+            :host(.lighter-item:not([nested-nav])) #main > * {
+                color: var(--dark-secondary-text-color);
+            }
+
+            #main {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+
+                position: relative;
+                height: 48px;
+                cursor: pointer;
+                text-decoration: none;
+                text-transform: capitalize;
+            }
+
+            #main:active {
+                background-color: var(--dark-hover-color);
+            }
+
+            iron-icon {
+                margin: 0 22px;
+                color: var(--dark-icon-color);
+                min-width: 26px;
+                min-height: 26px;
+            }
+
+            #name { color: var(--dark-primary-text-color); }
+
+            iron-collapse {
+                display: none;
+            }
+
+            .content-wrapper {
+                padding-top: 8px;
+                padding-bottom: 24px;
+                font-weight: 400;
+                text-transform: capitalize;
+                color: var(--dark-secondary-text-color);
+            }
+
+            .content-wrapper ::content a {
+                display: block;
+                white-space: nowrap;
+                padding: 8px 24px 8px 72px;
+            }
+
+            paper-tooltip {
+                white-space: nowrap;
+            }
+        </style>
+
+        <a id="main" target$="[[_setTarget(external)]]" href$="[[sideBarLink]]" on-tap="_handleMainTap">
+            <iron-icon icon="{{icon}}"></iron-icon>
+            <div id="name">[[name]]</div>
+        </a>
+        <paper-tooltip position="right" offset="-10">[[name]]</paper-tooltip>
+
+        <iron-collapse id="collapse" opened="{{opened}}">
+            <div class="content-wrapper">
+                <content></content>
+            </div>
+        </iron-collapse>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'side-bar-item',
+
+            properties: {
+                external: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+
+            _handleMainTap: function() {
+                this.fire('selected');
+            },
+
+            _setTarget: function() {
+                if (this.external) { return '_blank'; }
+                return '_self'
+            }
+        });
+    </script>
+</dom-module>

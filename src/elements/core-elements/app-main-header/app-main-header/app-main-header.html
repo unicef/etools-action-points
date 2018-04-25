@@ -1,0 +1,152 @@
+<!--import [polymer, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh]-->
+<!--import [etools-app-config, etools-app-selector, countries-dropdown, user-dropdown, shared-styles, app-icons]-->
+
+<dom-module id="app-main-header">
+    <template>
+        <style include="shared-styles">
+            app-toolbar {
+                background-color: #233944;
+                padding: 0 8px 0 0;
+            }
+
+            div[main-title] {
+                position: relative;
+                bottom: 1px;
+                margin-left: 24px;
+                min-height: 30px;
+                background: url('../../../images/etools_logo_icon.png') no-repeat center left;
+                background-size: auto 48px;
+                padding-left: 48px;
+                font-size: 30px;
+                color: var(--light-primary-text-color);
+            }
+
+            etools-page-refresh {
+                color: #BCC1C6;
+            }
+
+            .right-side {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+            }
+
+            etools-page-refresh {
+                margin-left: 8px;
+            }
+
+            .titlebar {
+                flex: 1;
+                font-size: 28px;
+                font-weight: 300;
+                color: var(--light-primary-text-color);
+            }
+
+            .titlebar img {
+                height: auto;
+                width: auto;
+                max-width: 130px;
+                max-height: 36px;
+                margin: 0 8px 0 24px;
+            }
+
+            .content-align {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+            }
+
+            @media (min-width: 851px) {
+                div[main-title] {
+                    margin-left: 32px;
+                }
+            }
+        </style>
+
+        <app-toolbar sticky class="content-align">
+            <div class="titlebar content-align">
+                <etools-app-selector hidden$="[[!user.is_staff]]" menu-options="[[menuOptions]]"></etools-app-selector>
+
+                <img src$="[[getAbsolutePath('images/etools_logo.svg')]]">
+            </div>
+
+            <div class="content-align">
+                <countries-dropdown
+                        countries="[[user.profile.countries_available]]"
+                        country-id="[[user.profile.country]]">
+                </countries-dropdown>
+
+                <user-dropdown is-admin="[[user.is_superuser]]"></user-dropdown>
+
+                <etools-page-refresh id="refresh"></etools-page-refresh>
+            </div>
+        </app-toolbar>
+    </template>
+
+    <script>
+        (function () {
+            Polymer({
+                is: 'app-main-header',
+
+                behaviors: [
+                    etoolsAppConfig.globals
+                ],
+
+                properties: {
+                    user: {
+                        type: Object
+                    },
+                    menuOptions: {
+                        type: Array,
+                        value: function () {
+                            return [
+                                {
+                                    title: 'Dashboards',
+                                    icon: 'app-selector-icons:dashIcon',
+                                    url: 'dash'
+                                },
+                                {
+                                    title: 'Partnership Management',
+                                    icon: 'app-selector-icons:pmpIcon',
+                                    url: 'pmp'
+                                },
+                                {
+                                    title: 'Trip Management',
+                                    icon: 'app-selector-icons:tripsIcon',
+                                    url: 't2f'
+                                },
+                                {
+                                    title: 'Financial Assurance Module',
+                                    icon: 'app-icons:auditor',
+                                    url: 'ap'
+                                },
+                                {
+                                    title: 'Action Points',
+                                    icon: 'app-icons:auditor',
+                                    url: 'apd'
+                                },
+                                {
+                                    title: 'Admin (Permission Required)',
+                                    icon: 'app-selector-icons:adminIcon',
+                                    url: 'admin'
+                                }
+
+                            ];
+                        }
+                    }
+                },
+
+                listeners: {
+                    'main_refresh': '_refresh_page'
+                },
+
+                openDrawer: function () {
+                    this.fire('drawer');
+                },
+
+                _refresh_page: function (event) {
+                    event.stopImmediatePropagation();
+                    this.$.refresh.refresh();
+                },
+            });
+        })();
+    </script>
+</dom-module>

@@ -1,0 +1,59 @@
+<!--import [polymer, etools-ajax, lodash]-->
+<!--import [permission-controller, user-controller]-->
+
+<dom-module id="user-data">
+    <template>
+        <etools-ajax
+                endpoint="[[endpoint]]"
+                caching-storage="custom"
+                dexie-db-collection="profile"
+                on-success="_handleResponse"
+                on-forbidden="_forbidden"
+                on-fail="_handleError">
+        </etools-ajax>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'user-data',
+
+            behaviors: [
+                etoolsAppConfig.globals,
+                APBehaviors.PermissionController,
+                APBehaviors.UserController,
+            ],
+
+            properties: {},
+
+            ready: function () {
+                this.endpoint = this.getEndpoint('userProfile');
+            },
+
+            _handleResponse: function (data) {
+                let user = data.detail;
+                let lastUserId = JSON.parse(localStorage.getItem('userId'));
+                let countriesAvailable = _.get(user, 'profile.countries_available') || [];
+
+                countriesAvailable = _.sortBy(countriesAvailable, ['name']);
+                _.set(user, 'profile.countries_available', countriesAvailable);
+
+                if (!lastUserId || lastUserId !== user.id) {
+                    this.resetOldUserData();
+                }
+
+                localStorage.setItem('userId', user.id);
+
+                this._setUserData(user);
+                this.fire('user-profile-loaded');
+            },
+
+            _handleError: function (rsp, err) {
+                console.error('Can\'t load user data');
+            },
+
+            _forbidden: function() {
+                window.location.href = window.location.origin + '/';
+            }
+        });
+    </script>
+</dom-module>

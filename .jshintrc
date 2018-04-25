@@ -1,0 +1,28 @@
+{
+  "maxdepth": 3,
+  "node": true,
+  "browser": true,
+  "esnext": true,
+  "camelcase": false,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": true,
+  "noarg": true,
+  "quotmark": "single",
+  "undef": true,
+  "unused": true,
+  "newcap": false,
+  "laxbreak": true,
+  "globals": {
+    "Polymer": true,
+    "_": true,
+    "Dexie": true,
+    "etoolsAppConfig": true,
+    "etoolsAjaxDefaultDexieDbPrefix": true,
+    "DynamicCustomStyleBehavior": true,
+    "APBehaviors": true,
+    "etoolsBehaviors": true,
+    "moment": true
+  }
+}

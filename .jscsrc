@@ -1,0 +1,8 @@
+{
+  "preset": "google",
+  "disallowMultipleVarDecl": null,
+  "disallowSpacesInAnonymousFunctionExpression": null,
+  "maximumLineLength": null,
+  "validateIndentation": 4,
+  "requireCamelCaseOrUpperCaseIdentifiers": {"ignoreProperties": true}
+}

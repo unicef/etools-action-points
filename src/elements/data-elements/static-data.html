@@ -1,0 +1,51 @@
+<!--import [polymer, etools-ajax, lodash]-->
+<!--import [static-data-behavior, permission-controller, user-controller, user-data]-->
+
+<dom-module id="static-data">
+    <template>
+        <user-data></user-data>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            let dataLoaded = {};
+
+            Polymer({
+                is: 'static-data',
+
+                behaviors: [
+                    etoolsAppConfig.globals,
+                    APBehaviors.StaticDataController,
+                    APBehaviors.PermissionController,
+                    APBehaviors.UserController,
+                ],
+
+                properties: {},
+
+                listeners: {
+                    'user-profile-loaded': 'loadStaticData'
+                },
+
+                loadStaticData: function () {
+                    this._allDataLoaded();
+                },
+
+                _allDataLoaded: function() {
+                    this.fire('static-data-loaded');
+                },
+
+                _triggerGlobalEvent: function(eventName, data) {
+                    let detail = {detail: data};
+                    let event = new CustomEvent(eventName, detail);
+                    document.dispatchEvent(event);
+                },
+
+                _responseError: function(message, type, eventType = 'error') {
+                    console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
+                }
+            });
+        })();
+    </script>
+</dom-module>
