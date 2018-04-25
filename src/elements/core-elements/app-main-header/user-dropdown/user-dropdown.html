@@ -1,4 +1,4 @@
-<!--import [paper-menu-button, paper-button, iron-icon, paper-menu, paper-item]-->
+<!--import [paper-menu-button, paper-button, iron-icon, paper-listbox, paper-item]-->
 <!--import [etools-app-config]-->
 
 <dom-module id="user-dropdown">
@@ -10,19 +10,19 @@
                 vertical-offset="56"
                 horizontal-align="right">
 
-            <paper-button class="dropdown-trigger" on-tap="_toggleOpened">
+            <paper-icon-button icon="menu" slot="dropdown-trigger" class="dropdown-trigger" on-tap="_toggleOpened">
                 <iron-icon icon="social:person"></iron-icon>
 
                 <iron-icon class="arrow-down" icon="icons:arrow-drop-down"></iron-icon>
                 <iron-icon class="arrow-up" icon="icons:arrow-drop-up"></iron-icon>
-            </paper-button>
+            </paper-icon-button>
 
-            <paper-menu id="dropdownMenu" class="dropdown-content no-focus">
+            <paper-listbox slot="dropdown-content" id="dropdownMenu" class="dropdown-content no-focus">
                 <paper-item on-tap="_logout">
                     <iron-icon icon="icons:power-settings-new"></iron-icon>
                     Sign out
                 </paper-item>
-            </paper-menu>
+            </paper-listbox>
         </paper-menu-button>
     </template>
 

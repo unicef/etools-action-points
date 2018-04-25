@@ -53,11 +53,11 @@ Polymer({
 
     ready: function() {
         this.baseUrl = this.basePath;
-        this.fire('global-loading', {message: 'Loading...', active: true, type: 'initialisation'});
+        this.dispatchEvent(new CustomEvent('global-loading', {message: 'Loading...', active: true, type: 'initialisation'}));
     },
 
     attached: function() {
-        if (this.initLoadingComplete && this.route.path === '/ap/') {
+        if (this.initLoadingComplete && this.route.path === '/apd/') {
             this._configPath();
         }
         this.$.drawer.$.scrim.remove();
@@ -73,8 +73,7 @@ Polymer({
             drawerWidth = '70px';
         }
 
-        this.$.drawer.customStyle['--app-drawer-width'] = drawerWidth;
-        this.$.drawer.updateStyles();
+        this.$.drawer.updateStyles({'--app-drawer-width': drawerWidth});
 
         this.$.layout.style.paddingLeft = drawerWidth;
         this.$.header.style.paddingLeft = drawerWidth;
@@ -102,7 +101,7 @@ Polymer({
     },
 
     _pageChanged: function(page) {
-        if (Polymer.isInstance(this.$[`${page}`])) { return; }
+        if (this.$[`${page}`] instanceof Polymer.Element) { return; }
         this.fire('global-loading', {message: 'Loading...', active: true, type: 'initialisation'});
 
         var resolvedPageUrl;
@@ -111,11 +110,16 @@ Polymer({
         } else {
             resolvedPageUrl = `elements/pages/${page}-page-components/${page}-page-main/${page}-page-main.html`;
         }
-        this.importHref(resolvedPageUrl, () => {
-            if (!this.initLoadingComplete) { this.initLoadingComplete = true; }
-            this.fire('global-loading', {type: 'initialisation'});
-            if (this.route.path === '/ap/') { this._configPath(); }
-        }, this._pageNotFound, true);
+        Polymer.importHref(resolvedPageUrl,
+            () => this._loadPage(),
+            (event) => this._pageNotFound(event),
+            true);
+    },
+
+    _loadPage: function() {
+        if (!this.initLoadingComplete) { this.initLoadingComplete = true; }
+        this.fire('global-loading', {type: 'initialisation'});
+        if (this.route.path === '/apd/') { this._configPath();}
     },
 
     _pageNotFound: function(event) {

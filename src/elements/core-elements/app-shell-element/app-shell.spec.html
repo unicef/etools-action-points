@@ -60,7 +60,6 @@
             it('called when property page changed', () => {
                 sinon.spy(myEl, '_pageChanged');
                 sinon.spy(myEl, 'fire');
-                Polymer.isInstance = sinon.stub().returns(false);
                 myEl.page = 'test';
                 assert.isTrue(myEl._pageChanged.called);
                 assert.isTrue(myEl.fire.called);
