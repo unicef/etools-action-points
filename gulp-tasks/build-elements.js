@@ -44,9 +44,7 @@ function buildElements(done) {
                     return data.pipe(sass().on('error', function(error) {console.log('\x1b[31m%s\x1b[0m', error.message); done()}))
                 }),
                 compileHtmlTags('script', function (tag, data) {
-                    return data.pipe(babel({
-                        presets: ['es2015']
-                    }).on('error', function(error) {console.log('\x1b[31m%s\x1b[0m', error.message); done()}));
+                    return data;
                 }),
                 through2(function(file, enc, callback){
                     file.base = path.normalize(file.base + '/..');

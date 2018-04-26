@@ -2,6 +2,7 @@
   "entrypoint": "src/index.html",
   "shell": "src/elements/core-elements/app-shell-element/app-shell.html",
   "fragments": [
+    "src/elements/pages/action-points-page-view/action-points-page-view.html",
     "src/elements/pages/not-found-page-view/not-found-page-view.html"
   ],
   "sourceGlobs": [

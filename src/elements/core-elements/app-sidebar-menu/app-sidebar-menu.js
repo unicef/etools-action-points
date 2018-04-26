@@ -1,15 +1,15 @@
-Polymer({
-    is: 'app-sidebar-menu',
+class AppSidebarMenu extends window.EtoolsMixins.AppConfig(Polymer.Element) {
+    static get is () { return 'app-sidebar-menu'; }
 
-    properties: {
-        page: String
-    },
-
-    behaviors: [
-        etoolsAppConfig.globals
-    ],
-
-    _toggleDrawer: function() {
-        this.fire('drawer-toggle-tap');
+    static get properties() {
+        return {
+            page: String
+        };
     }
-});
+
+    _toggleDrawer() {
+        this.dispatchEvent(new CustomEvent('drawer-toggle-tap'));
+    }
+}
+
+window.customElements.define(AppSidebarMenu.is, AppSidebarMenu);

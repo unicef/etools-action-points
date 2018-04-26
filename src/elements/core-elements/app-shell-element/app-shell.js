@@ -1,69 +1,77 @@
-Polymer({
-    is: 'app-shell',
+'use strict';
 
-    behaviors: [
-        etoolsBehaviors.LoadingBehavior,
-        Polymer.IronScrollTargetBehavior,
-        etoolsAppConfig.globals,
-        APBehaviors.UserController,
-    ],
+let AppShellClass = window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDBehaviors.UserController(Polymer.Element)));
 
-    properties: {
-        page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged'
-        },
-        narrow: {
-            type: Boolean,
-            reflectToAttribute: true
-        },
-        _toast: {
-            type: Object,
-            value: null
-        },
-        _toastQueue: {
-            type: Array,
-            value: function() {
-                return [];
+class AppShell extends AppShellClass {
+    static get is() { return 'app-shell'; }
+
+    static get properties() {
+        return {
+            page: {
+                type: String,
+                reflectToAttribute: true,
+                observer: '_pageChanged'
+            },
+            narrow: {
+                type: Boolean,
+                reflectToAttribute: true
+            },
+            _toast: {
+                type: Object,
+                value: null
+            },
+            _toastQueue: {
+                type: Array,
+                value: function() {
+                    return [];
+                }
+            },
+            globalLoadingQueue: {
+                type: Array,
+                value: function() {return [];}
+            },
+            user: {
+                type: Object,
+                value: function() {
+                    return {};
+                }
+            },
+            route: {
+                type: Object,
+                notify: true
+            },
+        };
+    }
+
+    static get observers() {
+        return [
+            '_routePageChanged(route.path)'
+        ];
+    }
+
+    ready() {
+        super.ready();
+        this.baseUrl = this.globals.basePath;
+        this.addEventListener('toast', this.queueToast);
+        this.addEventListener('drawer-toggle-tap', this.toggleDrawer);
+        this.addEventListener('404', this._pageNotFound);
+        this.shadowRoot.querySelector('static-data').addEventListener('static-data-loaded', (e) => {
+            if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
+            if (this.staticDataLoaded) {
+                this.user = this.getUserData();
+                this.page = this._configPath();
             }
-        },
-        globalLoadingQueue: {
-            type: Array,
-            value: function() {return [];}
-        },
-        user: {
-            type: Object,
-            value: function() {
-                return {};
-            }
-        }
-    },
+        });
+    }
 
-    observers: [
-        '_routePageChanged(route.path)'
-    ],
-
-    listeners: {
-        'toast': 'queueToast',
-        'drawer-toggle-tap': 'toggleDrawer',
-        '404': '_pageNotFound',
-        'static-data-loaded': '_initialDataLoaded',
-    },
-
-    ready: function() {
-        this.baseUrl = this.basePath;
-        this.dispatchEvent(new CustomEvent('global-loading', {message: 'Loading...', active: true, type: 'initialisation'}));
-    },
-
-    attached: function() {
-        if (this.initLoadingComplete && this.route.path === '/apd/') {
-            this._configPath();
-        }
+    connectedCallback() {
+        super.connectedCallback();
+        let eventData = {message: 'Loading...', active: true, type: 'initialisation'};
+        this.dispatchEvent(new CustomEvent('global-loading', {detail: eventData}));
         this.$.drawer.$.scrim.remove();
-    },
+    }
 
-    toggleDrawer: function() {
+    toggleDrawer() {
         let isClosed = !this.$.drawer.opened;
         let drawerWidth;
 
@@ -81,28 +89,28 @@ Polymer({
         this.$.drawer.querySelector('app-sidebar-menu').toggleClass('opened', isClosed);
         this.$.drawer.toggleClass('opened', isClosed);
         this.$.drawer.toggleAttribute('opened', isClosed);
-    },
+    }
 
-    queueToast: function(e, detail) {
+    queueToast(e, detail) {
         let notificationList = Polymer.dom(this.root).querySelector('multi-notification-list');
         if (!notificationList) { return; }
 
         if (detail && detail.reset) {
-            notificationList.fire('reset-notifications');
+            notificationList.dispatchEvent('reset-notifications');
         } else {
-            notificationList.fire('notification-push', detail);
+            notificationList.dispatchEvent('notification-push', detail);
         }
-    },
+    }
 
-    _routePageChanged: function() {
+    _routePageChanged() {
         if (!this.initLoadingComplete || !this.routeData.page) { return; }
         this.page = this.routeData.page || 'action-points';
         this.scroll(0, 0);
-    },
+    }
 
-    _pageChanged: function(page) {
+    _pageChanged(page) {
         if (this.$[`${page}`] instanceof Polymer.Element) { return; }
-        this.fire('global-loading', {message: 'Loading...', active: true, type: 'initialisation'});
+        this.dispatchEvent(new CustomEvent('global-loading', {detail: {message: 'Loading...', active: true, type: 'initialisation'}}));
 
         var resolvedPageUrl;
         if (page === 'not-found') {
@@ -114,33 +122,31 @@ Polymer({
             () => this._loadPage(),
             (event) => this._pageNotFound(event),
             true);
-    },
+    }
 
-    _loadPage: function() {
+    _loadPage() {
         if (!this.initLoadingComplete) { this.initLoadingComplete = true; }
-        this.fire('global-loading', {type: 'initialisation'});
+        this.dispatchEvent(new CustomEvent('global-loading', {detail: {type: 'initialisation'}}));
         if (this.route.path === '/apd/') { this._configPath();}
-    },
+    }
 
-    _pageNotFound: function(event) {
+    _pageNotFound(event) {
         this.page = 'not-found';
         let message = event && event.detail && event.detail.message ?
             `${event.detail.message}` :
             'Oops you hit a 404!';
 
-        this.fire('toast', {text: message});
-        this.fire('global-loading', {type: 'initialisation'});
-    },
+        this.dispatchEvent(new CustomEvent('toast', {detail: {text: message}}));
+        this.dispatchEvent(new CustomEvent('global-loading', {detail: {type: 'initialisation'}}));
+    }
 
-    _initialDataLoaded: function(e) {
-        if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
-        if (this.routeData && this.staticDataLoaded) {
-            this.user = this.getUserData();
-            this.page = this.routeData.page || this._configPath();
-        }
-    },
+    _configPath() {
+        let path = `${this.baseUrl}action-points`;
+        this.set('route.path', path);
+        return 'action-points';
+    }
 
-    handleLoading: function(event) {
+    handleLoading(event) {
         if (!event.detail || !event.detail.type) {
             console.error('Bad details object', JSON.stringify(event.detail));
             return;
@@ -159,11 +165,7 @@ Polymer({
                 this.handleLoading(this.globalLoadingQueue.shift());
             }
         }
-    },
-
-    _configPath: function() {
-        let path = `${this.basePath}action-points`;
-        this.set('route.path', path);
-        return 'action-points';
     }
-});
+}
+
+window.customElements.define(AppShell.is, AppShell);

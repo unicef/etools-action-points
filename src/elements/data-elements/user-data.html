@@ -1,4 +1,4 @@
-<!--import [polymer, etools-ajax, lodash]-->
+<!--import [polymer/polymer-element, etools-ajax, lodash]-->
 <!--import [permission-controller, user-controller]-->
 
 <dom-module id="user-data">
@@ -14,22 +14,17 @@
     </template>
 
     <script>
-        Polymer({
-            is: 'user-data',
+        class UserData extends window.EtoolsMixins.AppConfig(APDBehaviors.UserController(APDBehaviors.PermissionController(Polymer.Element))) {
+            static get is() { return 'user-data'; }
 
-            behaviors: [
-                etoolsAppConfig.globals,
-                APBehaviors.PermissionController,
-                APBehaviors.UserController,
-            ],
+            static get properties() { return {}; }
 
-            properties: {},
-
-            ready: function () {
+            ready() {
+                super.ready();
                 this.endpoint = this.getEndpoint('userProfile');
-            },
+            }
 
-            _handleResponse: function (data) {
+            _handleResponse(data) {
                 let user = data.detail;
                 let lastUserId = JSON.parse(localStorage.getItem('userId'));
                 let countriesAvailable = _.get(user, 'profile.countries_available') || [];
@@ -44,16 +39,18 @@
                 localStorage.setItem('userId', user.id);
 
                 this._setUserData(user);
-                this.fire('user-profile-loaded');
-            },
+                this.dispatchEvent(new CustomEvent('user-profile-loaded', { bubbles: true }));
+            }
 
-            _handleError: function (rsp, err) {
+            _handleError(rsp, err) {
                 console.error('Can\'t load user data');
-            },
+            }
 
-            _forbidden: function() {
+            _forbidden() {
                 window.location.href = window.location.origin + '/';
             }
-        });
+        }
+
+        window.customElements.define(UserData.is, UserData);
     </script>
 </dom-module>

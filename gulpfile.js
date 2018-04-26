@@ -22,7 +22,7 @@ const runTests = require('./gulp-tasks/test');
 const jsLinter = require('./gulp-tasks/js-linter');
 
 global.config = {
-  appName: 'etoolsTpm',
+  appName: 'etoolsApd',
   polymerJsonPath: path.join(process.cwd(), 'polymer.json'),
   build: {
     rootDirectory: 'build',

@@ -1,4 +1,4 @@
-<!--import [polymer, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh]-->
+<!--import [polymer/polymer-element, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh]-->
 <!--import [etools-app-config, etools-app-selector, countries-dropdown, user-dropdown, shared-styles, app-icons]-->
 
 <dom-module id="app-main-header">
@@ -82,15 +82,11 @@
     </template>
 
     <script>
-        (function () {
-            Polymer({
-                is: 'app-main-header',
+        class AppMainHeader extends window.EtoolsMixins.AppConfig(Polymer.Element) {
+            static get is() { return 'app-main-header'; }
 
-                behaviors: [
-                    etoolsAppConfig.globals
-                ],
-
-                properties: {
+            static get properties() {
+                return {
                     user: {
                         type: Object
                     },
@@ -132,21 +128,24 @@
                             ];
                         }
                     }
-                },
+                };
+            }
 
-                listeners: {
-                    'main_refresh': '_refresh_page'
-                },
+            connectedCallback() {
+                super.connectedCallback();
+                this.addEventListener('main_refresh', this._refresh_page)
+            }
 
-                openDrawer: function () {
-                    this.fire('drawer');
-                },
+            openDrawer() {
+                this.fire('drawer');
+            }
 
-                _refresh_page: function (event) {
-                    event.stopImmediatePropagation();
-                    this.$.refresh.refresh();
-                },
-            });
-        })();
+            _refresh_page(event) {
+                event.stopImmediatePropagation();
+                this.$.refresh.refresh();
+            }
+        }
+
+        window.customElements.define(AppMainHeader.is, AppMainHeader)
     </script>
 </dom-module>

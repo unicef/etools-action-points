@@ -2,36 +2,36 @@
 
 <script>
     'use strict';
-    (function () {
-        var _user, _groups;
 
-        window.APBehaviors = window.APBehaviors || {};
-        window.APBehaviors.UserController = {
-            _setUserData: function(user) {
-                if (_user) { throw 'User already exists!'; }
+    let _user;
+    let _groups;
 
-                if (!user || !_.isObject(user) || _.isArray(user)) { throw 'User must be an object'; }
-                if (!user.id || !user.groups) { throw 'User must have id and groups fields!'; }
+    window.APDBehaviors = window.APDBehaviors || {};
+    window.APDBehaviors.UserController = (superClass) => class extends superClass {
+        _setUserData(user) {
+            if (_user) { throw 'User already exists!'; }
 
-                _user = _.cloneDeep(user);
-                this._setGroups(user);
-            },
+            if (!user || !_.isObject(user) || _.isArray(user)) { throw 'User must be an object'; }
+            if (!user.id || !user.groups) { throw 'User must have id and groups fields!'; }
 
-            _setGroups: function(user) {
-                if (!user.groups.length) { throw 'Can not find user group!'; }
-                _groups = user.groups.map((group) => {
-                    return group.name;
-                });
-            },
+            _user = _.cloneDeep(user);
+            this._setGroups(user);
+        }
 
-            getUserData: function() {
-                return _.cloneDeep(_user);
-            },
+        _setGroups(user) {
+            if (!user.groups.length) { throw 'Can not find user group!'; }
+            _groups = user.groups.map((group) => {
+                return group.name;
+            });
+        }
 
-            isAuditor: function() {
-                if (!_groups) { throw 'User data is missing or incorrect'; }
-                return !!~_groups.indexOf('Auditor');
-            }
-        };
-    })()
+        getUserData() {
+            return _.cloneDeep(_user);
+        }
+
+        isAuditor() {
+            if (!_groups) { throw 'User data is missing or incorrect'; }
+            return !!~_groups.indexOf('Auditor');
+        }
+    }
 </script>

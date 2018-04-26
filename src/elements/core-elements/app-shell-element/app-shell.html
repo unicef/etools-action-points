@@ -1,5 +1,5 @@
-<!--import [polymer, app-route/app-location, app-route, app-layout, paper-icon-button, paper-material, iron-selector,
-            iron-pages, iron-collapse, iron-icons, iron-icons/social-icons, iron-icons/av-icons]-->
+<!--import [polymer/polymer-element, app-route/app-location, app-route, app-layout, paper-icon-button, paper-material, iron-selector,
+            iron-pages, iron-collapse, iron-icons, iron-icons/social-icons, iron-icons/av-icons, etools-loading/etools-loading-mixin]-->
 
 <!--import [app-main-header, app-sidebar-menu, multi-notification-list, permission-controller, etools-app-config,
             user-controller, countries-data, side-bar-item, countries-dropdown, static-data, shared-styles,
@@ -29,12 +29,12 @@
 
         <app-drawer-layout id="layout" opened-when-narrow force-narrow narrow="{{narrow}}">
             <!-- Drawer content -->
-            <app-drawer id="drawer" transition-duration="350" disable-swipe opened>
+            <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe opened>
                 <app-sidebar-menu class="opened" page="[[page]]"></app-sidebar-menu>
             </app-drawer>
 
             <!-- Main content -->
-            <app-header id="header" fixed shadow>
+            <app-header slot="header" id="header" fixed shadow>
                 <app-main-header user="[[user]]"></app-main-header>
             </app-header>
 
@@ -44,7 +44,7 @@
                     attr-for-selected="name"
                     fallback-selection="not-found"
                     role="main">
-
+                <action-points-page-main name="action-points" id="action-points" route="actionPointsSubroute"></action-points-page-main>
                 <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
 

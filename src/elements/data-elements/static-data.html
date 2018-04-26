@@ -1,5 +1,5 @@
-<!--import [polymer, etools-ajax, lodash]-->
-<!--import [static-data-behavior, permission-controller, user-controller, user-data]-->
+<!--import [polymer/polymer-element, etools-ajax, lodash]-->
+<!--import [static-data-mixin, permission-controller, user-controller, user-data]-->
 
 <dom-module id="static-data">
     <template>
@@ -7,45 +7,36 @@
     </template>
 
     <script>
-        (function() {
-            'use strict';
 
-            let dataLoaded = {};
+        let dataLoaded = {};
+        class StaticData extends APDBehaviors.StaticDataMixin(APDBehaviors.PermissionController(APDBehaviors.UserController(Polymer.Element))) {
+            static get is() { return 'static-data'; }
 
-            Polymer({
-                is: 'static-data',
+            ready() {
+                super.ready();
+                this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
+                    this.loadStaticData();
+                })
+            }
 
-                behaviors: [
-                    etoolsAppConfig.globals,
-                    APBehaviors.StaticDataController,
-                    APBehaviors.PermissionController,
-                    APBehaviors.UserController,
-                ],
+            loadStaticData() {
+                this._allDataLoaded();
+            }
+            _allDataLoaded() {
+                this.dispatchEvent(new CustomEvent('static-data-loaded'));
+            }
 
-                properties: {},
+            _triggerGlobalEvent(eventName, data) {
+                let detail = {detail: data};
+                let event = new CustomEvent(eventName, detail);
+                document.dispatchEvent(event);
+            }
 
-                listeners: {
-                    'user-profile-loaded': 'loadStaticData'
-                },
+            _responseError(message, type, eventType = 'error') {
+                console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
+            }
+        }
 
-                loadStaticData: function () {
-                    this._allDataLoaded();
-                },
-
-                _allDataLoaded: function() {
-                    this.fire('static-data-loaded');
-                },
-
-                _triggerGlobalEvent: function(eventName, data) {
-                    let detail = {detail: data};
-                    let event = new CustomEvent(eventName, detail);
-                    document.dispatchEvent(event);
-                },
-
-                _responseError: function(message, type, eventType = 'error') {
-                    console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
-                }
-            });
-        })();
+        window.customElements.define(StaticData.is, StaticData);
     </script>
 </dom-module>

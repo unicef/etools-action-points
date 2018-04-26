@@ -1,67 +1,75 @@
 <!--
 App global configuration
 -->
-<!--import [polymer, etools-dexiejs, lodash]-->
+<!--import [polymer/polymer-element, etools-dexiejs, lodash]-->
 
 <script>
     'use strict';
 
-    var etoolsCustomDexieDb = new Dexie('APD');
+    window.EtoolsMixins = window.EtoolsMixins || {};
+    /**
+     * @polymer
+     * @mixinFunction
+     */
+    EtoolsMixins.AppConfig = Polymer.dedupingMixin(baseClass => class extends baseClass {
+        constructor() {
+            super();
 
-    etoolsCustomDexieDb.version(1).stores({
-        collectionsList: '&name, expire',
-    });
+            this.etoolsCustomDexieDb = new Dexie('APD');
 
-    var etoolsAppConfig = {
-        // app endpoints
-        endpoints: {
-            userProfile: {
-                url: '/users/api/profile/'
-            },
-            changeCountry: {
-                url: '/users/api/changecountry/'
-            }
-        },
+            this.etoolsCustomDexieDb.version(1).stores({
+                collectionsList: '&name, expire',
+            });
 
-        localEndpoints: {
-            userProfile: {
-                url: '/data/user-profile.json'
-            },
-            actionPotins: {
-                url: '/data/action-points.json'
-            }
-        },
-
-        globals: {
-            // globals
-            baseSite: window.location.origin,
-            basePath: (window.location.port === '8080') ? '/' : '/apd/',
-            serverBackend: (window.location.port !== '8080'),
-            epsPath: (window.location.port !== '8080') ? 'endpoints' : 'localEndpoints',
-
-            // dexie js
-            appDexieDb: etoolsCustomDexieDb,
-
-            getEndpoint: function (endpointName, data) {
-                var endpoint = etoolsAppConfig[etoolsAppConfig.globals.epsPath][endpointName];
-                if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
-                    endpoint.url = this.baseSite + _.template(endpoint.template)(data);
+            this.endpoints = {
+                userProfile: {
+                    url: '/users/api/profile/'
+                },
+                changeCountry: {
+                    url: '/users/api/changecountry/'
                 }
-                return _.clone(endpoint);
-            },
+            };
 
-            resetOldUserData: function() {
-                console.log('resetOldUserData()');
+            this.localEndpoints = {
+                userProfile: {
+                    url: '/data/user-profile.json'
+                },
+                actionPotins: {
+                    url: '/data/action-points.json'
+                }
+            };
 
-                localStorage.removeItem('userId');
+            this.globals = {
+                // globals
+                baseSite: window.location.origin,
+                basePath: (window.location.port === '8080') ? '/' : '/apd/',
+                serverBackend: (window.location.port !== '8080'),
+                epsPath: (window.location.port !== '8080') ? 'endpoints' : 'localEndpoints',
 
-                etoolsCustomDexieDb.collectionsList.clear();
-            },
-
-            getAbsolutePath: function(path) {
-                path = path || '';
-                return this.basePath + path;
+                // dexie js
+                appDexieDb: this.etoolsCustomDexieDb,
             }
         }
-    };
+
+        getEndpoint(endpointName, data) {
+            let endpoint = this[this.globals.epsPath][endpointName];
+            if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
+                endpoint.url = this.baseSite + _.template(endpoint.template)(data);
+            }
+            return _.clone(endpoint);
+        }
+
+        resetOldUserData() {
+            console.log('resetOldUserData()');
+
+            localStorage.removeItem('userId');
+
+            this.etoolsCustomDexieDb.collectionsList.clear();
+        }
+
+        getAbsolutePath(path) {
+            path = path || '';
+            return this.globals.basePath + path;
+        }
+    });
 </script>

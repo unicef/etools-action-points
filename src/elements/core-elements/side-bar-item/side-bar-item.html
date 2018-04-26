@@ -1,4 +1,4 @@
-<!--import [polymer, iron-collapse, iron-icon, paper-tooltip]-->
+<!--import [polymer/polymer-element, iron-collapse, iron-icon, paper-tooltip]-->
 <!--import [module-styles]-->
 
 <dom-module id="side-bar-item">
@@ -89,7 +89,7 @@
 
         <iron-collapse id="collapse" opened="{{opened}}">
             <div class="content-wrapper">
-                <content></content>
+                <slot></slot>
             </div>
         </iron-collapse>
     </template>
