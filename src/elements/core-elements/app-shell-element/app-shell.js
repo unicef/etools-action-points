@@ -52,8 +52,8 @@ class AppShell extends AppShellClass {
     ready() {
         super.ready();
         this.baseUrl = this.globals.basePath;
-        this.addEventListener('toast', this.queueToast);
-        this.addEventListener('drawer-toggle-tap', this.toggleDrawer);
+        this.addEventListener('toast', (e, detail) => this.queueToast(e, detail));
+        this.$.drawer.querySelector('app-sidebar-menu').addEventListener('drawer-toggle-tap', (e) => this.toggleDrawer(e));
         this.addEventListener('404', this._pageNotFound);
         this.shadowRoot.querySelector('static-data').addEventListener('static-data-loaded', (e) => {
             if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
@@ -86,7 +86,7 @@ class AppShell extends AppShellClass {
         this.$.layout.style.paddingLeft = drawerWidth;
         this.$.header.style.paddingLeft = drawerWidth;
 
-        this.$.drawer.querySelector('app-sidebar-menu').toggleClass('opened', isClosed);
+        this.$.drawer.querySelector('app-sidebar-menu').classList.toggle('opened', isClosed);
         this.$.drawer.toggleClass('opened', isClosed);
         this.$.drawer.toggleAttribute('opened', isClosed);
     }

@@ -34,9 +34,11 @@
             </app-drawer>
 
             <!-- Main content -->
-            <app-header slot="header" id="header" fixed shadow>
-                <app-main-header user="[[user]]"></app-main-header>
-            </app-header>
+            <app-header-layout>
+                <app-header slot="header" id="header" fixed shadow>
+                    <app-main-header user="[[user]]"></app-main-header>
+                </app-header>
+            </app-header-layout>
 
             <iron-pages
                     id="pages"

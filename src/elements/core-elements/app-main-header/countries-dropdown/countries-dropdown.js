@@ -27,8 +27,8 @@ class CountriesDropdown extends window.EtoolsMixins.AppConfig(Polymer.Element) {
         ];
     }
 
-    connectCallback() {
-        super.connectCallback();
+    connectedCallback() {
+        super.connectedCallback();
         this.addEventListener('paper-dropdown-close', this._toggleOpened);
         this.addEventListener('paper-dropdown-open', this._toggleOpened);
     }

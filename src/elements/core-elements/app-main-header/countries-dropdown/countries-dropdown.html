@@ -19,20 +19,20 @@
                 id="dropdown" vertical-align="top"
                 vertical-offset="56"
                 horizontal-align="right">
-            <paper-button class="dropdown-trigger" on-tap="_toggleOpened">
+            <paper-button slot="dropdown-trigger">
                 <span class="dropdown-text">[[country.name]]</span>
 
                 <iron-icon class="arrow-down" icon="icons:arrow-drop-down"></iron-icon>
                 <iron-icon class="arrow-up" icon="icons:arrow-drop-up"></iron-icon>
             </paper-button>
 
-            <paper-menu class="dropdown-content" selected="[[countryIndex]]" on-iron-select="_countrySelected">
+            <paper-listbox slot="dropdown-content" selected="[[countryIndex]]" on-iron-select="_countrySelected">
                 <template id="repeat" is="dom-repeat" items="[[countries]]">
                     <paper-item on-tap="_changeCountry">
                         [[item.name]]
                     </paper-item>
                 </template>
-            </paper-menu>
+            </paper-listbox>
         </paper-menu-button>
     </template>
 

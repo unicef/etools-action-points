@@ -16,8 +16,8 @@ class MultiNotificationItem extends Polymer.Element {
         };
     }
 
-    connectCallback() {
-        super.connectCallback();
+    connectedCallback() {
+        super.connectedCallback();
         this.addEventListener('transitionend', this._onTransitionEnd);
     }
 

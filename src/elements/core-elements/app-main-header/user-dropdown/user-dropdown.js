@@ -15,10 +15,10 @@ class UserDropdown extends window.EtoolsMixins.AppConfig(Polymer.Element) {
         };
     }
 
-    connectCallback() {
-        super.connectCallback();
-        this.addEventListener('paper-dropdown-close', this._toggleOpened);
-        this.addEventListener('paper-dropdown-open', this._toggleOpened);
+    connectedCallback() {
+        super.connectedCallback();
+        this.$.dropdown.addEventListener('paper-dropdown-close', (e) => this._toggleOpened(e));
+        this.$.dropdown.addEventListener('paper-dropdown-open', (e) => this._toggleOpened(e));
     }
 
     _toggleOpened() {
