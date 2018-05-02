@@ -14,7 +14,7 @@
     </template>
 
     <script>
-        class UserData extends window.EtoolsMixins.AppConfig(APDBehaviors.UserController(APDBehaviors.PermissionController(Polymer.Element))) {
+        class UserData extends window.EtoolsMixins.AppConfig(APDMixins.UserController(APDMixins.PermissionController(Polymer.Element))) {
             static get is() { return 'user-data'; }
 
             static get properties() { return {}; }

@@ -48,12 +48,10 @@
     </template>
 
     <script>
-        (function () {
-            'use strict';
+        class PageFooter extends Polymer.Element {
+            static get is() { return 'page-footer'; }
+        }
 
-            Polymer({
-                is: 'page-footer'
-            });
-        })();
+        window.customElements.define(PageFooter.is, PageFooter);
     </script>
 </dom-module>

@@ -1,37 +1,40 @@
-Polymer({
-    is: 'multi-notification-list',
+class MultiNotificationList extends Polymer.Element {
+    static get is() { return 'multi-notification-list'; }
 
-    properties: {
-        notifications: {
-            type: Array,
-            value: function() {
-                return [];
+    static get properties() {
+        return {
+            notifications: {
+                type: Array,
+                value() {
+                    return [];
+                },
+                notify: true,
             },
-            notify: true,
-        },
-        notificationsQueue: {
-            type: Array,
-            value: function() {
-                return [];
+            notificationsQueue: {
+                type: Array,
+                value() {
+                    return [];
+                }
+            },
+            limit: {
+                type: Number,
+                value: 3
+            },
+            count: {
+                type: Number,
+                value: 1
             }
-        },
-        limit: {
-            type: Number,
-            value: 3
-        },
-        count: {
-            type: Number,
-            value: 1
-        }
-    },
+        };
+    }
 
-    listeners: {
-        'notification-push': '_onNotificationPush',
-        'notification-shift': '_onNotificationShift',
-        'reset-notifications': '_resetNotifications',
-    },
+    connectCallback() {
+        super.connectCallback();
+        this.addEventListener('notification-push', this._onNotificationPush);
+        this.addEventListener('notification-shift', this._onNotificationShift);
+        this.addEventListener('reset-notifications', this._resetNotifications);
+    }
 
-    _onNotificationShift: function(e, id) {
+    _onNotificationShift(e, id) {
         let index = this.notifications.findIndex((notification) => {
             return notification.id === id;
         });
@@ -45,9 +48,9 @@ Polymer({
         if (this.notificationsQueue.length) {
             this.push('notifications', this.shift('notificationsQueue'));
         }
-    },
+    }
 
-    _onNotificationPush: function(e, notification = {}) {
+    _onNotificationPush(e, notification = {}) {
         notification.id = `toast___${this.count++}`;
 
         if (this.limit > this.notifications.length) {
@@ -55,22 +58,12 @@ Polymer({
         } else {
             this.push('notificationsQueue', notification);
         }
-    },
+    }
 
-    _resetNotifications: function() {
+    _resetNotifications() {
         this.set('notifications', []);
         this.set('notificationsQueue', []);
-    },
+    }
+}
 
-    /**
-     * Fired when notification added in queue
-     *
-     * @event notification-push
-     */
-
-    /**
-     * Fired when notification removed from queue after showing
-     *
-     * @event notification-shift
-     */
-});
+window.customElements.define(MultiNotificationList.is, MultiNotificationList);

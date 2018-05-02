@@ -1,4 +1,4 @@
-<!--import [polymer, etools-ajax]-->
+<!--import [polymer/polymer-element, etools-ajax]-->
 
 <dom-module id="countries-data">
     <template>
@@ -12,10 +12,10 @@
 
     <script>
 
-        var _data = {};
-        var _countryEls = [];
+        let _data = {};
+        let _countryEls = [];
 
-        var _setCountryData = function(data) {
+        let _setCountryData = function(data) {
             _data.countries = data || {};
             this.load(_data);
             _countryEls.forEach(function(el) {
@@ -23,41 +23,45 @@
             });
         };
 
-        Polymer({
-            is: 'countries-data',
+        class CountriesData extends Polymer.Element {
+            static get is() {
+                return 'countries-data';
+            }
 
-            properties: {
-                countries: {
-                    type: Array,
-                    readOnly: true,
-                    notify: true
-                }
-            },
+            static get properties() {
+                return {
+                    countries: {
+                        type: Array,
+                        readOnly: true,
+                        notify: true
+                    }
+                };
+            }
 
-            ready: function() {
+            ready() {
                 this.load(_data);
-            },
+            }
 
-            attached: function() {
+            attached() {
                 if (_countryEls.length === 0 && !_data.countries) {
                     this.endpoint = etoolsAppConfig.globals.getEndpoint('countries');
                 }
                 _countryEls.push(this);
-            },
+            }
 
-            detached: function() {
+            detached() {
                 _countryEls.splice(_countryEls.indexOf(this), 1);
-            },
+            }
 
-            load: function(data) {
+            load(data) {
                 if (data.countries) {
                     this._setCountries(data.countries);
                 }
-            },
+            }
 
-            _handleResponse: function(res) {
+            _handleResponse(res) {
                 _setCountryData.bind(this)(res.detail);
             }
-        });
+        }
     </script>
 </dom-module>

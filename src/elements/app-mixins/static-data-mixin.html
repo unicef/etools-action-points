@@ -3,8 +3,8 @@
 <script>
     'use strict';
 
-    window.APDBehaviors = window.APDBehaviors || {};
-    window.APDBehaviors.StaticDataMixin = (superClass) => class extends superClass {
+    window.APDMixins = window.APDMixins || {};
+    window.APDMixins.StaticDataMixin = (superClass) => class extends superClass {
         _setData(key, data) {
             if (!key || !data || _staticData[key]) { return false; }
             _staticData[key] = _.cloneDeep(data);

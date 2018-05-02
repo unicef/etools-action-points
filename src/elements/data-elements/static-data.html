@@ -9,7 +9,7 @@
     <script>
 
         let dataLoaded = {};
-        class StaticData extends APDBehaviors.StaticDataMixin(APDBehaviors.PermissionController(APDBehaviors.UserController(Polymer.Element))) {
+        class StaticData extends APDMixins.StaticDataMixin(APDMixins.PermissionController(APDMixins.UserController(Polymer.Element))) {
             static get is() { return 'static-data'; }
 
             ready() {

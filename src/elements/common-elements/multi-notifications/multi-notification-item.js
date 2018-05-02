@@ -1,56 +1,58 @@
-Polymer({
-    is: 'multi-notification-item',
+'use strict';
 
-    properties: {
-        opened: {
-            type: Boolean,
-            observer: '_openedChanged'
-        },
-        text: {
-            type: String,
-            value: ''
-        }
-    },
+class MultiNotificationItem extends Polymer.Element {
+    static get is() { return 'multi-notification-item'; }
 
-    listeners: {
-        'transitionend': '_onTransitionEnd',
-    },
+    static get properties() {
+        return {
+            opened: {
+                type: Boolean,
+                observer: '_openedChanged'
+            },
+            text: {
+                type: String,
+                value: ''
+            }
+        };
+    }
 
-    _onTransitionEnd: function(e) {
+    connectCallback() {
+        super.connectCallback();
+        this.addEventListener('transitionend', this._onTransitionEnd);
+    }
+
+    _onTransitionEnd(e) {
         if (e && e.target === this && e.propertyName === 'opacity') {
             if (!this.opened) {
                 this.fire('notification-shift', this.id);
             }
         }
-    },
+    }
 
-    _renderOpened: function() {
+    _renderOpened() {
         requestAnimationFrame(() => {
             this.classList.add('notification-open');
         });
-    },
+    }
 
-    _renderClosed: function() {
+    _renderClosed() {
         requestAnimationFrame(() => {
             this.classList.remove('notification-open');
         });
-    },
+    }
 
-    _openedChanged: function(opened) {
+    _openedChanged(opened) {
         if (opened) {
             this._renderOpened();
         } else {
             this._renderClosed();
         }
-    },
+    }
 
-    close: function() {
+    close() {
         this.opened = false;
-    },
+    }
+}
 
-    /**
-     * Fired when notification should be moved up
-     *
-     * @event move-up
-     */
-});
+window.customElements.define(MultiNotificationItem.is, MultiNotificationItem);
+

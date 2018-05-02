@@ -1,6 +1,6 @@
 'use strict';
 
-let AppShellClass = window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDBehaviors.UserController(Polymer.Element)));
+let AppShellClass = window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDMixins.UserController(Polymer.Element)));
 
 class AppShell extends AppShellClass {
     static get is() { return 'app-shell'; }
@@ -92,13 +92,13 @@ class AppShell extends AppShellClass {
     }
 
     queueToast(e, detail) {
-        let notificationList = Polymer.dom(this.root).querySelector('multi-notification-list');
+        let notificationList = this.shadowRoot.querySelector('multi-notification-list');
         if (!notificationList) { return; }
 
         if (detail && detail.reset) {
-            notificationList.dispatchEvent('reset-notifications');
+            notificationList.dispatchEvent(new CustomEvent('reset-notifications'));
         } else {
-            notificationList.dispatchEvent('notification-push', detail);
+            notificationList.dispatchEvent(new CustomEvent('notification-push', detail));
         }
     }
 

@@ -3,8 +3,8 @@
 <script>
     'use strict';
 
-    window.APDBehaviors = window.APDBehaviors || {};
-    window.APDBehaviors.ErrorHandlerMixin = (superClass) => class extends superClass {
+    window.APDMixins = window.APDMixins || {};
+    window.APDMixins.ErrorHandlerMixin = (superClass) => class extends superClass {
         refactorErrorObject(errorData) {
             if (!errorData) { return {}; }
 

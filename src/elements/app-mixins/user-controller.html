@@ -6,8 +6,8 @@
     let _user;
     let _groups;
 
-    window.APDBehaviors = window.APDBehaviors || {};
-    window.APDBehaviors.UserController = (superClass) => class extends superClass {
+    window.APDMixins = window.APDMixins || {};
+    window.APDMixins.UserController = (superClass) => class extends superClass {
         _setUserData(user) {
             if (_user) { throw 'User already exists!'; }
 

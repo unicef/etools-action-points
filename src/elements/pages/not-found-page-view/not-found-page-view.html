@@ -1,4 +1,4 @@
-<!--import [polymer]-->
+<!--import [polymer/polymer-element]-->
 <!--import [shared-styles, page-layout-styles, etools-app-config]-->
 
 <dom-module id="not-found-page-view">
@@ -24,20 +24,18 @@
     <script>
         'use strict';
 
-        Polymer({
-            is: 'not-found-page-view',
+        class NotFoundPageView extends window.EtoolsMixins.AppConfig(Polymer.Element) {
+            static get is() { return 'not-found-page-view'; }
 
-            behaviors: [
-                etoolsAppConfig.globals
-            ],
-
-            getLink: function() {
+            getLink() {
                 return this.getAbsolutePath('action-points');
-            },
+            }
 
-            openDrawer: function() {
+            openDrawer() {
                 this.fire('drawer');
             }
-        });
+        }
+
+        window.customElements.define(NotFoundPageView.is, NotFoundPageView);
     </script>
 </dom-module>

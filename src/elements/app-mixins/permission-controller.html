@@ -1,8 +1,8 @@
 <!--import [lodash]-->
 <script>
     'use strict';
-    window.APDBehaviors = window.APDBehaviors || {};
-    window.APDBehaviors.PermissionController = (superClass) => class extends superClass {
+    window.APDMixins = window.APDMixins || {};
+    window.APDMixins.PermissionController = (superClass) => class extends superClass {
         _addToCollection(collectionName, data) {
             //check arguments
             if (!collectionName || !data) {

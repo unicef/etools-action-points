@@ -95,27 +95,31 @@
     </template>
 
     <script>
-        Polymer({
-            is: 'side-bar-item',
+        class SideBarItem extends Polymer.Element {
+            static get is() { return 'side-bar-item'; }
 
-            properties: {
-                name: String,
-                icon: String,
-                sideBarLink: String,
-                external: {
-                    type: Boolean,
-                    value: false
-                }
-            },
+            static get properties() {
+                return {
+                    name: String,
+                        icon: String,
+                        sideBarLink: String,
+                        external: {
+                        type: Boolean,
+                            value: false
+                    }
+                };
+            }
 
-            _handleMainTap: function() {
-                this.fire('selected');
-            },
+            _handleMainTap() {
+                this.dispatchEvent(new CustomEvent('selected'));
+            }
 
-            _setTarget: function() {
+            _setTarget() {
                 if (this.external) { return '_blank'; }
                 return '_self'
             }
-        });
+        }
+
+        window.customElements.define(SideBarItem.is, SideBarItem);
     </script>
 </dom-module>
