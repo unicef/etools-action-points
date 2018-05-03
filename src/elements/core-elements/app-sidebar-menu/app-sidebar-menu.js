@@ -8,7 +8,7 @@ class AppSidebarMenu extends window.EtoolsMixins.AppConfig(Polymer.Element) {
     }
 
     _toggleDrawer() {
-        this.dispatchEvent(new CustomEvent('drawer-toggle-tap'));
+        this.dispatchEvent(new CustomEvent('drawer-toggle-tap', {bubbles: true, composed: true}));
     }
 }
 

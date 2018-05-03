@@ -53,15 +53,9 @@ class AppShell extends AppShellClass {
         super.ready();
         this.baseUrl = this.globals.basePath;
         this.addEventListener('toast', (e, detail) => this.queueToast(e, detail));
-        this.$.drawer.querySelector('app-sidebar-menu').addEventListener('drawer-toggle-tap', (e) => this.toggleDrawer(e));
-        this.addEventListener('404', this._pageNotFound);
-        this.shadowRoot.querySelector('static-data').addEventListener('static-data-loaded', (e) => {
-            if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
-            if (this.staticDataLoaded) {
-                this.user = this.getUserData();
-                this.page = this._configPath();
-            }
-        });
+        this.addEventListener('drawer-toggle-tap', (e) => this.toggleDrawer(e));
+        this.addEventListener('404', (e) => this._pageNotFound(e));
+        this.addEventListener('static-data-loaded', (e) => this._staticDataLoaded(e));
     }
 
     connectedCallback() {
@@ -91,14 +85,23 @@ class AppShell extends AppShellClass {
         this.$.drawer.toggleAttribute('opened', isClosed);
     }
 
-    queueToast(e, detail) {
+    _staticDataLoaded(e) {
+        if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
+        if (this.staticDataLoaded) {
+            this.user = this.getUserData();
+            this.page = this.routeData.page || this._initRoute();
+        }
+    }
+
+    queueToast(e) {
+        let detail = e.detail;
         let notificationList = this.shadowRoot.querySelector('multi-notification-list');
         if (!notificationList) { return; }
 
         if (detail && detail.reset) {
             notificationList.dispatchEvent(new CustomEvent('reset-notifications'));
         } else {
-            notificationList.dispatchEvent(new CustomEvent('notification-push', detail));
+            notificationList.dispatchEvent(new CustomEvent('notification-push', {detail: detail}));
         }
     }
 
@@ -127,7 +130,7 @@ class AppShell extends AppShellClass {
     _loadPage() {
         if (!this.initLoadingComplete) { this.initLoadingComplete = true; }
         this.dispatchEvent(new CustomEvent('global-loading', {detail: {type: 'initialisation'}}));
-        if (this.route.path === '/apd/') { this._configPath();}
+        if (this.route.path === '/') { this._initRoute();}
     }
 
     _pageNotFound(event) {
@@ -140,7 +143,7 @@ class AppShell extends AppShellClass {
         this.dispatchEvent(new CustomEvent('global-loading', {detail: {type: 'initialisation'}}));
     }
 
-    _configPath() {
+    _initRoute() {
         let path = `${this.baseUrl}action-points`;
         this.set('route.path', path);
         return 'action-points';

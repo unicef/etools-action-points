@@ -23,7 +23,7 @@
                 this._allDataLoaded();
             }
             _allDataLoaded() {
-                this.dispatchEvent(new CustomEvent('static-data-loaded'));
+                this.dispatchEvent(new CustomEvent('static-data-loaded', {bubbles: true, composed: true}));
             }
 
             _triggerGlobalEvent(eventName, data) {

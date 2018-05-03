@@ -29,9 +29,9 @@ class MultiNotificationList extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('notification-push', this._onNotificationPush);
-        this.addEventListener('notification-shift', this._onNotificationShift);
-        this.addEventListener('reset-notifications', this._resetNotifications);
+        this.addEventListener('notification-push', (e, detail) => this._onNotificationPush(e, detail));
+        this.addEventListener('notification-shift', (e, detail) => this._onNotificationShift(e, detail));
+        this.addEventListener('reset-notifications', () => this._resetNotifications());
     }
 
     _onNotificationShift(e, id) {

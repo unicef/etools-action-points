@@ -18,13 +18,17 @@ class MultiNotificationItem extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('transitionend', this._onTransitionEnd);
+        this.addEventListener('transitionend', (e) => this._onTransitionEnd(e));
     }
 
     _onTransitionEnd(e) {
         if (e && e.target === this && e.propertyName === 'opacity') {
             if (!this.opened) {
-                this.fire('notification-shift', this.id);
+                this.dispatchEvent(new CustomEvent('notification-shift', {
+                    detail: {id: this.id},
+                    bubbles: true,
+                    composed: true
+                }));
             }
         }
     }
