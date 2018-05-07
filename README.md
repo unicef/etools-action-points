@@ -1,4 +1,4 @@
-Etools Auditor Portal Front-End module
+Etools Action Poins Dashboard module
 ======================================
 
 Installation

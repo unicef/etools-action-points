@@ -1,8 +1,8 @@
 'use strict';
 
-let AppShellClass = window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDMixins.UserController(Polymer.Element)));
+let BaseClass = window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDMixins.UserController(Polymer.Element)));
 
-class AppShell extends AppShellClass {
+class AppShell extends BaseClass {
     static get is() { return 'app-shell'; }
 
     static get properties() {

@@ -1,19 +1,16 @@
 {
-  "name": "polymer-starter-kit-custom-build",
+  "name": "eTools - Action Points Dashboard",
   "version": "0.0.0",
-  "description": "A starting point for Polymer 1.0 custom build apps",
   "repository": {
     "type": "git",
-    "url": "git@github.com:PolymerElements/generator-polymer-init-custom-build"
+    "url": "git@github.com:unicef/etools-apd"
   },
-  "license": "http://polymer.github.io/LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/PolymerElements/generator-polymer-init-custom-build/issues"
+    "url": "https://github.com/unicef/etools-apd/issues"
   },
   "engines": {
     "node": ">=6.0"
   },
-  "private": true,
   "devDependencies": {
     "babel-preset-env": "^1.6.1"
   },
