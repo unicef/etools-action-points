@@ -1,0 +1,12 @@
+<!--import [polymer/polymer-element]-->
+
+<dom-module id="action-points-list">
+    <template>
+        <div>List</div>
+        <paper-button on-click="_toNew">New</paper-button>
+        <template is="dom-repeat" items="[[actionPoints]]">
+            <paper-button on-click="_toActionPoint">[[item.id]]</paper-button>
+        </template>
+    </template>
+    <!-- inject scripts './action-points-list.js' -->
+</dom-module>

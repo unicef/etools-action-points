@@ -3,7 +3,6 @@
 const gulp = require('gulp'),
     compileHtmlTags = require('gulp-compile-html-tags'),
     sass = require('gulp-sass'),
-    babel = require("gulp-babel"),
     builder = require('polytempl'),
     gulpIf = require('gulp-if'),
     fs = require('fs'),
