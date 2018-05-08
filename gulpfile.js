@@ -56,4 +56,4 @@ gulp.task('prodBuild', gulp.series(clean.build, copyBower('toSrc'), buildElement
 gulp.task('devup', gulp.series('devBuild', gulp.parallel('startServer', 'watch')));
 
 //Minify scripts, run prod server and watch changes
-gulp.task('default', gulp.series([ 'prodBuild']));
+gulp.task('default', gulp.series(['prodBuild']));

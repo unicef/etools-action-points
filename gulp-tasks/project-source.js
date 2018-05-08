@@ -1,7 +1,7 @@
 'use strict';
 
 const sass = require('gulp-sass');
-const babel = require("gulp-babel");
+const babel = require('gulp-babel');
 const builder = require('polytempl');
 const compileHtmlTags = require('gulp-compile-html-tags');
 const gulpif = require('gulp-if');

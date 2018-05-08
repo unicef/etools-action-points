@@ -1,8 +1,6 @@
 'use strict';
 
-let BaseClass = window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDMixins.UserController(Polymer.Element)));
-
-class AppShell extends BaseClass {
+class AppShell extends window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDMixins.UserController(Polymer.Element))) {
     static get is() { return 'app-shell'; }
 
     static get properties() {
@@ -130,7 +128,7 @@ class AppShell extends BaseClass {
     _loadPage() {
         if (!this.initLoadingComplete) { this.initLoadingComplete = true; }
         this.dispatchEvent(new CustomEvent('global-loading', {detail: {type: 'initialisation'}}));
-        if (this.route.path === '/') { this._initRoute();}
+        // if (this.route.path === '/') { this._initRoute();}
     }
 
     _pageNotFound(event) {

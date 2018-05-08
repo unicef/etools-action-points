@@ -1,8 +1,24 @@
-<!--import [polymer/polymer-element]-->
+<!--import [polymer/polymer-element, iron-pages, action-points-list, action-points-item, action-points-new, lodash]-->
 
 <dom-module id="action-points-page-main">
     <template>
-        <div>Action Points</div>
+        <app-route
+                route="{{route}}"
+                pattern="/"
+                tail="{{listRoute}}"></app-route>
+        <app-route
+                route="{{route}}"
+                pattern="/new"
+                tail="{{newRoute}}"></app-route>
+        <app-route
+                route="{{route}}"
+                pattern="/:id"
+                tail="{{detailRoute}}"></app-route>
+        <iron-pages selected="[[view]]" attr-for-selected="name">
+            <action-points-new name="new" route="{{route}}"></action-points-new>
+            <action-points-item name="detail" route="{{route}}"></action-points-item>
+            <action-points-list name="list" route="{{route}}"></action-points-list>
+        </iron-pages>
     </template>
     <!-- inject scripts './action-points-page-main.js' -->
 </dom-module>
