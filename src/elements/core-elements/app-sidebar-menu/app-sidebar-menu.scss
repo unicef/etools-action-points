@@ -4,15 +4,16 @@
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    outline: 1px solid var(--dark-divider-color);
+    //outline: 1px solid var(--dark-divider-color);
 
     .menu-header {
         @apply(--layout-horizontal);
         @apply(--layout-center);
 
-        background-color: #4c6f80;
+        background-color: #bdbdbd;
         color: white;
-        border-bottom: 1px solid var(--dark-divider-color);
+        //border-bottom: 1px solid var(--dark-divider-color);
+        border-bottom: 1px solid #bdbdbd;
         height: 59px;
         font-size: 14px;
         line-height: 18px;
@@ -23,7 +24,7 @@
             height: 59%;
         }
 
-        img {
+        img, iron-icon {
             width: 55%;
             margin: auto;
             cursor: pointer;
@@ -84,6 +85,6 @@
 :host(.opened) {
     app-toolbar {
         #close-drawer { display: initial; }
-        img { display: none; }
+        img, iron-icon { display: none; }
     }
 }

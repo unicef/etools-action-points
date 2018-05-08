@@ -1,4 +1,5 @@
 <!--import [polymer/polymer-element, etools-ajax]-->
+<!--import [etools-app-config]-->
 
 <dom-module id="countries-data">
     <template>
@@ -23,7 +24,7 @@
             });
         };
 
-        class CountriesData extends Polymer.Element {
+        class CountriesData extends window.APDMixins.AppConfig(Polymer.Element) {
             static get is() {
                 return 'countries-data';
             }
@@ -44,7 +45,7 @@
 
             attached() {
                 if (_countryEls.length === 0 && !_data.countries) {
-                    this.endpoint = etoolsAppConfig.globals.getEndpoint('countries');
+                    this.endpoint = this.getEndpoint('countries');
                 }
                 _countryEls.push(this);
             }

@@ -1,4 +1,4 @@
-class CountriesDropdown extends window.EtoolsMixins.AppConfig(Polymer.Element) {
+class CountriesDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
     static get is() { return 'countries-dropdown'; }
 
     static get properties() {

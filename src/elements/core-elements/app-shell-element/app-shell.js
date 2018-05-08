@@ -1,6 +1,6 @@
 'use strict';
 
-class AppShell extends window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppConfig(APDMixins.UserController(Polymer.Element))) {
+class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConfig(APDMixins.UserController(Polymer.Element))) {
     static get is() { return 'app-shell'; }
 
     static get properties() {
@@ -49,7 +49,6 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppC
 
     ready() {
         super.ready();
-        this.baseUrl = this.globals.basePath;
         this.addEventListener('toast', (e, detail) => this.queueToast(e, detail));
         this.addEventListener('drawer-toggle-tap', (e) => this.toggleDrawer(e));
         this.addEventListener('404', (e) => this._pageNotFound(e));
@@ -87,7 +86,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppC
         if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
         if (this.staticDataLoaded) {
             this.user = this.getUserData();
-            this.page = this.routeData.page || this._initRoute();
+            this.page = _.get(this, 'routeData.page') || this._initRoute();
         }
     }
 
@@ -142,7 +141,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppC
     }
 
     _initRoute() {
-        let path = `${this.baseUrl}action-points`;
+        let path = `${this.basePath}action-points`;
         this.set('route.path', path);
         return 'action-points';
     }
@@ -169,4 +168,4 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.EtoolsMixins.AppC
     }
 }
 
-window.customElements.define(AppShell.is, AppShell);
+customElements.define(AppShell.is, AppShell);

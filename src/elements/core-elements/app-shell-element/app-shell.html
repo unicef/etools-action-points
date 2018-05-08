@@ -16,12 +16,12 @@
 
         <app-route
                 route="{{route}}"
-                pattern="/:page"
+                pattern="[[basePath]]:page"
                 data="{{routeData}}">
         </app-route>
         <app-route
                 route="{{route}}"
-                pattern="/action-points"
+                pattern="[[basePath]]action-points"
                 tail="{{actionPointsSubroute}}">
         </app-route>
 

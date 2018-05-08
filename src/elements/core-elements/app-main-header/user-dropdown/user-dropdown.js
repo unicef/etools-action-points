@@ -1,4 +1,4 @@
-class UserDropdown extends window.EtoolsMixins.AppConfig(Polymer.Element) {
+class UserDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
     static get is() { return 'user-dropdown'; }
 
     static get properties() {

@@ -6,22 +6,21 @@ App global configuration
 <script>
     'use strict';
 
-    window.EtoolsMixins = window.EtoolsMixins || {};
+    window.APDMixins = window.APDMixins || {};
     /**
      * @polymer
      * @mixinFunction
      */
-    EtoolsMixins.AppConfig = Polymer.dedupingMixin(baseClass => class extends baseClass {
+    APDMixins.AppConfig = Polymer.dedupingMixin(baseClass => class extends baseClass {
         constructor() {
             super();
 
-            this.etoolsCustomDexieDb = new Dexie('APD');
-
-            this.etoolsCustomDexieDb.version(1).stores({
-                collectionsList: '&name, expire',
+            let etoolsCustomDexieDb = new Dexie('APD');
+            etoolsCustomDexieDb.version(1).stores({
+                collectionsList: '&name, expire'
             });
 
-            this.endpoints = {
+            const endpoints = {
                 userProfile: {
                     url: '/users/api/profile/'
                 },
@@ -30,7 +29,7 @@ App global configuration
                 }
             };
 
-            this.localEndpoints = {
+            const localEndpoints = {
                 userProfile: {
                     url: '/data/user-profile.json'
                 },
@@ -39,20 +38,18 @@ App global configuration
                 }
             };
 
-            this.globals = {
-                // globals
-                baseSite: window.location.origin,
-                basePath: (window.location.port === '8080') ? '/' : '/apd/',
-                serverBackend: (window.location.port !== '8080'),
-                epsPath: (window.location.port !== '8080') ? 'endpoints' : 'localEndpoints',
 
-                // dexie js
-                appDexieDb: this.etoolsCustomDexieDb,
-            }
+            this.baseSite = window.location.origin;
+            this.serverBackend = (window.location.port !== '8080');
+            this.basePath = this.serverBackend ? '/apd/' : '/';
+            this.epsData = this.serverBackend ? endpoints : localEndpoints;
+            // dexie js
+            this.appDexieDb = etoolsCustomDexieDb;
+
         }
 
         getEndpoint(endpointName, data) {
-            let endpoint = this[this.globals.epsPath][endpointName];
+            let endpoint = this.epsData[endpointName];
             if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
                 endpoint.url = this.baseSite + _.template(endpoint.template)(data);
             }
@@ -61,15 +58,13 @@ App global configuration
 
         resetOldUserData() {
             console.log('resetOldUserData()');
-
             localStorage.removeItem('userId');
-
-            this.etoolsCustomDexieDb.collectionsList.clear();
+            this.appDexieDb.collectionsList.clear();
         }
 
         getAbsolutePath(path) {
             path = path || '';
-            return this.globals.basePath + path;
+            return this.basePath + path;
         }
     });
 </script>
