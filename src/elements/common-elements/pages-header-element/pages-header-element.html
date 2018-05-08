@@ -1,0 +1,48 @@
+<!--import [polymer, iron-flex-layout/iron-flex-layout-classes, paper-button, paper-menu-button,
+            etools-ajax, paper-tooltip]-->
+<!--import [etools-app-config, shared-styles, module-styles]-->
+
+<dom-module id="pages-header-element">
+    <template>
+        <style include="iron-flex shared-styles module-styles"></style>
+        <!-- inject styles './pages-header-element.scss'-->
+
+        <div class="header-wrapper">
+            <div class="side-heading horizontal layout center">
+                <span class="flex title">[[_setTitle(pageData, pageTitle)]]</span>
+
+                <div class="side-heading-button-holder">
+                    <div class="export-buttons" hidden$="[[!exportLinks.length]]">
+                        <paper-menu-button id="dropdown" hidden$="[[!_isDropDown(exportLinks)]]" on-tap="_toggleOpened" horizontal-align="right">
+                            <paper-button class="grey-buttons dropdown-trigger">
+                                <iron-icon icon="file-download"></iron-icon>
+                                Export
+                            </paper-button>
+
+                            <paper-menu id="dropdownMenu" class="dropdown-content mw-150">
+                                <template is="dom-repeat" items="[[exportLinks]]">
+                                    <paper-item on-tap="exportData">[[item.name]]</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-menu-button>
+
+                        <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
+                            <iron-icon icon="file-download"></iron-icon>
+                            Export
+                        </paper-button>
+                    </div>
+
+                    <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
+                        <template is="dom-if" if="{{_showLink(link)}}"><a href="{{link}}" class="btn-link"></a></template>
+                        <iron-icon icon="add"></iron-icon>
+                        <span>[[btnText]]</span>
+                    </paper-button>
+                </div>
+            </div>
+
+            <content></content>
+        </div>
+    </template>
+
+    <!-- inject scripts './pages-header-element.js'-->
+</dom-module>
