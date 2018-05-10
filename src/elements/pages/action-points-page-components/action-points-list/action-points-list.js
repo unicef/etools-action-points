@@ -17,6 +17,10 @@ class ActionPointsList extends Polymer.Element {
                 type: String,
                 value: '/new'
             },
+            pageSize: Number,
+            pageNumber: Number,
+            totalResults: Number,
+            visibleRange: Number,
             route: {
                 type: Object,
                 notify: true

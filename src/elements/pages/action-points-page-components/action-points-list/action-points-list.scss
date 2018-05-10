@@ -1,6 +1,15 @@
 :host {
   position: relative;
   display: block;
+
+  paper-card {
+    display: block;
+    margin-top: 25px;
+    --paper-card_-_background-color: white;
+    --paper-card_-_margin: 0 24px;
+    --paper-card_-_width: calc(100% - 48px);
+  }
 }
 
 pages-header-element { box-shadow: 1px -3px 9px 0 #000000; }
+

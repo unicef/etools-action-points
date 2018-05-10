@@ -33,7 +33,8 @@
     "etools-content-panel": "^2.0.0",
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4",
     "paper-input": "PolymerElements/paper-input#^2.2.2",
-    "etools-dropdown": "^2.0.0"
+    "etools-dropdown": "^2.0.0",
+    "etools-data-table": "^2.0.1"
   },
   "devDependencies": {},
   "resolutions": {
