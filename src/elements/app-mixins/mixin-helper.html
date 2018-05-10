@@ -1,0 +1,19 @@
+<!--import [polymer/polymer-element, lodash]-->
+
+<dom-module id="mixin-helper">
+    <script>
+        window.generateBaseClass = function(mixinsArray) {
+            if (mixinsArray && !_.isArray(mixinsArray)) {
+                throw new Error(`Provided mixins array is not valid! Received: ${typeof mixinsArray}`);
+            }
+
+            let base = Polymer.Element;
+
+            _.each(mixinsArray, mixin => {
+                base = mixin(base);
+            });
+
+            return base;
+        }
+    </script>
+</dom-module>

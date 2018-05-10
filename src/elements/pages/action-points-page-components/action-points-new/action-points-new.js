@@ -1,4 +1,6 @@
-class ActionPointsNew extends Polymer.Element {
+'use strict';
+
+class ActionPointsNew extends APDMixins.InputAttrs(APDMixins.StaticDataMixin(Polymer.Element)) {
     static get is() { return 'action-points-new'; }
 
     static get properties() {
@@ -6,8 +8,17 @@ class ActionPointsNew extends Polymer.Element {
             route: {
                 type: Object,
                 notify: true
+            },
+            partners: {
+                type: Array,
+                value: () => [{labe: 'test 1', value: 1}, {labe: 'test 2', value: 2}, {labe: 'test 3', value: 3}]
             }
         };
+    }
+
+    ready() {
+        super.ready();
+        // this.partners = this.getData('partnerOrganisations');
     }
 }
 
