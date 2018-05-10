@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!--import [list-pagination]-->
+</head>
+<body>
+
+<test-fixture id="list-pagination-fixture">
+    <template>
+        <list-pagination></list-pagination>
+    </template>
+</test-fixture>
+
+<script>
+    describe('<list-pagination>', function () {
+        let myEl;
+
+        beforeEach(function () {
+            myEl = fixture('list-pagination-fixture');
+        });
+
+        describe('method _sizeChanged(newSize)', function () {
+            beforeEach(function () {
+                myEl.sizesAllowed = ['10', '25', '50', '100'];
+            });
+
+            it('sets pageSize="10" if newSize not in sizesAllowed array', function () {
+                assert.isUndefined(myEl.pageSize);
+                myEl._sizeChanged('34');
+                assert.equal(myEl.pageSize, '10');
+            });
+
+            it('does nothing if newSize in sizesAllowed array', function () {
+                assert.isUndefined(myEl.pageSize);
+                myEl._sizeChanged('25');
+                assert.isUndefined(myEl.pageSize);
+            });
+        });
+
+        describe('method goToFirst()', function () {
+            it('sets pageNumber="1"', function () {
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToFirst();
+                assert.equal(myEl.pageNumber, '1');
+            });
+        });
+
+        describe('method goToLeft()', function () {
+            it('sets pageNumber equal to currentPage-1', function () {
+                myEl.currentPage = 2;
+
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToLeft();
+                assert.equal(myEl.pageNumber, '1');
+            });
+
+            it('considers currentPage to equal 1 if it has bad value', function () {
+                myEl.currentPage = null;
+
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToLeft();
+                assert.equal(myEl.pageNumber, '0');
+            });
+        });
+
+        describe('method goToRight()', function () {
+            it('does nothing if currentPage is equal to lastPage', function () {
+                //set lastPage
+                sinon.stub(myEl, '_calcLastPage').returns(3);
+                myEl.datalength = 1;
+                myEl.pageSize = 1;
+
+                myEl.currentPage = 3;
+
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToRight();
+                assert.isUndefined(myEl.pageNumber);
+            });
+
+            it('sets pageNumber equal to currentPage+1', function () {
+                myEl.lastPage = 3;
+                myEl.currentPage = 2;
+
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToRight();
+                assert.equal(myEl.pageNumber, '3');
+            });
+
+            it('considers currentPage to equal 1 if it has bad value', function () {
+                myEl.lastPage = 3;
+                myEl.currentPage = null;
+
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToRight();
+                assert.equal(myEl.pageNumber, '2');
+            });
+        });
+
+        describe('method goToLast()', function () {
+            it('sets pageNumber equal to lastPage', function () {
+                //set lastPage
+                sinon.stub(myEl, '_calcLastPage').returns(3);
+                myEl.datalength = 1;
+                myEl.pageSize = 1;
+
+                assert.isUndefined(myEl.pageNumber);
+                myEl.goToLast();
+                assert.equal(myEl.pageNumber, '3');
+            });
+        });
+
+        describe('method _disableButton(currentPage, datalength, pageSize)', function () {
+            it('returns true if currentPage=1 and pageSize is falsy', function () {
+                myEl.currentPage = 1;
+                assert.isTrue(myEl._disableButton(null, null, undefined));
+            });
+
+            it('returns true if currentPage is equal to lastPage and pageSize is truthy', function () {
+                //set lastPage
+                sinon.stub(myEl, '_calcLastPage').returns(3);
+                myEl.datalength = 1;
+                myEl.pageSize = 1;
+
+                myEl.currentPage = 3;
+
+                assert.isTrue(myEl._disableButton(null, null, '10'));
+            });
+
+            it('returns true if myEl.pageSize >= datalength', function () {
+                myEl.currentPage = 3;
+                myEl.pageSize = '10';
+
+                assert.isTrue(myEl._disableButton(null, 5, undefined));
+            });
+        });
+
+        describe('method _calcLastPage(dataLength, size)', function () {
+            it('calculates number of pages', function () {
+                assert.equal(myEl._calcLastPage(20, 10), 2);
+                assert.equal(myEl._calcLastPage(22, 10), 3);
+            });
+        });
+
+        describe('method _pageChanged(pageNumber)', function () {
+            it('sets currentPage equal to pageNumber if pageNumber is truthy', function () {
+                assert.equal(myEl.currentPage, 1);
+                myEl._pageChanged(2);
+                assert.equal(myEl.currentPage, 2);
+            });
+
+            it('sets currentPage equal to 1 if pageNumber is falsy', function () {
+                myEl.currentPage = 3;
+                assert.equal(myEl.currentPage, 3);
+                myEl._pageChanged(null);
+                assert.equal(myEl.currentPage, 1);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

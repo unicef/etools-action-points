@@ -1,0 +1,376 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!--import [list-element, moment-element/moment-import]-->
+</head>
+<body>
+
+<test-fixture id="list-element-fixture">
+    <template>
+        <list-element></list-element>
+    </template>
+</test-fixture>
+
+<script>
+    describe('<list-element>', function () {
+        let myEl;
+
+        beforeEach(function () {
+            myEl = fixture('list-element-fixture');
+        });
+
+        describe('method _setHover()', function () {
+            it('sets element property hover=true', function () {
+                assert.isUndefined(myEl.hover);
+                myEl._setHover();
+                assert.isTrue(myEl.hover);
+            });
+        });
+
+        describe('method _resetHover()', function () {
+            it('sets element property hover=false', function () {
+                assert.isUndefined(myEl.hover);
+                myEl._resetHover();
+                assert.isFalse(myEl.hover);
+            });
+        });
+
+        describe('method _setRightPadding()', function () {
+            it('returns if headings is not defined', function () {
+                assert.isUndefined(myEl.paddingRight);
+                myEl.headings = null;
+                myEl._setRightPadding();
+                assert.isUndefined(myEl.paddingRight);
+
+            });
+
+            it('sets paddingRight property depending on headings "size"', function () {
+                assert.isUndefined(myEl.paddingRight);
+                myEl.headings = [
+                    {'size': '50px', 'label': 'label', 'path': 'path'},
+                    {'size': '25px', 'label': 'label2', 'path': 'path2'}
+                ];
+                myEl._setRightPadding();
+                assert.equal(myEl.paddingRight, '75px');
+            });
+
+            it('skips size specified as number when calculating paddingRight property', function () {
+                assert.isUndefined(myEl.paddingRight);
+                myEl.headings = [
+                    {'size': '50px', 'label': 'label', 'path': 'path'},
+                    {'size': 25, 'label': 'label2', 'path': 'path2'}
+                ];
+                myEl._setRightPadding();
+                assert.equal(myEl.paddingRight, '50px');
+            });
+
+            it('sets paddingRight="0px"', function () {
+                assert.isUndefined(myEl.paddingRight);
+                myEl.headings = [];
+                myEl._setRightPadding();
+                assert.equal(myEl.paddingRight, '0px');
+            });
+        });
+
+        describe('method _computeShowCollapse(details, hasCollapse)', function () {
+            it('returns true when details is not empty and hasCollapse is true', function () {
+                assert.isTrue(myEl._computeShowCollapse([{prop: 'val'}], true));
+            });
+
+            it('returns false when details is empty array', function () {
+                assert.isFalse(myEl._computeShowCollapse([], true));
+            });
+
+            it('returns false when hasCollapse is false', function () {
+                assert.isFalse(myEl._computeShowCollapse([{prop: 'val'}], false));
+            });
+        });
+
+        describe('method _isOneOfType(item, [type1, type2...])', function () {
+            it('returns false if item is not defined', function () {
+                assert.isFalse(myEl._isOneOfType());
+                assert.isFalse(myEl._isOneOfType(null));
+            });
+
+            it('returns false if item has no property "type" or it is false', function () {
+                assert.isFalse(myEl._isOneOfType({}, 'type'));
+                assert.isFalse(myEl._isOneOfType({type: false}, 'type'));
+            });
+
+            it('returns true if item has property "type" and it is true', function () {
+                assert.isTrue(myEl._isOneOfType({type: true}, 'type'));
+            });
+        });
+
+        describe('method _getValue(item, data, bool)', function () {
+            it('returns property value by item.path', function () {
+                let item = {path: 'path'};
+                myEl.data = {path: 'value'};
+                assert.equal(myEl._getValue(item), 'value');
+            });
+
+            it('returns property value by item.name', function () {
+                let item = {name: 'path'};
+                myEl.data = {path: 'value'};
+                assert.equal(myEl._getValue(item), 'value');
+            });
+
+            it('converts value to boolean if bool argument is true', function () {
+                let item = {name: 'path'};
+                myEl.data = {path: 'value'};
+                assert.isTrue(myEl._getValue(item, [], true));
+            });
+
+            it('returns "--" if value is falsy and bool argument is false', function () {
+                let item = {name: 'path'};
+                myEl.data = {path: null};
+                assert.isFalse(myEl._getValue(item));
+            });
+
+            it('calls _refactorValue() method when item.name="type"', function () {
+                let spy = sinon.stub(myEl, '_refactorValue');
+                let item = {name: 'type', path: 'path'};
+                myEl.data = {path: 'type_name'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly(item.name, 'type_name'));
+            });
+
+            it('calls _refactorValue() method when item.name="status"', function () {
+                let spy = sinon.stub(myEl, '_refactorValue');
+                let item = {name: 'status', path: 'path'};
+                myEl.data = {path: 'status_name'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly(item.name, 'status_name'));
+            });
+
+            it('calls _refactorTime() method when item.name="date"', function () {
+                let spy = sinon.stub(myEl, '_refactorTime');
+                let item = {name: 'date', path: 'path'};
+                myEl.data = {path: 'date'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly('date'));
+            });
+
+            it('calls _refactorCurrency() method when item.name="currency"', function () {
+                let spy = sinon.stub(myEl, '_refactorCurrency');
+                let item = {name: 'currency', path: 'path'};
+                myEl.data = {path: 'currency'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly('currency'));
+            });
+
+            it('calls _refactorPercents() method when item.name="percents"', function () {
+                let spy = sinon.stub(myEl, '_refactorPercents');
+                let item = {name: 'percents', path: 'path'};
+                myEl.data = {path: 'percents'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly('percents'));
+            });
+        });
+
+        describe('method _refactorValue(type, value)', function () {
+            it('returns undefined if values for specified type is not defined', function () {
+                myEl.itemValues = {};
+                assert.isUndefined(myEl._refactorValue('some_type', 'key'));
+            });
+
+            it('returns refactored value', function () {
+                myEl.itemValues = {
+                    some_type: {
+                        key: 'value'
+                    }
+                };
+
+                assert.equal(myEl._refactorValue('some_type', 'key'), 'value');
+            });
+        });
+
+        describe('method _refactorTime(value, format)', function () {
+            it('returns undefined if value is not defined', function () {
+                assert.isUndefined(myEl._refactorTime());
+            });
+
+            it('returns undefined if date is invalid', function () {
+                assert.isUndefined(myEl._refactorTime('invalid value'));
+            });
+
+            it('returns formatted date', function () {
+                let date = '2017-06-27';
+                let value = 'formatted date';
+                sinon.stub(moment, 'utc').returns({format: function () {
+                    return value;
+                }});
+
+                assert.equal(myEl._refactorTime(date), value);
+            });
+        });
+
+        describe('method _refactorCurrency(value)', function () {
+            it('interprets bad value as 0', function () {
+                assert.equal(myEl._refactorCurrency([]), '0.00');
+            });
+
+            it('refactores value to currency format', function () {
+                assert.equal(myEl._refactorCurrency(123456.78), '123,456.78');
+            });
+        });
+
+        describe('method _refactorPercents(value)', function () {
+            it('returns null for bad values', function () {
+                assert.isNull(myEl._refactorPercents(NaN));
+                assert.isNull(myEl._refactorPercents(null));
+                assert.isNull(myEl._refactorPercents({}));
+                assert.isNull(myEl._refactorPercents([]));
+            });
+
+            it('returns number with percent symbol', function () {
+                assert.equal(myEl._refactorPercents(88.88), '88.88%');
+            });
+        });
+
+        describe('method _getAdditionalValue(item)', function () {
+            let item = {
+                'size': 30,
+                'label': 'Status',
+                'name': 'status',
+                'ordered': false,
+                'additional': {
+                    'type': 'date',
+                    'path': 'status_date'
+                }
+            };
+
+            it('returns undefined if item.additional is not defined', function () {
+                let item = {};
+                assert.isUndefined(myEl._getAdditionalValue(item));
+            });
+
+            it('calls _getValue() method to get additional value', function () {
+                let spy = sinon.stub(myEl, '_getValue');
+                let item = {additional: {path: 'path'}};
+                myEl.data = {path: 'additional_value'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getAdditionalValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly(item.additional));
+            });
+
+            it('returns "–" if value is false', function () {
+                let item = {additional: {path: 'path'}};
+                myEl.data = {path: null};
+                assert.equal(myEl._getAdditionalValue(item), '–')
+            });
+
+            it('calls _refactorTime() method when item.additional.type="date"', function () {
+                let spy = sinon.stub(myEl, '_refactorTime');
+                let item = {additional: {type: 'date', path: 'path'}};
+                myEl.data = {path: 'additional_value'};
+                spy.returns('refactored_value');
+
+                assert.isFalse(spy.called);
+                assert.equal(myEl._getAdditionalValue(item), 'refactored_value');
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWithExactly('additional_value'));
+            });
+        });
+
+        describe('method _getStatus(synced)', function () {
+            it('returns string if synced is true', function () {
+                assert.equal(myEl._getStatus(true), 'Synced from VISION');
+            });
+
+            it('returns undefined if synced is false', function () {
+                assert.isUndefined(myEl._getStatus(false));
+            });
+        });
+
+        describe('method _getLink(pattern)', function () {
+            it('returns # if pattern is not string', function () {
+                assert.equal(myEl._getLink({}), '#');
+                assert.equal(myEl._getLink([]), '#');
+                assert.equal(myEl._getLink(null), '#');
+            });
+
+            it('returns # if formatted link has string "undefined"', function () {
+                myEl.data = {};
+                assert.equal(myEl._getLink('path/*data_id*/path'), '#');
+            });
+
+            it('replaces occurrences of *data_id* in pattern with data.id value', function () {
+                myEl.data = {id: 123};
+                assert.equal(myEl._getLink('path/*data_id*/path'), 'path/123/path');
+            });
+        });
+
+        describe('method _emtyObj(data)', function () {
+            it('returns true if data.empty is falsy', function () {
+                assert.isTrue(myEl._emtyObj({empty: null}));
+                assert.isTrue(myEl._emtyObj({}));
+                assert.isTrue(myEl._emtyObj({empty: ''}));
+            });
+
+            it('returns false if data.empty is truthy', function () {
+                assert.isFalse(myEl._emtyObj({empty: true}));
+                assert.isFalse(myEl._emtyObj({empty: 'true'}));
+            });
+        });
+
+        describe('method _hasProperty(data, property, doNotHide)', function () {
+            let data = {prop: 'value'};
+
+            beforeEach(function () {
+                myEl.data = data;
+            });
+
+            it('returns truthy value if data has such property', function () {
+                assert.isOk(myEl._hasProperty(data, 'prop'));
+            });
+
+            it('returns truthy value when data is defined and doNotHide is true', function () {
+                assert.isOk(myEl._hasProperty(data, 'prop', true));
+                assert.isOk(myEl._hasProperty(data, null, true));
+            });
+
+            it('returns falsy value if no such property in data and doNotHide is falsy', function () {
+                assert.isNotOk(myEl._hasProperty(data, 'no_such_prop'));
+            });
+
+            it('returns falsy value in other cases', function () {
+                assert.isNotOk(myEl._hasProperty());
+                assert.isNotOk(myEl._hasProperty(null, null, true));
+                assert.isNotOk(myEl._hasProperty(null, null));
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

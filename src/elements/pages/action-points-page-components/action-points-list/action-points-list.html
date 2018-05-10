@@ -1,12 +1,16 @@
-<!--import [polymer/polymer-element]-->
+<!--import [polymer/polymer-element, pages-header-element]-->
 
 <dom-module id="action-points-list">
     <template>
-        <div>List</div>
-        <paper-button on-click="_toNew">New</paper-button>
-        <template is="dom-repeat" items="[[actionPoints]]">
-            <paper-button on-click="_toActionPoint">[[item.id]]</paper-button>
-        </template>
+        <!-- inject styles './action-points-list.scss'-->
+        <pages-header-element
+                hide-print-button
+                link="/action-points/new"
+                show-add-button="{{_showAddButton()}}"
+                btn-text="Add Action Point"
+                page-title="Action Points">
+        </pages-header-element>
+
     </template>
     <!-- inject scripts './action-points-list.js' -->
 </dom-module>

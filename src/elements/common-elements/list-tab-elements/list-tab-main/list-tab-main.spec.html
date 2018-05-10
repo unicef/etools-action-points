@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!--import [list-tab-main]-->
+</head>
+<body>
+
+<test-fixture id="list-tab-main-fixture">
+    <template>
+        <list-tab-main></list-tab-main>
+    </template>
+</test-fixture>
+
+<script>
+    describe('<list-tab-main>', function () {
+        let myEl;
+
+        beforeEach(function () {
+            myEl = fixture('list-tab-main-fixture');
+        });
+
+        describe('method _setHeaderNoAdditional(noAdditional, dataLength)', function () {
+            it('should return true if noAdditional is true', function () {
+                let returnedValue = myEl._setHeaderNoAdditional(true, 1);
+                assert.isTrue(returnedValue);
+            });
+
+            it('should return true if dataLength equal to 0', function () {
+                let returnedValue = myEl._setHeaderNoAdditional(false, 0);
+                assert.isTrue(returnedValue);
+            });
+
+            it('should return false if noAdditional is false and dataLength is not equal to 0', function () {
+                let returnedValue = myEl._setHeaderNoAdditional(false, 1);
+                assert.isFalse(returnedValue);
+            });
+        });
+
+        describe('method _setTitleNoAdditionalClass(noAdditional, dataLength)', function () {
+            it('should return "no-additional" string if noAdditional is true', function () {
+                let returnedValue = myEl._setTitleNoAdditionalClass(true, 1);
+                assert.equal(returnedValue, 'no-additional');
+            });
+
+            it('should return "no-additional" string if dataLength equal to 0', function () {
+                let returnedValue = myEl._setTitleNoAdditionalClass(false, 0);
+                assert.equal(returnedValue, 'no-additional');
+            });
+
+            it('should return empt string if noAdditional is false and dataLength is not equal to 0', function () {
+                let returnedValue = myEl._setTitleNoAdditionalClass(false, 1);
+                assert.equal(returnedValue, '');
+            });
+        });
+
+        describe('method _orderChanged(newOrder)', function () {
+            beforeEach(function () {
+                myEl.headings = [{
+                    'size': 15,
+                    'name': 'agreement__order_number',
+                    'link': '*engagement_type*/*data_id*/overview',
+                    'ordered': false,
+                    'path': 'agreement'
+                }, {
+                    'size': 20,
+                    'name': 'partner__name',
+                    'ordered': false,
+                    'path': 'partner'
+                }];
+            });
+
+            it('returns false if newOrder is falsy or headings is not Array', function () {
+                assert.isFalse(myEl._orderChanged(null));
+
+                myEl.headings = null;
+                assert.isFalse(myEl._orderChanged('name'));
+            });
+
+            it('sets ordered property of specified heading equal to current direction(asc/desc)', function () {
+                let newOrder = myEl.headings[0].name;
+                myEl.queryParams = {};
+
+                assert.isFalse(myEl.headings[0].ordered);
+                assert.isFalse(myEl.headings[1].ordered);
+
+                myEl._orderChanged(newOrder);
+
+                assert.equal(myEl.headings[0].ordered, 'asc');
+                assert.isFalse(myEl.headings[1].ordered);
+
+                myEl._orderChanged('-' + newOrder);
+
+                assert.equal(myEl.headings[0].ordered, 'desc');
+                assert.isFalse(myEl.headings[1].ordered);
+            });
+
+            it('updates queryParams.ordering if it is new', function () {
+                let newOrder = myEl.headings[0].name;
+                let oldOrder = 'old_order';
+                myEl.queryParams = {};
+
+                assert.isUndefined(myEl.queryParams.ordering);
+                myEl.orderBy = newOrder; //calls myEl._orderChanged(newOrder);
+                assert.equal(myEl.queryParams.ordering, newOrder);
+            });
+        });
+
+        describe('method _paramsChanged(newParams)', function () {
+            it('updates orderBy property if newParams.ordering and orderBy are not equal', function () {
+                assert.equal(myEl.orderBy, '');
+                myEl._paramsChanged({ordering: 'name'});
+                assert.equal(myEl.orderBy, 'name');
+            });
+        });
+
+        describe('method _computeResultsToShow(lengthAmount, size)', function () {
+            let itemsLength = 30;
+            let itemsPerPage = '10';
+
+            it('returns string with currently showed items', function () {
+                myEl.queryParams = {page: 2};
+                assert.equal(myEl._computeResultsToShow(itemsLength, itemsPerPage), '11 - 20 of 30');
+            });
+
+            it('replaces bad size with 10', function () {
+                myEl.queryParams = {page: 2};
+                assert.equal(myEl._computeResultsToShow(itemsLength, 'bad_size'), '11 - 20 of 30');
+            });
+
+            it('replaces bad queryParams.page with 1', function () {
+                myEl.queryParams = {page: null};
+                assert.equal(myEl._computeResultsToShow(itemsLength, itemsPerPage), '1 - 10 of 30');
+            });
+
+            it('', function () {
+
+            });
+        });
+
+        describe('method _listDataChanged()', function () {
+            let headings = [{
+                'size': 100,
+                'name': 'property',
+                'path': 'property'
+            }];
+            let data = [
+                {property: 'value', details: 'details_value'},
+                {property: 'value2', details: 'details_value'},
+                {property: 'value3', details: 'details_value'},
+            ];
+
+            let details = [{
+                'label': 'Details',
+                'path': 'details',
+                'size': 100
+            }];
+
+            it('collapse opened details', function (done) {
+                myEl.headings = headings;
+                myEl.data = data;
+                myEl.details = details;
+                myEl.hasCollapse = true;
+
+                flush(function () {
+                    let rows = Polymer.dom(myEl.root).querySelectorAll('.list-element');
+                    let spy = sinon.stub(rows[1], '_toggleRowDetails');
+                    spy.returns(undefined);
+                    rows[1].detailsOpened = true;
+
+                    myEl._listDataChanged();
+                    assert.isTrue(spy.calledOnce);
+                    done();
+                });
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

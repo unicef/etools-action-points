@@ -1,0 +1,61 @@
+<!--import [polymer/polymer-element, iron-flex-layout/iron-flex-layout-classes, iron-icons, paper-dropdown-menu,
+            paper-listbox, paper-item, pagination-icons, paper-icon-button]-->
+<!--import [module-styles, shared-styles, query-params-mixin, tab-inputs-styles]-->
+
+<dom-module id="list-pagination">
+    <template>
+        <!-- inject styles './list-pagination.scss'-->
+        <style include="iron-flex shared-styles module-styles"></style>
+
+        <div class="clearfix rightfloat horizontal layout center">
+            <span class="textsec lh">Rows per page:</span>
+
+            <paper-dropdown-menu
+                    id="item-nr-select"
+                    no-label-float
+                    vertical-align="bottom"
+                    horizontal-align="right">
+                <paper-listbox id="selecta" class="dropdown-content" attr-for-selected="name" selected="{{pageSize}}">
+                    <!--on-iron-select="itemsNrChanged"-->
+                    <template is="dom-repeat" items="[[sizesAllowed]]">
+                        <paper-item name="[[item]]">[[item]]</paper-item>
+                    </template>
+                </paper-listbox>
+            </paper-dropdown-menu>
+
+            <span class="textsec lh unselectable">{{showingResults}}</span>
+
+            <div class="chevron-container layout around-justified horizontal">
+                <paper-icon-button
+                        disabled$="{{_disableButton(currentPage, datalength)}}"
+                        icon="pagination:first-page"
+                        on-click="goToFirst"
+                        class$="chev back-arr [[pageMarker]]">
+                </paper-icon-button>
+
+                <paper-icon-button
+                        disabled$="{{_disableButton(currentPage, datalength)}}"
+                        icon="icons:chevron-left"
+                        class$="chev back-arr [[pageMarker]]"
+                        on-click="goToLeft">
+                </paper-icon-button>
+
+                <paper-icon-button
+                        disabled$="{{_disableButton(currentPage, datalength, pageSize)}}"
+                        icon="icons:chevron-right"
+                        class$="chev next-arr [[pageMarker]]"
+                        on-click="goToRight">
+                </paper-icon-button>
+
+                <paper-icon-button
+                        disabled$="{{_disableButton(currentPage, datalength, pageSize)}}"
+                        icon="pagination:last-page"
+                        on-click="goToLast"
+                        class$="chev next-arr [[pageMarker]]">
+                </paper-icon-button>
+            </div>
+        </div>
+    </template>
+
+    <!-- inject scripts './list-pagination.js'-->
+</dom-module>

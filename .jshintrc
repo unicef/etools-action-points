@@ -23,6 +23,7 @@
     "DynamicCustomStyleBehavior": true,
     "APDMixins": true,
     "etoolsBehaviors": true,
-    "moment": true
+    "moment": true,
+    "customElements": true
   }
 }

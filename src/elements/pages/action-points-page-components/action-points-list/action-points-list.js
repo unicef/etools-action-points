@@ -13,6 +13,10 @@ class ActionPointsList extends Polymer.Element {
                     ];
                 }
             },
+            createLink: {
+                type: String,
+                value: '/new'
+            },
             route: {
                 type: Object,
                 notify: true
@@ -26,6 +30,9 @@ class ActionPointsList extends Polymer.Element {
 
     _toNew() {
         this.set('route.path', '/new');
+    }
+    _showAddButton() {
+        return true;
     }
 }
 

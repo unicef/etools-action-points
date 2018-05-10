@@ -1,0 +1,180 @@
+*[hidden] {
+    display: none !important;
+}
+
+:host {
+    display: block;
+    border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+
+    .question-title {
+        font-weight: 500;
+        font-size: 14px !important;
+        letter-spacing: 0.5px
+    }
+
+    .partner-data {
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+        box-sizing: border-box;
+        white-space: nowrap;
+        font-size: 0; //skip gaps between inline-blocks
+        overflow: inherit;
+
+        .col-data {
+            display: inline-block;
+            overflow: hidden;
+            font-size: 13px;
+            text-overflow: ellipsis;
+            padding-right: 10px;
+            padding-left: 1px;
+            box-sizing: border-box;
+            vertical-align: middle;
+
+            &:not(.truncate) {
+                padding-right: 0;
+                overflow: visible;
+            }
+            .truncate { white-space: nowrap; }
+            .additional {
+                color: var(--dark-secondary-text-color);
+                font-size: 11px;
+            }
+
+            &.right { text-align: right; }
+            &.center { text-align: center; }
+            &.overflow-visible { overflow: visible; }
+        }
+        a.col-data {
+            color: var(--module-primary);
+            font-weight: 500;
+            cursor: pointer;
+
+            &[href="#"] {
+                cursor: default;
+                font-weight: 400;
+                color: initial;
+                pointer-events: none;
+            }
+        }
+
+        .hover-icons-block {
+            position: absolute;
+            top: 0;
+            right: 14px;
+            bottom: 0;
+            line-height: 48px;
+            opacity: 0;
+            background-color: #eeeeee;
+            z-index: 1;
+        }
+
+        &:hover .hover-icons-block{ opacity: 1; }
+    }
+
+    .partners-data-details {
+        position: relative;
+        display: block;
+        width: 100%;
+
+        .row-details-content {
+            float: left;
+            box-sizing: border-box;
+            padding-right: 0;
+            padding-bottom: 20px;
+            vertical-align: top;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+
+            .rdc-title {
+                display: inline-block;
+                width: 100%;
+                color: rgba(0, 0, 0, 0.54);
+                font-weight: 500;
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+
+            .data {
+                font-size: 13px;
+            }
+        }
+    }
+
+
+}
+
+.custom-icon {
+    --iron-icon-height: 16px;
+    --iron-icon-width: 16px;
+}
+
+:host([hover]) {
+    paper-material {
+        background-color: #EEEEEE;
+    }
+}
+
+paper-material {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+    font-size: 13px;
+    color: var(--gray-dark, rgba(0, 0, 0, 0.87));
+    background-color: var(--primary-background-color, #FFFFFF);
+    padding: 0 14px 0 72px !important;
+    box-sizing: border-box;
+}
+
+:host([no-additional]) {
+    paper-material {
+        padding: 0 14px 0 24px !important
+    }
+}
+
+:host([multiline]) {
+    .partner-data {
+        .col-data {
+            padding-top: 5px;
+            padding-bottom: 5px;
+
+            .truncate { white-space: normal; }
+        }
+    }
+}
+
+:host([no-hover]) {
+    paper-material:hover {
+        background-color: initial;
+    }
+}
+
+paper-material ::slotted(*) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#iconWrapper {
+    position: absolute;
+    top: 50%;
+    margin-top: -24px;
+    padding: 0 24px;
+    margin-left: -72px;
+    line-height: 48px;
+    cursor: pointer;
+}
+
+iron-icon {
+    color: var(--dark-icon-color, rgba(0, 0, 0, 0.54));
+}
+
+#collapse-wrapper {
+    padding: 14px 24px 4px 24px;
+    background-color: #EEEEEE;
+    /* TODO: replace with app-theme var */
+    border-top: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+}
