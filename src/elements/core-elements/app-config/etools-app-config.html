@@ -17,8 +17,10 @@ App global configuration
 
             let etoolsCustomDexieDb = new Dexie('APD');
             etoolsCustomDexieDb.version(1).stores({
-                collectionsList: '&name, expire'
+                listsExpireMapTable: '&name, expire',
+                partners: 'id',
             });
+            window.EtoolsRequestCacheDb = etoolsCustomDexieDb;
 
             const endpoints = {
                 userProfile: {
@@ -26,7 +28,12 @@ App global configuration
                 },
                 changeCountry: {
                     url: '/users/api/changecountry/'
-                }
+                },
+                partnerOrganisations: {
+                    url: '/api/v2/partners/?hidden=false',
+                    exp: 2 * 60 * 60 * 1000, // 2h
+                    cacheTableName: 'partners'
+                },
             };
 
             const localEndpoints = {
@@ -59,7 +66,7 @@ App global configuration
         resetOldUserData() {
             console.log('resetOldUserData()');
             localStorage.removeItem('userId');
-            this.appDexieDb.collectionsList.clear();
+            this.appDexieDb.listsExpireMapTable.clear();
         }
 
         getAbsolutePath(path) {

@@ -1,8 +1,60 @@
-<!--import [polymer/polymer-element]-->
+<!--import [polymer/polymer-element, etools-content-panel, paper-input, paper-input/paper-textarea, etools-searchable-multiselection-menu/etools-single-selection-menu]-->
+<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, tab-inputs-styles, input-attrs-mixin]-->
 
 <dom-module id="action-points-new">
     <template>
-        New Action Point
+        <style include="page-layout-styles shared-styles main-page-styles tab-inputs-styles"></style>
+
+        <pages-header-element page-title="Add New Action Point"></pages-header-element>
+
+        <div class="view-container">
+            <div id="pageContent">
+
+                <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
+                    <div class="row-h group">
+                        <div class="input-container">
+                            <!--<etools-single-selection-menu-->
+                                    <!--class$="validate-input disabled-as-readonly [[_setRequired('tpm_activities.partner', basePermissionPath)]]"-->
+                                    <!--value="{{editedItem.partner}}"-->
+                                    <!--label="[[getLabel('tpm_activities.partner', basePermissionPath)]]"-->
+                                    <!--placeholder="[[getPlaceholderText('tpm_activities.partner', basePermissionPath)]]"-->
+                                    <!--options="[[partners]]"-->
+                                    <!--option-label="name"-->
+                                    <!--option-value="id"-->
+                                    <!--update-selected-->
+                                    <!--required$="[[_setRequired('tpm_activities.partner', basePermissionPath)]]"-->
+                                    <!--disabled$="[[_isReadOnly('tpm_activities.partner', 'true', 'true', someRequestInProcess, basePermissionPath)]]"-->
+                                    <!--readonly$="[[_isReadOnly('tpm_activities.partner', 'true', 'true', someRequestInProcess, basePermissionPath)]]"-->
+                                    <!--invalid="{{errors.partner}}"-->
+                                    <!--error-message="{{errors.partner}}"-->
+                                    <!--on-focus="_resetFieldError"-->
+                                    <!--on-tap="_resetFieldError"-->
+                                    <!--dynamic-align>-->
+                            <!--</etools-single-selection-menu>-->
+                            <etools-single-selection-menu label="Options menu"
+                                                          options="[[partners]]"
+                                                          selected="{{selectedId}}"
+                                                          hide-search></etools-single-selection-menu>
+
+                        </div>
+
+                        <div class="input-container">
+                            TEs 2
+                        </div>
+
+                        <div class="input-container">
+                            Test 3
+                        </div>
+                    </div>
+                </etools-content-panel>
+
+            </div>
+
+            <div id="sidebar">
+                <!--<status-tab-element engagement-data="[[engagement]]" permission-base="new_engagement"></status-tab-element>-->
+            </div>
+        </div>
+
     </template>
     <!-- inject scripts './action-points-new.js' -->
 </dom-module>
