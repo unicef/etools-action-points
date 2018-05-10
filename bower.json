@@ -32,7 +32,8 @@
     "etools-searchable-multiselection-menu": "^2.2.18",
     "moment-element": "^3.0.1",
     "etools-content-panel": "^2.0.0",
-    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4"
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4",
+    "paper-input": "PolymerElements/paper-input#^2.2.2"
   },
   "devDependencies": {},
   "resolutions": {
