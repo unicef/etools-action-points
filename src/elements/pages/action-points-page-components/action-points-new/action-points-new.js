@@ -11,7 +11,7 @@ class ActionPointsNew extends APDMixins.InputAttrs(APDMixins.StaticDataMixin(Pol
             },
             partners: {
                 type: Array,
-                value: () => [{labe: 'test 1', value: 1}, {labe: 'test 2', value: 2}, {labe: 'test 3', value: 3}]
+                value: () => [{label: 'test 1', value: 1}, {label: 'test 2', value: 2}, {label: 'test 3', value: 3}]
             }
         };
     }

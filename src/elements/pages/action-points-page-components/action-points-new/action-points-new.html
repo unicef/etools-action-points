@@ -1,4 +1,4 @@
-<!--import [polymer/polymer-element, etools-content-panel, paper-input, paper-input/paper-textarea, etools-searchable-multiselection-menu/etools-single-selection-menu]-->
+<!--import [polymer/polymer-element, etools-content-panel, paper-input, paper-input/paper-textarea, etools-dropdown]-->
 <!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, tab-inputs-styles, input-attrs-mixin]-->
 
 <dom-module id="action-points-new">
@@ -31,10 +31,10 @@
                                     <!--on-tap="_resetFieldError"-->
                                     <!--dynamic-align>-->
                             <!--</etools-single-selection-menu>-->
-                            <etools-single-selection-menu label="Options menu"
-                                                          options="[[partners]]"
-                                                          selected="{{selectedId}}"
-                                                          hide-search></etools-single-selection-menu>
+                            <etools-dropdown label="Options menu"
+                                             options="[[partners]]"
+                                             selected="{{selectedId}}"
+                                             hide-search></etools-dropdown>
 
                         </div>
 

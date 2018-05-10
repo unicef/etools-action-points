@@ -29,14 +29,15 @@
     "neon-animation": "PolymerElements/neon-animation#^2.2.1",
     "web-animations-js": "^2.3.1",
     "paper-card": "PolymerElements/paper-card#^2.1.0",
-    "etools-searchable-multiselection-menu": "^2.2.18",
     "moment-element": "^3.0.1",
     "etools-content-panel": "^2.0.0",
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4",
-    "paper-input": "PolymerElements/paper-input#^2.2.2"
+    "paper-input": "PolymerElements/paper-input#^2.2.2",
+    "etools-dropdown": "^2.0.0"
   },
   "devDependencies": {},
   "resolutions": {
+    "iron-icon": "2.1.0",
     "paper-styles": "2.1.0",
     "paper-icon-button": "2.2.0",
     "iron-flex-layout": "2.0.3",
