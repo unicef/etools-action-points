@@ -34,6 +34,14 @@ App global configuration
                     exp: 2 * 60 * 60 * 1000, // 2h
                     cacheTableName: 'partners'
                 },
+                actionPointsList: {
+                    url: '/api/action-points/action-points/'
+                },
+                locations: {
+                    url: '/api/locations-light/',
+                    exp: 90 * 24 * 3600 * 1000, // 3 months
+                    cachingKey: 'locations',
+                },
             };
 
             const localEndpoints = {

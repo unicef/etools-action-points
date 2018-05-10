@@ -34,24 +34,55 @@
                 }
 
                 loadStaticData() {
-                    this.loadPartners();
+                    this._loadAPOptions();
+                    this._loadPartners();
+                    this._loadLocations();
                 }
 
                 _allDataLoaded() {
-                    if (this.dataLoaded.organizations) {
+                    if (this.dataLoaded.organizations && this.dataLoaded.apOptions) {
                         this.dispatchEvent(new CustomEvent('static-data-loaded', {bubbles: true, composed: true}));
                     }
                 }
 
-                loadPartners() {
+                _loadAPOptions() {
+                    let endpoint = this.getEndpoint('actionPointsList');
+                    this.sendRequest({method: 'OPTIONS', endpoint})
+                            .then(data => {
+                                let actions = data && data.actions;
+                                if (!this.isValidCollection(actions)) {
+                                    this._responseError('partners options');
+                                    return;
+                                }
+
+                                this._addToCollection('action_points', actions);
+
+                                this.dataLoaded.apOptions = true;
+                                this._allDataLoaded();
+                            }, error => this._responseError('Partners', 'request error'));
+                }
+
+                _loadPartners() {
                     let endpoint = this.getEndpoint('partnerOrganisations');
                     this.sendRequest({method: 'GET', endpoint})
                             .then(data => {
                                 let partnerOrganisations = _.sortBy(data, ['name']);
                                 this._setData('partnerOrganisations', partnerOrganisations);
                                 this.dataLoaded.organizations = true;
-                                this._allDataLoaded()
+                                this._allDataLoaded();
                             }, error => this._responseError('Partners', 'request error'));
+                }
+
+                _loadLocations() {
+                    let endpoint = this.getEndpoint('locations');
+                    this.sendRequest({method: 'GET', endpoint})
+                            .then(data => {
+                                let locations = _.sortBy(data, ['name']);
+                                this._setData('locations', locations);
+
+                                let locationsLoaded = new CustomEvent('locations-loaded');
+                                document.dispatchEvent(locationsLoaded);
+                            }, error => this._responseError('Locations', 'request error'));
                 }
 
                 _triggerGlobalEvent(eventName, data) {

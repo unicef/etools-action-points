@@ -1,6 +1,8 @@
 <!--import [lodash]-->
 <script>
     'use strict';
+    var _permissionCollection = {};
+
     window.APDMixins = window.APDMixins || {};
     window.APDMixins.PermissionController = (superClass) => class extends superClass {
         _addToCollection(collectionName, data) {

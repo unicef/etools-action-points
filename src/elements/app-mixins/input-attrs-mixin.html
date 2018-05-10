@@ -19,6 +19,7 @@
             }
 
             getPlaceholderText(path, base, special) {
+                console.log(special)
                 if (this.isReadonly(`${base}.${path}`)) { return 'Empty Field' }
 
                 let label = this.getLabel(path, base),
@@ -33,6 +34,15 @@
                 if (readOnly === null) { readOnly = true; }
 
                 return readOnly;
+            }
+
+            _resetFieldError(event) {
+                if (!event || !event.target) { return false; }
+
+                let field = event.target.getAttribute('field');
+                if (field) { this.set(`errors.${field}`, false); }
+
+                event.target.invalid = false;
             }
         }
     })();

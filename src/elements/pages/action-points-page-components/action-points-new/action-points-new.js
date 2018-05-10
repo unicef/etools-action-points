@@ -11,14 +11,54 @@ class ActionPointsNew extends APDMixins.InputAttrs(APDMixins.StaticDataMixin(Pol
             },
             partners: {
                 type: Array,
-                value: () => [{label: 'test 1', value: 1}, {label: 'test 2', value: 2}, {label: 'test 3', value: 3}]
+                value: () => []
+            },
+            basePermissionPath: {
+                type: String,
+                value: 'action_points'
+            },
+            locations: {
+                type: Array,
+                value: () => []
             }
         };
     }
 
     ready() {
         super.ready();
-        // this.partners = this.getData('partnerOrganisations');
+        this.partners = this.getData('partnerOrganisations');
+
+        this._updateLocations();
+        document.addEventListener('locations-loaded', () => this._updateLocations());
+    }
+
+    _updateLocations() {
+        this.locations = this.getData('locations') || [];
+    }
+
+    _requestPartner(partnerId) {
+        if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
+            return;
+        }
+        this.lastPartnerId = partnerId;
+
+        // if (!this.editDialogOpened) {
+        //     this.set('intervention', null);
+        //     this.set('optionsModel.intervention', null);
+        //     this.set('partner.interventions', []);
+        //
+        //     this.set('optionsModel.cp_output', null);
+        //     this.set('cpOutputs', []);
+        // }
+
+        if (!partnerId && partnerId !== 0) {
+            return;
+        }
+
+        this.partnerRequestInProcess = true;
+        let endpoint = this.getEndpoint('partnerOrganisationDetails');
+
+        return true;
     }
 }
 
