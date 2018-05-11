@@ -1,124 +1,16 @@
-<!--import [polymer/polymer-element, etools-content-panel, paper-input, paper-input/paper-textarea, etools-dropdown,
-            etools-dropdown/etools-dropdown-multi, etools-ajax, etools-loading]-->
-<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, tab-inputs-styles, input-attrs-mixin, etools-app-config]-->
+<!--import [polymer/polymer-element]-->
+<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details]-->
 
 <dom-module id="action-points-new">
     <template>
-        <style include="page-layout-styles shared-styles main-page-styles tab-inputs-styles">
-            .loading {
-                position: absolute;
-                top: 28px;
-                left: auto;
-                background-color: #fff;
-            }
-
-            .loading:not([active]) {
-                opacity: 0;
-                z-index: -1;
-            }
-        </style>
+        <style include="page-layout-styles shared-styles main-page-styles"></style>
 
         <pages-header-element page-title="Add New Action Point"></pages-header-element>
 
         <div class="view-container">
             <div id="pageContent">
 
-                <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
-                    <div class="row-h group">
-                        <div class="input-container input-container-ms">
-                            <!-- Implementing Partner -->
-                            <etools-dropdown
-                                    class$="validate-input disabled-as-readonly [[_setRequired('partner', basePermissionPath)]]"
-                                    selected="{{editedItem.partner}}"
-                                    label="[[getLabel('partner', basePermissionPath)]]"
-                                    placeholder="[[getPlaceholderText('partner', basePermissionPath, 'true')]]"
-                                    options="[[partners]]"
-                                    option-label="name"
-                                    option-value="id"
-                                    update-selected
-                                    required$="[[_setRequired('partner', basePermissionPath)]]"
-                                    disabled$="[[isReadOnly('partner', basePermissionPath)]]"
-                                    readonly$="[[isReadOnly('partner', basePermissionPath)]]"
-                                    invalid="{{errors.partner}}"
-                                    error-message="{{errors.partner}}"
-                                    on-focus="_resetFieldError"
-                                    on-tap="_resetFieldError"
-                                    dynamic-align>
-                            </etools-dropdown>
-                            <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading"></etools-loading>
-                        </div>
-
-                        <div class="input-container input-container-ms">
-                            <!-- PD/SSFA -->
-                            <etools-dropdown
-                                    class$="validate-input disabled-as-readonly [[_setRequired('intervention', basePermissionPath)]]"
-                                    selected="{{editedItem.intervention}}"
-                                    label="[[getLabel('intervention', basePermissionPath)]]"
-                                    placeholder="[[getPlaceholderText('intervention', basePermissionPath, 'true')]]"
-                                    options="[[partner.interventions]]"
-                                    option-label="title"
-                                    option-value="id"
-                                    update-selected
-                                    required$="[[_setRequired('intervention', basePermissionPath)]]"
-                                    disabled$="[[isFieldReadonly('intervention', basePermissionPath, partner)]]"
-                                    readonly$="[[isFieldReadonly('intervention', basePermissionPath, partner)]]"
-                                    invalid="{{errors.intervention}}"
-                                    error-message="{{errors.intervention}}"
-                                    on-focus="_resetFieldError"
-                                    on-tap="_resetFieldError"
-                                    dynamic-align>
-                            </etools-dropdown>
-                            <etools-loading active="{{interventionRequestInProcess}}" no-overlay loading-text="" class="loading"></etools-loading>
-                        </div>
-                    </div>
-
-
-                    <div class="row-h group">
-                        <div class="input-container input-container-ms">
-                            <!-- CP Output -->
-                            <etools-dropdown
-                                    class$="validate-input disabled-as-readonly [[_setRequired('cp_output', basePermissionPath)]]"
-                                    selectedItem="{{editedItem.cp_output}}"
-                                    label="[[getLabel('cp_output', basePermissionPath)]]"
-                                    placeholder="[[getPlaceholderText('cp_output', basePermissionPath, 'true')]]"
-                                    options="[[cpOutputs]]"
-                                    option-label="name"
-                                    option-value="id"
-                                    update-selected
-                                    required$="[[_setRequired('cp_output', basePermissionPath)]]"
-                                    disabled$="[[isFieldReadonly('cp_output', basePermissionPath, cpOutputs)]]"
-                                    readonly$="[[isFieldReadonly('cp_output', basePermissionPath, cpOutputs)]]"
-                                    invalid="{{errors.cp_output}}"
-                                    error-message="{{errors.cp_output}}"
-                                    on-focus="_resetFieldError"
-                                    on-tap="_resetFieldError"
-                                    dynamic-align>
-                            </etools-dropdown>
-                        </div>
-
-                        <div class="input-container input-container-ms">
-                            <!-- Locations -->
-                            <etools-dropdown-multi
-                                    class$="validate-input disabled-as-readonly [[_setRequired('location', basePermissionPath)]]"
-                                    selectedItem="{{editedItem.location}}"
-                                    label="[[getLabel('location', basePermissionPath)]]"
-                                    placeholder="[[getPlaceholderText('location', basePermissionPath, 'true')]]"
-                                    options="[[locations]]"
-                                    option-label="name"
-                                    option-value="id"
-                                    update-selected
-                                    required$="[[_setRequired('location', basePermissionPath)]]"
-                                    disabled$="[[isReadOnly('location', basePermissionPath)]]"
-                                    readonly$="[[isReadOnly('location', basePermissionPath)]]"
-                                    invalid="{{errors.location}}"
-                                    error-message="{{errors.location}}"
-                                    on-focus="_resetFieldError"
-                                    on-tap="_resetFieldError"
-                                    dynamic-align>
-                            </etools-dropdown-multi>
-                        </div>
-                    </div>
-                </etools-content-panel>
+                <action-point-details base-permission-path="action_points"></action-point-details>
 
             </div>
 

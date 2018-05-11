@@ -19,8 +19,7 @@
             }
 
             getPlaceholderText(path, base, special) {
-                console.log(special)
-                if (this.isReadonly(`${base}.${path}`)) { return 'Empty Field' }
+                if (this.isReadonly(`${base}.${path}`)) { return 'Empty Field'; }
 
                 let label = this.getLabel(path, base),
                         prefix = special ? 'Select' : 'Enter';
