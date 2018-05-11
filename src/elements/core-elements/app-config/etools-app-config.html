@@ -34,6 +34,15 @@ App global configuration
                     exp: 2 * 60 * 60 * 1000, // 2h
                     cacheTableName: 'partners'
                 },
+                partnerOrganisationDetails: {
+                    template: '/api/v2/partners/<%=id%>/'
+                },
+                interventionDetails: {
+                    template: '/api/v2/interventions/<%=id%>/'
+                },
+                cpOutputsV2: {
+                    template: '/api/v2/reports/results/?values=<%=ids%>'
+                },
                 actionPointsList: {
                     url: '/api/action-points/action-points/'
                 },

@@ -24,6 +24,8 @@
     "APDMixins": true,
     "etoolsBehaviors": true,
     "moment": true,
-    "customElements": true
+    "customElements": true,
+    "generateBaseClass": true,
+    "EtoolsAjaxRequestMixin": true
   }
 }
