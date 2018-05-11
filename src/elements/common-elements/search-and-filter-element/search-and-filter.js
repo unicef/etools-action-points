@@ -41,11 +41,11 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
     }
 
     searchKeyDown() {
-        this.debounce('searchKeyDown', () => {
+        this._debounceSearch = Polymer.Debouncer.debounce(this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
             if (this.searchString.length !== 1) {
                 this.updateQueries({search: this.searchString || undefined, page: '1'});
             }
-        }, 300);
+        });
     }
 
     addFilter(e) {
@@ -96,7 +96,7 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
     }
 
     _restoreFilters() {
-        this.debounce('_restoreFilters', () => {
+        this._debounceFilters = Polymer.Debouncer.debounce(this._debounceFilters, Polymer.Async.timeOut.after(50), () => {
             let queryParams = this.queryParams;
 
             if (!queryParams) {
@@ -122,7 +122,7 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
             } else {
                 this.set('searchString', '');
             }
-        }, 50);
+        });
     }
 
     _getFilterIndex(query) {

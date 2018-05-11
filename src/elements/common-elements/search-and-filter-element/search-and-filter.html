@@ -1,4 +1,4 @@
-<!--import [polymer, paper-input, paper-card, iron-icon, etools-dropdown, paper-menu-button,
+<!--import [polymer/polymer-element, paper-input, paper-card, iron-icon, iron-icons, etools-dropdown, paper-menu-button,
             paper-button, paper-listbox, iron-flex-layout]-->
 
 <!--import [shared-styles, module-styles, tab-inputs-styles, query-params-mixin]-->
@@ -15,10 +15,12 @@
                             type="search"
                             value="{{searchString}}"
                             label="[[searchLabel]]"
+                            placeholder="Type and search"
                             on-value-changed="searchKeyDown"
+                            always-float-label
                             inline>
 
-                        <iron-icon icon="search" prefix></iron-icon>
+                        <iron-icon icon="search" slot="prefix"></iron-icon>
                     </paper-input>
                 </div>
 

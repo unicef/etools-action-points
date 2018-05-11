@@ -85,6 +85,15 @@
                             }, error => this._responseError('Locations', 'request error'));
                 }
 
+                _filtersDataLoaded() {
+                    if (this.dataLoaded.filterActionPoints) {
+                        this._triggerGlobalEvent('action-points-filters-updated');
+
+                        this.dataLoaded.filters = true;
+                        this.dataLoaded.filterActionPoints = false;
+                    }
+                }
+
                 _triggerGlobalEvent(eventName, data) {
                     let detail = {detail: data};
                     let event = new CustomEvent(eventName, detail);

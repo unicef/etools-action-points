@@ -4,18 +4,23 @@ class ActionPointsList extends Polymer.Element {
     static get properties() {
         return {
             actionPoints: {
-                type: Array,
-                value() {
-                    return [
-                        {id: 1},
-                        {id: 2},
-                        {id: 3}
-                    ];
-                }
+                type: Array
             },
             createLink: {
                 type: String,
                 value: '/new'
+            },
+            filters: {
+                type: Array,
+                value: [
+                    {
+                        name: 'auditor',
+                        query: 'agreement__auditor_firm',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
+                    }
+                ]
             },
             pageSize: Number,
             pageNumber: Number,
@@ -26,6 +31,47 @@ class ActionPointsList extends Polymer.Element {
                 notify: true
             }
         };
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('action-points-filters-updated', this._actionPointsFiltersUpdated.bind(this));
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        document.removeEventListener('action-points-filters-updated', this._actionPointsFiltersUpdated);
+    }
+
+    _actionPointsFiltersUpdated() {
+        let filtersElement = this.$.filters;
+        this.setFiltersSelections();
+        if (filtersElement) {
+            filtersElement._reloadFilters();
+        }
+    }
+
+    setFiltersSelections() {
+        let queryAndKeyPairs = [
+            {query: 'partner', dataKey: 'filterPartners'},
+            {query: 'agreement__auditor_firm', dataKey: 'filterAuditors'},
+            {query: 'status', dataKey: 'statuses'},
+            {query: 'engagement_type', dataKey: 'engagementTypes'},
+            {query: 'staff_members__user', dataKey: 'staffMembersUsers'}
+        ];
+
+        queryAndKeyPairs.forEach((pair) => {
+            let filterIndex = this._getFilterIndex(pair.query);
+            let data = this.getData(pair.dataKey) || [];
+            this.setFilterSelection(filterIndex, data);
+        });
+    }
+
+    setFilterSelection(filterIndex, data) {
+        if (filterIndex !== undefined && filterIndex !== -1) {
+            this.set(`filters.${filterIndex}.selection`, data);
+            return true;
+        }
     }
 
     _toActionPoint({model}) {
