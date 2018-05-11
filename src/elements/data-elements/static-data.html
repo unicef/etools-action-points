@@ -61,6 +61,10 @@
 
                                 this._addToCollection('action_points', actions);
 
+                                let statusesData = this.getChoices('action_points.status');
+                                if (!statusesData) { console.error('Can not load action points statuses data'); }
+                                this._setData('statuses', statusesData);
+
                                 this.dataLoaded.apOptions = true;
                                 this._allDataLoaded();
                             }, error => this._responseError('Partners', 'request error'));

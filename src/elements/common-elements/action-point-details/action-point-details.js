@@ -15,7 +15,8 @@
         static get observers() {
             return [
                 '_requestPartner(editedItem.partner)',
-                '_updateCpOutputs(editedItem.intervention)'
+                '_updateCpOutputs(editedItem.intervention)',
+                '_updateEditedItem(actionPoint)'
             ];
         }
 
@@ -52,6 +53,10 @@
 
             this._updateLocations();
             document.addEventListener('locations-loaded', () => this._updateLocations());
+        }
+
+        _updateEditedItem(actionPoint) {
+            this.editedItem = actionPoint || {};
         }
 
         _updateLocations() {
@@ -127,6 +132,21 @@
 
         isFieldReadonly(path, base, special) {
             return this.isReadOnly(path, base) || !special;
+        }
+
+        validate() {
+            let elements = Polymer.dom(this.root).querySelectorAll('.validate-input');
+            let valid = true;
+            _.each(elements, element => {
+                if (element.required && !element.disabled && !element.validate()) {
+                    let label = element.label || 'Field';
+                    element.errorMessage = `${label} is required`;
+                    element.invalid = true;
+                    valid = false;
+                }
+            });
+
+            return valid;
         }
     }
 

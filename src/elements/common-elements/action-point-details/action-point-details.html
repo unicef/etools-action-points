@@ -180,8 +180,8 @@
                                 modal="[[datepickerModal]]"
                                 slot="prefix"
                                 format="YYYY-MM-DD"
-                                date="[[editedItem.due_date]]"
                                 pretty-date="{{editedItem.due_date}}"
+                                show-clear-btn
                                 no-init>
                         </etools-datepicker-button>
                     </paper-input>
@@ -189,7 +189,7 @@
 
                 <div class="input-container input-checkbox-container">
                     <!-- Priority -->
-                   <paper-checkbox checked="editedItem.priority">Heigh Priority</paper-checkbox>
+                   <paper-checkbox checked="{{editedItem.high_priority}}">Heigh Priority</paper-checkbox>
                 </div>
             </div>
 
