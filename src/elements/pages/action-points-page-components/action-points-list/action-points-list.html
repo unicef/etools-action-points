@@ -14,29 +14,26 @@
         <paper-card class="horizontal layout center">
             <etools-data-table-header id="listHeader"
                                       label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
-                <etools-data-table-column class="col-2" field="number" sortable>
+                <etools-data-table-column class="col-2" field="reference_number" sortable>
                     Action Point #
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="module" sortable>
-                    Module
+                <etools-data-table-column class="col-2" field="related_module" sortable>
+                    CP Output
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="description" sortable>
-                    Description
+                <etools-data-table-column class="col-2" field="partner" sortable>
+                    Partner
+                </etools-data-table-column>
+                <etools-data-table-column class="col-2" field="partner" sortable>
+                    Office
+                </etools-data-table-column>
+                <etools-data-table-column class="col-2" field="section" sortable>
+                    Section
                 </etools-data-table-column>
                 <etools-data-table-column class="col-2" field="assigned_to" sortable>
                     Assigned To
                 </etools-data-table-column>
                 <etools-data-table-column class="col-2" field="due_date" sortable>
                     Due Date
-                </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="partner" sortable>
-                    Partner
-                </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="location" sortable>
-                    Location
-                </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="section" sortable>
-                    Section
                 </etools-data-table-column>
                 <etools-data-table-column class="col-2" field="status" sortable>
                     Status
@@ -46,32 +43,39 @@
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
                 <etools-data-table-row details-opened="[[detailsOpened]]">
                     <div slot="row-data">
-                        <span class="col-data">[[entry.number]]</span>
-                        <span class="col-data">[[entry.module]]</span>
-                        <span class="col-data">[[entry.description]]</span>
+                        <span class="col-data">[[entry.reference_number]]</span>
+                        <span class="col-data">[[entry.cp_output]]</span>
+                        <span class="col-data">[[entry.partner]]</span>
+                        <span class="col-data">[[entry.office]]</span>
+                        <span class="col-data">[[entry.section]]</span>
                         <span class="col-data">[[entry.assigned_to]]</span>
                         <span class="col-data">[[entry.due_date]]</span>
-                        <span class="col-data">[[entry.partner]]</span>
-                        <span class="col-data">[[entry.location]]</span>
-                        <span class="col-data">[[entry.section]]</span>
                         <span class="col-data">[[entry.status]]</span>
                     </div>
                     <div slot="row-data-details">
+                        <div class="row-details-content">
+                            <span class="rdc-title">Description</span>
+                            <span>[[entry.description]]</span>
+                        </div>
+                        <div class="row-details-content">
+                            <span class="rdc-title">PD/SSFA</span>
+                            <span>[[entry.intervention]]</span>
+                        </div>
+                        <div class="row-details-content">
+                            <span class="rdc-title">Location</span>
+                            <span>[[entry.location]]</span>
+                        </div>
+                        <div class="row-details-content">
+                            <span class="rdc-title">Module</span>
+                            <span>[[entry.module]]</span>
+                        </div>
                         <div class="row-details-content">
                             <span class="rdc-title">Assigned By</span>
                             <span>[[entry.assigned_by]]</span>
                         </div>
                         <div class="row-details-content">
-                            <span class="rdc-title">CP Output</span>
-                            <span>[[entry.cp_output]]</span>
-                        </div>
-                        <div class="row-details-content">
-                            <span class="rdc-title">PD/SSFA</span>
-                            <span>[[entry.pd_ssfa]]</span>
-                        </div>
-                        <div class="row-details-content">
                             <span class="rdc-title">Completed Date</span>
-                            <span>[[entry.completed_date]]</span>
+                            <span>[[entry.date_of_completion]]</span>
                         </div>
                     </div>
                 </etools-data-table-row>
