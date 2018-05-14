@@ -34,6 +34,15 @@ App global configuration
                     exp: 2 * 60 * 60 * 1000, // 2h
                     cacheTableName: 'partners'
                 },
+                partnerOrganisationDetails: {
+                    template: '/api/v2/partners/<%=id%>/'
+                },
+                interventionDetails: {
+                    template: '/api/v2/interventions/<%=id%>/'
+                },
+                cpOutputsV2: {
+                    template: '/api/v2/reports/results/?values=<%=ids%>'
+                },
                 actionPointsList: {
                     url: '/api/action-points/action-points/'
                 },
@@ -41,6 +50,15 @@ App global configuration
                     url: '/api/locations-light/',
                     exp: 90 * 24 * 3600 * 1000, // 3 months
                     cachingKey: 'locations',
+                },
+                sectionsCovered: {
+                    url: '/api/sections/'
+                },
+                offices: {
+                    url: '/api/offices/'
+                },
+                unicefUsers: {
+                    url: '/api/users/'
                 },
             };
 

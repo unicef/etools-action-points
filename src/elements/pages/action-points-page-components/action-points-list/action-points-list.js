@@ -35,12 +35,12 @@ class ActionPointsList extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        document.addEventListener('action-points-filters-updated', this._actionPointsFiltersUpdated.bind(this));
+        this.addEventListener('static-data-loaded', this._actionPointsFiltersUpdated.bind(this));
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
-        document.removeEventListener('action-points-filters-updated', this._actionPointsFiltersUpdated);
+        this.removeEventListener('static-data-loaded', this._actionPointsFiltersUpdated);
     }
 
     _actionPointsFiltersUpdated() {

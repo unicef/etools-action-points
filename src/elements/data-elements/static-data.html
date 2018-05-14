@@ -37,10 +37,14 @@
                     this._loadAPOptions();
                     this._loadPartners();
                     this._loadLocations();
+                    this._loadData('sectionsCovered');
+                    this._loadData('offices');
+                    this._loadData('unicefUsers');
                 }
 
                 _allDataLoaded() {
-                    if (this.dataLoaded.organizations && this.dataLoaded.apOptions) {
+                    if (this.dataLoaded.organizations && this.dataLoaded.apOptions &&
+                            this.dataLoaded.sectionsCovered && this.dataLoaded.offices && this.dataLoaded.unicefUsers) {
                         this.dispatchEvent(new CustomEvent('static-data-loaded', {bubbles: true, composed: true}));
                     }
                 }
@@ -85,13 +89,14 @@
                             }, error => this._responseError('Locations', 'request error'));
                 }
 
-                _filtersDataLoaded() {
-                    if (this.dataLoaded.filterActionPoints) {
-                        this._triggerGlobalEvent('action-points-filters-updated');
-
-                        this.dataLoaded.filters = true;
-                        this.dataLoaded.filterActionPoints = false;
-                    }
+                _loadData(dataName) {
+                    let endpoint = this.getEndpoint(dataName);
+                    this.sendRequest({method: 'GET', endpoint})
+                            .then(data => {
+                                this._setData(dataName, data);
+                                this.dataLoaded[dataName] = true;
+                                this._allDataLoaded();
+                            }, error => this._responseError(dataName, 'request error'));
                 }
 
                 _triggerGlobalEvent(eventName, data) {
