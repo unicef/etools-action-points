@@ -12,7 +12,7 @@
 
         <static-data></static-data>
 
-        <app-location route="{{route}}"></app-location>
+        <app-location route="{{route}}" query-params="{{queryParams}}"></app-location>
 
         <app-route
                 route="{{route}}"
@@ -45,7 +45,7 @@
                     attr-for-selected="name"
                     fallback-selection="not-found"
                     role="main">
-                <action-points-page-main name="action-points" id="action-points" route="{{actionPointsSubroute}}"></action-points-page-main>
+                <action-points-page-main name="action-points" id="action-points" route="{{actionPointsSubroute}}" query-params="{{queryParams}}"></action-points-page-main>
                 <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
 

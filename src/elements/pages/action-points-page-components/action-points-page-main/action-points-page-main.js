@@ -1,4 +1,4 @@
-class ActionPointsPageMain extends Polymer.Element {
+class ActionPointsPageMain extends APDMixins.QueryParamsMixin(Polymer.Element) {
     static get is() { return 'action-points-page-main'; }
 
     static get properties() {
@@ -7,6 +7,10 @@ class ActionPointsPageMain extends Polymer.Element {
                 type: Object,
                 notify: true
             },
+            queryParams: {
+                type: Object,
+                notify: true
+            }
         };
     }
 
@@ -23,9 +27,15 @@ class ActionPointsPageMain extends Polymer.Element {
     _setRoutePath(path) {
         if (!path.length) {
             this.set('view', 'list');
+            this.updateQueries({
+                page: 1,
+                page_size: 10
+            });
         } else if (path.startsWith('/new')) {
+            this.clearQueries();
             this.set('view', 'new');
         } else {
+            this.clearQueries();
             this.set('view', 'detail');
         }
     }

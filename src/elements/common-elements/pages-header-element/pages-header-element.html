@@ -33,7 +33,7 @@
                     </div>
 
                     <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
-                        <template is="dom-if" if="{{_showLink(link)}}"><a href="{{link}}" class="btn-link"></a></template>
+                        <template is="dom-if" if="{{_showLink(link)}}"><a href$="{{link}}" class="btn-link"></a></template>
                         <iron-icon icon="add"></iron-icon>
                         <span>[[btnText]]</span>
                     </paper-button>

@@ -1,4 +1,4 @@
-<!--import [polymer, paper-input, paper-card, iron-icon, etools-dropdown, paper-menu-button,
+<!--import [polymer/polymer-element, paper-input, paper-card, iron-icon, iron-icons, etools-dropdown, paper-menu-button,
             paper-button, paper-listbox, iron-flex-layout]-->
 
 <!--import [shared-styles, module-styles, tab-inputs-styles, query-params-mixin]-->
@@ -15,10 +15,12 @@
                             type="search"
                             value="{{searchString}}"
                             label="[[searchLabel]]"
+                            placeholder="Type and search"
                             on-value-changed="searchKeyDown"
+                            always-float-label
                             inline>
 
-                        <iron-icon icon="search" prefix></iron-icon>
+                        <iron-icon icon="search" slot="prefix"></iron-icon>
                     </paper-input>
                 </div>
 
@@ -28,15 +30,14 @@
                         <etools-dropdown
                                 id="[[item.query]]"
                                 class="filter-dropdown"
-                                value="[[item.value]]"
-                                label="[[item.label]]"
+                                selected="{{selectedId}}"
                                 placeholder$="Select [[item.name]]"
                                 options="[[item.selection]]"
-                                custom-object-options
                                 option-label="[[item.optionLabel]]"
                                 option-value="[[item.optionValue]]"
-                                on-value-change="_changeFilterValue"
-                                hide-search="[[item.hideSearch]]">
+                                on-iron-select="_changeFilterValue"
+                                hide-search="[[item.hideSearch]]"
+                                shown-items-limit="5">
                         </etools-dropdown>
 
                         <div class="filter-reset-button" on-click="removeFilter">×</div>

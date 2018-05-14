@@ -28,7 +28,7 @@
 
         getPath() {
             let path = this.getLocationProperty('pathname');
-            if (~path.indexOf('/tpm')) { path = path.slice(4) }
+            if (~path.indexOf('/apd')) { path = path.slice(4) }
             return path.slice(1);
         }
         updateQueries(newQueries, path, noNotify) {
@@ -56,17 +56,17 @@
                 console.warn(err);
             }
 
-            if (!noNotify) { window.dispatchEvent(new CustomEvent('location-changed')); }
+            if (!noNotify) { this.dispatchEvent(new CustomEvent('location-changed', {bubbles: true, composed: true})); }
             return true;
         }
 
         clearQueries() {
             try {
-                window.history.replaceState({}, '', this.getLocationProperty('pathname'));
+                this.history.replaceState({}, '', this.getLocationProperty('pathname'));
             } catch (err) {
                 console.warn(err);
             }
-            window.dispatchEvent(new CustomEvent('location-changed'));
+            this.dispatchEvent(new CustomEvent('location-changed', {bubbles: true, composed: true}));
         }
     };
 </script>
