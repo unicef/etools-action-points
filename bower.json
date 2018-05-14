@@ -39,6 +39,7 @@
   },
   "devDependencies": {},
   "resolutions": {
+    "paper-ripple": "2.1.1",
     "iron-icon": "2.1.0",
     "paper-styles": "2.1.0",
     "paper-icon-button": "2.2.0",
