@@ -1,0 +1,44 @@
+<!--import [polymer/polymer-element, iron-icons, iron-icons/av-icons, iron-flex-layout, paper-button,
+            etools-content-panel]-->
+<!--import [static-data-mixin, permission-controller, action-buttons, module-styles]-->
+
+<dom-module id="status-element">
+    <template>
+        <!-- inject styles './status-element.scss'-->
+        <style include="module-styles"></style>
+
+        <etools-content-panel panel-title="Status">
+
+            <div class="status-list" id="statusList">
+                <template is="dom-repeat" items="{{statuses}}" as="status">
+                    <div class$="status-container [[_getStatusClass(actionPoint, status.value, statuses)]]">
+                        <div class="status-icon">
+                                <span class="icon-wrapper">
+                                    <span class="status-nr">[[setIndex(index)]]</span>
+                                    <iron-icon icon="check"></iron-icon>
+                                    <iron-icon icon="cancel"></iron-icon>
+                                </span>
+                        </div>
+
+                        <div class="status">
+                            <span class="status-header">[[status.display_name]]</span>
+                            <span class="status-date">
+                                <!--{{_getFormattedDate('partner_contacted_at', engagementData.partner_contacted_at)}}-->
+                                </span>
+                        </div>
+                    </div>
+
+                    <div class="divider" hidden$="[[hideDivider(status.value, statuses)]]">
+                        <div class="status-divider"></div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="actions" hidden$="[[noActionsAllowed(permissionBase)]]">
+                <action-buttons actions="[[getActions(permissionBase)]]"></action-buttons>
+            </div>
+        </etools-content-panel>
+    </template>
+
+    <!-- inject scripts './status-element.js'-->
+</dom-module>

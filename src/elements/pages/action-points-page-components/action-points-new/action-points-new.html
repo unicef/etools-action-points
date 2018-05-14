@@ -1,21 +1,20 @@
-<!--import [polymer/polymer-element]-->
-<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details]-->
+<!--import [polymer/polymer-element, etools-ajax]-->
+<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details, status-element]-->
 
 <dom-module id="action-points-new">
     <template>
         <style include="page-layout-styles shared-styles main-page-styles"></style>
-
         <pages-header-element page-title="Add New Action Point"></pages-header-element>
 
         <div class="view-container">
             <div id="pageContent">
 
-                <action-point-details base-permission-path="action_points"></action-point-details>
+                <action-point-details id="ap-details" action-point="[[actionPoint]]" base-permission-path="action_points"></action-point-details>
 
             </div>
 
             <div id="sidebar">
-                <!--<status-tab-element engagement-data="[[engagement]]" permission-base="new_engagement"></status-tab-element>-->
+                <status-element action-point="[[actionPoint]]" permission-base="action_points"></status-element>
             </div>
         </div>
 

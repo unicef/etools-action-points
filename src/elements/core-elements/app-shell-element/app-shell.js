@@ -53,6 +53,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
         this.addEventListener('drawer-toggle-tap', (e) => this.toggleDrawer(e));
         this.addEventListener('404', (e) => this._pageNotFound(e));
         this.addEventListener('static-data-loaded', (e) => this._staticDataLoaded(e));
+        this.addEventListener('global-loading', (e) => this.handleLoading(e));
     }
 
     connectedCallback() {
