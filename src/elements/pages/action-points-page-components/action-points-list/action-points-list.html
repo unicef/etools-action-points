@@ -1,5 +1,5 @@
 <!--import [polymer/polymer-element, pages-header-element, search-and-filter, etools-data-table, paper-card,
-            static-data-mixin, action-points-data]-->
+            iron-flex-layout, static-data-mixin, action-points-data]-->
 
 <dom-module id="action-points-list">
     <template>
@@ -19,69 +19,69 @@
                            filters="[[filters]]"
                            query-params="{{queryParams}}"
                            search-params="[[searchParams]]"></search-and-filter>
-        <paper-card class="horizontal layout center">
+        <paper-card>
             <etools-data-table-header id="listHeader"
                                       label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
-                <etools-data-table-column class="col-2" field="reference_number" sortable>
+                <etools-data-table-column class="col-flex-1" field="reference_number" sortable>
                     Action Point #
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="related_module" sortable>
+                <etools-data-table-column class="col-flex-2" field="cp_output" sortable>
                     CP Output
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="partner" sortable>
+                <etools-data-table-column class="col-flex-2" field="partner" sortable>
                     Partner
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="partner" sortable>
+                <etools-data-table-column class="col-flex-2" field="office" sortable>
                     Office
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="section" sortable>
+                <etools-data-table-column class="col-flex-2" field="section" sortable>
                     Section
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="assigned_to" sortable>
+                <etools-data-table-column class="col-flex-2" field="assigned_to" sortable>
                     Assigned To
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="due_date" sortable>
+                <etools-data-table-column class="col-flex-1" field="due_date" sortable>
                     Due Date
                 </etools-data-table-column>
-                <etools-data-table-column class="col-2" field="status" sortable>
+                <etools-data-table-column class="col-flex-1" field="status" sortable>
                     Status
                 </etools-data-table-column>
             </etools-data-table-header>
 
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
                 <etools-data-table-row>
-                    <div slot="row-data">
-                        <span class="col-data">[[entry.reference_number]]</span>
-                        <span class="col-data">[[entry.cp_output.name]]</span>
-                        <span class="col-data">[[entry.partner.name]]</span>
-                        <span class="col-data">[[entry.office.name]]</span>
-                        <span class="col-data">[[entry.section.name]]</span>
-                        <span class="col-data">[[entry.assigned_to.name]]</span>
-                        <span class="col-data">[[entry.due_date]]</span>
-                        <span class="col-data">[[entry.status]]</span>
+                    <div slot="row-data" class="row-action-points">
+                        <span class="col-data col-base col-flex-1">[[entry.reference_number]]</span>
+                        <span class="col-data col-base col-flex-2">[[entry.cp_output.name]]</span>
+                        <span class="col-data col-base col-flex-2">[[entry.partner.name]]</span>
+                        <span class="col-data col-base col-flex-2">[[entry.office.name]]</span>
+                        <span class="col-data col-base col-flex-2">[[entry.section.name]]</span>
+                        <span class="col-data col-base col-flex-2">[[entry.assigned_to.name]]</span>
+                        <span class="col-data col-base col-flex-1">[[entry.due_date]]</span>
+                        <span class="col-data col-base col-flex-1">[[entry.status]]</span>
                     </div>
-                    <div slot="row-data-details">
-                        <div class="row-details-content">
+                    <div slot="row-data-details" class="row-action-points">
+                        <div class="col-detail col-flex-1">
                             <span class="rdc-title">Description</span>
                             <span>[[entry.description]]</span>
                         </div>
-                        <div class="row-details-content">
+                        <div class="col-detail col-flex-1">
                             <span class="rdc-title">PD/SSFA</span>
                             <span>[[entry.intervention.number]]</span>
                         </div>
-                        <div class="row-details-content">
+                        <div class="col-detail col-flex-1">
                             <span class="rdc-title">Location</span>
                             <span>[[entry.location.name]]</span>
                         </div>
-                        <div class="row-details-content">
+                        <div class="col-detail col-flex-1">
                             <span class="rdc-title">Module</span>
                             <span>[[entry.related_module]]</span>
                         </div>
-                        <div class="row-details-content">
+                        <div class="col-detail col-flex-1">
                             <span class="rdc-title">Assigned By</span>
                             <span>[[entry.assigned_by.name]]</span>
                         </div>
-                        <div class="row-details-content">
+                        <div class="col-detail col-flex-1">
                             <span class="rdc-title">Completed Date</span>
                             <span>[[entry.date_of_completion]]</span>
                         </div>
