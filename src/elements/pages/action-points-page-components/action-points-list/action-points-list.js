@@ -31,10 +31,6 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
                 value: 1
             },
             totalResults: Number,
-            visibleRange: {
-                type: Array,
-                computed: '_computeVisibleRange(queryParams.*)'
-            },
             route: {
                 type: Object,
                 notify: true
@@ -46,15 +42,19 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
         };
     }
 
+    static get observers() {
+        return [
+            '_updateQuery(pageSize, pageNumber)'
+        ];
+    }
+
     connectedCallback() {
         super.connectedCallback();
         this._actionPointsFiltersUpdated();
     }
 
-    _computeVisibleRange() {
-        let startRange = (this.queryParams.page - 1) * this.queryParams.page_size;
-        let endRange = this.queryParams.page * this.queryParams.page_size;
-        return [startRange, endRange];
+    _getLink(referenceNumber) {
+        return `action-points/${referenceNumber}`;
     }
 
     _actionPointsFiltersUpdated() {
@@ -67,12 +67,17 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
 
     setFiltersSelections() {
         let queryAndKeyPairs = [
-            {query: 'assigned_to', dataKey: 'offices'},
+            {query: 'assigned_to', dataKey: 'unicefUsers', map: (user) => {
+                return {
+                    id: user.id,
+                    name: `${user.first_name} ${user.last_name}`
+                };
+            }},
         ];
 
         queryAndKeyPairs.forEach((pair) => {
             let filterIndex = this._getFilterIndex(pair.query);
-            let data = this.getData(pair.dataKey) || [];
+            let data = (this.getData(pair.dataKey) || []).map((user) => pair.map(user));
             this.setFilterSelection(filterIndex, data);
         });
     }
@@ -98,6 +103,11 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
 
     _showAddButton() {
         return true;
+    }
+
+    _updateQuery(pageSize, pageNumber) {
+        this.set('queryParams.page_size', pageSize || 10);
+        this.set('queryParams.page', pageNumber || 1);
     }
 }
 

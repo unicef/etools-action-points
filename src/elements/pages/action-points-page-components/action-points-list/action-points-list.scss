@@ -30,12 +30,24 @@
     @apply --layout-flex-3;
   }
 
+  a.col-data {
+    color: var(--module-primary);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
   paper-card {
     display: block;
     margin-top: 25px;
     --paper-card_-_background-color: white;
     --paper-card_-_margin: 0 24px;
     --paper-card_-_width: calc(100% - 48px);
+  }
+
+  etools-data-table-row {
+    --row-width: {
+      width: calc(100% - 60px);
+    };
   }
 }
 

@@ -62,7 +62,7 @@
 
         clearQueries() {
             try {
-                this.history.replaceState({}, '', this.getLocationProperty('pathname'));
+                window.history.replaceState({}, '', this.getLocationProperty('pathname'));
             } catch (err) {
                 console.warn(err);
             }

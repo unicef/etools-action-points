@@ -38,6 +38,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
                 type: Object,
                 notify: true
             },
+            queryParams: Object
         };
     }
 

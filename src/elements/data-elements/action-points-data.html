@@ -11,7 +11,7 @@
     </template>
 
     <script>
-        class ActionPointsData extends APDMixins.AppConfig(Polymer.Element) {
+        class ActionPointsData extends APDMixins.AppConfig(APDMixins.QueryParamsMixin(Polymer.Element)) {
             static get is() {
                 return 'action-points-data';
             }
@@ -49,6 +49,7 @@
                     composed: true
                 }));
                 this.endpoint = this.getEndpoint('actionPointsList');
+                this.endpoint.url += this.getQueriesString();
             }
 
             _actionPointsLoaded(e, detail) {
