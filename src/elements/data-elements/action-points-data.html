@@ -18,9 +18,8 @@
 
             static get properties() {
                 return {
-                    data: {
+                    actionPoints: {
                         type: Array,
-                        readOnly: true,
                         notify: true
                     },
                     requestQueries: {
@@ -58,7 +57,7 @@
                     return;
                 }
 
-                this.data = detail.results;
+                this.actionPoints = detail.results;
                 this.listLength = detail.count;
 
                 this.dispatchEvent(new CustomEvent('global-loading', {
@@ -68,5 +67,7 @@
                 }));
             }
         }
+
+        customElements.define(ActionPointsData.is, ActionPointsData);
     </script>
 </dom-module>

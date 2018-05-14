@@ -30,15 +30,14 @@
                         <etools-dropdown
                                 id="[[item.query]]"
                                 class="filter-dropdown"
-                                value="[[item.value]]"
-                                label="[[item.label]]"
+                                selected="{{selectedId}}"
                                 placeholder$="Select [[item.name]]"
                                 options="[[item.selection]]"
-                                custom-object-options
                                 option-label="[[item.optionLabel]]"
                                 option-value="[[item.optionValue]]"
-                                on-value-change="_changeFilterValue"
-                                hide-search="[[item.hideSearch]]">
+                                on-iron-select="_changeFilterValue"
+                                hide-search="[[item.hideSearch]]"
+                                shown-items-limit="5">
                         </etools-dropdown>
 
                         <div class="filter-reset-button" on-click="removeFilter">×</div>

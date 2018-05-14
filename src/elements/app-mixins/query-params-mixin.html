@@ -28,7 +28,7 @@
 
         getPath() {
             let path = this.getLocationProperty('pathname');
-            if (~path.indexOf('/tpm')) { path = path.slice(4) }
+            if (~path.indexOf('/apd')) { path = path.slice(4) }
             return path.slice(1);
         }
         updateQueries(newQueries, path, noNotify) {

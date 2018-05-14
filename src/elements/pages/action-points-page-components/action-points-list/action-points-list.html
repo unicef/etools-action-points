@@ -1,18 +1,21 @@
-<!--import [polymer/polymer-element, pages-header-element, search-and-filter, etools-data-table, paper-card]-->
+<!--import [polymer/polymer-element, pages-header-element, search-and-filter, etools-data-table, paper-card,
+            static-data-mixin, action-points-data]-->
 
 <dom-module id="action-points-list">
     <template>
         <!-- inject styles './action-points-list.scss'-->
         <pages-header-element
                 hide-print-button
-                link="/action-points/new"
+                link="action-points/new"
                 show-add-button="{{_showAddButton()}}"
                 btn-text="Add Action Point"
                 page-title="Action Points">
         </pages-header-element>
-        <action-points-data data="{{actionPoints}}"
+        <action-points-data action-points="{{actionPoints}}"
+                            request-queries="{{queryParams}}"
                             list-length="{{totalResults}}"></action-points-data>
         <search-and-filter search-label="Keywords"
+                           id="filters"
                            filters="[[filters]]"
                            query-params="{{queryParams}}"
                            search-params="[[searchParams]]"></search-and-filter>
@@ -46,14 +49,14 @@
             </etools-data-table-header>
 
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
-                <etools-data-table-row details-opened="[[detailsOpened]]">
+                <etools-data-table-row>
                     <div slot="row-data">
                         <span class="col-data">[[entry.reference_number]]</span>
-                        <span class="col-data">[[entry.cp_output]]</span>
-                        <span class="col-data">[[entry.partner]]</span>
-                        <span class="col-data">[[entry.office]]</span>
-                        <span class="col-data">[[entry.section]]</span>
-                        <span class="col-data">[[entry.assigned_to]]</span>
+                        <span class="col-data">[[entry.cp_output.name]]</span>
+                        <span class="col-data">[[entry.partner.name]]</span>
+                        <span class="col-data">[[entry.office.name]]</span>
+                        <span class="col-data">[[entry.section.name]]</span>
+                        <span class="col-data">[[entry.assigned_to.name]]</span>
                         <span class="col-data">[[entry.due_date]]</span>
                         <span class="col-data">[[entry.status]]</span>
                     </div>
@@ -64,19 +67,19 @@
                         </div>
                         <div class="row-details-content">
                             <span class="rdc-title">PD/SSFA</span>
-                            <span>[[entry.intervention]]</span>
+                            <span>[[entry.intervention.number]]</span>
                         </div>
                         <div class="row-details-content">
                             <span class="rdc-title">Location</span>
-                            <span>[[entry.location]]</span>
+                            <span>[[entry.location.name]]</span>
                         </div>
                         <div class="row-details-content">
                             <span class="rdc-title">Module</span>
-                            <span>[[entry.module]]</span>
+                            <span>[[entry.related_module]]</span>
                         </div>
                         <div class="row-details-content">
                             <span class="rdc-title">Assigned By</span>
-                            <span>[[entry.assigned_by]]</span>
+                            <span>[[entry.assigned_by.name]]</span>
                         </div>
                         <div class="row-details-content">
                             <span class="rdc-title">Completed Date</span>
@@ -87,12 +90,10 @@
             </template>
 
             <etools-data-table-footer
-                    page-size="[[pageSize]]"
-                    page-number="[[pageNumber]]"
+                    page-size="{{queryParams.page_size}}"
+                    page-number="{{queryParams.page}}"
                     total-results="[[totalResults]]"
-                    visible-range="{{visibleRange}}"
-                    on-page-size-changed="_pageSizeSelected"
-                    on-page-number-changed="_pageNumberChanged">
+                    visible-range="{{visibleRange}}">
             </etools-data-table-footer>
         </paper-card>
     </template>

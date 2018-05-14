@@ -1,4 +1,4 @@
-class ActionPointsList extends Polymer.Element {
+class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
     static get is() { return 'action-points-list'; }
 
     static get properties() {
@@ -14,19 +14,32 @@ class ActionPointsList extends Polymer.Element {
                 type: Array,
                 value: [
                     {
-                        name: 'auditor',
-                        query: 'agreement__auditor_firm',
+                        name: 'Assigned To',
+                        query: 'assigned_to',
                         optionValue: 'id',
                         optionLabel: 'name',
                         selection: []
                     }
                 ]
             },
-            pageSize: Number,
-            pageNumber: Number,
+            pageSize: {
+                type: Number,
+                value: 10
+            },
+            pageNumber: {
+                type: Number,
+                value: 1
+            },
             totalResults: Number,
-            visibleRange: Number,
+            visibleRange: {
+                type: Array,
+                computed: '_computeVisibleRange(queryParams.*)'
+            },
             route: {
+                type: Object,
+                notify: true
+            },
+            queryParams: {
                 type: Object,
                 notify: true
             }
@@ -35,12 +48,13 @@ class ActionPointsList extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('static-data-loaded', this._actionPointsFiltersUpdated.bind(this));
+        this._actionPointsFiltersUpdated();
     }
 
-    disconnectedCallback() {
-        super.disconnectedCallback();
-        this.removeEventListener('static-data-loaded', this._actionPointsFiltersUpdated);
+    _computeVisibleRange() {
+        let startRange = (this.queryParams.page - 1) * this.queryParams.page_size;
+        let endRange = this.queryParams.page * this.queryParams.page_size;
+        return [startRange, endRange];
     }
 
     _actionPointsFiltersUpdated() {
@@ -53,17 +67,21 @@ class ActionPointsList extends Polymer.Element {
 
     setFiltersSelections() {
         let queryAndKeyPairs = [
-            {query: 'partner', dataKey: 'filterPartners'},
-            {query: 'agreement__auditor_firm', dataKey: 'filterAuditors'},
-            {query: 'status', dataKey: 'statuses'},
-            {query: 'engagement_type', dataKey: 'engagementTypes'},
-            {query: 'staff_members__user', dataKey: 'staffMembersUsers'}
+            {query: 'assigned_to', dataKey: 'offices'},
         ];
 
         queryAndKeyPairs.forEach((pair) => {
             let filterIndex = this._getFilterIndex(pair.query);
             let data = this.getData(pair.dataKey) || [];
             this.setFilterSelection(filterIndex, data);
+        });
+    }
+
+    _getFilterIndex(query) {
+        if (!this.filters) { return -1; }
+
+        return this.filters.findIndex((filter) => {
+            return filter.query === query;
         });
     }
 
@@ -78,9 +96,6 @@ class ActionPointsList extends Polymer.Element {
         this.set('route.path', `/${model.item.id}`);
     }
 
-    _toNew() {
-        this.set('route.path', '/new');
-    }
     _showAddButton() {
         return true;
     }

@@ -125,14 +125,6 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
         });
     }
 
-    _getFilterIndex(query) {
-        if (!this.filters) { return -1; }
-
-        return this.filters.findIndex((filter) => {
-            return filter.query === query;
-        });
-    }
-
     _setFilterValue(filter) {
         if (!filter) {
             return;
@@ -171,18 +163,16 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
         }
     }
 
-    _changeFilterValue(e, detail) {
-        if (!e || !e.currentTarget || !detail) {
+    _changeFilterValue(e) {
+        if (!e || !e.currentTarget) {
             return;
         }
 
         let query = e.currentTarget.id;
 
-        if (detail.selectedValues && query) {
-            let filter = this._getFilter(query);
-            let optionValue = filter.optionValue || 'value';
+        if (e.model.selectedId && query) {
             let queryObject = {page: '1'};
-            queryObject[query] = detail.selectedValues[optionValue];
+            queryObject[query] = e.model.selectedId;
 
             this.updateQueries(queryObject);
         }
