@@ -30,7 +30,6 @@
                             options="[[partners]]"
                             option-label="name"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('partner', basePermissionPath)]]"
                             disabled$="[[isReadOnly('partner', basePermissionPath)]]"
                             readonly$="[[isReadOnly('partner', basePermissionPath)]]"
@@ -53,7 +52,6 @@
                             options="[[partner.interventions]]"
                             option-label="title"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('intervention', basePermissionPath)]]"
                             disabled$="[[isFieldReadonly('intervention', basePermissionPath, partner)]]"
                             readonly$="[[isFieldReadonly('intervention', basePermissionPath, partner)]]"
@@ -79,7 +77,6 @@
                             options="[[cpOutputs]]"
                             option-label="name"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('cp_output', basePermissionPath)]]"
                             disabled$="[[isFieldReadonly('cp_output', basePermissionPath, cpOutputs)]]"
                             readonly$="[[isFieldReadonly('cp_output', basePermissionPath, cpOutputs)]]"
@@ -101,7 +98,6 @@
                             options="[[locations]]"
                             option-label="name"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('location', basePermissionPath)]]"
                             disabled$="[[isReadOnly('location', basePermissionPath)]]"
                             readonly$="[[isReadOnly('location', basePermissionPath)]]"
@@ -148,7 +144,6 @@
                             options="[[unicefUsers]]"
                             option-label="name"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('assigned_to', basePermissionPath)]]"
                             disabled$="[[isReadOnly('assigned_to', basePermissionPath)]]"
                             readonly$="[[isReadOnly('assigned_to', basePermissionPath)]]"
@@ -205,7 +200,6 @@
                             options="[[sectionsCovered]]"
                             option-label="name"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('section', basePermissionPath)]]"
                             disabled$="[[isReadOnly('section', basePermissionPath)]]"
                             readonly$="[[isReadOnly('section', basePermissionPath)]]"
@@ -227,7 +221,6 @@
                             options="[[offices]]"
                             option-label="name"
                             option-value="id"
-                            update-selected
                             required$="[[_setRequired('office', basePermissionPath)]]"
                             disabled$="[[isReadOnly('office', basePermissionPath)]]"
                             readonly$="[[isReadOnly('office', basePermissionPath)]]"

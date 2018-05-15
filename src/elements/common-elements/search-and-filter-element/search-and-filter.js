@@ -170,9 +170,10 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
 
         let query = e.currentTarget.id;
 
-        if (e.model.selectedId && query) {
+        if (e.detail.item && query) {
             let queryObject = {page: '1'};
-            queryObject[query] = e.model.selectedId;
+            // e.detail.item.item doesn't from etools-dropdown
+            queryObject[query] = e.detail.item.getAttribute('internal-id');
 
             this.updateQueries(queryObject);
         }

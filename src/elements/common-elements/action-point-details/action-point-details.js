@@ -56,14 +56,30 @@
         }
 
         _updateEditedItem(actionPoint) {
-            this.editedItem = actionPoint || {};
+            let editedItem = actionPoint || {};
+            editedItem.partner = this._resolveFieldId(actionPoint.partner);
+            editedItem.intervention = this._resolveFieldId(actionPoint.intervention);
+            editedItem.office = this._resolveFieldId(actionPoint.office);
+            editedItem.location = this._resolveFieldId(actionPoint.location);
+            editedItem.section = this._resolveFieldId(actionPoint.section);
+            editedItem.assigned_to = this._resolveFieldId(actionPoint.assigned_to);
+            editedItem.assigned_by = this._resolveFieldId(actionPoint.assigned_by);
+            this.editedItem = editedItem;
+        }
+
+        _resolveFieldId(field) {
+            return _.isObject(field) ? field.id : field;
         }
 
         _updateLocations() {
             this.locations = this.getData('locations') || [];
         }
 
-        _requestPartner(partnerId) {
+        _requestPartner(partner) {
+            if (!partner) {
+                return;
+            }
+            let partnerId = _.isObject(partner) ? partner.id : partner;
             if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
                 return;
             }
@@ -89,8 +105,9 @@
         }
 
         /* jshint ignore:start */
-        async _updateCpOutputs(interventionId) {
-            if (!interventionId) { return; }
+        async _updateCpOutputs(intervention) {
+            if (!intervention) { return; }
+            let interventionId = _.isObject(intervention) ? intervention.id : intervention;
             try {
                 this.interventionRequestInProcess = true;
                 this.cpOutputs = undefined;

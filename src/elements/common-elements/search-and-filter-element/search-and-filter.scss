@@ -53,7 +53,7 @@
             }
         }
 
-        paper-menu {
+        paper-listbox {
             background-color: #ffffff;
 
             --paper-menu-background-color: #ffffff;
@@ -66,6 +66,7 @@
                 font-weight: normal;
                 height: 48px;
                 min-height: initial;
+                cursor: pointer;
 
                 --paper-item-focused-before: #{'{
                     background: var(--primary-background-color);

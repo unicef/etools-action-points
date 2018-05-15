@@ -7,6 +7,7 @@ class ActionPointsPageMain extends APDMixins.QueryParamsMixin(Polymer.Element) {
                 type: Object,
                 notify: true
             },
+            routeData: Object,
             queryParams: {
                 type: Object,
                 notify: true
@@ -37,6 +38,7 @@ class ActionPointsPageMain extends APDMixins.QueryParamsMixin(Polymer.Element) {
         } else {
             this.clearQueries();
             this.set('view', 'detail');
+            this.set('actionPointId', this.routeData.id);
         }
     }
 }

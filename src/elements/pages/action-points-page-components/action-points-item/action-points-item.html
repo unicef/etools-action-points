@@ -1,8 +1,21 @@
-<!--import [polymer/polymer-element]-->
+<!--import [polymer/polymer-element, etools-ajax]-->
+<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details, status-element]-->
 
 <dom-module id="action-points-item">
     <template>
-        Action Point Item
+        <style include="page-layout-styles shared-styles main-page-styles"></style>
+        <pages-header-element page-title="[[actionPoint.reference_number]]"></pages-header-element>
+
+        <div class="view-container">
+            <div id="pageContent">
+                <action-point-details id="ap-details" action-point="[[actionPoint]]" base-permission-path="action_points"></action-point-details>
+            </div>
+
+            <div id="sidebar">
+                <status-element action-point="[[actionPoint]]" permission-base="action_points"></status-element>
+            </div>
+        </div>
+
     </template>
     <!-- inject scripts './action-points-item.js' -->
 </dom-module>

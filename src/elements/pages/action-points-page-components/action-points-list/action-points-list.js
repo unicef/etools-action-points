@@ -19,6 +19,41 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
                         optionValue: 'id',
                         optionLabel: 'name',
                         selection: []
+                    },
+                    {
+                        name: 'Assigned By',
+                        query: 'assigned_by',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
+                    },
+                    {
+                        name: 'Partner',
+                        query: 'partner',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
+                    },
+                    {
+                        name: 'Office',
+                        query: 'office',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
+                    },
+                    {
+                        name: 'Locations',
+                        query: 'locations',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
+                    },
+                    {
+                        name: 'Section',
+                        query: 'section',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
                     }
                 ]
             },
@@ -50,14 +85,19 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
 
     connectedCallback() {
         super.connectedCallback();
-        this._actionPointsFiltersUpdated();
+        this._initFilters();
+        this.addEventListener('sort-changed', (e) => this._sort(e));
     }
 
-    _getLink(referenceNumber) {
-        return `action-points/${referenceNumber}`;
+    _sort({detail}) {
+        this.set('queryParams.ordering', detail.field);
     }
 
-    _actionPointsFiltersUpdated() {
+    _getLink(actionPointId) {
+        return `action-points/${actionPointId}`;
+    }
+
+    _initFilters() {
         let filtersElement = this.$.filters;
         this.setFiltersSelections();
         if (filtersElement) {
@@ -66,18 +106,23 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
     }
 
     setFiltersSelections() {
-        let queryAndKeyPairs = [
-            {query: 'assigned_to', dataKey: 'unicefUsers', map: (user) => {
-                return {
-                    id: user.id,
-                    name: `${user.first_name} ${user.last_name}`
-                };
-            }},
+        let usersList = this.getData('unicefUsers').map((user) => {
+            return {
+                id: user.id,
+                name: `${user.first_name} ${user.last_name}`};
+        });
+        let queryDataPairs = [
+            {query: 'assigned_to', data: usersList},
+            {query: 'assigned_by', data: usersList},
+            {query: 'partner', dataKey: 'partnerOrganisations'},
+            {query: 'office', dataKey: 'offices'},
+            {query: 'location', dataKey: 'locations'},
+            {query: 'section', dataKey: 'sectionsCovered'},
         ];
 
-        queryAndKeyPairs.forEach((pair) => {
+        queryDataPairs.forEach((pair) => {
             let filterIndex = this._getFilterIndex(pair.query);
-            let data = (this.getData(pair.dataKey) || []).map((user) => pair.map(user));
+            let data = !pair.data ? this.getData(pair.dataKey) : pair.data || [];
             this.setFilterSelection(filterIndex, data);
         });
     }
@@ -95,10 +140,6 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
             this.set(`filters.${filterIndex}.selection`, data);
             return true;
         }
-    }
-
-    _toActionPoint({model}) {
-        this.set('route.path', `/${model.item.id}`);
     }
 
     _showAddButton() {
