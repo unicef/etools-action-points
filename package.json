@@ -18,9 +18,6 @@
     "gulp-if": "^2.0.2"
   },
   "dependencies": {
-    "babel-preset-es2016": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
-    "babel-preset-es2017-node7": "^0.5.2",
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
     "express": "^4.15.3",
