@@ -33,13 +33,13 @@ function minifyHtml() {
 
 module.exports = function() {
     return project.splitSource()
-        .pipe(gulpif('**/*.js', babel({presets: ['env']})))
+        .pipe(gulpif('**/*.js', babel({presets: [['env', {exclude: ['transform-es2015-classes']}]]})))
         .pipe(gulpif('**/*.html', builder([{path: `${process.cwd()}/bower_components/`, new_base: `${process.cwd()}/src/bower_components/`}])))
         .pipe(gulpif(function(file) {
             return file.extname === '.html' && file.stem !== 'index';
         }, combine(
             compileHtmlTags('style', function (tag, data) { return data.pipe(sass()).pipe(minifyCss()) }),
-            compileHtmlTags('script', function (tag, data) { return data.pipe(babel({presets: ['env']})).pipe(minifyJs()); }),
+            compileHtmlTags('script', function (tag, data) { return data.pipe(babel({presets: [['env', {exclude: ['transform-es2015-classes']}]]})); }),
             minifyHtml()
         )))
 
