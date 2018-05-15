@@ -184,7 +184,7 @@
 
                 <div class="input-container input-checkbox-container">
                     <!-- Priority -->
-                   <paper-checkbox checked="{{editedItem.high_priority}}">Heigh Priority</paper-checkbox>
+                   <paper-checkbox checked="{{editedItem.high_priority}}">Height Priority</paper-checkbox>
                 </div>
             </div>
 
@@ -221,6 +221,7 @@
                             options="[[offices]]"
                             option-label="name"
                             option-value="id"
+                            update-selected
                             required$="[[_setRequired('office', basePermissionPath)]]"
                             disabled$="[[isReadOnly('office', basePermissionPath)]]"
                             readonly$="[[isReadOnly('office', basePermissionPath)]]"
