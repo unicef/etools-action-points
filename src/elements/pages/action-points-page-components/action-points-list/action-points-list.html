@@ -5,7 +5,10 @@
     <template>
         <!-- inject styles './action-points-list.scss'-->
         <style include="module-styles shared-styles"></style>
-
+        <app-route
+                route="{{route}}"
+                pattern="/"
+                query-params="{{queryParams}}"></app-route>
         <pages-header-element
                 hide-print-button
                 link="action-points/new"
@@ -65,29 +68,29 @@
                         <span class="col-data col-base col-flex-1">[[entry.status]]</span>
                     </div>
                     <div slot="row-data-details" class="row-action-points">
-                        <div class="col-detail col-flex-1">
+                        <div class="row-details-content col-flex-1">
                             <span class="rdc-title">Description</span>
                             <span>[[entry.description]]</span>
                         </div>
-                        <div class="col-detail col-flex-1">
+                        <div class="row-details-content col-flex-1">
                             <span class="rdc-title">PD/SSFA</span>
                             <span>[[entry.intervention.number]]</span>
                         </div>
-                        <div class="col-detail col-flex-1">
+                        <div class="row-details-content col-flex-1">
                             <span class="rdc-title">Location</span>
                             <span>[[entry.location.name]]</span>
                         </div>
-                        <div class="col-detail col-flex-1">
-                            <span class="rdc-title">Module</span>
-                            <span>[[entry.related_module]]</span>
-                        </div>
-                        <div class="col-detail col-flex-1">
+                        <div class="row-details-content col-flex-1">
                             <span class="rdc-title">Assigned By</span>
                             <span>[[entry.assigned_by.name]]</span>
                         </div>
-                        <div class="col-detail col-flex-1">
+                        <div class="row-details-content col-flex-1">
                             <span class="rdc-title">Completed Date</span>
                             <span>[[entry.date_of_completion]]</span>
+                        </div>
+                        <div class="row-details-content col-flex-1">
+                            <span class="rdc-title">Module</span>
+                            <span>[[entry.related_module]]</span>
                         </div>
                     </div>
                 </etools-data-table-row>

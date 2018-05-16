@@ -27,18 +27,17 @@ class ActionPointsPageMain extends APDMixins.QueryParamsMixin(Polymer.Element) {
 
     _setRoutePath(path) {
         if (!path.length) {
-            this.set('view', 'list');
+            //todo rework query params
             this.updateQueries({
                 page: 1,
                 page_size: 10
             });
+            this.set('view', 'list');
         } else if (path.startsWith('/new')) {
-            this.clearQueries();
             this.set('view', 'new');
         } else {
-            this.clearQueries();
             this.set('view', 'detail');
-            this.set('actionPointId', this.routeData.id);
+            this.set('actionPointId', path.replace('/', ''));
         }
     }
 }

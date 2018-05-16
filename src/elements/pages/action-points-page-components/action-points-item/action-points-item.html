@@ -8,11 +8,11 @@
 
         <div class="view-container">
             <div id="pageContent">
-                <action-point-details id="ap-details" action-point="[[actionPoint]]" base-permission-path="action_points"></action-point-details>
+                <action-point-details id="ap-details" action-point="[[actionPoint]]" base-permission-path="[[basePermissionPath]]"></action-point-details>
             </div>
 
             <div id="sidebar">
-                <status-element action-point="[[actionPoint]]" permission-base="action_points"></status-element>
+                <status-element action-point="[[actionPoint]]" permission-base="[[basePermissionPath]]"></status-element>
             </div>
         </div>
 

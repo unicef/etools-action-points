@@ -41,6 +41,7 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
     }
 
     searchKeyDown() {
+        if (!this.searchString) { return; }
         this._debounceSearch = Polymer.Debouncer.debounce(this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
             if (this.searchString.length !== 1) {
                 this.updateQueries({search: this.searchString || undefined, page: '1'});
