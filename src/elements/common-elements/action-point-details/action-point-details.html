@@ -16,6 +16,17 @@
                 opacity: 0;
                 z-index: -1;
             }
+            .last-modify {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                padding: 12px 24px;
+                font-size: 12px;
+                color: var(--list-secondary-text-color, #757575);
+            }
+            .last-modify__author {
+                font-weight: bold;
+            }
         </style>
 
         <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
@@ -233,6 +244,14 @@
                     </etools-dropdown>
                 </div>
 
+            </div>
+            <!--<template is="dom-if">-->
+                <!--<div class="last-modify">Last modify by [[editedItem.history]]</div>-->
+            <!--</template>-->
+            <div class="last-modify">
+                Last modify by
+                <span class="last-modify__author">[[editedItem.history.0.by_user_display]]</span>
+                [[prettyDate(editedItem.history.0.modified, 'D MMM YYYY [at] h:mm')]]
             </div>
         </etools-content-panel>
 
