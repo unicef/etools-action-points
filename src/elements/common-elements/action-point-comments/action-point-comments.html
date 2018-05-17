@@ -1,0 +1,36 @@
+<!--import [polymer/polymer-element, etools-content-panel, paper-icon-button, etools-data-table, etools-dialog]-->
+
+<dom-module id="action-point-comments">
+    <template>
+        <style include="tab-inputs-styles module-styles">
+        </style>
+        <etools-content-panel panel-title="[[getLabel('comments', basePermissionPath)]]">
+            <div slot="panel-btns">
+                <paper-icon-button icon="add" on-tap="_openAddComment"></paper-icon-button>
+            </div>
+            <template id="rows" is="dom-repeat" items="[[comments]]" as="item">
+                <etools-data-table-row>
+                    <div slot="row-data">
+                        <span class="col-data">
+                          [[item.comment]]
+                        </span>
+                    </div>
+                </etools-data-table-row>
+            </template>
+            <etools-data-table-footer
+                    page-size="[[pageSize]]"
+                    page-number="[[pageNumber]]"
+                    total-results="[[comments.length]]">
+            </etools-data-table-footer>
+        </etools-content-panel>
+        <etools-dialog size="md" opened="{{openedCommentDialog}}" dialog-title="Add New Comment">
+            <paper-input class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', basePermissionPath)]]"
+                         label="[[getLabel('comments.comment', basePermissionPath)]]"
+                         placeholder="[[getPlaceholderText('comments.comment', basePermissionPath, 'true')]]"
+                         required$="[[_setRequired('comments.comment', basePermissionPath)]]"
+                         disabled$="[[isReadOnly('comments.comment', basePermissionPath)]]"
+                         readonly$="[[isReadOnly('comments.comment', basePermissionPath)]]"></paper-input>
+        </etools-dialog>
+    </template>
+    <!-- inject scripts './action-point-comments.js' -->
+</dom-module>

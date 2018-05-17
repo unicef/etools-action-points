@@ -1,14 +1,21 @@
 <!--import [polymer/polymer-element, etools-ajax]-->
-<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details, status-element]-->
+<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details,
+            action-point-comments, status-element]-->
 
 <dom-module id="action-points-item">
     <template>
-        <style include="page-layout-styles shared-styles main-page-styles"></style>
+        <style include="page-layout-styles shared-styles main-page-styles">
+            #pageContent > * {
+                display: block;
+                margin-bottom: 25px;
+            }
+        </style>
         <pages-header-element page-title="[[actionPoint.reference_number]]"></pages-header-element>
 
         <div class="view-container">
             <div id="pageContent">
                 <action-point-details id="ap-details" action-point="[[actionPoint]]" base-permission-path="[[basePermissionPath]]"></action-point-details>
+                <action-point-comments comments="[[actionPoint.comments]]" base-permission-path="[[basePermissionPath]]"></action-point-comments>
             </div>
 
             <div id="sidebar">

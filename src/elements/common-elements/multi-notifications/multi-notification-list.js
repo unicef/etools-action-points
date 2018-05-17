@@ -29,14 +29,14 @@ class MultiNotificationList extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('notification-push', (e, detail) => this._onNotificationPush(e, detail));
-        this.addEventListener('notification-shift', (e, detail) => this._onNotificationShift(e, detail));
+        this.addEventListener('notification-push', (e) => this._onNotificationPush(e));
+        this.addEventListener('notification-shift', (e) => this._onNotificationShift(e));
         this.addEventListener('reset-notifications', () => this._resetNotifications());
     }
 
-    _onNotificationShift(e, id) {
+    _onNotificationShift({detail}) {
         let index = this.notifications.findIndex((notification) => {
-            return notification.id === id;
+            return notification.id === detail.id;
         });
 
         if (index !== undefined) {
@@ -50,7 +50,8 @@ class MultiNotificationList extends Polymer.Element {
         }
     }
 
-    _onNotificationPush(e, notification = {}) {
+    _onNotificationPush({detail}) {
+        let notification = detail;
         notification.id = `toast___${this.count++}`;
 
         if (this.limit > this.notifications.length) {

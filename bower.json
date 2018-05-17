@@ -35,7 +35,8 @@
     "paper-input": "PolymerElements/paper-input#^2.2.2",
     "etools-dropdown": "^2.0.0",
     "etools-data-table": "^2.0.1",
-    "etools-datepicker": "^2.0.0"
+    "etools-datepicker": "^2.0.0",
+    "etools-dialog": "^2.0.1"
   },
   "devDependencies": {},
   "resolutions": {
