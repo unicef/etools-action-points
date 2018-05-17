@@ -245,14 +245,14 @@
                 </div>
 
             </div>
-            <!--<template is="dom-if">-->
-                <!--<div class="last-modify">Last modify by [[editedItem.history]]</div>-->
-            <!--</template>-->
-            <div class="last-modify">
-                Last modify by
-                <span class="last-modify__author">[[editedItem.history.0.by_user_display]]</span>
-                [[prettyDate(editedItem.history.0.modified, 'D MMM YYYY [at] h:mm')]]
-            </div>
+            <template is="dom-if" if="[[editedItem.history.0]]">
+                <div class="last-modify">
+                    Last modify by
+                    <span class="last-modify__author">[[editedItem.history.0.by_user_display]]</span>
+                    [[prettyDate(editedItem.history.0.modified, 'D MMM YYYY [at] h:mm')]]
+                </div>
+            </template>
+
         </etools-content-panel>
 
     </template>
