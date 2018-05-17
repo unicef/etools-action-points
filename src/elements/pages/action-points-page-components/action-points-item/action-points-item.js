@@ -12,8 +12,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
                 observer: '_changeActionPointId'
             },
             actionPoint: {
-                type: Object,
-                value: () => ({})
+                type: Object
             },
             basePermissionPath: String
         };
@@ -81,7 +80,6 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
 
         this.sendRequest({method: 'PUT', endpoint, body: data})
             .then(data => {
-                this.actionPoint = {};
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: ' Action Point successfully updated.'},
                     bubbles: true,
