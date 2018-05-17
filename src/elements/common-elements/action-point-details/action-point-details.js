@@ -139,7 +139,7 @@
         }
 
         validate() {
-            let elements = Polymer.dom(this.root).querySelectorAll('.validate-input');
+            let elements = this.shadowRoot.querySelectorAll('.validate-input');
             let valid = true;
             _.each(elements, element => {
                 if (element.required && !element.disabled && !element.validate()) {

@@ -12,7 +12,8 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
                 observer: '_changeActionPointId'
             },
             actionPoint: {
-                type: Object
+                type: Object,
+                value() { return {};}
             },
             basePermissionPath: String
         };
@@ -66,7 +67,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
     }
 
     _updateAP() {
-        let detailsElement = this.shadowRoot.querySelector('#ap-details');
+        let detailsElement = this.shadowRoot.querySelector('action-point-details');
         if (!detailsElement || !detailsElement.validate()) { return; }
 
         let data = _.clone(detailsElement.editedItem);

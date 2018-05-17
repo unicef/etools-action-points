@@ -2,34 +2,54 @@
 
 <dom-module id="action-point-comments">
     <template>
+        <!-- inject styles './action-point-comments.scss'-->
         <style include="tab-inputs-styles module-styles">
         </style>
         <etools-content-panel panel-title="[[getLabel('comments', basePermissionPath)]]">
             <div slot="panel-btns">
                 <paper-icon-button icon="add" on-tap="_openAddComment"></paper-icon-button>
             </div>
-            <template id="rows" is="dom-repeat" items="[[comments]]" as="item">
-                <etools-data-table-row>
-                    <div slot="row-data">
-                        <span class="col-data">
-                          [[item.comment]]
-                        </span>
+            <div class="comments-list">
+                <template id="rows" is="dom-repeat" items="[[filteredComments]]" as="item">
+                    <div class="comment-item">
+                        <div class="comment-item__header">
+                            <span class="comment-item__user">[[item.user.name]]</span>
+                            <span class="comment-item__date">[[prettyDate(item.submit_date, 'D MMM YYYY h:mm')]]</span>
+                        </div>
+                        <div class="comment-item__body">
+                            [[item.comment]]
+                        </div>
                     </div>
-                </etools-data-table-row>
-            </template>
+                </template>
+            </div>
             <etools-data-table-footer
-                    page-size="[[pageSize]]"
-                    page-number="[[pageNumber]]"
-                    total-results="[[comments.length]]">
+                    page-size="{{pageSize}}"
+                    page-number="{{pageNumber}}"
+                    total-results="[[actionPoint.comments.length]]">
             </etools-data-table-footer>
         </etools-content-panel>
-        <etools-dialog size="md" opened="{{openedCommentDialog}}" dialog-title="Add New Comment">
-            <paper-input class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', basePermissionPath)]]"
-                         label="[[getLabel('comments.comment', basePermissionPath)]]"
-                         placeholder="[[getPlaceholderText('comments.comment', basePermissionPath, 'true')]]"
-                         required$="[[_setRequired('comments.comment', basePermissionPath)]]"
-                         disabled$="[[isReadOnly('comments.comment', basePermissionPath)]]"
-                         readonly$="[[isReadOnly('comments.comment', basePermissionPath)]]"></paper-input>
+        <etools-dialog size="md"
+                       opened="{{openedCommentDialog}}"
+                       dialog-title="Add New Comment"
+                       keep-dialog-open
+                       show-spinner="[[isSaveComment]]"
+                       on-confirm-btn-clicked="saveComment"
+                       on-close="closeSaveDialog">
+            <div class="row-h group">
+                <div class="input-container input-container-l">
+                    <paper-input class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', basePermissionPath)]]"
+                                 label="[[getLabel('comments.comment', basePermissionPath)]]"
+                                 value="{{commentText}}"
+                                 placeholder="[[getPlaceholderText('comments.comment', basePermissionPath, 'true')]]"
+                                 required$="[[_setRequired('comments.comment', basePermissionPath)]]"
+                                 disabled$="[[isReadOnly('comments.comment', basePermissionPath)]]"
+                                 readonly$="[[isReadOnly('comments.comment', basePermissionPath)]]"
+                                 invalid="{{errors.comments.comment}}"
+                                 error-message="{{errors.comments.comment}}"
+                                 on-focus="_resetFieldError"
+                                 on-tap="_resetFieldError"></paper-input>
+                </div>
+            </div>
         </etools-dialog>
     </template>
     <!-- inject scripts './action-point-comments.js' -->

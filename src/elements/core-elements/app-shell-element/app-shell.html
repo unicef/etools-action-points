@@ -27,7 +27,7 @@
 
         <etools-loading id="global-loading" absolute></etools-loading>
 
-        <app-drawer-layout id="layout" opened-when-narrow force-narrow narrow="{{narrow}}">
+        <div id="layout">
             <!-- Drawer content -->
             <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe opened>
                 <app-sidebar-menu class="opened" page="[[page]]"></app-sidebar-menu>
@@ -49,7 +49,7 @@
                 <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
 
-        </app-drawer-layout>
+        </div>
         <multi-notification-list></multi-notification-list>
     </template>
 
