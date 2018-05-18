@@ -31,7 +31,7 @@
         paper-icon-button { top: -2px; }
     }
 
-    .dropdown-content { padding: 6px 0; }
+    [slot="dropdown-content"] { padding: 6px 0; }
 
     .other-title {
         cursor: default;
@@ -43,6 +43,7 @@
     }
 
     .other-options {
+        outline: none;
         min-width: 150px;
         text-align: left;
         padding: 13px;
