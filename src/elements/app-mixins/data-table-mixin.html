@@ -1,0 +1,17 @@
+<!--import [polymer, lodash, static-data-mixin]-->
+
+<script>
+    'use strict';
+
+    window.APDMixins = window.APDMixins || {};
+    window.APDMixins.DataTableMixin = (superClass) => class extends superClass {
+        getStringValue(value, list, field) {
+            let stringValue = value;
+            if (!_.isNil(list) && !_.isNil(field)) {
+                let item = _.find(list, {value: value});
+                stringValue = item && item[field] ? item[field] : '';
+            }
+            return _.isNil(stringValue) || !stringValue.length ? '-' : stringValue;
+        }
+    }
+</script>

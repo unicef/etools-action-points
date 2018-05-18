@@ -1,4 +1,4 @@
-class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMixin(Polymer.Element)) {
+class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMixin(APDMixins.DataTableMixin(APDMixins.DateMixin(Polymer.Element)))) {
     static get is() { return 'action-points-list'; }
 
     static get properties() {

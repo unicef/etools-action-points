@@ -10,6 +10,9 @@
                 <paper-icon-button icon="add" on-tap="_openAddComment"></paper-icon-button>
             </div>
             <div class="comments-list">
+                <template is="dom-if" if="[[!filteredComments.length]]">
+                    <span>No actions taken</span>
+                </template>
                 <template id="rows" is="dom-repeat" items="[[filteredComments]]" as="item">
                     <div class="comment-item">
                         <div class="comment-item__header">
@@ -17,7 +20,7 @@
                             <span class="comment-item__date">[[prettyDate(item.submit_date, 'D MMM YYYY h:mm')]]</span>
                         </div>
                         <div class="comment-item__body">
-                            [[item.comment]]
+                            [[getStringValue(item.comment)]]
                         </div>
                     </div>
                 </template>
@@ -30,7 +33,7 @@
         </etools-content-panel>
         <etools-dialog size="md"
                        opened="{{openedCommentDialog}}"
-                       dialog-title="Add New Comment"
+                       dialog-title="Add New [[getLabel('comments', basePermissionPath)]]"
                        keep-dialog-open
                        show-spinner="[[isSaveComment]]"
                        on-confirm-btn-clicked="saveComment"

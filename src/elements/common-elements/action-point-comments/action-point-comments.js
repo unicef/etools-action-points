@@ -1,6 +1,6 @@
 'use strict';
 
-class ActionPointComments extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMixins.DateMixin(APDMixins.InputAttrs(Polymer.Element)))) {
+class ActionPointComments extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMixins.DateMixin(APDMixins.InputAttrs(APDMixins.DataTableMixin(Polymer.Element))))) {
     static get is() { return 'action-point-comments'; }
 
     static get properties() {

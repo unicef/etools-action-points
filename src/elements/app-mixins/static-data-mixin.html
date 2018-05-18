@@ -22,11 +22,6 @@
                 _staticData[key] = _.cloneDeep(data);
                 return true;
             }
-
-            _getDisplayName(key, field, value) {
-                let item = _.find(_staticData[key], {value: value});
-                return item && item[field] ? item[field] : '';
-            }
         }
     })();
 </script>
