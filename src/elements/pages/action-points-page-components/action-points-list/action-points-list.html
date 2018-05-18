@@ -1,14 +1,20 @@
 <!--import [polymer/polymer-element, pages-header-element, search-and-filter, etools-data-table, paper-card,
-            iron-flex-layout, static-data-mixin, action-points-data]-->
+            iron-flex-layout, static-data-mixin, action-points-data, iron-location]-->
 
 <dom-module id="action-points-list">
     <template>
         <!-- inject styles './action-points-list.scss'-->
         <style include="module-styles shared-styles"></style>
-        <app-route
-                route="{{route}}"
-                pattern="/"
-                query-params="{{queryParams}}"></app-route>
+        <iron-location path="{{path}}" query="{{query}}"></iron-location>
+        <iron-query-params
+                params-string="{{query}}"
+                params-object="{{queryParams}}">
+        </iron-query-params>
+        <app-route-converter
+                path="{{path}}"
+                query-params="{{queryParams}}"
+                route="{{route}}">
+        </app-route-converter>
         <pages-header-element
                 hide-print-button
                 link="action-points/new"
@@ -100,7 +106,9 @@
                     page-size="{{pageSize}}"
                     page-number="{{pageNumber}}"
                     total-results="[[totalResults]]"
-                    visible-range="{{visibleRange}}">
+                    visible-range="{{visibleRange}}"
+                    on-page-size-changed="_pageSizeSelected"
+                    on-page-number-changed="_pageNumberChanged">
             </etools-data-table-footer>
         </paper-card>
     </template>

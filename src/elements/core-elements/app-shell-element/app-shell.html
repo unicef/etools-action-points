@@ -12,7 +12,7 @@
 
         <static-data></static-data>
 
-        <app-location route="{{route}}" query-params="{{queryParams}}"></app-location>
+        <app-location route="{{route}}"></app-location>
 
         <app-route
                 route="{{route}}"
@@ -22,7 +22,7 @@
         <app-route
                 route="{{route}}"
                 pattern="[[basePath]]action-points"
-                tail="{{actionPointsSubroute}}">
+                tail="{{actionPointsRoute}}">
         </app-route>
 
         <etools-loading id="global-loading" absolute></etools-loading>
@@ -30,7 +30,7 @@
         <div id="layout">
             <!-- Drawer content -->
             <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe opened>
-                <app-sidebar-menu class="opened" page="[[page]]"></app-sidebar-menu>
+                <app-sidebar-menu class="opened" route="{{route}}" page="[[page]]"></app-sidebar-menu>
             </app-drawer>
 
             <!-- Main content -->
@@ -45,7 +45,7 @@
                     attr-for-selected="name"
                     fallback-selection="not-found"
                     role="main">
-                <action-points-page-main name="action-points" id="action-points" route="{{actionPointsSubroute}}" query-params="{{queryParams}}"></action-points-page-main>
+                <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}"></action-points-page-main>
                 <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
 

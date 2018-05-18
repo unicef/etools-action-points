@@ -7,7 +7,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
                 type: Object,
                 notify: true
             },
-            actionPointId: {
+            routeData: {
                 type: String,
                 observer: '_changeActionPointId'
             },
@@ -24,9 +24,10 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
         this.addEventListener('action-activated', () => this._updateAP());
     }
 
-    _changeActionPointId(id) {
+    _changeActionPointId(data) {
+        let id = data.id;
         if (!id) { return; }
-        let endpoint = this.getEndpoint('actionPoint', {id: this.actionPointId});
+        let endpoint = this.getEndpoint('actionPoint', {id: id});
         this._loadAPOptions(id);
         this.sendRequest({method: 'GET', endpoint})
             .then((result) => {

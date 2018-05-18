@@ -4,21 +4,23 @@
     <template>
         <app-route
                 route="{{route}}"
-                pattern="/"
-                query-params="{{queryParams}}"
+                pattern="/:view"
+                data="{{routeData}}"></app-route>
+        <app-route
+                route="{{route}}"
+                pattern="/list"
                 tail="{{listRoute}}"></app-route>
         <app-route
                 route="{{route}}"
-                pattern="/new"
-                tail="{{newRoute}}"></app-route>
+                pattern="/new"></app-route>
         <app-route
                 route="{{route}}"
-                pattern="/:id"
+                pattern="/detail"
                 tail="{{detailRoute}}"></app-route>
-        <iron-pages selected="[[view]]" attr-for-selected="name">
+        <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
             <action-points-new name="new" route="{{route}}"></action-points-new>
-            <action-points-item name="detail" action-point-id="{{actionPointId}}" route="{{route}}"></action-points-item>
-            <action-points-list name="list" route="{{route}}" query-params="{{queryParams}}"></action-points-list>
+            <action-points-item name="detail" route="{{detailRoute}}"></action-points-item>
+            <action-points-list name="list" route="{{listRoute}}"></action-points-list>
         </iron-pages>
     </template>
     <!-- inject scripts './action-points-page-main.js' -->

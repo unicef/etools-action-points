@@ -1,4 +1,4 @@
-class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
+class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMixin(Polymer.Element)) {
     static get is() { return 'action-points-list'; }
 
     static get properties() {
@@ -57,20 +57,20 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
                     }
                 ]
             },
-            pageSize: {
-                type: Number,
-                value: 10
-            },
             pageNumber: {
                 type: Number,
                 value: 1
             },
-            totalResults: Number,
-            route: {
+            pageSize: {
+                type: Number,
+                value: 10
+            },
+            queryParams: {
                 type: Object,
                 notify: true
             },
-            queryParams: {
+            totalResults: Number,
+            route: {
                 type: Object,
                 notify: true
             }
@@ -79,7 +79,9 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
 
     static get observers() {
         return [
-            '_updateQuery(pageSize, pageNumber)'
+            '_updateQueries(queryParams)',
+            '_setPath(path)',
+            '_initLoad(route.path)'
         ];
     }
 
@@ -89,12 +91,31 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
         this.addEventListener('sort-changed', (e) => this._sort(e));
     }
 
+    _setPath(path) {
+        if (!!~path.indexOf('/list')) {
+            this.set('queryParams.page_size', this.pageSize);
+            this.set('queryParams.page', this.pageNumber);
+        }
+    }
+
+    _updateQueries() {
+        if (!!~this.path.indexOf('/list')) {
+            if (this.queryParams.reload) {
+                this.clearQueries();
+                this.set('queryParams.page_size', this.pageSize);
+                this.set('queryParams.page', this.pageNumber);
+            }
+            this.updateQueries(this.queryParams, null, true);
+            this._requestData();
+        }
+    }
+
     _sort({detail}) {
         this.set('queryParams.ordering', detail.field);
     }
 
     _getLink(actionPointId) {
-        return `action-points/${actionPointId}`;
+        return `action-points/detail/${actionPointId}`;
     }
 
     _initFilters() {
@@ -146,9 +167,17 @@ class ActionPointsList extends APDMixins.StaticDataMixin(Polymer.Element) {
         return true;
     }
 
-    _updateQuery(pageSize, pageNumber) {
-        this.set('queryParams.page_size', pageSize || 10);
-        this.set('queryParams.page', pageNumber || 1);
+    _requestData() {
+        let actionPointData = this.shadowRoot.querySelector('action-points-data');
+        actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
+    }
+
+    _pageNumberChanged({detail}) {
+        this.set('queryParams.page', detail.value);
+    }
+
+    _pageSizeSelected({detail}) {
+        this.set('queryParams.page_size', detail.value);
     }
 }
 
