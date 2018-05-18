@@ -10,20 +10,6 @@ class ActionPointsPageMain extends Polymer.Element {
             routeData: Object
         };
     }
-
-    connectedCallback() {
-        super.connectedCallback();
-    }
-
-    static get observers() {
-        return [
-            '_setRoutePath(route.path)'
-        ];
-    }
-
-    _setRoutePath(path) {
-        console.log(path);
-    }
 }
 
 window.customElements.define(ActionPointsPageMain.is, ActionPointsPageMain);
