@@ -21,21 +21,27 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
 
     ready() {
         super.ready();
-        this.addEventListener('action-activated', () => this._updateAP());
+        this.addEventListener('action-activated', ({detail}) => {
+            if (detail.type === 'save') {
+                this._updateAP();
+            } else if (detail.type === 'complete') {
+                this._completeAP();
+            }
+        });
     }
 
     _changeActionPointId(data) {
-        let id = data.id;
-        if (!id) { return; }
-        let endpoint = this.getEndpoint('actionPoint', {id: id});
-        this._loadAPOptions(id);
+        this.actionPointId = data.id;
+        if (!this.actionPointId) { return; }
+        let endpoint = this.getEndpoint('actionPoint', {id: this.actionPointId});
+        this._loadOptions(this.actionPointId);
         this.sendRequest({method: 'GET', endpoint})
             .then((result) => {
                 this.set('actionPoint', this._getActionPoint(result));
             });
     }
 
-    _loadAPOptions(id) {
+    _loadOptions(id) {
         let permissionPath = `action_points_${id}`;
         let endpoint = this.getEndpoint('actionPoint', {id: id});
         this.sendRequest({method: 'OPTIONS', endpoint})
@@ -65,6 +71,39 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
 
     _getObjectId(field) {
         return _.isObject(field) ? field.id : field;
+    }
+
+    _completeAP() {
+        let endpoint = this.getEndpoint('actionPointComplete', {id: this.actionPointId});
+
+        this.dispatchEvent(new CustomEvent('global-loading', {
+            detail: {type: 'ap-complete', active: true, message: 'Completing Action Point...'},
+            bubbles: true,
+            composed: true
+        }));
+
+        this.sendRequest({method: 'POST', endpoint})
+            .then(data => {
+                this.dispatchEvent(new CustomEvent('toast', {
+                    detail: {text: ' Action Point successfully completed.'},
+                    bubbles: true,
+                    composed: true
+                }));
+                this.set('route.path', `${data.id}`);
+            }, () => {
+                this.dispatchEvent(new CustomEvent('toast', {
+                    detail: {text: 'Can not complete Action Point. Please check all fields and try again.'},
+                    bubbles: true,
+                    composed: true
+                }));
+            })
+            .finally(() => {
+                this.dispatchEvent(new CustomEvent('global-loading', {
+                    detail: {type: 'ap-complete'},
+                    bubbles: true,
+                    composed: true
+                }));
+            });
     }
 
     _updateAP() {

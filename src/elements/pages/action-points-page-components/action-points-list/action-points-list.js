@@ -86,6 +86,7 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
 
     connectedCallback() {
         super.connectedCallback();
+        this.statuses = this.getData('statuses') || [];
         this._initFilters();
         this.addEventListener('sort-changed', (e) => this._sort(e));
     }

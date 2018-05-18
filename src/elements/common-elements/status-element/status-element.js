@@ -22,6 +22,10 @@
                         };
                     }
                 },
+                actions: {
+                    type: Array,
+                    value() { return []; }
+                },
                 permissionBase: String
             };
         }
@@ -31,13 +35,20 @@
             this.statuses = this.getData('statuses') || [];
         }
 
+        _isStatusFinish(actionPoint, status) {
+            let currentStatus = actionPoint.status;
+            if (!currentStatus) { return false; }
+            let currentStatusIndex = _.findIndex(this.statuses, {value: currentStatus});
+            let statusIndex = _.findIndex(this.statuses, {value: status});
+            return (currentStatusIndex >= statusIndex);
+        }
+
         _getStatusClass(actionPoint, status) {
-            let currentStatus = actionPoint.status,
-                statusDateField = this.dateProperties[status];
+            let currentStatus = actionPoint.status;
 
             if (!currentStatus && status === 'open') {
                 return 'active';
-            } else if (actionPoint[statusDateField]) {
+            } else if (this._isStatusFinish(actionPoint, status)) {
                 return 'completed';
             } else {
                 return 'pending';

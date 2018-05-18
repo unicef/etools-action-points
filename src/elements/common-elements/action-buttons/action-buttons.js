@@ -20,16 +20,7 @@
                         return {
                             'cancel': 'cancel',
                             'save': 'save',
-                            'submit': 'assignment-turned-in',
-                            'finalize': 'assignment-turned-in',
-                            'activate': 'check',
-                            'confirm': 'check',
-                            'assign': 'check',
-                            'approve': 'assignment-turned-in',
-                            'reject_report': 'cancel',
-                            'send_report': 'assignment-turned-in',
-                            'accept': 'check',
-                            'reject': 'cancel'
+                            'complete': 'assignment-turned-in'
                         };
                     }
                 }
@@ -82,7 +73,7 @@
             return length > 1 ? 'with-menu' : '';
         }
 
-        _filterActionsn(action) {
+        _filterActions(action) {
             return !_.isEqual(action, this.actions[0]);
         }
 

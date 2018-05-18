@@ -71,7 +71,7 @@
                         <span class="col-data col-base col-flex-2">[[entry.section.name]]</span>
                         <span class="col-data col-base col-flex-2">[[entry.assigned_to.name]]</span>
                         <span class="col-data col-base col-flex-1">[[entry.due_date]]</span>
-                        <span class="col-data col-base col-flex-1">[[entry.status]]</span>
+                        <span class="col-data col-base col-flex-1">[[_getDisplayName('statuses', 'display_name', entry.status)]]</span>
                     </div>
                     <div slot="row-data-details" class="row-action-points">
                         <div class="row-details-content col-flex-1">
