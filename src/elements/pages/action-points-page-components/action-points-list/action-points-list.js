@@ -80,8 +80,7 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
     static get observers() {
         return [
             '_updateQueries(queryParams)',
-            '_setPath(path)',
-            '_initLoad(route.path)'
+            '_setPath(path)'
         ];
     }
 
