@@ -1,5 +1,6 @@
-<!--import [etools-behaviors/etools-mixin-factory, polymer/polymer-element, pages-header-element, search-and-filter, etools-data-table, paper-card,
-            iron-flex-layout, static-data-mixin, action-points-data, iron-location, data-table-mixin, date-mixin]-->
+<!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, polymer/polymer-element,
+            pages-header-element, search-and-filter, etools-data-table, paper-card, iron-flex-layout,
+            static-data-mixin, action-points-data, iron-location, data-table-mixin, date-mixin, input-attrs-mixin]-->
 
 <dom-module id="action-points-list">
     <template>
@@ -18,7 +19,7 @@
         <pages-header-element
                 hide-print-button
                 link="action-points/new"
-                show-add-button="{{_showAddButton()}}"
+                show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
                 btn-text="Add Action Point"
                 page-title="Action Points">
         </pages-header-element>
@@ -34,28 +35,28 @@
             <etools-data-table-header id="listHeader"
                                       label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
                 <etools-data-table-column class="col-base col-flex-1" field="reference_number" sortable>
-                    Action Point #
+                    [[getLabel('reference_number', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="cp_output" sortable>
-                    CP Output
+                <etools-data-table-column class="col-base col-flex-2" field="cp_output__name" sortable>
+                    [[getLabel('cp_output', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="partner" sortable>
-                    Partner
+                <etools-data-table-column class="col-base col-flex-2" field="partner__name" sortable>
+                    [[getLabel('partner', basePermissionPath)]]
                 </etools-data-table-column>
                 <etools-data-table-column class="col-base col-flex-2" field="office" sortable>
-                    Office
+                    [[getLabel('office', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="section" sortable>
-                    Section
+                <etools-data-table-column class="col-base col-flex-2" field="section__name" sortable>
+                    [[getLabel('section', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="assigned_to" sortable>
-                    Assigned To
+                <etools-data-table-column class="col-base col-flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
+                    [[getLabel('assigned_to', basePermissionPath)]]
                 </etools-data-table-column>
                 <etools-data-table-column class="col-base col-flex-1" field="due_date" sortable>
-                    Due Date
+                    [[getLabel('due_date', basePermissionPath)]]
                 </etools-data-table-column>
                 <etools-data-table-column class="col-base col-flex-1" field="status" sortable>
-                    Status
+                    [[getLabel('status', basePermissionPath)]]
                 </etools-data-table-column>
             </etools-data-table-header>
 

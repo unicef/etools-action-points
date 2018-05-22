@@ -7,7 +7,10 @@
         </style>
         <etools-content-panel panel-title="[[getLabel('comments', basePermissionPath)]]">
             <div slot="panel-btns">
-                <paper-icon-button icon="add" on-tap="_openAddComment"></paper-icon-button>
+                <paper-icon-button
+                        hidden$="[[noActionsAllowed(basePermissionPath)]]"
+                        icon="add"
+                        on-tap="_openAddComment"></paper-icon-button>
             </div>
             <div class="comments-list">
                 <template is="dom-if" if="[[!filteredComments.length]]">

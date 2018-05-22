@@ -1,5 +1,6 @@
 const ActionPointsListMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.StaticDataMixin,
+    APDMixins.InputAttrs,
     APDMixins.QueryParamsMixin,
     APDMixins.DataTableMixin,
     APDMixins.DateMixin], Polymer.Element);
@@ -81,6 +82,9 @@ class ActionPointsList extends ActionPointsListMixins {
             route: {
                 type: Object,
                 notify: true
+            },
+            basePermissionPath: {
+                type: String
             }
         };
     }
@@ -119,7 +123,11 @@ class ActionPointsList extends ActionPointsListMixins {
     }
 
     _sort({detail}) {
-        this.set('queryParams.ordering', detail.field);
+        let ordering = detail.field;
+        if (this.queryParams.ordering && this.queryParams.ordering === ordering) {
+            ordering = this.queryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
+        }
+        this.set('queryParams.ordering', ordering);
     }
 
     _getLink(actionPointId) {
@@ -172,10 +180,6 @@ class ActionPointsList extends ActionPointsListMixins {
             this.set(`filters.${filterIndex}.selection`, data);
             return true;
         }
-    }
-
-    _showAddButton() {
-        return true;
     }
 
     _requestData() {

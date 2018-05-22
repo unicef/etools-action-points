@@ -4,13 +4,21 @@
     'use strict';
 
     window.APDMixins = window.APDMixins || {};
+    /**
+     * Mixin for parsing and format date by pattern
+     * @polymer
+     * @mixinFunction
+     */
     window.APDMixins.DateMixin = superClass => class extends superClass {
+        /**
+         * Format date from string
+         */
         prettyDate(dateString, format) {
             if (!format) {
                 format = 'D MMM YYYY';
             }
             if (typeof dateString === 'string' && dateString !== '') {
-                var date = new Date(dateString);
+                let date = new Date(dateString);
                 if (date.toString() !== 'Invalid Date') {
                     // using moment.utc() ensures that the date will not be changed no matter timezone the user has set
                     return moment.utc(date).format(format);
@@ -24,7 +32,7 @@
          */
         prepareDate(dateString) {
             if (typeof dateString === 'string' && dateString !== '') {
-                var date = new Date(dateString);
+                let date = new Date(dateString);
                 if (date.toString() === 'Invalid Date') {
                     date = new Date();
                 }
@@ -41,10 +49,10 @@
         openDatePicker(event) {
             // do not close datepicker on mouse up
             this.datepickerModal = true;
-            var id = Polymer.dom(event).localTarget.getAttribute('data-selector');
+            let id = Polymer.dom(event).localTarget.getAttribute('data-selector');
             if (id) {
-                var datepickerId = '#' + id;
-                var datePicker = Polymer.dom(this.root).querySelector(datepickerId);
+                let datepickerId = '#' + id;
+                let datePicker = Polymer.dom(this.root).querySelector(datepickerId);
                 if (datePicker) {
                     datePicker.open = true;
                 }

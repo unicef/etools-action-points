@@ -3,7 +3,19 @@
 <script>
     'use strict';
     window.APDMixins = window.APDMixins || {};
+    /*
+     * Mixin for input field functionality.
+     * @polymer
+     * @mixinFunction
+     */
     window.APDMixins.InputAttrs = superClass => class extends APDMixins.PermissionController(superClass) {
+        /**
+         * Set required class from OPTIONS data by path
+         * @param field
+         * @param basePermissionPath
+         * @returns {*}
+         * @private
+         */
         _setRequired(field, basePermissionPath) {
             if (!basePermissionPath) {return false;}
 
@@ -12,11 +24,24 @@
             return required ? 'required' : false;
         }
 
+        /**
+         * Get label from OPTIONS data by path
+         * @param path
+         * @param base
+         * @returns {*}
+         */
         getLabel(path, base) {
             if (!base) {return '';}
             return this.getFieldAttribute(`${base}.${path}`, 'label', 'GET');
         }
 
+        /**
+         * Get placeholder text from OPTIONS data by path
+         * @param path
+         * @param base
+         * @param special
+         * @returns {*}
+         */
         getPlaceholderText(path, base, special) {
             if (this.isReadonly(`${base}.${path}`)) {return 'Empty Field';}
 
@@ -25,6 +50,13 @@
             return `${prefix} ${label}`;
         }
 
+        /**
+         * Get is readonly flag from OPTIONS data by path
+         * @param field
+         * @param basePermissionPath
+         * @param inProcess
+         * @returns {*}
+         */
         isReadOnly(field, basePermissionPath, inProcess) {
             if (!basePermissionPath || inProcess) {return true;}
 
@@ -34,6 +66,12 @@
             return readOnly;
         }
 
+        /**
+         * Reset highlight error fields
+         * @param event
+         * @returns {boolean}
+         * @private
+         */
         _resetFieldError(event) {
             if (!event || !event.target) {return false;}
 

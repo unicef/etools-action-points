@@ -1,6 +1,7 @@
 const ActionPointCommentsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.InputAttrs,
+    APDMixins.PermissionController,
     APDMixins.DataTableMixin,
     APDMixins.DateMixin,
     EtoolsAjaxRequestMixin], Polymer.Element);

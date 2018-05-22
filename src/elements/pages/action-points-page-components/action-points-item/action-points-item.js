@@ -29,11 +29,15 @@ class ActionPointsItem extends ActionPointsItemMixins {
         super.ready();
         this.addEventListener('action-activated', ({detail}) => {
             if (detail.type === 'save') {
-                this._update();
-                this._loadOptions(this.actionPointId);
+                this._update()
+                    .then(() => {
+                        this._loadOptions(this.actionPointId);
+                    });
             } else if (detail.type === 'complete') {
-                this._complete();
-                this._loadOptions(this.actionPointId);
+                this._complete()
+                    .then(() => {
+                        this._loadOptions(this.actionPointId);
+                    });
             }
         });
     }
@@ -52,10 +56,16 @@ class ActionPointsItem extends ActionPointsItemMixins {
     _loadOptions(id) {
         let permissionPath = `action_points_${id}`;
         let endpoint = this.getEndpoint('actionPoint', {id: id});
-        this.sendRequest({method: 'OPTIONS', endpoint})
+        return this.sendRequest({method: 'OPTIONS', endpoint})
             .then((data) => {
                 let actions = data && data.actions;
-                this._addToCollection(permissionPath, actions);
+                if (!this.collectionExists(permissionPath)) {
+                    this._addToCollection(permissionPath, actions);
+                } else {
+                    this._updateCollection(permissionPath, actions);
+                    this.set('basePermissionPath', '');
+                }
+                this.set('basePermissionPath', permissionPath);
             }, () => this._responseError('Partners', 'request error'))
             .finally(() => {
                 this.basePermissionPath = permissionPath;
@@ -90,7 +100,7 @@ class ActionPointsItem extends ActionPointsItemMixins {
             composed: true
         }));
 
-        this.sendRequest({method: 'POST', endpoint})
+        return this.sendRequest({method: 'POST', endpoint})
             .then((data) => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: ' Action Point successfully completed.'},
@@ -127,7 +137,7 @@ class ActionPointsItem extends ActionPointsItemMixins {
             composed: true
         }));
 
-        this.sendRequest({method: 'PUT', endpoint, body: data})
+        return this.sendRequest({method: 'PUT', endpoint, body: data})
             .then((data) => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: ' Action Point successfully updated.'},
