@@ -2,10 +2,10 @@
 <script>
     'use strict';
     window.APDMixins = window.APDMixins || {};
-    window.APDMixins.QueryParamsMixin = (superClass) => class extends superClass {
+    window.APDMixins.QueryParamsMixin = superClass => class extends superClass {
         parseQueries() {
-            let queriesOvj = {},
-                    queries = this.getQueriesString()
+            let queriesOvj = {};
+            let queries = this.getQueriesString()
                             .slice(1)
                             .split('&');
 
@@ -22,20 +22,20 @@
             return window && window.location && window.location[property] || '';
         }
 
-        getQueriesString () {
+        getQueriesString() {
             return this.getLocationProperty('search');
         }
 
         getPath() {
             let path = this.getLocationProperty('pathname');
-            if (~path.indexOf('/apd')) { path = path.slice(4) }
+            if (~path.indexOf('/apd')) {path = path.slice(4);}
             return path.slice(1);
         }
         updateQueries(newQueries, path, noNotify) {
-            if (!_.isObject(newQueries)) { return false; }
+            if (!_.isObject(newQueries)) {return false;}
             let keys = Object.keys(newQueries);
 
-            if (!keys.length) { return false; }
+            if (!keys.length) {return false;}
 
             path = path && _.isString(path) ? path : this.getPath();
             let queries = this.parseQueries();
@@ -46,7 +46,7 @@
             });
 
             queries = Object.keys(queries).map((key) => {
-                let value = typeof queries[key] ===  'boolean' ? '' : `=${queries[key]}`;
+                let value = typeof queries[key] === 'boolean' ? '' : `=${queries[key]}`;
                 return `${key}${value}`;
             });
 
@@ -56,7 +56,7 @@
                 console.warn(err);
             }
 
-            if (!noNotify) { this.dispatchEvent(new CustomEvent('location-changed', {bubbles: true, composed: true})); }
+            if (!noNotify) {this.dispatchEvent(new CustomEvent('location-changed', {bubbles: true, composed: true}));}
             return true;
         }
 

@@ -8,10 +8,10 @@ app-drawer {
     z-index: 65 !important;
 
     --app-drawer-width: 220px;
-    --app-drawer-content-container: #{'{
+    --app-drawer-content-container: {
         transform: translate3d(0, 0, 0);
         background-color: var(--light-theme-content-color);
-    }'};
+    };
 }
 
 #layout {

@@ -35,8 +35,8 @@
             }
 
             #main {
-                @apply(--layout-horizontal);
-                @apply(--layout-center);
+                @apply --layout-horizontal;
+                @apply --layout-center;
 
                 position: relative;
                 height: 48px;
@@ -96,7 +96,7 @@
 
     <script>
         class SideBarItem extends Polymer.Element {
-            static get is() { return 'side-bar-item'; }
+            static get is() {return 'side-bar-item';}
 
             static get properties() {
                 return {
@@ -115,11 +115,11 @@
             }
 
             _setTarget() {
-                if (this.external) { return '_blank'; }
-                return '_self'
+                if (this.external) {return '_blank';}
+                return '_self';
             }
         }
 
-        window.customElements.define(SideBarItem.is, SideBarItem);
+        customElements.define(SideBarItem.is, SideBarItem);
     </script>
 </dom-module>

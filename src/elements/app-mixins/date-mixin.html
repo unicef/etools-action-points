@@ -4,7 +4,7 @@
     'use strict';
 
     window.APDMixins = window.APDMixins || {};
-    window.APDMixins.DateMixin = (superClass) => class extends superClass {
+    window.APDMixins.DateMixin = superClass => class extends superClass {
         prettyDate(dateString, format) {
             if (!format) {
                 format = 'D MMM YYYY';
@@ -39,7 +39,7 @@
          * Make sure you also have the data-selector attribute set on the input field.
          */
         openDatePicker(event) {
-            //do not close datepicker on mouse up
+            // do not close datepicker on mouse up
             this.datepickerModal = true;
             var id = Polymer.dom(event).localTarget.getAttribute('data-selector');
             if (id) {
@@ -49,8 +49,8 @@
                     datePicker.open = true;
                 }
             }
-            //allow outside click closing
+            // allow outside click closing
             setTimeout(() => this.datepickerModal = false, 300);
         }
-    }
+    };
 </script>

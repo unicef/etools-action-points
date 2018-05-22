@@ -24,18 +24,21 @@
     <script>
         'use strict';
 
-        class NotFoundPageView extends window.APDMixins.AppConfig(Polymer.Element) {
-            static get is() { return 'not-found-page-view'; }
+        class NotFoundPageView extends APDMixins.AppConfig(Polymer.Element) {
+            static get is() {return 'not-found-page-view';}
 
             getLink() {
                 return this.getAbsolutePath('action-points');
             }
 
             openDrawer() {
-                this.fire('drawer');
+                this.dispatchEvent(new CustomEvent('drawer', {
+                    bubbles: true,
+                    composed: true
+                }));
             }
         }
 
-        window.customElements.define(NotFoundPageView.is, NotFoundPageView);
+        customElements.define(NotFoundPageView.is, NotFoundPageView);
     </script>
 </dom-module>

@@ -1,5 +1,13 @@
-class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMixin(APDMixins.DataTableMixin(APDMixins.DateMixin(Polymer.Element)))) {
-    static get is() { return 'action-points-list'; }
+const ActionPointsListMixins = EtoolsMixinFactory.combineMixins([
+    APDMixins.StaticDataMixin,
+    APDMixins.QueryParamsMixin,
+    APDMixins.DataTableMixin,
+    APDMixins.DateMixin], Polymer.Element);
+
+class ActionPointsList extends ActionPointsListMixins {
+    static get is() {
+        return 'action-points-list';
+    }
 
     static get properties() {
         return {
@@ -88,18 +96,18 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
         super.connectedCallback();
         this.statuses = this.getData('statuses') || [];
         this._initFilters();
-        this.addEventListener('sort-changed', (e) => this._sort(e));
+        this.addEventListener('sort-changed', e => this._sort(e));
     }
 
     _setPath(path) {
-        if (!!~path.indexOf('/list')) {
+        if (~path.indexOf('/list')) {
             this.set('queryParams.page_size', this.pageSize);
             this.set('queryParams.page', this.pageNumber);
         }
     }
 
     _updateQueries() {
-        if (!!~this.path.indexOf('/list')) {
+        if (~this.path.indexOf('/list')) {
             if (this.queryParams.reload) {
                 this.clearQueries();
                 this.set('queryParams.page_size', this.pageSize);
@@ -130,7 +138,8 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
         let usersList = this.getData('unicefUsers').map((user) => {
             return {
                 id: user.id,
-                name: `${user.first_name} ${user.last_name}`};
+                name: `${user.first_name} ${user.last_name}`
+            };
         });
         let queryDataPairs = [
             {query: 'assigned_to', data: usersList},
@@ -138,7 +147,7 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
             {query: 'partner', dataKey: 'partnerOrganisations'},
             {query: 'office', dataKey: 'offices'},
             {query: 'location', dataKey: 'locations'},
-            {query: 'section', dataKey: 'sectionsCovered'},
+            {query: 'section', dataKey: 'sectionsCovered'}
         ];
 
         queryDataPairs.forEach((pair) => {
@@ -149,7 +158,9 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
     }
 
     _getFilterIndex(query) {
-        if (!this.filters) { return -1; }
+        if (!this.filters) {
+            return -1;
+        }
 
         return this.filters.findIndex((filter) => {
             return filter.query === query;
@@ -181,4 +192,4 @@ class ActionPointsList extends APDMixins.StaticDataMixin(APDMixins.QueryParamsMi
     }
 }
 
-window.customElements.define(ActionPointsList.is, ActionPointsList);
+customElements.define(ActionPointsList.is, ActionPointsList);

@@ -26,8 +26,8 @@
             }
 
             .right-side {
-                @apply(--layout-horizontal);
-                @apply(--layout-center);
+                @apply --layout-horizontal;
+                @apply --layout-center;
             }
 
             etools-page-refresh {
@@ -50,8 +50,8 @@
             }
 
             .content-align {
-                @apply(--layout-horizontal);
-                @apply(--layout-center);
+                @apply --layout-horizontal;
+                @apply --layout-center;
             }
 
             @media (min-width: 851px) {
@@ -82,8 +82,8 @@
     </template>
 
     <script>
-        class AppMainHeader extends window.APDMixins.AppConfig(Polymer.Element) {
-            static get is() { return 'app-main-header'; }
+        class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
+            static get is() {return 'app-main-header';}
 
             static get properties() {
                 return {
@@ -92,7 +92,7 @@
                     },
                     menuOptions: {
                         type: Array,
-                        value: function () {
+                        value: function() {
                             return [
                                 {
                                     title: 'Dashboards',
@@ -133,19 +133,19 @@
 
             connectedCallback() {
                 super.connectedCallback();
-                this.addEventListener('main_refresh', this._refresh_page)
+                this.addEventListener('main_refresh', this._refreshPage);
             }
 
             openDrawer() {
                 this.dispatchEvent(new CustomEvent('drawer'));
             }
 
-            _refresh_page(event) {
+            _refreshPage(event) {
                 event.stopImmediatePropagation();
                 this.$.refresh.refresh();
             }
         }
 
-        window.customElements.define(AppMainHeader.is, AppMainHeader);
+        customElements.define(AppMainHeader.is, AppMainHeader);
     </script>
 </dom-module>

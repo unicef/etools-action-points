@@ -1,7 +1,5 @@
-'use strict';
-
-class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
-    static get is() { return 'search-and-filter'; }
+class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
+    static get is() {return 'search-and-filter';}
 
     static get properties() {
         return {
@@ -41,8 +39,9 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
     }
 
     searchKeyDown() {
-        if (!this.searchString) { return; }
-        this._debounceSearch = Polymer.Debouncer.debounce(this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
+        if (!this.searchString) {return;}
+        this._debounceSearch = Polymer.Debouncer.debounce(
+            this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
             if (this.searchString.length !== 1) {
                 this.updateQueries({search: this.searchString || undefined, page: '1'});
             }
@@ -76,7 +75,7 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
         let indexToRemove = this.usedFilters.findIndex((filter) => {
             return filter.query === query;
         });
-        if (indexToRemove === -1) { return; }
+        if (indexToRemove === -1) {return;}
 
         let queryObject = {};
         queryObject[query] = undefined;
@@ -97,7 +96,9 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element){
     }
 
     _restoreFilters() {
-        this._debounceFilters = Polymer.Debouncer.debounce(this._debounceFilters, Polymer.Async.timeOut.after(50), () => {
+        this._debounceFilters = Polymer.Debouncer.debounce(this._debounceFilters,
+            Polymer.Async.timeOut.after(50),
+            () => {
             let queryParams = this.queryParams;
 
             if (!queryParams) {

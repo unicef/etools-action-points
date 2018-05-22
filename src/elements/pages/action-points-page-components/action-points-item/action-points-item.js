@@ -1,5 +1,11 @@
-class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMixins.PermissionController(Polymer.Element))) {
-    static get is() { return 'action-points-item'; }
+const ActionPointsItemMixins = EtoolsMixinFactory.combineMixins([
+    APDMixins.AppConfig,
+    APDMixins.PermissionController,
+    EtoolsAjaxRequestMixin
+], Polymer.Element);
+
+class ActionPointsItem extends ActionPointsItemMixins {
+    static get is() {return 'action-points-item';}
 
     static get properties() {
         return {
@@ -13,7 +19,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
             },
             actionPoint: {
                 type: Object,
-                value() { return {};}
+                value() {return {};}
             },
             basePermissionPath: String
         };
@@ -23,16 +29,18 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
         super.ready();
         this.addEventListener('action-activated', ({detail}) => {
             if (detail.type === 'save') {
-                this._updateAP();
+                this._update();
+                this._loadOptions(this.actionPointId);
             } else if (detail.type === 'complete') {
-                this._completeAP();
+                this._complete();
+                this._loadOptions(this.actionPointId);
             }
         });
     }
 
     _changeActionPointId(data) {
         this.actionPointId = data.id;
-        if (!this.actionPointId) { return; }
+        if (!this.actionPointId) {return;}
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPointId});
         this._loadOptions(this.actionPointId);
         this.sendRequest({method: 'GET', endpoint})
@@ -45,7 +53,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
         let permissionPath = `action_points_${id}`;
         let endpoint = this.getEndpoint('actionPoint', {id: id});
         this.sendRequest({method: 'OPTIONS', endpoint})
-            .then(data => {
+            .then((data) => {
                 let actions = data && data.actions;
                 this._addToCollection(permissionPath, actions);
             }, () => this._responseError('Partners', 'request error'))
@@ -56,7 +64,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
 
     _getActionPoint(actionPoint) {
         let item = actionPoint || {};
-        //todo rework and remove
+        // todo rework and remove
         item.partner = this._getObjectId(actionPoint.partner);
         item.intervention = this._getObjectId(actionPoint.intervention);
         item.office = this._getObjectId(actionPoint.office);
@@ -73,7 +81,7 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
         return _.isObject(field) ? field.id : field;
     }
 
-    _completeAP() {
+    _complete() {
         let endpoint = this.getEndpoint('actionPointComplete', {id: this.actionPointId});
 
         this.dispatchEvent(new CustomEvent('global-loading', {
@@ -83,13 +91,13 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
         }));
 
         this.sendRequest({method: 'POST', endpoint})
-            .then(data => {
+            .then((data) => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: ' Action Point successfully completed.'},
                     bubbles: true,
                     composed: true
                 }));
-                this.set('route.path', `${data.id}`);
+                this.actionPoint = this._getActionPoint(data);
             }, () => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: 'Can not complete Action Point. Please check all fields and try again.'},
@@ -106,9 +114,9 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
             });
     }
 
-    _updateAP() {
+    _update() {
         let detailsElement = this.shadowRoot.querySelector('action-point-details');
-        if (!detailsElement || !detailsElement.validate()) { return; }
+        if (!detailsElement || !detailsElement.validate()) {return;}
 
         let data = _.clone(detailsElement.editedItem);
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPointId});
@@ -120,13 +128,13 @@ class ActionPointsItem extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMix
         }));
 
         this.sendRequest({method: 'PUT', endpoint, body: data})
-            .then(data => {
+            .then((data) => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: ' Action Point successfully updated.'},
                     bubbles: true,
                     composed: true
                 }));
-                this.set('route.path', `${data.id}`);
+                this.actionPoint = this._getActionPoint(data);
             }, () => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: 'Can not update Action Point. Please check all fields and try again.'},

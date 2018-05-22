@@ -4,8 +4,6 @@ App global configuration
 <!--import [polymer/polymer-element, etools-dexiejs, lodash]-->
 
 <script>
-    'use strict';
-
     window.APDMixins = window.APDMixins || {};
     /**
      * @polymer
@@ -18,7 +16,7 @@ App global configuration
             let etoolsCustomDexieDb = new Dexie('APD');
             etoolsCustomDexieDb.version(1).stores({
                 listsExpireMapTable: '&name, expire',
-                partners: 'id',
+                partners: 'id'
             });
             window.EtoolsRequestCacheDb = etoolsCustomDexieDb;
 
@@ -55,7 +53,7 @@ App global configuration
                 locations: {
                     url: '/api/locations-light/',
                     exp: 90 * 24 * 3600 * 1000, // 3 months
-                    cachingKey: 'locations',
+                    cachingKey: 'locations'
                 },
                 sectionsCovered: {
                     url: '/api/sections/'
@@ -65,7 +63,7 @@ App global configuration
                 },
                 unicefUsers: {
                     url: '/api/users/'
-                },
+                }
             };
 
             const localEndpoints = {

@@ -77,13 +77,13 @@
 
     .status-container {
         position: relative;
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-horizontal;
+        @apply --layout-center;
 
         .status-icon, .status {
-            @apply(--layout-vertical);
-            @apply(--layout-center-justified);
-            @apply(--layout-warp);
+            @apply --layout-vertical;
+            @apply --layout-center-justified;
+            @apply --layout-warp;
         }
 
         iron-icon { display: inline-block;}
@@ -197,7 +197,7 @@
     }
 
     .divider {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
         width: 100%;
         .status-divider {
             height: 100%;

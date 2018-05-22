@@ -1,8 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
-const jshint = require('gulp-jshint');
-const jscs = require('gulp-jscs');
+const eslint = require('gulp-eslint');
 const through2 = require('through2').obj;
 const fs = require('fs');
 const gulpIf = require('gulp-if');
@@ -16,35 +15,32 @@ function lint() {
     try {
         eslintResults = JSON.parse(fs.readFileSync(cacheFilePath));
     } catch (e) {
+        console.info('No lint cache file');
     }
 
-    return gulp.src('./src/elements/**/*.js', {read: false})
+    return gulp.src(['./src/elements/**/*.js', './src/elements/**/*.html', '!**/*.spec.html'], {read: false})
         .pipe(gulpIf(
-            function(file) {
+            (file) => {
                 let cached = eslintResults[file.path];
-                return !(cached && cached.mtime == file.stat.mtime.toJSON() && cached.jshint && cached.jscs);
+                return !(cached && cached.mtime == file.stat.mtime.toJSON() && cached.eslint);
             },
             combine(
-                through2(function(file, enc, callback) {
+                through2((file, enc, callback) => {
                     file.contents = fs.readFileSync(file.path);
                     callback(null, file);
                 }),
-                jshint(),
-                jscs(),
-                through2(function(file, enc, callback) {
+                eslint(),
+                through2((file, enc, callback) => {
                     eslintResults[file.path] = {
-                        jshint: file.jshint.success,
-                        jscs: file.jscs.success,
+                        eslint: file.eslint.success,
                         mtime: file.stat.mtime
                     };
                     callback(null, file);
                 })
             )
         ))
-        .pipe(jshint.reporter('default'))
-        .pipe(jscs.reporter())
-        .pipe(gulpIf(argv.pc, jshint.reporter('fail')))
-        .pipe(gulpIf(argv.pc, jscs.reporter('fail')))
+        .pipe(eslint.format())
+        .pipe(gulpIf(argv.pc, eslint.failAfterError()))
         .on('end', function() {
             if (!fs.existsSync('build')) {
                 fs.mkdirSync('build');

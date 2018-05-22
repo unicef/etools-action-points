@@ -7,19 +7,19 @@
     let _groups;
 
     window.APDMixins = window.APDMixins || {};
-    window.APDMixins.UserController = (superClass) => class extends superClass {
+    window.APDMixins.UserController = superClass => class extends superClass {
         _setUserData(user) {
-            if (_user) { throw 'User already exists!'; }
+            if (_user) {throw new Error('User already exists!');}
 
-            if (!user || !_.isObject(user) || _.isArray(user)) { throw 'User must be an object'; }
-            if (!user.id || !user.groups) { throw 'User must have id and groups fields!'; }
+            if (!user || !_.isObject(user) || _.isArray(user)) {throw new Error('User must be an object');}
+            if (!user.id || !user.groups) {throw new Error('User must have id and groups fields!');}
 
             _user = _.cloneDeep(user);
             this._setGroups(user);
         }
 
         _setGroups(user) {
-            if (!user.groups.length) { throw 'Can not find user group!'; }
+            if (!user.groups.length) {throw new Error('Can not find user group!');}
             _groups = user.groups.map((group) => {
                 return group.name;
             });
@@ -30,8 +30,8 @@
         }
 
         isAuditor() {
-            if (!_groups) { throw 'User data is missing or incorrect'; }
+            if (!_groups) {throw new Error('User data is missing or incorrect');}
             return !!~_groups.indexOf('Auditor');
         }
-    }
+    };
 </script>

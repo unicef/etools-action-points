@@ -1,5 +1,5 @@
-class UserDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
-    static get is() { return 'user-dropdown'; }
+class UserDropdown extends APDMixins.AppConfig(Polymer.Element) {
+    static get is() {return 'user-dropdown';}
 
     static get properties() {
         return {
@@ -17,8 +17,8 @@ class UserDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
 
     connectedCallback() {
         super.connectedCallback();
-        this.$.dropdown.addEventListener('paper-dropdown-close', (e) => this._toggleOpened(e));
-        this.$.dropdown.addEventListener('paper-dropdown-open', (e) => this._toggleOpened(e));
+        this.$.dropdown.addEventListener('paper-dropdown-close', e => this._toggleOpened(e));
+        this.$.dropdown.addEventListener('paper-dropdown-open', e => this._toggleOpened(e));
     }
 
     _toggleOpened() {
@@ -36,4 +36,4 @@ class UserDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
     }
 }
 
-window.customElements.define(UserDropdown.is, UserDropdown);
+customElements.define(UserDropdown.is, UserDropdown);

@@ -1,7 +1,10 @@
-'use strict';
+const AppShellMixins = EtoolsMixinFactory.combineMixins([
+    APDMixins.AppConfig,
+    APDMixins.UserController,
+    EtoolsMixins.LoadingMixin], Polymer.Element);
 
-class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConfig(APDMixins.UserController(Polymer.Element))) {
-    static get is() { return 'app-shell'; }
+class AppShell extends AppShellMixins {
+    static get is() {return 'app-shell';}
 
     static get properties() {
         return {
@@ -51,10 +54,10 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
     ready() {
         super.ready();
         this.addEventListener('toast', (e, detail) => this.queueToast(e, detail));
-        this.addEventListener('drawer-toggle-tap', (e) => this.toggleDrawer(e));
-        this.addEventListener('404', (e) => this._pageNotFound(e));
-        this.addEventListener('static-data-loaded', (e) => this._staticDataLoaded(e));
-        this.addEventListener('global-loading', (e) => this.handleLoading(e));
+        this.addEventListener('drawer-toggle-tap', e => this.toggleDrawer(e));
+        this.addEventListener('404', e => this._pageNotFound(e));
+        this.addEventListener('static-data-loaded', e => this._staticDataLoaded(e));
+        this.addEventListener('global-loading', e => this.handleLoading(e));
     }
 
     connectedCallback() {
@@ -85,7 +88,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
     }
 
     _staticDataLoaded(e) {
-        if (e && e.type === 'static-data-loaded') { this.staticDataLoaded = true; }
+        if (e && e.type === 'static-data-loaded') {this.staticDataLoaded = true;}
         if (this.staticDataLoaded) {
             this.user = this.getUserData();
             this.page = _.get(this, 'routeData.page') || this._initRoute();
@@ -95,7 +98,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
     queueToast(e) {
         let detail = e.detail;
         let notificationList = this.shadowRoot.querySelector('multi-notification-list');
-        if (!notificationList) { return; }
+        if (!notificationList) {return;}
 
         if (detail && detail.reset) {
             notificationList.dispatchEvent(new CustomEvent('reset-notifications'));
@@ -105,14 +108,16 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
     }
 
     _routePageChanged() {
-        if (!this.initLoadingComplete || !this.routeData.page) { return; }
+        if (!this.initLoadingComplete || !this.routeData.page) {return;}
         this.page = this.routeData.page || 'action-points';
         this.scroll(0, 0);
     }
 
     _pageChanged(page) {
-        if (this.$[`${page}`] instanceof Polymer.Element) { return; }
-        this.dispatchEvent(new CustomEvent('global-loading', {detail: {message: 'Loading...', active: true, type: 'initialisation'}}));
+        if (this.$[`${page}`] instanceof Polymer.Element) {return;}
+        this.dispatchEvent(new CustomEvent('global-loading', {
+            detail: {message: 'Loading...', active: true, type: 'initialisation'}
+        }));
 
         var resolvedPageUrl;
         if (page === 'not-found') {
@@ -122,12 +127,12 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
         }
         Polymer.importHref(resolvedPageUrl,
             () => this._loadPage(),
-            (event) => this._pageNotFound(event),
+            event => this._pageNotFound(event),
             true);
     }
 
     _loadPage() {
-        if (!this.initLoadingComplete) { this.initLoadingComplete = true; }
+        if (!this.initLoadingComplete) {this.initLoadingComplete = true;}
         this.dispatchEvent(new CustomEvent('global-loading', {detail: {type: 'initialisation'}}));
         // if (this.route.path === '/') { this._initRoute();}
     }
@@ -153,7 +158,7 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
             console.error('Bad details object', JSON.stringify(event.detail));
             return;
         }
-        let loadingElement =  this.$['global-loading'];
+        let loadingElement = this.$['global-loading'];
 
         if (event.detail.active && loadingElement.active) {
             this.globalLoadingQueue.push(event);
@@ -162,7 +167,9 @@ class AppShell extends window.EtoolsMixins.LoadingMixin(window.APDMixins.AppConf
             loadingElement.active = true;
         } else {
             loadingElement.active = false;
-            this.globalLoadingQueue = this.globalLoadingQueue.filter((element) => {return element.detail.type !== event.detail.type;});
+            this.globalLoadingQueue = this.globalLoadingQueue.filter((element) => {
+                return element.detail.type !== event.detail.type;
+            });
             if (this.globalLoadingQueue.length) {
                 this.handleLoading(this.globalLoadingQueue.shift());
             }

@@ -2,47 +2,45 @@
 
 <script>
     'use strict';
-    (function () {
-        window.APDMixins = window.APDMixins || {};
-        window.APDMixins.InputAttrs = (superClass) => class extends APDMixins.PermissionController(superClass) {
-            _setRequired(field, basePermissionPath) {
-                if (!basePermissionPath) { return false; }
+    window.APDMixins = window.APDMixins || {};
+    window.APDMixins.InputAttrs = superClass => class extends APDMixins.PermissionController(superClass) {
+        _setRequired(field, basePermissionPath) {
+            if (!basePermissionPath) {return false;}
 
-                let required = this.isRequired(`${basePermissionPath}.${field}`);
+            let required = this.isRequired(`${basePermissionPath}.${field}`);
 
-                return required ? 'required' : false;
-            }
-
-            getLabel(path, base) {
-                if (!base) { return ''; }
-                return this.getFieldAttribute(`${base}.${path}`, 'label', 'GET');
-            }
-
-            getPlaceholderText(path, base, special) {
-                if (this.isReadonly(`${base}.${path}`)) { return 'Empty Field'; }
-
-                let label = this.getLabel(path, base),
-                        prefix = special ? 'Select' : 'Enter';
-                return `${prefix} ${label}`;
-            }
-
-            isReadOnly(field, basePermissionPath, inProcess) {
-                if (!basePermissionPath || inProcess) { return true; }
-
-                let readOnly = this.isReadonly(`${basePermissionPath}.${field}`);
-                if (readOnly === null) { readOnly = true; }
-
-                return readOnly;
-            }
-
-            _resetFieldError(event) {
-                if (!event || !event.target) { return false; }
-
-                let field = event.target.getAttribute('field');
-                if (field) { this.set(`errors.${field}`, false); }
-
-                event.target.invalid = false;
-            }
+            return required ? 'required' : false;
         }
-    })();
+
+        getLabel(path, base) {
+            if (!base) {return '';}
+            return this.getFieldAttribute(`${base}.${path}`, 'label', 'GET');
+        }
+
+        getPlaceholderText(path, base, special) {
+            if (this.isReadonly(`${base}.${path}`)) {return 'Empty Field';}
+
+            let label = this.getLabel(path, base);
+            let prefix = special ? 'Select' : 'Enter';
+            return `${prefix} ${label}`;
+        }
+
+        isReadOnly(field, basePermissionPath, inProcess) {
+            if (!basePermissionPath || inProcess) {return true;}
+
+            let readOnly = this.isReadonly(`${basePermissionPath}.${field}`);
+            if (readOnly === null) {readOnly = true;}
+
+            return readOnly;
+        }
+
+        _resetFieldError(event) {
+            if (!event || !event.target) {return false;}
+
+            let field = event.target.getAttribute('field');
+            if (field) {this.set(`errors.${field}`, false);}
+
+            event.target.invalid = false;
+        }
+    };
 </script>

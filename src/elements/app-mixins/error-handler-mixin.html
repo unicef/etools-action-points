@@ -4,14 +4,15 @@
     'use strict';
 
     window.APDMixins = window.APDMixins || {};
-    window.APDMixins.ErrorHandlerMixin = (superClass) => class extends superClass {
+    window.APDMixins.ErrorHandlerMixin = superClass => class extends superClass {
         refactorErrorObject(errorData) {
-            if (!errorData) { return {}; }
+            if (!errorData) {return {};}
 
-            if (!_.isObject(errorData)) { return errorData; }
+            if (!_.isObject(errorData)) {return errorData;}
 
             if (_.isArray(errorData)) {
-                return _.isObject(errorData[0]) && !!errorData[0] ? errorData.map(object => this.refactorErrorObject(object)) :  errorData[0];
+                return _.isObject(errorData[0]) && !!errorData[0] ?
+                    errorData.map(object => this.refactorErrorObject(object)) : errorData[0];
             } else {
                 _.forOwn(errorData, (value, key) => {
                     errorData[key] = this.refactorErrorObject(value);
@@ -25,22 +26,12 @@
             return !!value;
         }
 
-        whichPageTrows(errorObj) {
-            let overviewError;
-
-            _.each(errorObj, (value, key) => {
-                if (~OverviewProperties.indexOf(key)) { overviewError = 'overview'; }
-            });
-
-            return overviewError || null;
-        }
-
         checkNonField(errorObj) {
-            if (!_.isObject(errorObj)) { return null; }
+            if (!_.isObject(errorObj)) {return null;}
 
             let message = null;
             if (_.isArray(errorObj)) {
-                _.each(errorObj, value => {
+                _.each(errorObj, (value) => {
                     let recursive = this.checkNonField(value);
                     recursive && !message ? message = recursive : null;
                 });
@@ -56,5 +47,5 @@
             }
             return message;
         }
-    }
+    };
 </script>

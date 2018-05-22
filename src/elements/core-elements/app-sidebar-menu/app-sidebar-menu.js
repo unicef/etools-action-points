@@ -1,5 +1,5 @@
-class AppSidebarMenu extends window.APDMixins.AppConfig(Polymer.Element) {
-    static get is () { return 'app-sidebar-menu'; }
+class AppSidebarMenu extends APDMixins.AppConfig(Polymer.Element) {
+    static get is() {return 'app-sidebar-menu';}
 
     static get properties() {
         return {

@@ -1,7 +1,7 @@
 'use strict';
 
 class MultiNotificationItem extends Polymer.Element {
-    static get is() { return 'multi-notification-item'; }
+    static get is() {return 'multi-notification-item';}
 
     static get properties() {
         return {
@@ -18,7 +18,7 @@ class MultiNotificationItem extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('transitionend', (e) => this._onTransitionEnd(e));
+        this.addEventListener('transitionend', e => this._onTransitionEnd(e));
     }
 
     _onTransitionEnd(e) {

@@ -4,14 +4,14 @@
     <template>
         <style>
             #footer-content {
-                @apply(--layout-horizontal);
+                @apply --layout-horizontal;
 
                 padding: 5px 24px 15px;
             }
 
             #unicef-logo {
-                @apply(--layout-horizontal);
-                @apply(--layout-inline);
+                @apply --layout-horizontal;
+                @apply --layout-inline;
 
                 padding-right: 30px;
                 border-right: 1px solid var(--dark-divider-color);
@@ -49,7 +49,7 @@
 
     <script>
         class PageFooter extends Polymer.Element {
-            static get is() { return 'page-footer'; }
+            static get is() {return 'page-footer';}
         }
 
         window.customElements.define(PageFooter.is, PageFooter);

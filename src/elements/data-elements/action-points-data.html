@@ -28,13 +28,13 @@
                     listLength: {
                         type: Number,
                         notify: true
-                    },
+                    }
                 };
             }
 
             connectedCallback() {
                 super.connectedCallback();
-                this.addEventListener('request-action-points', () => this._loadList())
+                this.addEventListener('request-action-points', () => this._loadList());
             }
 
             _loadList() {
@@ -42,7 +42,7 @@
                     detail: {
                         type: 'action-points-list',
                         active: true,
-                        message: 'Loading of action points list...',
+                        message: 'Loading of action points list...'
                     },
                     bubbles: true,
                     composed: true

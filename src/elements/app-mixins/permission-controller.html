@@ -1,12 +1,12 @@
 <!--import [lodash]-->
 <script>
     'use strict';
-    var _permissionCollection = {};
+    let _permissionCollection = {};
 
     window.APDMixins = window.APDMixins || {};
-    window.APDMixins.PermissionController = (superClass) => class extends superClass {
+    window.APDMixins.PermissionController = superClass => class extends superClass {
         _addToCollection(collectionName, data) {
-            //check arguments
+            // check arguments
             if (!collectionName || !data) {
                 console.warn('collectionName and data arguments must be provided!');
                 return false;
@@ -20,8 +20,8 @@
                 return false;
             }
 
-            //check existance
-            if (_permissionCollection[collectionName]) { return false; }
+            // check existence
+            if (_permissionCollection[collectionName]) {return false;}
 
             _permissionCollection[collectionName] = data;
             this._manageActions(collectionName);
@@ -51,22 +51,22 @@
                 return false;
             }
 
-            let allowed_actions = collection.allowed_FSM_transitions || [];
+            let allowedActions = collection.allowed_FSM_transitions || [];
 
             let actions = [];
             if (this.isValidCollection(collection.PUT)) {
-                actions.push(this._createAction('save', allowed_actions[0]));
+                actions.push(this._createAction('save', allowedActions[0]));
             }
             if (this.isValidCollection(collection.POST)) {
-                actions.push(this._createAction('create', allowed_actions[0]));
+                actions.push(this._createAction('create', allowedActions[0]));
             }
 
-            collection.allowed_actions = actions.concat(allowed_actions);
+            collection.allowed_actions = actions.concat(allowedActions);
             return true;
         }
 
         _createAction(action, existedAction) {
-            if (!existedAction || typeof existedAction === 'string') { return action; }
+            if (!existedAction || typeof existedAction === 'string') {return action;}
             return {
                 code: action,
                 display_name: action
@@ -74,13 +74,13 @@
         }
 
         getFieldAttribute(path, attribute, actionType) {
-            if (!path || !attribute) { throw new Error('path and attribute arguments must be provided'); }
-            if (typeof path !== 'string') { throw new Error('path argument must be a string'); }
-            if (typeof attribute !== 'string') { throw new Error('attribute argument must be a string'); }
+            if (!path || !attribute) {throw new Error('path and attribute arguments must be provided');}
+            if (typeof path !== 'string') {throw new Error('path argument must be a string');}
+            if (typeof attribute !== 'string') {throw new Error('attribute argument must be a string');}
 
             let value = this._getCollection(path, actionType);
 
-            if (value) { value = value[attribute]; }
+            if (value) {value = value[attribute];}
 
             return value === undefined ? null : value;
 
@@ -96,8 +96,8 @@
         }
 
         collectionExists(path, actionType) {
-            if (!path) { throw new Error('path argument must be provided'); }
-            if (typeof path !== 'string') { throw new Error('path argument must be a string'); }
+            if (!path) {throw new Error('path argument must be provided');}
+            if (typeof path !== 'string') {throw new Error('path argument must be a string');}
 
             return !!this._getCollection(path, actionType);
         }
@@ -125,7 +125,7 @@
                     path.unshift(key);
                 }
 
-                if (!value) { break; }
+                if (!value) {break;}
             }
 
             return value;
@@ -140,14 +140,14 @@
         }
 
         actionAllowed(collection, action) {
-            if (!action || !collection) { return false; }
-            if (typeof collection !== 'string') { throw new Error('collection argument must be a string'); }
-            if (typeof action !== 'string') { throw new Error('action argument must be a string'); }
+            if (!action || !collection) {return false;}
+            if (typeof collection !== 'string') {throw new Error('collection argument must be a string');}
+            if (typeof action !== 'string') {throw new Error('action argument must be a string');}
             collection = _permissionCollection[collection];
 
             let actions = collection && collection.allowed_actions;
 
-            if (!actions || !actions.length) { return false; }
+            if (!actions || !actions.length) {return false;}
             if (typeof actions[0] !== 'string') {
                 actions = actions.map(action => action.code);
             }
@@ -156,19 +156,19 @@
         }
 
         noActionsAllowed(collection) {
-            if (!collection) { return true; }
-            if (typeof collection !== 'string') { throw new Error('Collection argument must be a string'); }
+            if (!collection) {return true;}
+            if (typeof collection !== 'string') {throw new Error('Collection argument must be a string');}
             collection = _permissionCollection[collection];
 
             return !(collection && collection.allowed_actions && collection.allowed_actions.length);
         }
 
         getActions(collection) {
-            if (!collection) { return null; }
-            if (typeof collection !== 'string') { throw new Error('Collection argument must be a string'); }
+            if (!collection) {return null;}
+            if (typeof collection !== 'string') {throw new Error('Collection argument must be a string');}
             collection = _permissionCollection[collection];
 
             return collection && collection.allowed_actions || null;
         }
-    }
+    };
 </script>

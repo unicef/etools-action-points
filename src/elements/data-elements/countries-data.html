@@ -20,11 +20,11 @@
             _data.countries = data || {};
             this.load(_data);
             _countryEls.forEach(function(el) {
-                if (el !== this) { el.load(_data); }
+                if (el !== this) {el.load(_data);}
             });
         };
 
-        class CountriesData extends window.APDMixins.AppConfig(Polymer.Element) {
+        class CountriesData extends APDMixins.AppConfig(Polymer.Element) {
             static get is() {
                 return 'countries-data';
             }
@@ -64,5 +64,7 @@
                 _setCountryData.bind(this)(res.detail);
             }
         }
+        customElements.define(CountriesData.is, CountriesData);
+
     </script>
 </dom-module>

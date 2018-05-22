@@ -1,5 +1,5 @@
-class CountriesDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
-    static get is() { return 'countries-dropdown'; }
+class CountriesDropdown extends APDMixins.AppConfig(Polymer.Element) {
+    static get is() {return 'countries-dropdown';}
 
     static get properties() {
         return {
@@ -33,7 +33,7 @@ class CountriesDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
         this.addEventListener('paper-dropdown-open', this._toggleOpened);
     }
     _setCountryIndex(countries, countryId) {
-        if (!(countries instanceof Array)) { return; }
+        if (!(countries instanceof Array)) {return;}
 
         this.countryIndex = countries.findIndex((country) => {
             return country.id === countryId;
@@ -46,23 +46,38 @@ class CountriesDropdown extends window.APDMixins.AppConfig(Polymer.Element) {
         this.set('country', this.$.repeat.itemForElement(e.detail.item));
     }
     _changeCountry(event) {
-        let country = event && event.model && event.model.item,
-            id = country && country.id;
+        let country = event && event.model && event.model.item;
+        let id = country && country.id;
 
-        if (Number(parseFloat(id)) !== id) { throw 'Can not find country id!'; }
+        if (Number(parseFloat(id)) !== id) {throw new Error('Can not find country id!');}
 
-        this.fire('global-loading', {type: 'change-country', active: true, message: 'Please wait while country is changing...'});
+        this.dispatchEvent(new CustomEvent('global-loading', {
+            detail: {type: 'change-country', active: true, message: 'Please wait while country is changing...'},
+            bubbles: true,
+            composed: true
+        }));
         this.countryData = {country: id};
         this.url = this.getEndpoint('changeCountry').url;
     }
     _handleError() {
         this.countryData = null;
         this.url = null;
-        this.fire('global-loading', {type: 'change-country'});
-        this.fire('toast', {text: 'Can not change country. Please, try again later'});
+        this.dispatchEvent(new CustomEvent('global-loading', {
+            detail: {type: 'change-country'},
+            bubbles: true,
+            composed: true
+        }));
+        this.dispatchEvent(new CustomEvent('toast', {
+            detail: {text: 'Can not change country. Please, try again later'},
+            bubbles: true,
+            composed: true
+        }));
     }
     _handleResponse() {
-        this.fire('main_refresh');
+        this.dispatchEvent(new CustomEvent('main_refresh', {
+            bubbles: true,
+            composed: true
+        }));
     }
 }
 

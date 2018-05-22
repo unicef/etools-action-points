@@ -1,5 +1,5 @@
 class ActionPointsPageMain extends Polymer.Element {
-    static get is() { return 'action-points-page-main'; }
+    static get is() {return 'action-points-page-main';}
 
     static get properties() {
         return {

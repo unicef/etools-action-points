@@ -1,5 +1,5 @@
 class MultiNotificationList extends Polymer.Element {
-    static get is() { return 'multi-notification-list'; }
+    static get is() {return 'multi-notification-list';}
 
     static get properties() {
         return {
@@ -8,7 +8,7 @@ class MultiNotificationList extends Polymer.Element {
                 value() {
                     return [];
                 },
-                notify: true,
+                notify: true
             },
             notificationsQueue: {
                 type: Array,
@@ -29,8 +29,8 @@ class MultiNotificationList extends Polymer.Element {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('notification-push', (e) => this._onNotificationPush(e));
-        this.addEventListener('notification-shift', (e) => this._onNotificationShift(e));
+        this.addEventListener('notification-push', e => this._onNotificationPush(e));
+        this.addEventListener('notification-shift', e => this._onNotificationShift(e));
         this.addEventListener('reset-notifications', () => this._resetNotifications());
     }
 
@@ -44,7 +44,7 @@ class MultiNotificationList extends Polymer.Element {
         }
 
         Polymer.dom.flush();
-        //Check and show notifications from queue
+        // Check and show notifications from queue
         if (this.notificationsQueue.length) {
             this.push('notifications', this.shift('notificationsQueue'));
         }

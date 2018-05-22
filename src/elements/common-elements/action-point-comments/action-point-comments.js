@@ -1,18 +1,23 @@
-'use strict';
+const ActionPointCommentsMixins = EtoolsMixinFactory.combineMixins([
+    APDMixins.AppConfig,
+    APDMixins.InputAttrs,
+    APDMixins.DataTableMixin,
+    APDMixins.DateMixin,
+    EtoolsAjaxRequestMixin], Polymer.Element);
 
-class ActionPointComments extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APDMixins.DateMixin(APDMixins.InputAttrs(APDMixins.DataTableMixin(Polymer.Element))))) {
-    static get is() { return 'action-point-comments'; }
+class ActionPointComments extends ActionPointCommentsMixins {
+    static get is() {return 'action-point-comments';}
 
     static get properties() {
         return {
             basePermissionPath: String,
             actionPoint: {
                 type: Array,
-                value() { return {};}
+                value() {return {};}
             },
             filteredComments: {
                 type: Array,
-                value() { return [];}
+                value() {return [];}
             },
             pageSize: {
                 type: Number,
@@ -61,7 +66,7 @@ class ActionPointComments extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APD
     validate() {
         let elements = this.shadowRoot.querySelectorAll('.validate-input');
         let valid = true;
-        _.each(elements, element => {
+        _.each(elements, (element) => {
             if (element.required && !element.disabled && !element.validate()) {
                 let label = element.label || 'Field';
                 element.errorMessage = `${label} is required`;
@@ -74,7 +79,7 @@ class ActionPointComments extends APDMixins.AppConfig(EtoolsAjaxRequestMixin(APD
     }
 
     _filterComments(comments, pageNumber, pageSize) {
-        if (!comments) { return; }
+        if (!comments) {return;}
         let from = (pageNumber - 1) * pageSize;
         let to = pageNumber * pageSize;
         this.set('filteredComments', comments.slice(from, to));

@@ -14,10 +14,16 @@
     </template>
 
     <script>
-        class UserData extends window.APDMixins.AppConfig(APDMixins.UserController(APDMixins.PermissionController(Polymer.Element))) {
-            static get is() { return 'user-data'; }
+        let UserDataMixins = EtoolsMixinFactory.combineMixins([
+            APDMixins.AppConfig,
+            APDMixins.PermissionController,
+            APDMixins.UserController
+        ], Polymer.Element);
 
-            static get properties() { return {}; }
+        class UserData extends UserDataMixins {
+            static get is() {return 'user-data';}
+
+            static get properties() {return {};}
 
             ready() {
                 super.ready();
@@ -39,7 +45,7 @@
                 localStorage.setItem('userId', user.id);
 
                 this._setUserData(user);
-                this.dispatchEvent(new CustomEvent('user-profile-loaded', { bubbles: true }));
+                this.dispatchEvent(new CustomEvent('user-profile-loaded', {bubbles: true}));
             }
 
             _handleError(rsp, err) {
