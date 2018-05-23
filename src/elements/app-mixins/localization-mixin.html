@@ -3,7 +3,18 @@
 <script>
     'use strict';
     window.APDMixins = window.APDMixins || {};
+    /**
+     * Mixin for localization functionality
+     * @param superClass
+     * @constructor
+     */
     window.APDMixins.LocalizationMixin = superClass => class extends APDMixins.PermissionController(superClass) {
+        /**
+         * Get string label from loaded permission data
+         * @param base permission path
+         * @param item
+         * @returns {*}
+         */
         getHeadingLabel(base, item) {
             if (!item) {return '';}
             if (!base) {return item.label || '';}

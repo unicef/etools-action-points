@@ -147,6 +147,10 @@ class ActionPointDetails extends ActionPointDetailsMixins {
 
         return valid;
     }
+
+    _isRelatedModule(relatedModule) {
+        return !!relatedModule;
+    }
 }
 
 customElements.define(ActionPointDetails.is, ActionPointDetails);

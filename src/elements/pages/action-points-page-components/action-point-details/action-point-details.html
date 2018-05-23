@@ -27,11 +27,68 @@
             .last-modify__author {
                 font-weight: bold;
             }
+            .reference-link {
+                @apply --layout-vertical;
+                padding: 8px 12px;
+                position: relative;
+            }
+            .reference-link > label {
+                font-size: 16px;
+                width: 133%;
+                transform: scale(0.75);
+                transform-origin: left top;
+                color: var(--paper-input-container-color, var(--secondary-text-color));
+            }
+            .reference-link > a {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: var(--module-primary);
+                font-weight: 500;
+            }
         </style>
-
         <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
+            <template is="dom-if" if="[[_isRelatedModule(editedItem.related_module)]]">
+                <div class="row-h group">
+                    <div class="input-container">
+                        <paper-input
+                                class="disabled-as-readonly"
+                                value="[[editedItem.related_module]]"
+                                label="[[getLabel('related_module', basePermissionPath)]]"
+                                placeholder="[[getPlaceholderText('related_module', basePermissionPath, 'true')]]"
+                                required$="[[_setRequired('related_module', basePermissionPath)]]"
+                                disabled$="[[isReadOnly('related_module', basePermissionPath)]]"
+                                readonly$="[[isReadOnly('related_module', basePermissionPath)]]"></paper-input>
+                    </div>
+                    <div class="input-container">
+                        <div class="reference-link">
+                            <label>[[getLabel('reference_number', basePermissionPath)]]</label>
+                            <a href$="[[editedItem.related_object_url]]">[[editedItem.related_object_str]]</a>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <etools-dropdown
+                                class$="validate-input disabled-as-readonly [[_setRequired('assigned_by', basePermissionPath)]]"
+                                selected="{{editedItem.assigned_by}}"
+                                label="[[getLabel('assigned_by', basePermissionPath)]]"
+                                placeholder="[[getPlaceholderText('assigned_by', basePermissionPath, 'true')]]"
+                                options="[[unicefUsers]]"
+                                option-label="name"
+                                option-value="id"
+                                required$="[[_setRequired('assigned_by', basePermissionPath)]]"
+                                disabled$="[[isReadOnly('assigned_by', basePermissionPath)]]"
+                                readonly$="[[isReadOnly('assigned_by', basePermissionPath)]]"
+                                invalid="{{errors.assigned_by}}"
+                                error-message="{{errors.assigned_by}}"
+                                on-focus="_resetFieldError"
+                                on-tap="_resetFieldError"
+                                dynamic-align>
+                        </etools-dropdown>
+                    </div>
+                </div>
+            </template>
             <div class="row-h group">
-                <div class="input-container input-container-ms">
+                <div class="input-container">
                     <!-- Implementing Partner -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('partner', basePermissionPath)]]"
@@ -52,8 +109,7 @@
                     </etools-dropdown>
                     <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading"></etools-loading>
                 </div>
-
-                <div class="input-container input-container-ms">
+                <div class="input-container">
                     <!-- PD/SSFA -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('intervention', basePermissionPath)]]"
@@ -78,7 +134,7 @@
 
 
             <div class="row-h group">
-                <div class="input-container input-container-ms">
+                <div class="input-container">
                     <!-- CP Output -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('cp_output', basePermissionPath)]]"
@@ -99,7 +155,7 @@
                     </etools-dropdown>
                 </div>
 
-                <div class="input-container input-container-ms">
+                <div class="input-container">
                     <!-- Locations -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('location', basePermissionPath)]]"
@@ -165,7 +221,54 @@
                             dynamic-align>
                     </etools-dropdown>
                 </div>
+                <div class="input-container">
+                    <!-- Section -->
+                    <etools-dropdown
+                            class$="validate-input disabled-as-readonly [[_setRequired('section', basePermissionPath)]]"
+                            selected="{{editedItem.section}}"
+                            label="[[getLabel('section', basePermissionPath)]]"
+                            placeholder="[[getPlaceholderText('section', basePermissionPath, 'true')]]"
+                            options="[[sectionsCovered]]"
+                            option-label="name"
+                            option-value="id"
+                            required$="[[_setRequired('section', basePermissionPath)]]"
+                            disabled$="[[isReadOnly('section', basePermissionPath)]]"
+                            readonly$="[[isReadOnly('section', basePermissionPath)]]"
+                            invalid="{{errors.section}}"
+                            error-message="{{errors.section}}"
+                            on-focus="_resetFieldError"
+                            on-tap="_resetFieldError"
+                            dynamic-align>
+                    </etools-dropdown>
+                </div>
+                <div class="input-container">
+                    <!-- Office -->
+                    <etools-dropdown
+                            class$="validate-input disabled-as-readonly [[_setRequired('office', basePermissionPath)]]"
+                            selected="{{editedItem.office}}"
+                            label="[[getLabel('office', basePermissionPath)]]"
+                            placeholder="[[getPlaceholderText('office', basePermissionPath, 'true')]]"
+                            options="[[offices]]"
+                            option-label="name"
+                            option-value="id"
+                            update-selected
+                            required$="[[_setRequired('office', basePermissionPath)]]"
+                            disabled$="[[isReadOnly('office', basePermissionPath)]]"
+                            readonly$="[[isReadOnly('office', basePermissionPath)]]"
+                            invalid="{{errors.office}}"
+                            error-message="{{errors.office}}"
+                            on-focus="_resetFieldError"
+                            on-tap="_resetFieldError"
+                            dynamic-align>
+                    </etools-dropdown>
+                </div>
+            </div>
 
+            <div class="row-h group">
+                <div class="input-container input-checkbox-container">
+                    <!-- Priority -->
+                    <paper-checkbox checked="{{editedItem.high_priority}}">[[getLabel('high_priority', basePermissionPath)]]</paper-checkbox>
+                </div>
                 <div class="input-container">
                     <!-- Due Date -->
                     <paper-input
@@ -192,58 +295,6 @@
                         </etools-datepicker-button>
                     </paper-input>
                 </div>
-
-                <div class="input-container input-checkbox-container">
-                    <!-- Priority -->
-                   <paper-checkbox checked="{{editedItem.high_priority}}">[[getLabel('high_priority', basePermissionPath)]]</paper-checkbox>
-                </div>
-            </div>
-
-
-            <div class="row-h group">
-                <div class="input-container">
-                    <!-- Section -->
-                    <etools-dropdown
-                            class$="validate-input disabled-as-readonly [[_setRequired('section', basePermissionPath)]]"
-                            selected="{{editedItem.section}}"
-                            label="[[getLabel('section', basePermissionPath)]]"
-                            placeholder="[[getPlaceholderText('section', basePermissionPath, 'true')]]"
-                            options="[[sectionsCovered]]"
-                            option-label="name"
-                            option-value="id"
-                            required$="[[_setRequired('section', basePermissionPath)]]"
-                            disabled$="[[isReadOnly('section', basePermissionPath)]]"
-                            readonly$="[[isReadOnly('section', basePermissionPath)]]"
-                            invalid="{{errors.section}}"
-                            error-message="{{errors.section}}"
-                            on-focus="_resetFieldError"
-                            on-tap="_resetFieldError"
-                            dynamic-align>
-                    </etools-dropdown>
-                </div>
-
-                <div class="input-container">
-                    <!-- Office -->
-                    <etools-dropdown
-                            class$="validate-input disabled-as-readonly [[_setRequired('office', basePermissionPath)]]"
-                            selected="{{editedItem.office}}"
-                            label="[[getLabel('office', basePermissionPath)]]"
-                            placeholder="[[getPlaceholderText('office', basePermissionPath, 'true')]]"
-                            options="[[offices]]"
-                            option-label="name"
-                            option-value="id"
-                            update-selected
-                            required$="[[_setRequired('office', basePermissionPath)]]"
-                            disabled$="[[isReadOnly('office', basePermissionPath)]]"
-                            readonly$="[[isReadOnly('office', basePermissionPath)]]"
-                            invalid="{{errors.office}}"
-                            error-message="{{errors.office}}"
-                            on-focus="_resetFieldError"
-                            on-tap="_resetFieldError"
-                            dynamic-align>
-                    </etools-dropdown>
-                </div>
-
             </div>
             <template is="dom-if" if="[[editedItem.history.0]]">
                 <div class="last-modify">

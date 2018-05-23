@@ -2,9 +2,18 @@
 <script>
     'use strict';
     window.APDMixins = window.APDMixins || {};
+    /*
+     * Mixin for edit query string in location.
+     * @polymer
+     * @mixinFunction
+     */
     window.APDMixins.QueryParamsMixin = superClass => class extends superClass {
+        /**
+         * Parse queries from location to JSON object
+         * @returns {{Object}} of queries key-value
+         */
         parseQueries() {
-            let queriesOvj = {};
+            let queriesObj = {};
             let queries = this.getQueriesString()
                             .slice(1)
                             .split('&');
@@ -12,25 +21,46 @@
             if (queries[0] === '') return {};
             queries.forEach((query) => {
                 let [key, value] = query.split('=');
-                queriesOvj[key] = value || true;
+                queriesObj[key] = value || true;
             });
 
-            return queriesOvj;
+            return queriesObj;
         }
 
+        /**
+         * Get part of location by property
+         * @param property
+         * @returns {Window|Location|String|*|string}
+         */
         getLocationProperty(property) {
             return window && window.location && window.location[property] || '';
         }
 
+        /**
+         * Get queries part of location
+         * @returns {Window|Location|String|*|string}
+         */
         getQueriesString() {
             return this.getLocationProperty('search');
         }
 
+        /**
+         * Get path part of location
+         * @returns {string}
+         */
         getPath() {
             let path = this.getLocationProperty('pathname');
             if (~path.indexOf('/apd')) {path = path.slice(4);}
             return path.slice(1);
         }
+
+        /**
+         * Update queries in location by new values
+         * @param newQueries
+         * @param path
+         * @param noNotify
+         * @returns {boolean}
+         */
         updateQueries(newQueries, path, noNotify) {
             if (!_.isObject(newQueries)) {return false;}
             let keys = Object.keys(newQueries);
@@ -60,6 +90,9 @@
             return true;
         }
 
+        /**
+         * Clear queries in location
+         */
         clearQueries() {
             try {
                 window.history.replaceState({}, '', this.getLocationProperty('pathname'));

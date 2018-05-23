@@ -84,7 +84,8 @@ class ActionPointsList extends ActionPointsListMixins {
                 notify: true
             },
             basePermissionPath: {
-                type: String
+                type: String,
+                value: 'action_points'
             }
         };
     }

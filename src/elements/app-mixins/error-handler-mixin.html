@@ -4,6 +4,11 @@
     'use strict';
 
     window.APDMixins = window.APDMixins || {};
+    /**
+     * Mixin error handling
+     * @param superClass
+     * @constructor
+     */
     window.APDMixins.ErrorHandlerMixin = superClass => class extends superClass {
         refactorErrorObject(errorData) {
             if (!errorData) {return {};}

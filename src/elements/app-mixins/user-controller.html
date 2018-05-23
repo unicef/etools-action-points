@@ -7,6 +7,11 @@
     let _groups;
 
     window.APDMixins = window.APDMixins || {};
+    /*
+     * Mixin for manage user data.
+     * @polymer
+     * @mixinFunction
+     */
     window.APDMixins.UserController = superClass => class extends superClass {
         _setUserData(user) {
             if (_user) {throw new Error('User already exists!');}

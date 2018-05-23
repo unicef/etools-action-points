@@ -4,6 +4,11 @@
     let _permissionCollection = {};
 
     window.APDMixins = window.APDMixins || {};
+    /*
+     * Mixin for manage permission data.
+     * @polymer
+     * @mixinFunction
+     */
     window.APDMixins.PermissionController = superClass => class extends superClass {
         _addToCollection(collectionName, data) {
             // check arguments

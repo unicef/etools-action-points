@@ -4,7 +4,19 @@
     'use strict';
 
     window.APDMixins = window.APDMixins || {};
+    /*
+     * Mixin for extend etools-data-table.
+     * @polymer
+     * @mixinFunction
+     */
     window.APDMixins.DataTableMixin = superClass => class extends superClass {
+        /**
+         * Format column data value also from list dropdown options
+         * @param value for format
+         * @param list of options
+         * @param field of option in list
+         * @returns {string} value for displaying
+         */
         getStringValue(value, list, field) {
             let stringValue = value;
             if (!_.isNil(list) && !_.isNil(field)) {
