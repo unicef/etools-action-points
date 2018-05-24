@@ -2,6 +2,8 @@ const ActionPointDetailsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.InputAttrs,
     APDMixins.StaticDataMixin,
+    APDMixins.PermissionController,
+    APDMixins.LocalizationMixin,
     APDMixins.DateMixin,
     EtoolsAjaxRequestMixin], Polymer.Element);
 
@@ -42,6 +44,7 @@ class ActionPointDetails extends ActionPointDetailsMixins {
 
     ready() {
         super.ready();
+        this.modules = this.getData('modules');
         this.partners = this.getData('partnerOrganisations');
         this.offices = this.getData('offices');
         this.sectionsCovered = this.getData('sectionsCovered');
@@ -146,10 +149,6 @@ class ActionPointDetails extends ActionPointDetailsMixins {
         });
 
         return valid;
-    }
-
-    _isRelatedModule(relatedModule) {
-        return !!relatedModule;
     }
 }
 

@@ -2,7 +2,7 @@ const ActionPointsListMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.StaticDataMixin,
     APDMixins.InputAttrs,
     APDMixins.QueryParamsMixin,
-    APDMixins.DataTableMixin,
+    APDMixins.LocalizationMixin,
     APDMixins.DateMixin], Polymer.Element);
 
 class ActionPointsList extends ActionPointsListMixins {

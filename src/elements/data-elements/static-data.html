@@ -63,6 +63,10 @@
                         if (!statusesData) {console.error('Can not load action points statuses data');}
                         this._setData('statuses', statusesData);
 
+                        let modulesData = this.getChoices('action_points.module');
+                        if (!modulesData) {console.error('Can not load action points modules data');}
+                        this._setData('modules', modulesData);
+
                         this.dataLoaded.apOptions = true;
                         this._allDataLoaded();
                     }, error => this._responseError('Partners', 'request error'));

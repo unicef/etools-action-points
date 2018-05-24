@@ -1,5 +1,5 @@
 <!--import [polymer/polymer-element, etools-content-panel, paper-input, paper-input/paper-textarea, etools-dropdown,
-            etools-ajax, etools-loading, etools-datepicker/etools-datepicker-button, paper-checkbox, lodash]-->
+            etools-ajax, etools-loading, etools-datepicker/etools-datepicker-button, paper-checkbox, lodash, localization-mixin]-->
 <!--import [page-layout-styles, module-styles, shared-styles, tab-inputs-styles, input-attrs-mixin, etools-app-config, date-mixin]-->
 
 <dom-module id="action-point-details">
@@ -46,24 +46,34 @@
                 color: var(--module-primary);
                 font-weight: 500;
             }
+            .reference-link > span {
+                color: var(--paper-input-container-color, var(--secondary-text-color));
+            }
         </style>
         <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
-            <template is="dom-if" if="[[_isRelatedModule(editedItem.related_module)]]">
+            <template is="dom-if" if="[[!actionAllowed(basePermissionPath, 'POST')]]">
                 <div class="row-h group">
                     <div class="input-container">
-                        <paper-input
-                                class="disabled-as-readonly"
-                                value="[[editedItem.related_module]]"
+                        <etools-dropdown
+                                class$="validate-input disabled-as-readonly [[_setRequired('related_module', basePermissionPath)]]"
+                                selected="{{editedItem.related_module}}"
                                 label="[[getLabel('related_module', basePermissionPath)]]"
-                                placeholder="[[getPlaceholderText('related_module', basePermissionPath, 'true')]]"
+                                placeholder="-"
+                                options="[[modules]]"
+                                option-label="name"
+                                option-value="id"
                                 required$="[[_setRequired('related_module', basePermissionPath)]]"
                                 disabled$="[[isReadOnly('related_module', basePermissionPath)]]"
-                                readonly$="[[isReadOnly('related_module', basePermissionPath)]]"></paper-input>
+                                readonly$="[[isReadOnly('related_module', basePermissionPath)]]"
+                                dynamic-align>
+                        </etools-dropdown>
                     </div>
                     <div class="input-container">
                         <div class="reference-link">
                             <label>[[getLabel('reference_number', basePermissionPath)]]</label>
-                            <a href$="[[editedItem.related_object_url]]">[[editedItem.related_object_str]]</a>
+                            <a hidden$="[[!editedItem.related_object_url]]"
+                               href$="[[editedItem.related_object_url]]">[[editedItem.related_object_str]]</a>
+                            <span hidden$="[[editedItem.related_object_url]]">-</span>
                         </div>
                     </div>
                     <div class="input-container">
@@ -71,7 +81,7 @@
                                 class$="validate-input disabled-as-readonly [[_setRequired('assigned_by', basePermissionPath)]]"
                                 selected="{{editedItem.assigned_by}}"
                                 label="[[getLabel('assigned_by', basePermissionPath)]]"
-                                placeholder="[[getPlaceholderText('assigned_by', basePermissionPath, 'true')]]"
+                                placeholder="-"
                                 options="[[unicefUsers]]"
                                 option-label="name"
                                 option-value="id"
