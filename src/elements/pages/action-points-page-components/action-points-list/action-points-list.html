@@ -1,5 +1,5 @@
 <!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, polymer/polymer-element,
-            pages-header-element, search-and-filter, etools-data-table, paper-card, iron-flex-layout,
+            pages-header-element, search-and-filter, filters-element, etools-data-table, paper-card, iron-flex-layout,
             static-data-mixin, action-points-data, iron-location, localization-mixin, date-mixin, input-attrs-mixin]-->
 
 <dom-module id="action-points-list">
@@ -26,12 +26,18 @@
         <action-points-data action-points="{{actionPoints}}"
                             request-queries="{{queryParams}}"
                             list-length="{{totalResults}}"></action-points-data>
-        <search-and-filter search-label="Keywords"
-                           id="filters"
-                           filters="[[filters]]"
-                           query-params="{{queryParams}}"
-                           search-params="[[searchParams]]">
-        </search-and-filter>
+        <filters-element>
+            <search-and-filter search-label="Keywords"
+                               id="filters"
+                               filters="[[filters]]"
+                               query-params="{{queryParams}}"
+                               search-params="[[searchParams]]">
+            </search-and-filter>
+            <div class="show-completed-toggle">
+                <span>Show Completed</span>
+                <paper-toggle-button checked="{{isShowCompleted}}"></paper-toggle-button>
+            </div>
+        </filters-element>
         <paper-card>
             <etools-data-table-header id="listHeader"
                                       label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
