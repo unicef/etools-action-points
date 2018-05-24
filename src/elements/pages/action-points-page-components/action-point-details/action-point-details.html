@@ -51,7 +51,7 @@
             }
         </style>
         <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
-            <template is="dom-if" if="[[!actionAllowed(basePermissionPath, 'POST')]]">
+            <template is="dom-if" if="[[!actionAllowed(basePermissionPath, 'create')]]">
                 <div class="row-h group">
                     <div class="input-container">
                         <etools-dropdown
