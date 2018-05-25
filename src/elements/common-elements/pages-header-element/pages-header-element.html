@@ -8,10 +8,10 @@
         <!-- inject styles './pages-header-element.scss'-->
 
         <div class="header-wrapper">
-            <div class="side-heading horizontal layout center">
+            <div class="side-heading horizontal layout center around-justified">
                 <span class="flex title">[[_setTitle(pageData, pageTitle)]]</span>
 
-                <div class="side-heading-button-holder">
+                <div class="horizontal layout center">
                     <div class="export-buttons" hidden$="[[!exportLinks.length]]">
                         <paper-menu-button id="dropdown" hidden$="[[!_isDropDown(exportLinks)]]" on-tap="_toggleOpened" horizontal-align="right">
                             <paper-button slot="dropdown-trigger" class="grey-buttons">
@@ -37,10 +37,9 @@
                         <iron-icon icon="add"></iron-icon>
                         <span>[[btnText]]</span>
                     </paper-button>
+                    <slot></slot>
                 </div>
             </div>
-
-            <slot></slot>
         </div>
     </template>
 

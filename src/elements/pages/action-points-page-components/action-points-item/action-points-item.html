@@ -1,20 +1,38 @@
-<!--import [polymer/polymer-element, etools-ajax]-->
+<!--import [polymer/polymer-element, etools-ajax, iron-flex-layout/iron-flex-layout-classes]-->
 <!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details,
-            action-point-comments, status-element]-->
+            action-point-comments, action-points-history, status-element]-->
 
 <dom-module id="action-points-item">
     <template>
-        <style include="page-layout-styles shared-styles main-page-styles">
+        <style include="page-layout-styles shared-styles main-page-styles iron-flex module-styles">
             #pageContent > * {
                 display: block;
                 margin-bottom: 25px;
+            }
+            .header-btn {
+                color: var(--gray-mid);
+                font-weight: 500;
+                font-size: 14px;
+            }
+            .header-btn iron-icon {
+                margin-right: 8px;
+            }
+            etools-dialog {
+                --etools-dialog-scrollable: {
+                    margin-top: 0;
+                };
             }
         </style>
         <app-route
                 route="{{route}}"
                 pattern="/:id"
                 data="{{routeData}}"></app-route>
-        <pages-header-element page-title="[[actionPoint.reference_number]]"></pages-header-element>
+        <pages-header-element page-title="[[actionPoint.reference_number]]">
+            <paper-button icon="history" class="header-btn" on-tap="showHistory">
+                <iron-icon icon="history"></iron-icon>
+                History
+            </paper-button>
+        </pages-header-element>
 
         <div class="view-container">
             <div id="pageContent">
@@ -27,6 +45,15 @@
             </div>
         </div>
 
+        <etools-dialog
+                size="md"
+                no-padding
+                opened="{{isOpenedHistory}}"
+                dialog-title="History"
+                cancel-btn-text="Close"
+                hide-confirm-btn>
+            <action-points-history history="[[actionPoint.history]]" permission-path="[[basePermissionPath]]"></action-points-history>
+        </etools-dialog>
     </template>
     <!-- inject scripts './action-points-item.js' -->
 </dom-module>

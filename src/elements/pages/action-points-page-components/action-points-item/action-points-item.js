@@ -1,5 +1,7 @@
 const ActionPointsItemMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
+    APDMixins.InputAttrs,
+    APDMixins.DateMixin,
     APDMixins.PermissionController,
     EtoolsAjaxRequestMixin
 ], Polymer.Element);
@@ -159,6 +161,10 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     composed: true
                 }));
             });
+    }
+
+    showHistory() {
+        this.isOpenedHistory = true;
     }
 
 }

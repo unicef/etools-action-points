@@ -1,0 +1,34 @@
+<!--import [polymer/polymer-element, module-styles, etools-data-table, iron-flex-layout/iron-flex-layout-classes]-->
+
+<dom-module id="action-points-history">
+    <template>
+        <style include="module-styles iron-flex">
+            etools-data-table-header {
+                --header-columns: {
+                    margin-left: 0;
+                }
+            }
+            etools-data-table-row {
+                --list-row-wrapper: {
+                    height: 48px;
+                }
+            }
+        </style>
+
+        <etools-data-table-header no-title>
+            <etools-data-table-column class="flex">Date</etools-data-table-column>
+            <etools-data-table-column class="flex">[[getLabel('history.by_user', permissionPath)]]</etools-data-table-column>
+            <etools-data-table-column class="flex">[[getLabel('history.action', permissionPath)]]</etools-data-table-column>
+        </etools-data-table-header>
+        <template id="rows" is="dom-repeat" items="[[history]]" as="historyItem">
+            <etools-data-table-row no-collapse>
+                <div slot="row-data" class="layout horizontal">
+                    <span class="layout horizontal center flex col-data">[[prettyDate(historyItem.modified)]]</span>
+                    <span class="layout horizontal center flex col-data">[[historyItem.by_user_display]]</span>
+                    <span class="layout horizontal center flex col-data">[[_getChanges(historyItem)]]</span>
+                </div>
+            </etools-data-table-row>
+        </template>
+    </template>
+    <!-- inject scripts './action-points-history.js' -->
+</dom-module>

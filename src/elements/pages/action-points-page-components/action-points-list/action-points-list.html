@@ -83,27 +83,27 @@
                     </div>
                     <div slot="row-data-details" class="row-action-points">
                         <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">Description</span>
+                            <span class="rdc-title">[[getLabel('description', basePermissionPath)]]</span>
                             <span class="truncate">[[getStringValue(entry.description)]]</span>
                         </div>
                         <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">PD/SSFA</span>
+                            <span class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</span>
                             <span class="truncate">[[getStringValue(entry.intervention.number)]]</span>
                         </div>
                         <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">Location</span>
+                            <span class="rdc-title">[[getLabel('location', basePermissionPath)]]</span>
                             <span class="truncate">[[getStringValue(entry.location.name)]]</span>
                         </div>
                         <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">Module</span>
+                            <span class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</span>
                             <span class="truncate">[[getStringValue(entry.related_module)]]</span>
                         </div>
                         <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">Assigned By</span>
+                            <span class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</span>
                             <span class="truncate">[[getStringValue(entry.assigned_by.name)]]</span>
                         </div>
                         <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">Completed Date</span>
+                            <span class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</span>
                             <span class="truncate">[[prettyDate(entry.date_of_completion)]]</span>
                         </div>
                     </div>

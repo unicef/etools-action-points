@@ -98,6 +98,17 @@
                 --paper-radio-button-checked-color: var(--module-primary);
             }
 
+            etools-data-table-header {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+            }
+
+            etools-data-table-row {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                --list-row-collapse-wrapper: {
+                    border-top: 1px solid rgba(0, 0, 0, 0.12);
+                };
+            }
+
             etools-dialog {
                 --etools-dialog-primary-color: var(--module-primary);
                 --etools-dialog-content: {
@@ -112,27 +123,27 @@
             etools-content-panel {
                 position: relative;
 
-                --ecp-header-title: #{'{
+                --ecp-header-title: {
                     line-height: 48px;
-                }'};
+                };
 
-                --ecp-expand-btn: #{'{
+                --ecp-expand-btn: {
                     position: absolute;
                     top: 3px;
                     left: 13px;
                     width: 45px;
                     height: 45px;
-                }'};
+                };
 
-                --ecp-header-title: #{'{
+                --ecp-header-title: {
                     font-weight: 500;
                     line-height: 48px;
                     padding: 0 30px;
-                }'};
+                };
 
-                --ecp-header-btns-wrapper: #{'{
+                --ecp-header-btns-wrapper: {
                     opacity: 1;
-                }'};
+                };
             }
 
             div[slot="panel-btns"] {
