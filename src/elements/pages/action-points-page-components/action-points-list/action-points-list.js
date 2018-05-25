@@ -66,6 +66,11 @@ class ActionPointsList extends ActionPointsListMixins {
                     }
                 ]
             },
+            isShowCompleted: {
+                type: Boolean,
+                value: true,
+                observer: '_setShowCompleted'
+            },
             pageNumber: {
                 type: Number,
                 value: 1
@@ -101,6 +106,7 @@ class ActionPointsList extends ActionPointsListMixins {
         super.connectedCallback();
         this.statuses = this.getData('statuses') || [];
         this._initFilters();
+        this.isShowCompleted = this.queryParams.status !== 'open';
         this.addEventListener('sort-changed', e => this._sort(e));
     }
 
@@ -194,6 +200,13 @@ class ActionPointsList extends ActionPointsListMixins {
 
     _pageSizeSelected({detail}) {
         this.set('queryParams.page_size', detail.value);
+    }
+    _setShowCompleted(isShowCompleted) {
+        if (!isShowCompleted) {
+            this.set('queryParams.status', 'open');
+        } else {
+            this.queryParams = _.omit(this.queryParams, ['status']);
+        }
     }
 }
 
