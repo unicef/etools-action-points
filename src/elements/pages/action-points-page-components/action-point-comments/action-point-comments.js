@@ -11,7 +11,7 @@ class ActionPointComments extends ActionPointCommentsMixins {
 
     static get properties() {
         return {
-            basePermissionPath: String,
+            permissionPath: String,
             actionPoint: {
                 type: Array,
                 value() {return {};}
@@ -67,14 +67,14 @@ class ActionPointComments extends ActionPointCommentsMixins {
     validate() {
         let elements = this.shadowRoot.querySelectorAll('.validate-input');
         let valid = true;
-        _.each(elements, (element) => {
+        for (let element of elements) {
             if (element.required && !element.disabled && !element.validate()) {
                 let label = element.label || 'Field';
                 element.errorMessage = `${label} is required`;
                 element.invalid = true;
                 valid = false;
             }
-        });
+        }
 
         return valid;
     }

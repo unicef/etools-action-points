@@ -1,5 +1,6 @@
 <!--import [polymer/polymer-element, etools-ajax]-->
-<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details, status-element]-->
+<!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details,
+            status-element, error-handler-mixin]-->
 
 <dom-module id="action-points-new">
     <template>
@@ -8,11 +9,11 @@
 
         <div class="view-container">
             <div id="pageContent">
-                <action-point-details id="ap-details" action-point="[[actionPoint]]" base-permission-path="action_points"></action-point-details>
+                <action-point-details id="ap-details" action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-details>
             </div>
 
             <div id="sidebar">
-                <status-element action-point="[[actionPoint]]" permission-base="action_points"></status-element>
+                <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
             </div>
         </div>
 

@@ -1,6 +1,6 @@
 <!--import [polymer/polymer-element, etools-ajax, iron-flex-layout/iron-flex-layout-classes]-->
 <!--import [pages-header-element, page-layout-styles, main-page-styles, shared-styles, action-point-details,
-            action-point-comments, action-points-history, status-element]-->
+            action-point-comments, action-points-history, status-element, error-handler-mixin]-->
 
 <dom-module id="action-points-item">
     <template>
@@ -36,12 +36,12 @@
 
         <div class="view-container">
             <div id="pageContent">
-                <action-point-details action-point="[[actionPoint]]" base-permission-path="[[basePermissionPath]]"></action-point-details>
-                <action-point-comments action-point="[[actionPoint]]" base-permission-path="[[basePermissionPath]]"></action-point-comments>
+                <action-point-details action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-details>
+                <action-point-comments action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-comments>
             </div>
 
             <div id="sidebar">
-                <status-element action-point="[[actionPoint]]" permission-base="[[basePermissionPath]]"></status-element>
+                <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
                 dialog-title="History"
                 cancel-btn-text="Close"
                 hide-confirm-btn>
-            <action-points-history history="[[actionPoint.history]]" permission-path="[[basePermissionPath]]"></action-points-history>
+            <action-points-history history="[[actionPoint.history]]" permission-path="[[permissionPath]]"></action-points-history>
         </etools-dialog>
     </template>
     <!-- inject scripts './action-points-item.js' -->

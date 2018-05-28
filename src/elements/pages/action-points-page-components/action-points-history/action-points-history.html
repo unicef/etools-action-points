@@ -23,9 +23,9 @@
         <template id="rows" is="dom-repeat" items="[[history]]" as="historyItem">
             <etools-data-table-row no-collapse>
                 <div slot="row-data" class="layout horizontal">
-                    <span class="layout horizontal center flex col-data">[[prettyDate(historyItem.modified)]]</span>
+                    <span class="layout horizontal center flex col-data">[[prettyDate(historyItem.created)]]</span>
                     <span class="layout horizontal center flex col-data">[[historyItem.by_user_display]]</span>
-                    <span class="layout horizontal center flex col-data">[[_getChanges(historyItem)]]</span>
+                    <span class="layout horizontal center flex col-data">[[historyItem.action]]</span>
                 </div>
             </etools-data-table-row>
         </template>

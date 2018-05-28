@@ -22,7 +22,7 @@ class StatusElement extends StatusElementMixins {
                 type: Array,
                 value() {return [];}
             },
-            permissionBase: String
+            permissionPath: String
         };
     }
 

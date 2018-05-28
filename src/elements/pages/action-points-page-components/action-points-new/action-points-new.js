@@ -1,5 +1,6 @@
 let ActionPointsNewMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
+    APDMixins.ErrorHandlerMixin,
     EtoolsAjaxRequestMixin], Polymer.Element);
 
 class ActionPointsNew extends ActionPointsNewMixins {
@@ -14,6 +15,10 @@ class ActionPointsNew extends ActionPointsNewMixins {
             actionPoint: {
                 type: Object,
                 value: () => ({})
+            },
+            permissionPath: {
+                type: String,
+                value: 'action_points'
             }
         };
     }
@@ -45,12 +50,8 @@ class ActionPointsNew extends ActionPointsNewMixins {
                     composed: true
                 }));
                 this.set('route.path', `detail/${data.id}`);
-            }, () => {
-                this.dispatchEvent(new CustomEvent('toast', {
-                    detail: {text: 'Can not create Action Point. Please check all fields and try again.'},
-                    bubbles: true,
-                    composed: true
-                }));
+            }, (err) => {
+                this.errorHandler(err, this.permissionPath);
             })
             .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {

@@ -1,4 +1,4 @@
-<!--import [polymer, lodash]-->
+<!--import [polymer, lodash, permission-controller]-->
 
 <script>
     'use strict';
@@ -9,7 +9,7 @@
      * @param superClass
      * @constructor
      */
-    window.APDMixins.ErrorHandlerMixin = superClass => class extends superClass {
+    window.APDMixins.ErrorHandlerMixin = superClass => class extends APDMixins.PermissionController(superClass) {
         refactorErrorObject(errorData) {
             if (!errorData) {return {};}
 
@@ -31,21 +31,46 @@
             return !!value;
         }
 
-        checkNonField(errorObj) {
+        errorHandler(errorObject, permissionPath) {
+            let errorMessages = this._getErrorMessages(errorObject, permissionPath);
+            let nonFieldMessage = this._getNonFieldsMessage(errorObject);
+            if (nonFieldMessage) {
+                errorMessages.push(nonFieldMessage);
+            }
+            for (let message of errorMessages) {
+                this.dispatchEvent(new CustomEvent('toast', {
+                    detail: {text: message},
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+        }
+
+        _getErrorMessages(errorObject, permissionPath) {
+            let messages = [];
+            if (!errorObject || !errorObject.response) {return messages;}
+            _.each(errorObject.response, (errorMessage, incorrectField) => {
+                let fieldLabel = this.getFieldAttribute(`${permissionPath}.${incorrectField}`, 'label');
+                messages.push(`${fieldLabel}: ${errorMessage}`);
+            });
+            return messages;
+        }
+
+        _getNonFieldsMessage(errorObj) {
             if (!_.isObject(errorObj)) {return null;}
 
             let message = null;
             if (_.isArray(errorObj)) {
-                _.each(errorObj, (value) => {
-                    let recursive = this.checkNonField(value);
+                for (let value of errorObj) {
+                    let recursive = this._getNonFieldsMessage(value);
                     recursive && !message ? message = recursive : null;
-                });
+                }
             } else {
                 _.each(errorObj, (value, key) => {
                     if (key === 'non_field_errors') {
                         message = value;
                     } else {
-                        let recursive = this.checkNonField(value);
+                        let recursive = this._getNonFieldsMessage(value);
                         recursive && !message ? message = recursive : null;
                     }
                 });

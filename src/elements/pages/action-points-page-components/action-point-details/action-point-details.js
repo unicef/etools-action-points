@@ -12,7 +12,7 @@ class ActionPointDetails extends ActionPointDetailsMixins {
 
     static get observers() {
         return [
-            '_updateStyles(basePermissionPath)',
+            '_updateStyles(permissionPath)',
             '_requestPartner(editedItem.partner)',
             '_updateCpOutputs(editedItem.intervention)',
             '_updateEditedItem(actionPoint)'
@@ -25,7 +25,7 @@ class ActionPointDetails extends ActionPointDetailsMixins {
                 type: Array,
                 value: () => []
             },
-            basePermissionPath: String,
+            permissionPath: String,
             locations: {
                 type: Array,
                 value: () => []
@@ -139,14 +139,14 @@ class ActionPointDetails extends ActionPointDetailsMixins {
     validate() {
         let elements = this.shadowRoot.querySelectorAll('.validate-input');
         let valid = true;
-        _.each(elements, (element) => {
+        for (let element of elements) {
             if (element.required && !element.disabled && !element.validate()) {
                 let label = element.label || 'Field';
                 element.errorMessage = `${label} is required`;
                 element.invalid = true;
                 valid = false;
             }
-        });
+        }
 
         return valid;
     }

@@ -3,6 +3,7 @@ const ActionPointsItemMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.InputAttrs,
     APDMixins.DateMixin,
     APDMixins.PermissionController,
+    APDMixins.ErrorHandlerMixin,
     EtoolsAjaxRequestMixin
 ], Polymer.Element);
 
@@ -23,7 +24,7 @@ class ActionPointsItem extends ActionPointsItemMixins {
                 type: Object,
                 value() {return {};}
             },
-            basePermissionPath: String
+            permissionPath: String
         };
     }
 
@@ -51,7 +52,7 @@ class ActionPointsItem extends ActionPointsItemMixins {
         this._loadOptions(this.actionPointId);
         this.sendRequest({method: 'GET', endpoint})
             .then((result) => {
-                this.set('actionPoint', this._getActionPoint(result));
+                this.set('actionPoint', this._prepareActionPoint(result));
             });
     }
 
@@ -65,32 +66,37 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     this._addToCollection(permissionPath, actions);
                 } else {
                     this._updateCollection(permissionPath, actions);
-                    this.set('basePermissionPath', '');
+                    this.set('permissionPath', '');
                 }
-                this.set('basePermissionPath', permissionPath);
+                this.set('permissionPath', permissionPath);
             }, () => this._responseError('Partners', 'request error'))
             .finally(() => {
-                this.basePermissionPath = permissionPath;
+                this.permissionPath = permissionPath;
             });
     }
 
-    _getActionPoint(actionPoint) {
-        let item = actionPoint || {};
-        // todo rework and remove
-        item.partner = this._getObjectId(actionPoint.partner);
-        item.intervention = this._getObjectId(actionPoint.intervention);
-        item.office = this._getObjectId(actionPoint.office);
-        item.location = this._getObjectId(actionPoint.location);
-        item.section = this._getObjectId(actionPoint.section);
-        item.assigned_to = this._getObjectId(actionPoint.assigned_to);
-        item.assigned_by = this._getObjectId(actionPoint.assigned_by);
-        item.cp_output = this._getObjectId(actionPoint.cp_output);
-        item.author = this._getObjectId(actionPoint.author);
-        return item;
+    _prepareActionPoint(actionPoint) {
+        return this._resolveFields(actionPoint, [
+            'partner',
+            'intervention',
+            'office',
+            'location',
+            'section',
+            'assigned_to',
+            'assigned_by',
+            'cp_output',
+            'author']);
     }
 
-    _getObjectId(field) {
-        return _.isObject(field) ? field.id : field;
+    _resolveFields(actionPoint, fields) {
+        let data = actionPoint || {};
+        for (let field of fields) {
+            let fieldValue = data[field];
+            if (fieldValue && fieldValue.id) {
+                data[field] = fieldValue.id;
+            }
+        }
+        return data;
     }
 
     _complete() {
@@ -109,13 +115,9 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     bubbles: true,
                     composed: true
                 }));
-                this.actionPoint = this._getActionPoint(data);
-            }, () => {
-                this.dispatchEvent(new CustomEvent('toast', {
-                    detail: {text: 'Can not complete Action Point. Please check all fields and try again.'},
-                    bubbles: true,
-                    composed: true
-                }));
+                this.actionPoint = this._prepareActionPoint(data);
+            }, (err) => {
+                this.errorHandler(err, this.permissionPath);
             })
             .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {
@@ -146,13 +148,9 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     bubbles: true,
                     composed: true
                 }));
-                this.actionPoint = this._getActionPoint(data);
-            }, () => {
-                this.dispatchEvent(new CustomEvent('toast', {
-                    detail: {text: 'Can not update Action Point. Please check all fields and try again.'},
-                    bubbles: true,
-                    composed: true
-                }));
+                this.actionPoint = this._prepareActionPoint(data);
+            }, (err) => {
+                this.errorHandler(err, this.permissionPath);
             })
             .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {

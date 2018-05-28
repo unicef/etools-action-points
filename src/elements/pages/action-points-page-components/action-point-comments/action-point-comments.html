@@ -5,10 +5,10 @@
         <!-- inject styles './action-point-comments.scss'-->
         <style include="tab-inputs-styles module-styles">
         </style>
-        <etools-content-panel panel-title="[[getLabel('comments', basePermissionPath)]]">
+        <etools-content-panel panel-title="[[getLabel('comments', permissionPath)]]">
             <div slot="panel-btns">
                 <paper-icon-button
-                        hidden$="[[noActionsAllowed(basePermissionPath)]]"
+                        hidden$="[[noActionsAllowed(permissionPath)]]"
                         icon="add"
                         on-tap="_openAddComment"></paper-icon-button>
             </div>
@@ -36,20 +36,20 @@
         </etools-content-panel>
         <etools-dialog size="md"
                        opened="{{openedCommentDialog}}"
-                       dialog-title="Add New [[getLabel('comments', basePermissionPath)]]"
+                       dialog-title="Add New [[getLabel('comments', permissionPath)]]"
                        keep-dialog-open
                        show-spinner="[[isSaveComment]]"
                        on-confirm-btn-clicked="saveComment"
                        on-close="closeSaveDialog">
             <div class="row-h group">
                 <div class="input-container input-container-l">
-                    <paper-input class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', basePermissionPath)]]"
-                                 label="[[getLabel('comments.comment', basePermissionPath)]]"
+                    <paper-input class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
+                                 label="[[getLabel('comments.comment', permissionPath)]]"
                                  value="{{commentText}}"
-                                 placeholder="[[getPlaceholderText('comments.comment', basePermissionPath, 'true')]]"
-                                 required$="[[_setRequired('comments.comment', basePermissionPath)]]"
-                                 disabled$="[[isReadOnly('comments.comment', basePermissionPath)]]"
-                                 readonly$="[[isReadOnly('comments.comment', basePermissionPath)]]"
+                                 placeholder="[[getPlaceholderText('comments.comment', permissionPath, 'true')]]"
+                                 required$="[[_setRequired('comments.comment', permissionPath)]]"
+                                 disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
+                                 readonly$="[[isReadOnly('comments.comment', permissionPath)]]"
                                  invalid="{{errors.comments.comment}}"
                                  error-message="{{errors.comments.comment}}"
                                  on-focus="_resetFieldError"
