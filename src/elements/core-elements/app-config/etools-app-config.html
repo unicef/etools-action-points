@@ -74,20 +74,11 @@
                 }
             };
 
-            const localEndpoints = {
-                userProfile: {
-                    url: '/data/user-profile.json'
-                },
-                actionPotins: {
-                    url: '/data/action-points.json'
-                }
-            };
-
-
             this.baseSite = window.location.origin;
             this.serverBackend = (window.location.port !== '8080');
             this.basePath = this.serverBackend ? '/apd/' : '/';
-            this.epsData = this.serverBackend ? endpoints : localEndpoints;
+            //this.epsData = this.serverBackend ? endpoints : localEndpoints;
+            this.epsData = endpoints;
             // dexie js
             this.appDexieDb = etoolsCustomDexieDb;
 
