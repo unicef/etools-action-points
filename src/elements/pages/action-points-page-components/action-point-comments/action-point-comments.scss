@@ -1,13 +1,13 @@
-:host {
-  display: block;
-}
-
 .comments-list {
   padding: 8px 12px;
 }
 
 .comment-item {
   margin-bottom: 12px;
+}
+
+.comment-item:last-of-type {
+  margin-bottom: 0;
 }
 
 .comment-item__user {

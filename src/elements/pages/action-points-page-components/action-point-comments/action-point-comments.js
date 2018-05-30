@@ -4,6 +4,7 @@ const ActionPointCommentsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.PermissionController,
     APDMixins.LocalizationMixin,
     APDMixins.DateMixin,
+    APDMixins.ErrorHandlerMixin,
     EtoolsAjaxRequestMixin], Polymer.Element);
 
 class ActionPointComments extends ActionPointCommentsMixins {
@@ -28,14 +29,24 @@ class ActionPointComments extends ActionPointCommentsMixins {
                 type: Number,
                 value: 1
             },
-            openedCommentDialog: Boolean
+            openedCommentDialog: {
+                type: Boolean,
+                observer: '_resetDialog'
+            },
+            commentText: String
         };
     }
 
     static get observers() {
         return [
+            '_updatePermission(permissionPath)',
             '_filterComments(actionPoint.comments, pageNumber, pageSize)'
         ];
+    }
+
+    _updatePermission() {
+        this.pageNumber = 1;
+        this.pageSize = 10;
     }
 
     _openAddComment() {
@@ -43,25 +54,21 @@ class ActionPointComments extends ActionPointCommentsMixins {
     }
 
     saveComment() {
-        this.validate();
+        if (!this.validate()) return;
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPoint.id});
-        let data = _.cloneDeep(this.actionPoint);
-        data.comments.push({
+        let comments = [{
             comment: this.commentText
-        });
+        }];
         this.isSaveComment = true;
-        this.sendRequest({method: 'PUT', endpoint, body: data})
+        this.sendRequest({method: 'PATCH', endpoint, body: {comments: comments}})
             .then((response) => {
                 this.set('actionPoint.comments', response.comments);
                 this.openedCommentDialog = false;
             })
+            .catch(err => this.errorHandler(err, this.permissionPath))
             .finally(() => {
                 this.isSaveComment = false;
             });
-    }
-
-    closeSaveDialog() {
-        this.commentText = '';
     }
 
     validate() {

@@ -141,7 +141,7 @@ class ActionPointsItem extends ActionPointsItemMixins {
             composed: true
         }));
 
-        return this.sendRequest({method: 'PUT', endpoint, body: data})
+        return this.sendRequest({method: 'PATCH', endpoint, body: data})
             .then((data) => {
                 this.dispatchEvent(new CustomEvent('toast', {
                     detail: {text: ' Action Point successfully updated.'},

@@ -29,7 +29,7 @@ class ActionPointsNew extends ActionPointsNewMixins {
     }
 
     _createAP() {
-        let detailsElement = Polymer.dom(this.root).querySelector('#ap-details');
+        let detailsElement = this.shadowRoot.querySelector('#ap-details');
         if (!detailsElement || !detailsElement.validate()) {return;}
 
         let data = _.clone(detailsElement.editedItem);

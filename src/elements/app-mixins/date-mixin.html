@@ -52,7 +52,7 @@
             let id = Polymer.dom(event).localTarget.getAttribute('data-selector');
             if (id) {
                 let datepickerId = '#' + id;
-                let datePicker = Polymer.dom(this.root).querySelector(datepickerId);
+                let datePicker = this.shadowRoot.querySelector(datepickerId);
                 if (datePicker) {
                     datePicker.open = true;
                 }

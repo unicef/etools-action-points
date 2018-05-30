@@ -80,5 +80,13 @@
 
             event.target.invalid = false;
         }
+
+        _resetDialog() {
+            let elements = this.shadowRoot.querySelectorAll('.validate-input');
+            for (let element of elements) {
+                element.invalid = false;
+                element.value = '';
+            }
+        }
     };
 </script>
