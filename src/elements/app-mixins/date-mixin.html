@@ -14,17 +14,17 @@
          * Format date from string
          */
         prettyDate(dateString, format) {
-            if (!format) {
-                format = 'D MMM YYYY';
-            }
-            if (typeof dateString === 'string' && dateString !== '') {
-                let date = new Date(dateString);
-                if (date.toString() !== 'Invalid Date') {
-                    // using moment.utc() ensures that the date will not be changed no matter timezone the user has set
-                    return moment.utc(date).format(format);
-                }
-            }
-            return '';
+            format = this._getFormat(format);
+            let date = this._getMomentDate(dateString);
+
+            return date ? date.utc().format(format) : '';
+        }
+
+        formatDateInLocal(dateString, format) {
+            format = this._getFormat(format);
+            let date = this._getMomentDate(dateString);
+
+            return date ? date.format(format) : '';
         }
 
         /**
@@ -59,6 +59,19 @@
             }
             // allow outside click closing
             setTimeout(() => this.datepickerModal = false, 300);
+        }
+
+        _getFormat(format) {
+            return !format || !_.isString(format) ? 'D MMM YYYY' : format;
+        }
+
+        _getMomentDate(dateString) {
+            if (!_.isString(dateString)) {
+                return '';
+            }
+
+            let date = new Date(dateString);
+            return date.toString() !== 'Invalid Date' ? moment(date) : '';
         }
     };
 </script>
