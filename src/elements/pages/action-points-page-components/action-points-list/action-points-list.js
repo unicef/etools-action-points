@@ -104,6 +104,7 @@ class ActionPointsList extends ActionPointsListMixins {
 
     connectedCallback() {
         super.connectedCallback();
+        this.modules = this.getData('modules') || [];
         this.statuses = this.getData('statuses') || [];
         this._initFilters();
         this.isShowCompleted = this.queryParams.status !== 'open';

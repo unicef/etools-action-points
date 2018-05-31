@@ -67,6 +67,10 @@
                 </etools-data-table-column>
             </etools-data-table-header>
 
+            <template is="dom-if" if="[[!actionPoints.length]]">
+                <span>No action points</span>
+            </template>
+
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
                 <etools-data-table-row>
                     <div slot="row-data" class="row-action-points">
@@ -96,7 +100,7 @@
                         </div>
                         <div class="row-details-content col-flex-1">
                             <span class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</span>
-                            <span class="truncate">[[getStringValue(entry.related_module)]]</span>
+                            <span class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</span>
                         </div>
                         <div class="row-details-content col-flex-1">
                             <span class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</span>
