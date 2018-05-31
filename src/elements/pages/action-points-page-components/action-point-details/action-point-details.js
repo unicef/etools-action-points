@@ -57,6 +57,12 @@ class ActionPointDetails extends ActionPointDetailsMixins {
 
         this._updateLocations();
         document.addEventListener('locations-loaded', () => this._updateLocations());
+        this.addEventListener('reset-validation', () => {
+            let elements = this.shadowRoot.querySelectorAll('.validate-input');
+            for (let element of elements) {
+                element.invalid = false;
+            }
+        });
     }
 
     _updateEditedItem(actionPoint) {

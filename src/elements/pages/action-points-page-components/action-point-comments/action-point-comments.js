@@ -31,7 +31,7 @@ class ActionPointComments extends ActionPointCommentsMixins {
             },
             openedCommentDialog: {
                 type: Boolean,
-                observer: '_resetDialog'
+                observer: '_resetInputs'
             },
             commentText: String
         };

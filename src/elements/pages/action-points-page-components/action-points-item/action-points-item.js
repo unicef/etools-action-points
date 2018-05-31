@@ -28,6 +28,12 @@ class ActionPointsItem extends ActionPointsItemMixins {
         };
     }
 
+    static get observers() {
+        return [
+            '_changeRoutePath(route.path)'
+        ];
+    }
+
     ready() {
         super.ready();
         this.addEventListener('action-activated', ({detail}) => {
@@ -43,6 +49,10 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     });
             }
         });
+    }
+
+    _changeRoutePath() {
+        this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
     }
 
     _changeActionPointId(data) {

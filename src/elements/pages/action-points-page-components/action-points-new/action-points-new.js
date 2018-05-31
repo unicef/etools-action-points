@@ -23,9 +23,19 @@ class ActionPointsNew extends ActionPointsNewMixins {
         };
     }
 
+    static get observers() {
+        return [
+            '_changeRoutePath(route.path)'
+        ];
+    }
+
     ready() {
         super.ready();
         this.addEventListener('action-activated', () => this._createAP());
+    }
+
+    _changeRoutePath() {
+        this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
     }
 
     _createAP() {
