@@ -28,10 +28,12 @@
                 pattern="/:id"
                 data="{{routeData}}"></app-route>
         <pages-header-element page-title="[[actionPoint.reference_number]]">
-            <paper-button icon="history" class="header-btn" on-tap="showHistory">
-                <iron-icon icon="history"></iron-icon>
-                History
-            </paper-button>
+            <template is="dom-if" if="[[hasHistory(actionPoint.history)]]">
+                <paper-button icon="history" class="header-btn" on-tap="showHistory">
+                    <iron-icon icon="history"></iron-icon>
+                    History
+                </paper-button>
+            </template>
         </pages-header-element>
 
         <div class="view-container">

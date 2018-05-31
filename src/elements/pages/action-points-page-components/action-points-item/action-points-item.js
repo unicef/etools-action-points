@@ -182,6 +182,10 @@ class ActionPointsItem extends ActionPointsItemMixins {
         this.isOpenedHistory = true;
     }
 
+    hasHistory(history) {
+        return history && history.length > 0;
+    }
+
 }
 
 customElements.define(ActionPointsItem.is, ActionPointsItem);
