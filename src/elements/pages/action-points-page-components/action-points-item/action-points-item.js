@@ -138,11 +138,18 @@ class ActionPointsItem extends ActionPointsItemMixins {
             });
     }
 
+    _getChangedData(oldData, newData) {
+        return _.pickBy(newData, (value, key) => {
+            return !_.isEqual(oldData[key], value);
+        });
+    }
+
     _update() {
         let detailsElement = this.shadowRoot.querySelector('action-point-details');
         if (!detailsElement || !detailsElement.validate()) {return;}
 
-        let data = _.clone(detailsElement.editedItem);
+        let editedData = _.clone(detailsElement.editedItem);
+        let data = this._getChangedData(this.actionPoint, editedData);
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPointId});
 
         this.dispatchEvent(new CustomEvent('global-loading', {

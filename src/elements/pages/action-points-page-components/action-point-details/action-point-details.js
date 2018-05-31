@@ -66,7 +66,7 @@ class ActionPointDetails extends ActionPointDetailsMixins {
     }
 
     _updateEditedItem(actionPoint) {
-        this.editedItem = actionPoint || {};
+        this.editedItem = actionPoint && _.cloneDeep(actionPoint) || {};
     }
 
     _updateLocations() {
