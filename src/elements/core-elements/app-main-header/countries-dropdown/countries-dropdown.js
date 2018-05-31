@@ -1,4 +1,8 @@
-class CountriesDropdown extends APDMixins.AppConfig(Polymer.Element) {
+const CountriesDropdownBase = Polymer.mixinBehaviors(
+    [etoolsBehaviors.EtoolsRefreshBehavior],
+    APDMixins.AppConfig(Polymer.Element));
+
+class CountriesDropdown extends CountriesDropdownBase {
     static get is() {return 'countries-dropdown';}
 
     static get properties() {
@@ -74,10 +78,13 @@ class CountriesDropdown extends APDMixins.AppConfig(Polymer.Element) {
         }));
     }
     _handleResponse() {
-        this.dispatchEvent(new CustomEvent('main_refresh', {
-            bubbles: true,
-            composed: true
-        }));
+        this.refreshInProgress = true;
+        this.clearDexieDbs();
+    }
+
+    _refreshPage() {
+        this.refreshInProgress = false;
+        window.location.href = `${window.location.origin}/apd/`;
     }
 }
 
