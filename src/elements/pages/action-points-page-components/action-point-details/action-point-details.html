@@ -46,7 +46,7 @@
                 font-weight: 500;
             }
             .reference-link > span {
-                color: var(--paper-input-container-color, var(--secondary-text-color));
+                /*color: var(--paper-input-container-color, var(--secondary-text-color));*/
             }
         </style>
         <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
@@ -54,7 +54,7 @@
                 <div class="row-h group">
                     <div class="input-container">
                         <etools-dropdown
-                                class$="validate-input disabled-as-readonly [[_setRequired('related_module', permissionPath)]]"
+                                class$="validate-input disabled-as-readonly readonly without-border [[_setRequired('related_module', permissionPath)]]"
                                 selected="{{editedItem.related_module}}"
                                 label="[[getLabel('related_module', permissionPath)]]"
                                 placeholder="-"
@@ -71,8 +71,9 @@
                         <div class="reference-link">
                             <label>[[getLabel('reference_number', permissionPath)]]</label>
                             <a hidden$="[[!editedItem.related_object_url]]"
+                               target="_blank"
                                href$="[[editedItem.related_object_url]]">[[editedItem.related_object_str]]</a>
-                            <span hidden$="[[editedItem.related_object_url]]">-</span>
+                            <span hidden$="[[editedItem.related_object_url]]">[[getRefNumber(editedItem.reference_number)]]</span>
                         </div>
                     </div>
                     <div class="input-container">

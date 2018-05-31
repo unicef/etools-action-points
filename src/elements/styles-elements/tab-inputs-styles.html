@@ -186,16 +186,6 @@
                 --paper-input-container-focus-color: var(--module-primary);
             }
 
-            etools-dropdown.readonly,
-            etools-dropdown-multi.readonly,
-            paper-input.readonly,
-            paper-dropdown-menu.readonly,
-            paper-textarea.readonly {
-                --paper-input-container-underline: {
-                    display: none;
-                };
-            }
-
             etools-dropdown-multi[readonly], etools-dropdown-multi[disabled].disabled-as-readonly,
             etools-dropdown[readonly], etools-dropdown[disabled].disabled-as-readonly,
             paper-textarea[readonly], paper-textarea[disabled].disabled-as-readonly,
@@ -303,7 +293,15 @@
                 }'};
             }
 
-
+            etools-dropdown.readonly,
+            etools-dropdown-multi.readonly,
+            paper-input.readonly,
+            paper-dropdown-menu.readonly,
+            paper-textarea.readonly {
+                --paper-input-container-underline: {
+                    display: none !important;
+                };
+            }
 
             #bottom-actions {
                 display: -ms-flexbox;

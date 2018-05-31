@@ -150,6 +150,10 @@ class ActionPointDetails extends ActionPointDetailsMixins {
 
         return valid;
     }
+
+    getRefNumber(number) {
+        return number || '-';
+    }
 }
 
 customElements.define(ActionPointDetails.is, ActionPointDetails);
