@@ -134,23 +134,21 @@ class ActionPointsList extends ActionPointsListMixins {
     }
 
     _updateQueries(queryParams, oldQueryParams) {
-        if (~this.path.indexOf('/list')) {
-            if (this.queryParams.reload) {
-                this.clearQueries();
-                this.set('queryParams.page_size', this.pageSize);
-                this.set('queryParams.page', this.pageNumber);
-            }
-            this.updateQueries(this.queryParams, null, true);
-            // not send request when empty filter added or removed
-            let hasNewEmptyFilter = oldQueryParams && _.some(_.map(queryParams, (value, key) => {
-                return !oldQueryParams[key] && value.length === 0;
-            }), value => value);
-            let hasOldEmptyFilter = oldQueryParams && _.some(_.map(oldQueryParams, (value, key) => {
-                return !queryParams[key] && value.length === 0;
-            }), value => value);
-            if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
-                this._requestData();
-            }
+        if (!~this.path.indexOf('action-points/list')) return;
+        if (this.queryParams.reload) {
+            this.clearQueries();
+            this.set('queryParams.page_size', this.pageSize);
+            this.set('queryParams.page', this.pageNumber);
+        }
+        this.updateQueries(this.queryParams, null, true);
+        let hasNewEmptyFilter = oldQueryParams && _.some(_.map(queryParams, (value, key) => {
+            return !oldQueryParams[key] && value.length === 0;
+        }), value => value);
+        let hasOldEmptyFilter = oldQueryParams && _.some(_.map(oldQueryParams, (value, key) => {
+            return !queryParams[key] && value.length === 0;
+        }), value => value);
+        if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
+            this._requestData();
         }
     }
 
