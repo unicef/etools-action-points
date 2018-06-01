@@ -79,10 +79,9 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     this.set('permissionPath', '');
                 }
                 this.set('permissionPath', permissionPath);
-            }, () => this._responseError('Partners', 'request error'))
-            .finally(() => {
-                this.permissionPath = permissionPath;
-            });
+            })
+            .catch(() => this._responseError('Action Point Permissions', 'request error'))
+            .finally(() => this.permissionPath = permissionPath);
     }
 
     _prepareActionPoint(actionPoint) {
@@ -126,7 +125,8 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     composed: true
                 }));
                 this.actionPoint = this._prepareActionPoint(data);
-            }, (err) => {
+            })
+            .catch((err) => {
                 this.errorHandler(err, this.permissionPath);
             })
             .finally(() => {
@@ -166,7 +166,8 @@ class ActionPointsItem extends ActionPointsItemMixins {
                     composed: true
                 }));
                 this.actionPoint = this._prepareActionPoint(data);
-            }, (err) => {
+            })
+            .catch((err) => {
                 this.errorHandler(err, this.permissionPath);
             })
             .finally(() => {

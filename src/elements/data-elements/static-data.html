@@ -1,5 +1,5 @@
 <!--import [polymer/polymer-element, etools-ajax, lodash]-->
-<!--import [static-data-mixin, permission-controller, user-controller, user-data, etools-app-config]-->
+<!--import [static-data-mixin, error-handler-mixin, permission-controller, user-controller, user-data, etools-app-config]-->
 
 <dom-module id="static-data">
     <template>
@@ -11,6 +11,7 @@
             APDMixins.AppConfig,
             EtoolsAjaxRequestMixin,
             APDMixins.StaticDataMixin,
+            APDMixins.ErrorHandlerMixin,
             APDMixins.PermissionController,
             APDMixins.UserController], Polymer.Element);
 
@@ -109,10 +110,6 @@
                 let detail = {detail: data};
                 let event = new CustomEvent(eventName, detail);
                 document.dispatchEvent(event);
-            }
-
-            _responseError(message, type, eventType = 'error') {
-                console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
             }
         }
 

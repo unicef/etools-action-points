@@ -106,5 +106,9 @@
             }
             return message;
         }
+
+        _responseError(message, type, eventType = 'error') {
+            console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
+        }
     };
 </script>
