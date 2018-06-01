@@ -68,7 +68,7 @@
             </etools-data-table-header>
 
             <template is="dom-if" if="[[!actionPoints.length]]">
-                <span>No action points</span>
+                <div class="no-content">No action points</div>
             </template>
 
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
