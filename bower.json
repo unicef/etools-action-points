@@ -36,11 +36,10 @@
     "etools-dropdown": "^2.0.0",
     "etools-data-table": "^2.0.1",
     "etools-datepicker": "^2.0.0",
-    "etools-dialog": "^2.0.1"
+    "etools-dialog": "^2.0.1",
+    "paper-toggle-button": "^2.1.1"
   },
-  "devDependencies": {
-    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.1.1"
-  },
+  "devDependencies": {},
   "resolutions": {
     "paper-ripple": "2.1.1",
     "iron-icon": "2.1.0",
