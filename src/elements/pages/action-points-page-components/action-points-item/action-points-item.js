@@ -38,15 +38,15 @@ class ActionPointsItem extends ActionPointsItemMixins {
         super.ready();
         this.addEventListener('action-activated', ({detail}) => {
             if (detail.type === 'save') {
-                this._update()
-                    .then(() => {
-                        this._loadOptions(this.actionPointId);
-                    });
+                let request = this._update();
+                request && request.then(() => {
+                    this._loadOptions(this.actionPointId);
+                });
             } else if (detail.type === 'complete') {
-                this._complete()
-                    .then(() => {
-                        this._loadOptions(this.actionPointId);
-                    });
+                let request = this._complete();
+                request && request.then(() => {
+                    this._loadOptions(this.actionPointId);
+                });
             }
         });
     }
