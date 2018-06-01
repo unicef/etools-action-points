@@ -81,6 +81,7 @@ class ActionPointsList extends ActionPointsListMixins {
             },
             queryParams: {
                 type: Object,
+                observer: '_updateQueries',
                 notify: true
             },
             totalResults: Number,
@@ -97,7 +98,7 @@ class ActionPointsList extends ActionPointsListMixins {
 
     static get observers() {
         return [
-            '_updateQueries(queryParams)',
+            // '_updateQueries(queryParams.*)',
             '_setPath(path)'
         ];
     }
@@ -132,7 +133,7 @@ class ActionPointsList extends ActionPointsListMixins {
         }
     }
 
-    _updateQueries() {
+    _updateQueries(queryParams, oldQueryParams) {
         if (~this.path.indexOf('/list')) {
             if (this.queryParams.reload) {
                 this.clearQueries();
@@ -140,7 +141,16 @@ class ActionPointsList extends ActionPointsListMixins {
                 this.set('queryParams.page', this.pageNumber);
             }
             this.updateQueries(this.queryParams, null, true);
-            this._requestData();
+            // not send request when empty filter added or removed
+            let hasNewEmptyFilter = oldQueryParams && _.some(_.map(queryParams, (value, key) => {
+                return !oldQueryParams[key] && value.length === 0;
+            }), value => value);
+            let hasOldEmptyFilter = oldQueryParams && _.some(_.map(oldQueryParams, (value, key) => {
+                return !queryParams[key] && value.length === 0;
+            }), value => value);
+            if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
+                this._requestData();
+            }
         }
     }
 
