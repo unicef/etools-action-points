@@ -107,8 +107,22 @@ class ActionPointsList extends ActionPointsListMixins {
         this.modules = this.getData('modules') || [];
         this.statuses = this.getData('statuses') || [];
         this._initFilters();
+        this._initOrdering();
         this.isShowCompleted = this.queryParams.status !== 'open';
         this.addEventListener('sort-changed', e => this._sort(e));
+    }
+
+    _initOrdering() {
+        let selectedColumn = this.queryParams.ordering;
+        if (!selectedColumn) return;
+        let direction = 'asc';
+        if (selectedColumn.charAt(0) === '-') {
+            selectedColumn = selectedColumn.slice(1);
+            direction = 'desc';
+        }
+        let column = this.shadowRoot.querySelector(`etools-data-table-column[field="${selectedColumn}"]`);
+        column.set('direction', direction);
+        column.set('selected', true);
     }
 
     _setPath(path) {
