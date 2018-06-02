@@ -1,0 +1,68 @@
+<!--import [polymer/polymer-element, etools-content-panel, paper-icon-button, etools-data-table, paper-input/paper-textarea,
+            etools-dialog, localization-mixin, error-handler-mixin, input-attrs-mixin, tab-inputs-styles, module-styles]-->
+
+<dom-module id="action-point-comments">
+    <template>
+        <!-- inject styles './action-point-comments.scss'-->
+        <style include="tab-inputs-styles module-styles">
+        </style>
+        <etools-content-panel panel-title="[[getLabel('comments', permissionPath)]]">
+            <div slot="panel-btns">
+                <paper-icon-button
+                        hidden$="[[noActionsAllowed(permissionPath)]]"
+                        icon="add"
+                        on-tap="_openAddComment"></paper-icon-button>
+            </div>
+            <div class="comments-list">
+                <template is="dom-if" if="[[!filteredComments.length]]">
+                    <span>No actions taken</span>
+                </template>
+                <template id="rows" is="dom-repeat" items="[[filteredComments]]" as="item">
+                    <div class="comment-item">
+                        <div class="comment-item__header">
+                            <span class="comment-item__user">[[item.user.name]]</span>
+                            <span class="comment-item__date">[[prettyDate(item.submit_date)]]</span>
+                        </div>
+                        <div class="comment-item__body">
+                            [[getStringValue(item.comment)]]
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <etools-data-table-footer
+                    page-size="{{pageSize}}"
+                    page-number="{{pageNumber}}"
+                    total-results="[[actionPoint.comments.length]]">
+            </etools-data-table-footer>
+        </etools-content-panel>
+        <etools-dialog size="md"
+                       opened="{{openedCommentDialog}}"
+                       dialog-title="Add New [[getLabel('comments', permissionPath)]]"
+                       keep-dialog-open
+                       on-confirm-btn-clicked="saveComment">
+            <etools-loading
+                active="{{isSaveComment}}"
+                loading-text="Save comment">
+            </etools-loading>
+            <div class="row-h group">
+                <div class="input-container input-container-l">
+                    <paper-input
+                            class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
+                            value="{{commentText}}"
+                            label="[[getLabel('comments.comment', permissionPath)]]"
+                            placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
+                            required$="[[_setRequired('comments.comment', permissionPath)]]"
+                            disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
+                            readonly$="[[isReadOnly('comments.comment', permissionPath)]]"
+                            invalid$="{{errors.comments.comment}}"
+                            error-message="{{errors.comments.comment}}"
+                            on-focus="_resetFieldError"
+                            on-tap="_resetFieldError"
+                            no-title-attr>
+                    </paper-input>
+                </div>
+            </div>
+        </etools-dialog>
+    </template>
+    <!-- inject scripts './action-point-comments.js' -->
+</dom-module>

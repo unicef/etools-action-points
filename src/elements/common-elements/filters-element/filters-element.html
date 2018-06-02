@@ -1,0 +1,28 @@
+<!--import [polymer/polymer-element, iron-flex-layout]-->
+
+<dom-module id="filters-element">
+    <template>
+        <style include="iron-flex">
+            :host {
+                display: block;
+                margin-top: 25px;
+            }
+
+            .second-header {
+                padding: 8px 0;
+                margin-bottom: 12px;
+                --paper-card-background-color: #ffffff;
+                --paper-card: {
+                    background-color: white;
+                    margin: 0 24px;
+                    width: calc(100% - 48px);
+                };
+            }
+        </style>
+
+        <paper-card class="second-header horizontal layout flex">
+            <slot></slot>
+        </paper-card>
+    </template>
+    <!-- inject scripts './filters-element.js'-->
+</dom-module>

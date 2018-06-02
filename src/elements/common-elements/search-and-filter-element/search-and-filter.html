@@ -1,0 +1,66 @@
+<!--import [polymer/polymer-element, paper-input, paper-card, iron-icon, iron-icons, etools-dropdown, paper-menu-button,
+            paper-button, paper-listbox, iron-flex-layout, paper-toggle-button]-->
+
+<!--import [shared-styles, module-styles, tab-inputs-styles, query-params-mixin]-->
+
+<dom-module id="search-and-filter">
+    <template>
+        <style include="shared-styles module-styles tab-inputs-styles iron-flex"></style>
+         <!--inject styles './search-and-filter.scss'-->
+        <div class="layout horizontal flex">
+            <div class="layout horizontal">
+                <paper-input
+                        type="search"
+                        value="{{searchString}}"
+                        label="[[searchLabel]]"
+                        placeholder="Type and search"
+                        on-value-changed="searchKeyDown"
+                        always-float-label
+                        inline>
+
+                    <iron-icon icon="search" slot="prefix"></iron-icon>
+                </paper-input>
+            </div>
+
+            <!-- FILTERS -->
+            <template is="dom-repeat" items="[[usedFilters]]">
+                <div class="layout horizontal">
+                    <etools-dropdown
+                            id="[[item.query]]"
+                            class="filter-dropdown"
+                            placeholder$="Select [[item.name]]"
+                            options="[[item.selection]]"
+                            option-label="[[item.optionLabel]]"
+                            option-value="[[item.optionValue]]"
+                            on-iron-select="_changeFilterValue"
+                            hide-search="[[item.hideSearch]]"
+                            shown-items-limit="5">
+                    </etools-dropdown>
+
+                    <div class="filter-reset-button" on-click="removeFilter">×</div>
+                </div>
+            </template>
+        </div>
+
+        <!-- ADD FILTERS -->
+        <template is="dom-if" if="[[filters.length]]">
+            <div id="add-filter-container">
+                <paper-menu-button horizontal-align="right" vertical-align="top" no-overlap>
+                    <paper-button slot="dropdown-trigger">
+                        <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
+
+                        <span class="add-filter-text">ADD FILTER</span>
+                    </paper-button>
+
+                    <paper-listbox slot="dropdown-content">
+                        <template is="dom-repeat" items="[[availableFilters]]">
+                            <paper-item on-click="addFilter"><span class="add-filter--item-name">[[item.name]]</span></paper-item>
+                        </template>
+                    </paper-listbox>
+                </paper-menu-button>
+            </div>
+        </template>
+    </template>
+
+    <!-- inject scripts './search-and-filter.js'-->
+</dom-module>
