@@ -233,4 +233,5 @@ class ActionPointsList extends ActionPointsListMixins {
     }
 }
 
+
 customElements.define(ActionPointsList.is, ActionPointsList);

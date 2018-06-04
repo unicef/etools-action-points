@@ -1,11 +1,12 @@
-<!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, polymer/polymer-element,
+<!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, iron-flex-layout/iron-flex-layout-classes,
             pages-header-element, search-and-filter, filters-element, etools-data-table, paper-card, iron-flex-layout,
-            static-data-mixin, action-points-data, iron-location, localization-mixin, date-mixin, input-attrs-mixin]-->
+            static-data-mixin, action-points-data, iron-location, localization-mixin, date-mixin, input-attrs-mixin,
+            text-content]-->
 
 <dom-module id="action-points-list">
     <template>
         <!-- inject styles './action-points-list.scss'-->
-        <style include="module-styles shared-styles"></style>
+        <style include="module-styles shared-styles iron-flex iron-flex-factors data-table-styles"></style>
         <iron-location path="{{path}}" query="{{query}}"></iron-location>
         <iron-query-params
                 params-string="{{query}}"
@@ -41,28 +42,28 @@
         <paper-card>
             <etools-data-table-header id="listHeader"
                                       label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
-                <etools-data-table-column class="col-base col-flex-1" field="reference_number" sortable>
+                <etools-data-table-column class="flex-1" field="reference_number" sortable>
                     [[getLabel('reference_number', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="cp_output__name" sortable>
+                <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
                     [[getLabel('cp_output', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="partner__name" sortable>
+                <etools-data-table-column class="flex-2" field="partner__name" sortable>
                     [[getLabel('partner', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="office" sortable>
+                <etools-data-table-column class="flex-2" field="office" sortable>
                     [[getLabel('office', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="section__name" sortable>
+                <etools-data-table-column class="flex-2" field="section__name" sortable>
                     [[getLabel('section', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
+                <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
                     [[getLabel('assigned_to', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-1" field="due_date" sortable>
+                <etools-data-table-column class="flex-1" field="due_date" sortable>
                     [[getLabel('due_date', basePermissionPath)]]
                 </etools-data-table-column>
-                <etools-data-table-column class="col-base col-flex-1" field="status" sortable>
+                <etools-data-table-column class="flex-1" field="status" sortable>
                     [[getLabel('status', basePermissionPath)]]
                 </etools-data-table-column>
             </etools-data-table-header>
@@ -73,42 +74,44 @@
 
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
                 <etools-data-table-row>
-                    <div slot="row-data" class="row-action-points">
-                        <span  class="col-base col-flex-1">
-                            <a class="col-data truncate" href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
-                        </span>
-                        <span class="col-data col-base col-flex-2 truncate">[[getStringValue(entry.cp_output.name)]]</span>
-                        <span class="col-data col-base col-flex-2 truncate">[[getStringValue(entry.partner.name)]]</span>
-                        <span class="col-data col-base col-flex-2 truncate">[[getStringValue(entry.office.name)]]</span>
-                        <span class="col-data col-base col-flex-2 truncate">[[getStringValue(entry.section.name)]]</span>
-                        <span class="col-data col-base col-flex-2 truncate">[[getStringValue(entry.assigned_to.name)]]</span>
-                        <span class="col-data col-base col-flex-1 truncate">[[getStringValue(entry.due_date)]]</span>
-                        <span class="col-data col-base col-flex-1 truncate">[[getStringValue(entry.status, statuses, 'display_name')]]</span>
+                    <div slot="row-data" class="layout horizontal">
+                        <div  class="col-data flex-1 truncate">
+                            <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
+                        </div>
+                        <div class="col-data flex-2 truncate">[[getStringValue(entry.cp_output.name)]]</div>
+                        <div class="col-data flex-2 truncate">[[getStringValue(entry.partner.name)]]</div>
+                        <div class="col-data flex-2 truncate">[[getStringValue(entry.office.name)]]</div>
+                        <div class="col-data flex-2 truncate">[[getStringValue(entry.section.name)]]</div>
+                        <div class="col-data flex-2 truncate">[[getStringValue(entry.assigned_to.name)]]</div>
+                        <div class="col-data flex-1 truncate">[[prettyDate(entry.due_date, null, '-')]]</div>
+                        <div class="col-data flex-1 truncate">[[getStringValue(entry.status, statuses, 'display_name')]]</div>
                     </div>
-                    <div slot="row-data-details" class="row-action-points">
-                        <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">[[getLabel('description', basePermissionPath)]]</span>
-                            <span class="truncate">[[getStringValue(entry.description)]]</span>
+                    <div slot="row-data-details" class="layout horizontal">
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('description', basePermissionPath)]]</div>
+                            <text-content rows="3" text="[[getStringValue(entry.description)]]"></text-content>
                         </div>
-                        <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</span>
-                            <span class="truncate">[[getStringValue(entry.intervention.number)]]</span>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.intervention.number)]]</div>
                         </div>
-                        <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">[[getLabel('location', basePermissionPath)]]</span>
-                            <span class="truncate">[[getStringValue(entry.location.name)]]</span>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('location', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.location.name)]]</div>
                         </div>
-                        <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</span>
-                            <span class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</span>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</div>
                         </div>
-                        <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</span>
-                            <span class="truncate">[[getStringValue(entry.assigned_by.name)]]</span>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.assigned_by.name)]]</div>
                         </div>
-                        <div class="row-details-content col-flex-1">
-                            <span class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</span>
-                            <span class="truncate">[[prettyDate(entry.date_of_completion)]]</span>
+                        <div class="row-details-content layout vertical flex">
+                            <template is="dom-if" if="[[entry.date_of_completion.length]]">
+                                <div class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</div>
+                                <div class="truncate">[[prettyDate(entry.date_of_completion)]]</div>
+                            </template>
                         </div>
                     </div>
                 </etools-data-table-row>

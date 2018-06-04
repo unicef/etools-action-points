@@ -13,11 +13,11 @@
         /**
          * Format date from string
          */
-        prettyDate(dateString, format) {
+        prettyDate(dateString, format, placeholder) {
             format = this._getFormat(format);
             let date = this._getMomentDate(dateString);
-
-            return date ? date.utc().format(format) : '';
+            let ph = placeholder ? placeholder : '';
+            return date ? date.utc().format(format) : ph;
         }
 
         formatDateInLocal(dateString, format) {
