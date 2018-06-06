@@ -80,7 +80,13 @@ class ActionPointsItem extends ActionPointsItemMixins {
                 }
                 this.set('permissionPath', permissionPath);
             })
-            .catch(() => this._responseError('Action Point Permissions', 'request error'))
+            .catch(() => {
+                this._responseError('Action Point Permissions', 'request error');
+                this.dispatchEvent(new CustomEvent('404', {
+                    bubbles: true,
+                    composed: true
+                }));
+            })
             .finally(() => this.permissionPath = permissionPath);
     }
 

@@ -22,35 +22,37 @@
                 route="{{route}}"
                 pattern="/:id"
                 data="{{routeData}}"></app-route>
-        <pages-header-element page-title="[[actionPoint.reference_number]]">
-            <template is="dom-if" if="[[hasHistory(actionPoint.history)]]">
-                <paper-button icon="history" class="header-btn" on-tap="showHistory">
-                    <iron-icon icon="history"></iron-icon>
-                    History
-                </paper-button>
-            </template>
-        </pages-header-element>
+        <div hidden$="[[!actionPoint.id]]">
+            <pages-header-element page-title="[[actionPoint.reference_number]]">
+                <template is="dom-if" if="[[hasHistory(actionPoint.history)]]">
+                    <paper-button icon="history" class="header-btn" on-tap="showHistory">
+                        <iron-icon icon="history"></iron-icon>
+                        History
+                    </paper-button>
+                </template>
+            </pages-header-element>
 
-        <div class="view-container">
-            <div id="pageContent">
-                <action-point-details action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-details>
-                <action-point-comments action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-comments>
+            <div class="view-container">
+                <div id="pageContent">
+                    <action-point-details action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-details>
+                    <action-point-comments action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></action-point-comments>
+                </div>
+
+                <div id="sidebar">
+                    <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
+                </div>
             </div>
 
-            <div id="sidebar">
-                <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
-            </div>
+            <etools-dialog
+                    size="md"
+                    no-padding
+                    opened="{{isOpenedHistory}}"
+                    dialog-title="History"
+                    cancel-btn-text="Close"
+                    hide-confirm-btn>
+                <action-points-history history="[[actionPoint.history]]" permission-path="[[permissionPath]]"></action-points-history>
+            </etools-dialog>
         </div>
-
-        <etools-dialog
-                size="md"
-                no-padding
-                opened="{{isOpenedHistory}}"
-                dialog-title="History"
-                cancel-btn-text="Close"
-                hide-confirm-btn>
-            <action-points-history history="[[actionPoint.history]]" permission-path="[[permissionPath]]"></action-points-history>
-        </etools-dialog>
     </template>
     <!-- inject scripts './action-points-item.js' -->
 </dom-module>
