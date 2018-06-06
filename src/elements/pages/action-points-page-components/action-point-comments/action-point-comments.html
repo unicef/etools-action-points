@@ -39,7 +39,8 @@
                        opened="{{openedCommentDialog}}"
                        dialog-title="Add New [[getLabel('comments', permissionPath)]]"
                        keep-dialog-open
-                       on-confirm-btn-clicked="saveComment">
+                       on-confirm-btn-clicked="saveComment"
+                       on-close="_resetInputs">
             <etools-loading
                 active="{{isSaveComment}}"
                 loading-text="Save comment">
