@@ -51,7 +51,13 @@ class ActionPointsItem extends ActionPointsItemMixins {
         });
     }
 
-    _changeRoutePath() {
+    _changeRoutePath(path) {
+        if (!path.match(/[^\\/]/g)) {
+            this.dispatchEvent(new CustomEvent('404', {
+                bubbles: true,
+                composed: true
+            }));
+        }
         this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
     }
 
