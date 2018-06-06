@@ -122,8 +122,10 @@ class ActionPointsList extends ActionPointsListMixins {
             direction = 'desc';
         }
         let column = this.shadowRoot.querySelector(`etools-data-table-column[field="${selectedColumn}"]`);
-        column.set('direction', direction);
-        column.set('selected', true);
+        column.dispatchEvent(new CustomEvent('tap'));
+        if (direction === 'desc') {
+            column.dispatchEvent(new CustomEvent('tap'));
+        }
     }
 
     _setPath(path) {
