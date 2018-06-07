@@ -5,6 +5,7 @@ const ActionPointDetailsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.PermissionController,
     APDMixins.LocalizationMixin,
     APDMixins.DateMixin,
+    APDMixins.TextareaMaxRowsMixin,
     EtoolsAjaxRequestMixin], Polymer.Element);
 
 class ActionPointDetails extends ActionPointDetailsMixins {
