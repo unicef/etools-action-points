@@ -36,9 +36,8 @@ class ActionPointsNew extends ActionPointsNewMixins {
 
     _changeRoutePath() {
         let details = this.shadowRoot.querySelector('action-point-details');
-        details.dispatchEvent(new CustomEvent('reset-validation', {
-            detail: {resetValues: true}
-        }));
+        this.set('actionPoint', {});
+        details.dispatchEvent(new CustomEvent('reset-validation'));
     }
 
     _createAP() {
