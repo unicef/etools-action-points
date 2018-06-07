@@ -57,9 +57,10 @@
         _getErrors(errors, permissionPath, basePath = []) {
             let messages = [];
             if (!errors) {return messages;}
-            _.each(errors, (errorBody, errorField) => {
-                for (let error of errorBody) {
-                    let fieldPath = basePath.concat([errorField]);
+            _.each(errors, (errorData, errorField) => {
+                let fieldPath = basePath.concat([errorField]);
+                let data = _.isArray(errorData) ? errorData : [errorData];
+                for (let error of data) {
                     if (_.isString(error)) {
                         let message = this._getErrorMessage(fieldPath.join('.'), error, permissionPath);
                         messages.push(message);
