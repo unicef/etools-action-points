@@ -41,6 +41,7 @@
         </filters-element>
         <paper-card>
             <etools-data-table-header id="listHeader"
+                                      no-collapse="[[!actionPoints.length]]"
                                       label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
                 <etools-data-table-column class="flex-1" field="reference_number" sortable>
                     [[getLabel('reference_number', basePermissionPath)]]
