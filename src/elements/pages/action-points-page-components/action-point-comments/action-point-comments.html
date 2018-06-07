@@ -47,10 +47,11 @@
             </etools-loading>
             <div class="row-h group">
                 <div class="input-container input-container-l">
-                    <paper-input
+                    <paper-textarea
                             class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
                             value="{{commentText}}"
                             label="[[getLabel('comments.comment', permissionPath)]]"
+                            max-rows="4"
                             placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
                             required$="[[_setRequired('comments.comment', permissionPath)]]"
                             disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
@@ -60,7 +61,7 @@
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
                             no-title-attr>
-                    </paper-input>
+                    </paper-textarea>
                 </div>
             </div>
         </etools-dialog>
