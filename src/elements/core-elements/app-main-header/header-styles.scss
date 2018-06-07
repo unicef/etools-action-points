@@ -52,7 +52,7 @@
 }
 
 :host([opened]) {
-    .arrow-up { display: inherit; }
+    .arrow-up { display: block; }
 
     .arrow-down { display: none; }
 
