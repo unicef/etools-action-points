@@ -5,6 +5,7 @@ const ActionPointCommentsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.LocalizationMixin,
     APDMixins.DateMixin,
     APDMixins.ErrorHandlerMixin,
+    APDMixins.TextareaMaxRowsMixin,
     EtoolsAjaxRequestMixin], Polymer.Element);
 
 class ActionPointComments extends ActionPointCommentsMixins {

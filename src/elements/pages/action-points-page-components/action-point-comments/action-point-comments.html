@@ -1,5 +1,6 @@
 <!--import [polymer/polymer-element, etools-content-panel, paper-icon-button, etools-data-table, paper-input/paper-textarea,
-            etools-dialog, localization-mixin, error-handler-mixin, input-attrs-mixin, tab-inputs-styles, module-styles]-->
+            etools-dialog, localization-mixin, error-handler-mixin, input-attrs-mixin, tab-inputs-styles, module-styles,
+            textarea-max-rows-mixin]-->
 
 <dom-module id="action-point-comments">
     <template>
@@ -56,6 +57,7 @@
                             disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
                             readonly$="[[isReadOnly('comments.comment', permissionPath)]]"
                             max-rows="4"
+                            maxlength="3000"
                             invalid$="{{errors.comments.comment}}"
                             error-message="{{errors.comments.comment}}"
                             on-focus="_resetFieldError"
