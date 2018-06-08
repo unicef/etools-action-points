@@ -108,24 +108,25 @@ class ActionPointsList extends ActionPointsListMixins {
         this.modules = this.getData('modules') || [];
         this.statuses = this.getData('statuses') || [];
         this._initFilters();
-        this._initOrdering();
+        this._initSort();
         this.isShowCompleted = this.queryParams.status !== 'open';
         this.addEventListener('sort-changed', e => this._sort(e));
     }
 
-    _initOrdering() {
-        let selectedColumn = this.queryParams.ordering;
-        if (!selectedColumn) return;
-        let direction = 'asc';
-        if (selectedColumn.charAt(0) === '-') {
-            selectedColumn = selectedColumn.slice(1);
-            direction = 'desc';
-        }
-        let column = this.shadowRoot.querySelector(`etools-data-table-column[field="${selectedColumn}"]`);
-        column.dispatchEvent(new CustomEvent('tap'));
-        if (direction === 'desc') {
-            column.dispatchEvent(new CustomEvent('tap'));
-        }
+    _initSort() {
+        let sortParams = this.queryParams && this.queryParams.ordering;
+        if (!sortParams) return;
+        let field = sortParams.replace(/^-/, '');
+        let direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
+        let column = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
+        if (!column) return;
+        column.dispatchEvent(new CustomEvent('sort-changed', {
+            detail: {field: field, direction: direction},
+            bubbles: true,
+            composed: true
+        }));
+        column.set('selected', true);
+        column.set('direction', direction);
     }
 
     _setPath(path) {
