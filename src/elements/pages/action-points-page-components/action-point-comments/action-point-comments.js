@@ -16,7 +16,8 @@ class ActionPointComments extends ActionPointCommentsMixins {
             permissionPath: String,
             actionPoint: {
                 type: Array,
-                value() {return {};}
+                value() {return {};},
+                notify: true
             },
             filteredComments: {
                 type: Array,
@@ -62,7 +63,7 @@ class ActionPointComments extends ActionPointCommentsMixins {
         this.isSaveComment = true;
         this.sendRequest({method: 'PATCH', endpoint, body: {comments: comments}})
             .then((response) => {
-                this.set('actionPoint.comments', response.comments);
+                this.set('actionPoint', response);
                 this.openedCommentDialog = false;
             })
             .catch(err => this.errorHandler(err, this.permissionPath))
