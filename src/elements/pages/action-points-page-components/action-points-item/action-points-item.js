@@ -199,6 +199,15 @@ class ActionPointsItem extends ActionPointsItemMixins {
         return history && history.length > 0;
     }
 
+    _setExportLinks(actionPoint) {
+        if (!actionPoint || !actionPoint.id) {return '';}
+
+        return [{
+            name: 'Export CSV',
+            url: this.getEndpoint('actionPointExport', {id: actionPoint.id}).url
+        }];
+    }
+
 }
 
 customElements.define(ActionPointsItem.is, ActionPointsItem);

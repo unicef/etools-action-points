@@ -23,7 +23,9 @@
                 pattern="/:id"
                 data="{{routeData}}"></app-route>
         <div hidden$="[[!actionPoint.id]]">
-            <pages-header-element page-title="[[actionPoint.reference_number]]">
+            <pages-header-element
+                    page-title="[[actionPoint.reference_number]]"
+                    export-links="[[_setExportLinks(actionPoint)]]">
                 <template is="dom-if" if="[[hasHistory(actionPoint.history)]]">
                     <paper-button icon="history" class="header-btn" on-tap="showHistory">
                         <iron-icon icon="history"></iron-icon>

@@ -1,4 +1,5 @@
 const ActionPointsListMixins = EtoolsMixinFactory.combineMixins([
+    APDMixins.AppConfig,
     APDMixins.StaticDataMixin,
     APDMixins.InputAttrs,
     APDMixins.QueryParamsMixin,
@@ -233,6 +234,12 @@ class ActionPointsList extends ActionPointsListMixins {
         } else {
             this.queryParams = _.omit(this.queryParams, ['status']);
         }
+    }
+    _setExportLinks() {
+        return [{
+            name: 'Export CSV',
+            url: this.getEndpoint('actionPointsListExport').url
+        }];
     }
 }
 

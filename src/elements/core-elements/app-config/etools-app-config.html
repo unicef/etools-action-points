@@ -46,8 +46,14 @@
                 actionPointsList: {
                     url: '/api/action-points/action-points/'
                 },
+                actionPointsListExport: {
+                    url: '/api/action-points/action-points/export/csv/'
+                },
                 actionPoint: {
                     template: '/api/action-points/action-points/<%=id%>/'
+                },
+                actionPointExport: {
+                    template: '/api/action-points/action-points/<%=id%>/export/csv/'
                 },
                 actionPointComplete: {
                     template: '/api/action-points/action-points/<%=id%>/complete/'

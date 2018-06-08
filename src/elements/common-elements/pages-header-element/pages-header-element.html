@@ -19,7 +19,7 @@
                                 Export
                             </paper-button>
 
-                            <paper-listbox id="dropdownMenu" slot="dropdown-content" class="mw-150">
+                            <paper-listbox id="dropdownMenu" slot="dropdown-content">
                                 <template is="dom-repeat" items="[[exportLinks]]">
                                     <paper-item on-tap="exportData">[[item.name]]</paper-item>
                                 </template>
