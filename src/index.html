@@ -52,7 +52,7 @@
     </style>
 
     <script>
-        (function () {
+        (function() {
             'use strict';
 
             var serverBackend = (window.location.port !== '8080');
@@ -73,7 +73,7 @@
             appShellImport.href = baseUrl + 'elements/core-elements/app-shell-element/app-shell.html';
             document.head.appendChild(appShellImport);
 
-            var onload = function () {
+            var onload = function() {
                 // For native Imports, manually fire WebComponentsReady so user code
                 // can use the same code path for native and polyfill'd imports.
                 if (!window.HTMLImports) {
@@ -92,7 +92,7 @@
             if (!webComponentsSupported) {
                 var script = document.createElement('script');
                 script.async = true;
-                script.src = baseUrl + '/bower_components/webcomponentsjs/webcomponents-lite.js';
+                script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-lite.js';
                 script.onload = onload;
                 document.head.appendChild(script);
             } else {
