@@ -63,7 +63,8 @@ class ActionPointComments extends ActionPointCommentsMixins {
         this.isSaveComment = true;
         this.sendRequest({method: 'PATCH', endpoint, body: {comments: comments}})
             .then((response) => {
-                this.set('actionPoint', response);
+                this.set('actionPoint.comments', response.comments);
+                this.set('actionPoint.history', response.history);
                 this.openedCommentDialog = false;
             })
             .catch(err => this.errorHandler(err, this.permissionPath))
