@@ -64,6 +64,13 @@ class ActionPointsList extends ActionPointsListMixins {
                         optionValue: 'id',
                         optionLabel: 'name',
                         selection: []
+                    },
+                    {
+                        name: 'Module',
+                        query: 'related_module',
+                        optionValue: 'value',
+                        optionLabel: 'display_name',
+                        selection: []
                     }
                 ]
             },
@@ -189,7 +196,8 @@ class ActionPointsList extends ActionPointsListMixins {
             {query: 'partner', dataKey: 'partnerOrganisations'},
             {query: 'office', dataKey: 'offices'},
             {query: 'location', dataKey: 'locations'},
-            {query: 'section', dataKey: 'sectionsCovered'}
+            {query: 'section', dataKey: 'sectionsCovered'},
+            {query: 'related_module', dataKey: 'modules'}
         ];
 
         queryDataPairs.forEach((pair) => {
