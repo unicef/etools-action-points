@@ -1,4 +1,4 @@
-const ActionPointCommentsMixins = EtoolsMixinFactory.combineMixins([
+class ActionPointComments extends EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.InputAttrs,
     APDMixins.PermissionController,
@@ -6,9 +6,7 @@ const ActionPointCommentsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.DateMixin,
     APDMixins.ErrorHandlerMixin,
     APDMixins.TextareaMaxRowsMixin,
-    EtoolsAjaxRequestMixin], Polymer.Element);
-
-class ActionPointComments extends ActionPointCommentsMixins {
+    EtoolsAjaxRequestMixin], Polymer.Element) {
     static get is() {return 'action-point-comments';}
 
     static get properties() {

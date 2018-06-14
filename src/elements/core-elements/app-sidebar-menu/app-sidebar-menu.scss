@@ -6,6 +6,7 @@
     overflow-x: hidden;
     box-shadow: 0 0 3px -1px #000;
     //outline: 1px solid var(--dark-divider-color);
+}
 
     .menu-header {
         @apply --layout-horizontal;
@@ -69,7 +70,6 @@
         font-size: 13px;
         font-weight: 500;
     }
-}
 
 :host(:not(.opened)) {
     app-toolbar {

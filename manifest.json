@@ -1,10 +1,10 @@
 {
   "name": "eTools - Action Points Dashboard",
-  "short_name": "eTools - Action Points",
-  "start_url": "/?homescreen=1",
+  "short_name": "eTools - APD",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#0099ff",
-  "background_color": "#ffffff",
+  "theme_color": "#3f51b5",
+  "background_color": "#3f51b5",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",

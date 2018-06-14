@@ -1,9 +1,8 @@
-let ActionPointsNewMixins = EtoolsMixinFactory.combineMixins([
+class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.ErrorHandlerMixin,
-    EtoolsAjaxRequestMixin], Polymer.Element);
+    EtoolsAjaxRequestMixin], Polymer.Element) {
 
-class ActionPointsNew extends ActionPointsNewMixins {
     static get is() {return 'action-points-new';}
 
     static get properties() {

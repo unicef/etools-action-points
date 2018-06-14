@@ -14,13 +14,12 @@
     </template>
 
     <script>
-        let UserDataMixins = EtoolsMixinFactory.combineMixins([
+        class UserData extends EtoolsMixinFactory.combineMixins([
             APDMixins.AppConfig,
             APDMixins.PermissionController,
             APDMixins.UserController
-        ], Polymer.Element);
+        ], Polymer.Element) {
 
-        class UserData extends UserDataMixins {
             static get is() {return 'user-data';}
 
             static get properties() {return {};}

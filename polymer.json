@@ -1,22 +1,17 @@
 {
-  "entrypoint": "src/index.html",
-  "shell": "src/elements/core-elements/app-shell-element/app-shell.html",
+  "entrypoint": "index.html",
+  "shell": "elements/core-elements/app-shell-element/app-shell.html",
   "fragments": [
-    "src/elements/pages/action-points-page-components/action-points-page-main/action-points-page-main.html",
-    "src/elements/pages/not-found-page-view/not-found-page-view.html"
+    "elements/pages/action-points-page-components/action-points-page-main/action-points-page-main.html",
+    "elements/pages/not-found-page-view/not-found-page-view.html"
   ],
   "sources": [
-    "src/assets/**/*",
-    "src/elements/**/*",
-    "!src/assets/data/**/*",
+    "assets/**/*",
+    "elements/**/*",
     "bower.json"
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.js"
-  ],
-  "builds": [
-    { "preset": "es5-bundled" },
-    { "preset": "es6-unbundled" }
+    "bower_components/webcomponentsjs/*.js"
   ]
 }

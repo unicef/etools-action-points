@@ -1,4 +1,4 @@
-const ActionPointDetailsMixins = EtoolsMixinFactory.combineMixins([
+class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.InputAttrs,
     APDMixins.StaticDataMixin,
@@ -6,9 +6,8 @@ const ActionPointDetailsMixins = EtoolsMixinFactory.combineMixins([
     APDMixins.LocalizationMixin,
     APDMixins.DateMixin,
     APDMixins.TextareaMaxRowsMixin,
-    EtoolsAjaxRequestMixin], Polymer.Element);
+    EtoolsAjaxRequestMixin], Polymer.Element) {
 
-class ActionPointDetails extends ActionPointDetailsMixins {
     static get is() {return 'action-point-details';}
 
     static get observers() {
