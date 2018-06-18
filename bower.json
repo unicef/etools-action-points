@@ -49,6 +49,6 @@
     "iron-flex-layout": "2.0.3",
     "iron-meta": "2.1.1",
     "polymer": "2.6.0",
-    "webcomponentsjs": "1.2.0"
+    "webcomponentsjs": "1.2.2"
   }
 }
