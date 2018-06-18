@@ -68,6 +68,11 @@
             polyfills.src = baseUrl + 'js/polyfill.min.js';
             document.head.appendChild(polyfills);
 
+            // var babelHelper = document.createElement('script');
+            // babelHelper.async = true;
+            // babelHelper.src = baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
+            // document.head.appendChild(babelHelper);
+
             var appShellImport = document.createElement('link');
             appShellImport.rel = 'import';
             appShellImport.href = baseUrl + 'elements/core-elements/app-shell-element/app-shell.html';
@@ -92,7 +97,7 @@
             if (!webComponentsSupported) {
                 var script = document.createElement('script');
                 script.async = true;
-                script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-lite.js';
+                script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-loader.js';
                 script.onload = onload;
                 document.head.appendChild(script);
             } else {

@@ -1,29 +1,17 @@
-/**
- * @license
- * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
- */
-
 'use strict';
 
 const gulp = require('gulp');
-// const gulpif = require('gulp-if');
+const gulpif = require('gulp-if');
 const mergeStream = require('merge-stream');
 const polymerBuild = require('polymer-build');
 // Here we add tools that will be used to process our source files.
 // const imagemin = require('gulp-imagemin');
+const babel = require('gulp-babel');
+// const uglify = require('gulp-uglify');
+// const cssSlam = require('css-slam');
+const htmlMinifier = require('gulp-html-minifier');
 const through2 = require('through2').obj;
 const path = require('path');
-
-// Additional plugins can be used to optimize your source files after splitting.
-// Before using each plugin, install with `npm i --save-dev <package-name>`
-// const uglify = require('gulp-uglify');
-// const cssSlam = require('css-slam').gulp;
-// const htmlMinifier = require('gulp-html-minifier');
 
 const polymerJson = require(global.config.polymerJsonPath);
 const polymerProject = new polymerBuild.PolymerProject(polymerJson);
@@ -45,11 +33,17 @@ function build() {
             // .pipe(gulpif(/\.(png|gif|jpg|svg)$/, imagemin()))
 
             .pipe(sourcesStreamSplitter.split())
+            .pipe(gulpif(/\.js$/, babel({
+                presets: [['env', {
+                    exclude: ['transform-es2015-classes'],
+                    modules: false
+                }]]
+            })))
+            // .pipe(gulpif(/\.js$/, uglify()))
+            // .pipe(gulpif(/\.css$/, cssSlam()))
+            .pipe(gulpif(/\.html$/, htmlMinifier()))
             .pipe(sourcesStreamSplitter.rejoin());
 
-        // .pipe(gulpif(/\.js$/, uglify())) // Install gulp-uglify to use
-        // .pipe(gulpif(/\.css$/, cssSlam())) // Install css-slam to use
-        // .pipe(gulpif(/\.html$/, htmlMinifier())) // Install gulp-html-minifier to use
         let dependenciesStream = polymerProject.dependencies()
             .pipe(dependenciesStreamSplitter.split())
             .pipe(dependenciesStreamSplitter.rejoin());

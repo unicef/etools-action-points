@@ -1,5 +1,6 @@
-class CountriesDropdown extends Polymer.mixinBehaviors(
-    [etoolsBehaviors.EtoolsRefreshBehavior],
+'use strict';
+
+class CountriesDropdown extends Polymer.mixinBehaviors([etoolsBehaviors.EtoolsRefreshBehavior],
     APDMixins.AppConfig(Polymer.Element)) {
 
     static get is() {return 'countries-dropdown';}
