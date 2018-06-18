@@ -1,8 +1,8 @@
-const CountriesDropdownBase = Polymer.mixinBehaviors(
-    [etoolsBehaviors.EtoolsRefreshBehavior],
-    APDMixins.AppConfig(Polymer.Element));
+'use strict';
 
-class CountriesDropdown extends CountriesDropdownBase {
+class CountriesDropdown extends Polymer.mixinBehaviors([etoolsBehaviors.EtoolsRefreshBehavior],
+    APDMixins.AppConfig(Polymer.Element)) {
+
     static get is() {return 'countries-dropdown';}
 
     static get properties() {

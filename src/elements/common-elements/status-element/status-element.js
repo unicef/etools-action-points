@@ -1,8 +1,6 @@
-const StatusElementMixins = EtoolsMixinFactory.combineMixins([
+class StatusElement extends EtoolsMixinFactory.combineMixins([
     APDMixins.PermissionController,
-    APDMixins.StaticDataMixin], Polymer.Element);
-
-class StatusElement extends StatusElementMixins {
+    APDMixins.StaticDataMixin], Polymer.Element) {
     static get is() {
         return 'status-element';
     }

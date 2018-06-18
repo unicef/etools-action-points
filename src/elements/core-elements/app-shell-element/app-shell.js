@@ -1,9 +1,8 @@
-const AppShellMixins = EtoolsMixinFactory.combineMixins([
+class AppShell extends EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.UserController,
-    EtoolsMixins.LoadingMixin], Polymer.Element);
+    EtoolsMixins.LoadingMixin], Polymer.Element) {
 
-class AppShell extends AppShellMixins {
     static get is() {return 'app-shell';}
 
     static get properties() {

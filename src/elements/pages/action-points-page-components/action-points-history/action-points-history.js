@@ -1,9 +1,7 @@
-const ActionPointsHistoryMixins = EtoolsMixinFactory.combineMixins([
+class ActionPointsHistory extends EtoolsMixinFactory.combineMixins([
     APDMixins.InputAttrs,
     APDMixins.DateMixin
-], Polymer.Element);
-
-class ActionPointsHistory extends ActionPointsHistoryMixins {
+], Polymer.Element) {
     static get is() {return 'action-points-history';}
 
     static properties() {

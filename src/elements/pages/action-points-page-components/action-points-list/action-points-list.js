@@ -1,12 +1,11 @@
-const ActionPointsListMixins = EtoolsMixinFactory.combineMixins([
+class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     APDMixins.AppConfig,
     APDMixins.StaticDataMixin,
     APDMixins.InputAttrs,
     APDMixins.QueryParamsMixin,
     APDMixins.LocalizationMixin,
-    APDMixins.DateMixin], Polymer.Element);
+    APDMixins.DateMixin], Polymer.Element) {
 
-class ActionPointsList extends ActionPointsListMixins {
     static get is() {
         return 'action-points-list';
     }

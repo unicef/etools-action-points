@@ -28,6 +28,7 @@
     "Promise": true,
     "Polymer": true,
     "Dexie": true,
+    "etoolsBehaviors": true,
     "etoolsAppConfig": true,
     "EtoolsMixinFactory": true,
     "EtoolsAjaxRequestMixin": true,

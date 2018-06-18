@@ -7,15 +7,14 @@
     </template>
 
     <script>
-        const StaticDataMixins = EtoolsMixinFactory.combineMixins([
+        class StaticData extends EtoolsMixinFactory.combineMixins([
             APDMixins.AppConfig,
             EtoolsAjaxRequestMixin,
             APDMixins.StaticDataMixin,
             APDMixins.ErrorHandlerMixin,
             APDMixins.PermissionController,
-            APDMixins.UserController], Polymer.Element);
+            APDMixins.UserController], Polymer.Element) {
 
-        class StaticData extends StaticDataMixins {
             constructor() {
                 super();
                 this.dataLoaded = {};

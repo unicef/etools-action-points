@@ -1,17 +1,20 @@
 {
-  "entrypoint": "src/index.html",
-  "shell": "src/elements/core-elements/app-shell-element/app-shell.html",
+  "entrypoint": "index.html",
+  "shell": "elements/core-elements/app-shell-element/app-shell.html",
   "fragments": [
-    "src/elements/pages/action-points-page-components/action-points-page-main/action-points-page-main.html",
-    "src/elements/pages/not-found-page-view/not-found-page-view.html"
+    "elements/pages/action-points-page-components/action-points-page-main/action-points-page-main.html",
+    "elements/pages/not-found-page-view/not-found-page-view.html"
   ],
-  "sourceGlobs": [
-    "src/assets/**/*",
-    "src/elements/**/*",
-    "!src/assets/data/**/*",
-    "src/manifest.json",
-    "src/bower_components/webcomponentsjs/webcomponents-lite.min.js",
-    "src/bower_components/webcomponentsjs/webcomponents-lite.js",
-    "src/assets/data/countries.json"
+  "sources": [
+    "assets/**/*",
+    "elements/**/*",
+    "bower.json"
+  ],
+  "builds": [{
+    "js": {"compile": true}
+  }],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
   ]
 }
