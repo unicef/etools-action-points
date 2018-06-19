@@ -63,7 +63,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
         super.connectedCallback();
         let eventData = {message: 'Loading...', active: true, type: 'initialisation'};
         this.dispatchEvent(new CustomEvent('global-loading', {detail: eventData}));
-        this.$.drawer.$.scrim.remove();
+        // this.$.drawer.$.scrim.remove();
     }
 
     toggleDrawer() {

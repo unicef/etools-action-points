@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 
 function copyAssets() {
-    return gulp.src(['./manifest.json', './index.html', './assets/**/*.*'], {since: gulp.lastRun(copyAssets)})
+    return gulp.src(['./manifest.json', './index.html', './images/**/*.*'], {since: gulp.lastRun(copyAssets)})
         .pipe(gulp.dest('./build/'));
 }
 

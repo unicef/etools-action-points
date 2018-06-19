@@ -6,12 +6,13 @@
     "elements/pages/not-found-page-view/not-found-page-view.html"
   ],
   "sources": [
-    "assets/**/*",
+    "images/**/*",
     "elements/**/*",
     "bower.json"
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/*.js"
+    "bower_components/webcomponentsjs/*.js",
+    "bower_components/babel-polyfill/browser-polyfill.js"
   ]
 }
