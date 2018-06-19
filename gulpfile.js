@@ -21,7 +21,7 @@ const build = require('./gulp-tasks/build');
 
 gulp.task('watch', function() {
     gulp.watch(['./src/elements/**/*.*'], gulp.series(jsLinter, buildElements));
-    gulp.watch(['./manifest.json', './index.html', './assets/**/*.*'], gulp.series(copyAssets));
+    gulp.watch(['./manifest.json', './index.html', './images/**/*.*'], gulp.series(copyAssets));
     gulp.watch(['./bower_components/**/*.*'], gulp.series(copyBower()));
 });
 
