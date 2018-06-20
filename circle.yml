@@ -9,14 +9,14 @@ dependencies:
   override:
     - if [[ -e ~/dockercache/auditor.tar ]]; then docker load -i ~/dockercache/auditor.tar; fi
     - if [[ -e ~/dockercache/auditortest.tar ]]; then docker load -i ~/dockercache/auditortest.tar; fi
-    - docker build --rm=false -t unicef/etools-apd:$CIRCLE_BRANCH .
-    - docker build --rm=false -t unicef/etools-apd-test:$CIRCLE_BRANCH --file docker-test .
-    - mkdir -p ~/dockercache; docker save unicef/etools-apd-test > ~/dockercache/auditortest.tar; docker save unicef/etools-apd > ~/dockercache/auditor.tar
+    - docker build --rm=false -t unicef/etools-action-points:$CIRCLE_BRANCH .
+    - docker build --rm=false -t unicef/etools-action-points-test:$CIRCLE_BRANCH --file docker-test .
+    - mkdir -p ~/dockercache; docker save unicef/etools-action-points-test > ~/dockercache/auditortest.tar; docker save unicef/etools-action-points > ~/dockercache/auditor.tar
 
 
 test:
   override:
-    - docker run -it unicef/etools-apd-test:$CIRCLE_BRANCH
+    - docker run -it unicef/etools-action-points-test:$CIRCLE_BRANCH
 
 deployment:
   hub:
