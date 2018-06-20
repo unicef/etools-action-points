@@ -8,11 +8,8 @@ const polymerBuild = require('polymer-build');
 // const imagemin = require('gulp-imagemin');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
-const postcss = require('gulp-postcss');
-const cssnano = require('cssnano');
+const cssSlam = require('css-slam').gulp;
 const htmlMinifier = require('gulp-html-minifier');
-const through2 = require('through2').obj;
-const path = require('path');
 
 const polymerJson = require(global.config.polymerJsonPath);
 const polymerProject = new polymerBuild.PolymerProject(polymerJson);
@@ -39,7 +36,7 @@ function build() {
                 }]]
             })))
             .pipe(gulpif(/\.js$/, uglify()))
-            .pipe(gulpif(/\.css$/, postcss([cssnano])))
+            .pipe(gulpif(/\.css$/, cssSlam()))
             .pipe(gulpif(/\.html$/, htmlMinifier({
                 caseSensitive: true,
                 collapseWhitespace: true
@@ -55,7 +52,7 @@ function build() {
             })))
             .pipe(gulpif(/^((?!custom-elements-es5-adapter|webcomponents-loader).)*\.js$/, uglify()))
             // .pipe(gulpif(/\.js$/, uglify()))
-            .pipe(gulpif(/\.css$/, postcss([cssnano])))
+            .pipe(gulpif(/\.css$/, cssSlam()))
             .pipe(gulpif(/\.html$/, htmlMinifier({
                 caseSensitive: true,
                 collapseWhitespace: true
