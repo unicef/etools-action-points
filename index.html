@@ -50,26 +50,31 @@
             color: rgba(0, 0, 0, 0.87);
         }
     </style>
-
     <script>
         (function() {
             'use strict';
-
-            var serverBackend = (window.location.port !== '8080');
-            var baseUrl = serverBackend ? '/apd/' : '/';
-
-            // add base tag with href set to baseUrl
+            window.baseUrl = window.location.port !== '8080' ? '/apd/' : '/';
             var base = document.createElement('base');
-            base.href = baseUrl;
+            base.href = window.baseUrl;
             document.head.appendChild(base);
-
+        })();
+    </script>
+    <!--removeIf(prod)-->
+    <script>
+        (function() {
+            'use strict';
             if (window.customElements) {
                 var adapter = document.createElement('script');
                 adapter.async = true;
-                adapter.src = baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
+                adapter.src = window.baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
                 document.head.appendChild(adapter);
             }
-
+        })();
+    </script>
+    <!--endRemoveIf(prod)-->
+    <script>
+        (function() {
+            'use strict';
             var scripts = [
                 'bower_components/babel-polyfill/browser-polyfill.js',
                 'bower_components/webcomponentsjs/webcomponents-loader.js'
@@ -77,13 +82,13 @@
             for (var i = 0; i < scripts.length; i++) {
                 var script = document.createElement('script');
                 script.async = true;
-                script.src = baseUrl + scripts[i];
+                script.src = window.baseUrl + scripts[i];
                 document.head.appendChild(script);
             }
 
             var appShellImport = document.createElement('link');
             appShellImport.rel = 'import';
-            appShellImport.href = baseUrl + 'elements/core-elements/app-shell-element/app-shell.html';
+            appShellImport.href = window.baseUrl + 'elements/core-elements/app-shell-element/app-shell.html';
             document.head.appendChild(appShellImport);
         })();
     </script>

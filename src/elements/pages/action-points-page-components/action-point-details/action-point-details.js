@@ -94,10 +94,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.sendRequest({method: 'GET', endpoint})
             .then((data) => {
                 this.partner = data || null;
+                this.partnerRequestInProcess = false;
             }, () => {
                 console.error('Can not load partner data');
-            })
-            .finally(() => this.partnerRequestInProcess = false);
+                this.partnerRequestInProcess = false;
+            });
     }
 
     async _updateCpOutputs(interventionId) {

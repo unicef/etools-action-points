@@ -64,9 +64,10 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
                 this.set('actionPoint.comments', response.comments);
                 this.set('actionPoint.history', response.history);
                 this.openedCommentDialog = false;
+                this.isSaveComment = false;
             })
-            .catch(err => this.errorHandler(err, this.permissionPath))
-            .finally(() => {
+            .catch((err) => {
+                this.errorHandler(err, this.permissionPath);
                 this.isSaveComment = false;
             });
     }

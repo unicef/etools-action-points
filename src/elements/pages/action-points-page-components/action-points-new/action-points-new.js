@@ -61,15 +61,13 @@ class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
                     composed: true
                 }));
                 this.set('route.path', `detail/${data.id}`);
-            }, (err) => {
-                this.errorHandler(err, this.permissionPath);
-            })
-            .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {
                     detail: {type: 'ap-creation'},
                     bubbles: true,
                     composed: true
                 }));
+            }, (err) => {
+                this.errorHandler(err, this.permissionPath);
             });
     }
 

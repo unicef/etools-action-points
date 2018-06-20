@@ -55,7 +55,6 @@ function build() {
             })))
             .pipe(gulpif(/^((?!custom-elements-es5-adapter|webcomponents-loader).)*\.js$/, uglify()))
             .pipe(gulpif(/\.css$/, cssSlam()))
-            .pipe(gulpif(/\.html$/, cssSlam()))
             .pipe(gulpif(/\.html$/, htmlMinifier({
                 caseSensitive: true,
                 collapseWhitespace: true

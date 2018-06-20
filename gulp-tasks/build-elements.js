@@ -3,7 +3,6 @@
 const gulp = require('gulp');
 const compileHtmlTags = require('gulp-compile-html-tags');
 const sass = require('gulp-sass');
-const babel = require('gulp-babel');
 const builder = require('polytempl');
 const gulpIf = require('gulp-if');
 // const fs = require('fs');
@@ -48,8 +47,9 @@ function buildElements(done) {
                 compileHtmlTags('script', function(tag, data) {
                     return data;
                     // return data.pipe(babel({
+                    //     sourceMaps: true,
                     //     presets: [['env', {
-                    //         exclude: ['transform-es2015-classes']
+                    //         modules: false
                     //     }]]
                     // }).on('error', function(error) {console.log('\x1b[31m%s\x1b[0m', error.message); done();}));
                 }),

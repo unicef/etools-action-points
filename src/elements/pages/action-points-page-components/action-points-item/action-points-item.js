@@ -91,8 +91,8 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     bubbles: true,
                     composed: true
                 }));
-            })
-            .finally(() => this.permissionPath = permissionPath);
+                this.permissionPath = permissionPath;
+            });
     }
 
     _prepareActionPoint(actionPoint) {
@@ -136,16 +136,14 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     composed: true
                 }));
                 this.actionPoint = this._prepareActionPoint(data);
-            })
-            .catch((err) => {
-                this.errorHandler(err, this.permissionPath);
-            })
-            .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {
                     detail: {type: 'ap-complete'},
                     bubbles: true,
                     composed: true
                 }));
+            })
+            .catch((err) => {
+                this.errorHandler(err, this.permissionPath);
             });
     }
 
@@ -177,16 +175,14 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     composed: true
                 }));
                 this.actionPoint = this._prepareActionPoint(data);
-            })
-            .catch((err) => {
-                this.errorHandler(err, this.permissionPath);
-            })
-            .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {
                     detail: {type: 'ap-update'},
                     bubbles: true,
                     composed: true
                 }));
+            })
+            .catch((err) => {
+                this.errorHandler(err, this.permissionPath);
             });
     }
 
