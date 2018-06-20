@@ -33,10 +33,12 @@ function build() {
             .pipe(gulpif(/\.js$/, babel({
                 presets: [['env', {
                     modules: false
-                }]]
+                }]],
+                plugins: ['external-helpers']
             })))
             .pipe(gulpif(/\.js$/, uglify()))
             .pipe(gulpif(/\.css$/, cssSlam()))
+            .pipe(gulpif(/\.html$/, cssSlam()))
             .pipe(gulpif(/\.html$/, htmlMinifier({
                 caseSensitive: true,
                 collapseWhitespace: true
@@ -48,11 +50,12 @@ function build() {
             .pipe(gulpif(/^((?!custom-elements-es5-adapter|webcomponents-loader).)*\.js$/, babel({
                 presets: [['env', {
                     modules: false
-                }]]
+                }]],
+                plugins: ['external-helpers']
             })))
             .pipe(gulpif(/^((?!custom-elements-es5-adapter|webcomponents-loader).)*\.js$/, uglify()))
-            // .pipe(gulpif(/\.js$/, uglify()))
             .pipe(gulpif(/\.css$/, cssSlam()))
+            .pipe(gulpif(/\.html$/, cssSlam()))
             .pipe(gulpif(/\.html$/, htmlMinifier({
                 caseSensitive: true,
                 collapseWhitespace: true
@@ -60,8 +63,10 @@ function build() {
             .pipe(dependenciesStreamSplitter.rejoin());
 
         let buildStream = mergeStream(sourcesStream, dependenciesStream)
-            // .pipe(polymerProject.addCustomElementsEs5Adapter())
-            .pipe(polymerProject.bundler())
+            .pipe(polymerProject.addBabelHelpersInEntrypoint())
+            .pipe(polymerProject.bundler({
+                stripComments: true
+            }))
             .pipe(gulp.dest(global.config.buildDirectory));
 
         return waitFor(buildStream).then(() => {
