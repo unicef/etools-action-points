@@ -65,6 +65,7 @@
                                 required$="[[_setRequired('related_module', permissionPath)]]"
                                 disabled$="[[isReadOnly('related_module', permissionPath)]]"
                                 readonly$="[[isReadOnly('related_module', permissionPath)]]"
+                                allow-outside-scroll
                                 dynamic-align>
                         </etools-dropdown>
                     </div>
@@ -93,6 +94,7 @@
                                 error-message="{{errors.assigned_by}}"
                                 on-focus="_resetFieldError"
                                 on-tap="_resetFieldError"
+                                allow-outside-scroll
                                 dynamic-align>
                         </etools-dropdown>
                     </div>
@@ -116,6 +118,7 @@
                             error-message="{{errors.partner}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                     <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading"></etools-loading>
@@ -137,6 +140,7 @@
                             error-message="{{errors.intervention}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                     <etools-loading active="{{interventionRequestInProcess}}" no-overlay loading-text="" class="loading"></etools-loading>
@@ -162,6 +166,7 @@
                             error-message="{{errors.cp_output}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                 </div>
@@ -183,6 +188,7 @@
                             error-message="{{errors.location}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                 </div>
@@ -229,6 +235,7 @@
                             error-message="{{errors.assigned_to}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                 </div>
@@ -249,6 +256,7 @@
                             error-message="{{errors.section}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                 </div>
@@ -270,6 +278,7 @@
                             error-message="{{errors.office}}"
                             on-focus="_resetFieldError"
                             on-tap="_resetFieldError"
+                            allow-outside-scroll
                             dynamic-align>
                     </etools-dropdown>
                 </div>

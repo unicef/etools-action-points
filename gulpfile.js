@@ -35,6 +35,6 @@ gulp.task('startServer', () => {nodemon({script: 'express.js'});});
 gulp.task('devBuild', gulp.series(clean, jsLinter, gulp.parallel(buildElements, copyAssets, copyImages, copyBower())));
 gulp.task('prodBuild', gulp.series(clean, preBuild, build, postBuild));
 
-gulp.task('devup', gulp.series('prodBuild', gulp.parallel('startServer')));
+gulp.task('devup', gulp.series('devBuild', gulp.parallel('startServer', 'watch')));
 
 gulp.task('default', gulp.series(['prodBuild']));
