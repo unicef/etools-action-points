@@ -49,14 +49,14 @@
                 background-color: var(--dark-hover-color);
             }
 
-            iron-icon {
+            :host a#main iron-icon#icon {
                 margin: 0 22px;
-                color: var(--dark-icon-color);
+                color: var(--module-color);
                 min-width: 26px;
                 min-height: 26px;
             }
 
-            #name { color: var(--dark-primary-text-color); }
+            :host #main #name { color: var(--module-color); }
 
             iron-collapse {
                 display: none;
@@ -82,7 +82,7 @@
         </style>
 
         <a id="main" target$="[[_setTarget(external)]]" href$="[[sideBarLink]]" on-tap="_handleMainTap">
-            <iron-icon icon="{{icon}}"></iron-icon>
+            <iron-icon icon="{{icon}}" id="icon"></iron-icon>
             <div id="name">[[name]]</div>
         </a>
         <paper-tooltip position="right" offset="-10">[[name]]</paper-tooltip>
