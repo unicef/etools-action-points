@@ -38,8 +38,9 @@
         </etools-content-panel>
         <etools-dialog size="md"
                        opened="{{openedCommentDialog}}"
-                       dialog-title="Add New [[getLabel('comments', permissionPath)]]"
+                       dialog-title="Add [[getLabel('comments', permissionPath)]]"
                        keep-dialog-open
+                       ok-btn-text="SAVE"
                        on-confirm-btn-clicked="saveComment"
                        on-iron-overlay-closed="_resetInputs">
             <etools-loading
