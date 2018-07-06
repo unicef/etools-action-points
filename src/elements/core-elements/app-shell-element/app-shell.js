@@ -57,6 +57,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
         this.addEventListener('404', e => this._pageNotFound(e));
         this.addEventListener('static-data-loaded', e => this._staticDataLoaded(e));
         this.addEventListener('global-loading', e => this.handleLoading(e));
+        this._setBgColor();
     }
 
     connectedCallback() {
@@ -172,6 +173,13 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
             if (this.globalLoadingQueue.length) {
                 this.handleLoading(this.globalLoadingQueue.shift());
             }
+        }
+    }
+
+    _setBgColor() {
+        // If not production environment, changing header color to red
+        if (!this.isProductionServer()) {
+            this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
         }
     }
 }

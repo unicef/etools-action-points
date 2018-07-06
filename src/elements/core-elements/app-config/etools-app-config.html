@@ -87,6 +87,8 @@
             this.epsData = endpoints;
             // dexie js
             this.appDexieDb = etoolsCustomDexieDb;
+            this.stagingDomain = 'etools-staging.unicef.org';
+            this.productionDomain = 'etools.unicef.org';
 
         }
 
@@ -107,6 +109,16 @@
         getAbsolutePath(path) {
             path = path || '';
             return this.basePath + path;
+        }
+
+        isProductionServer() {
+            let location = window.location.href;
+            return location.indexOf(this.productionDomain) > -1;
+        }
+
+        isStagingServer() {
+            let location = window.location.href;
+            return location.indexOf(this.stagingDomain) > -1;
         }
     });
 </script>

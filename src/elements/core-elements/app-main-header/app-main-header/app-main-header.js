@@ -54,6 +54,17 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
         this.addEventListener('main_refresh', this._refreshPage);
     }
 
+    ready() {
+        super.ready();
+        this._isStaging();
+    }
+
+    _isStaging() {
+        if (this.isStagingServer()) {
+            this.$.envWarningIf.if = true;
+        }
+    }
+
     openDrawer() {
         this.dispatchEvent(new CustomEvent('drawer'));
     }
