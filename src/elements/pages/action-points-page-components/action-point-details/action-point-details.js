@@ -13,6 +13,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     static get observers() {
         return [
             '_updateStyles(permissionPath)',
+            '_setDrDOptions(permissionPath)',
             '_requestPartner(editedItem.partner)',
             '_updateCpOutputs(editedItem.intervention)',
             '_updateEditedItem(actionPoint)'
@@ -40,6 +41,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
 
     _updateStyles() {
         this.updateStyles();
+    }
+
+    _setDrDOptions(permissionPath) {
+        if (!permissionPath) { return; }
+        this.categories = this.getChoices(`${permissionPath}.category`);
     }
 
     ready() {
