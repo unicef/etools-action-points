@@ -100,6 +100,31 @@
                     </div>
                 </div>
             </template>
+
+            <div class="row-h group">
+                <div class="input-container input-container-l">
+                    <!-- Category -->
+                    <etools-dropdown
+                            class$="validate-input disabled-as-readonly [[_setRequired('category', permissionPath)]]"
+                            selected="{{editedItem.category}}"
+                            label="[[getLabel('category', permissionPath)]]"
+                            placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
+                            options="[[categories]]"
+                            option-label="display_name"
+                            option-value="value"
+                            required$="[[_setRequired('category', permissionPath)]]"
+                            disabled$="[[isReadOnly('category', permissionPath)]]"
+                            readonly$="[[isReadOnly('category', permissionPath)]]"
+                            invalid="{{errors.category}}"
+                            error-message="{{errors.category}}"
+                            on-focus="_resetFieldError"
+                            on-tap="_resetFieldError"
+                            allow-outside-scroll
+                            dynamic-align>
+                    </etools-dropdown>
+                </div>
+            </div>
+
             <div class="row-h group">
                 <div class="input-container input-container-ms">
                     <!-- Implementing Partner -->
