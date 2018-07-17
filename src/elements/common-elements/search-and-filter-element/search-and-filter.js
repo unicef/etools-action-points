@@ -160,25 +160,7 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
             return;
         }
 
-        let filterValue = this.get(`queryParams.${filter.query}`);
-
-        if (filterValue !== undefined) {
-            filter.value = this._getFilterValue(filterValue, filter);
-        } else {
-            filter.value = undefined;
-        }
-    }
-
-    _getFilterValue(filterValue, filter) {
-        if (!filter || !filter.selection || filterValue === undefined) {
-            return;
-        }
-
-        let optionValue = filter.optionValue;
-
-        return filter.selection.find((selectionItem) => {
-            return selectionItem[optionValue].toString() === filterValue;
-        });
+        filter.value = this.get(`queryParams.${filter.query}`);
     }
 
     _getFilter(query) {
