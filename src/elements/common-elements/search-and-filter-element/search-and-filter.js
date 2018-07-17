@@ -1,5 +1,9 @@
-class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
-    static get is() {return 'search-and-filter';}
+class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
+    APDMixins.DateMixin,
+    APDMixins.QueryParamsMixin], Polymer.Element) {
+    static get is() {
+        return 'search-and-filter';
+    }
 
     static get properties() {
         return {
@@ -28,6 +32,10 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
             queryParams: {
                 type: Object,
                 notify: true
+            },
+            dates: {
+                type: Object,
+                value: () => ({})
             }
         };
     }
@@ -96,33 +104,53 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
     }
 
     _restoreFilters() {
+        this.restoreInProcess = true;
         this._debounceFilters = Polymer.Debouncer.debounce(this._debounceFilters,
             Polymer.Async.timeOut.after(50),
             () => {
-            let queryParams = this.queryParams;
+                let queryParams = this.queryParams;
 
-            if (!queryParams) {
-                return;
-            }
-
-            let availableFilters = [];
-
-            this.filters.forEach((filter) => {
-                let usedFilter = this.usedFilters.find(used => used.query === filter.query);
-
-                if (!usedFilter && queryParams[filter.query] !== undefined) {
-                    this.addFilter(filter.query);
-                } else if (queryParams[filter.query] === undefined) {
-                    this.removeFilter(filter.query);
-                    availableFilters.push(filter);
+                if (!queryParams) {
+                    return;
                 }
-            });
-            this.set('availableFilters', availableFilters);
 
-            if (queryParams.search) {
-                this.set('searchString', queryParams.search);
+                let availableFilters = [];
+
+                this.filters.forEach((filter) => {
+                    let usedFilter = this.usedFilters.find(used => used.query === filter.query);
+
+                    if (!usedFilter && queryParams[filter.query] !== undefined) {
+                        this.addFilter(filter.query);
+                    } else if (queryParams[filter.query] === undefined) {
+                        this.removeFilter(filter.query);
+                        availableFilters.push(filter);
+                    }
+                });
+                this.set('availableFilters', availableFilters);
+
+                if (queryParams.search) {
+                    this.set('searchString', queryParams.search);
+                } else {
+                    this.set('searchString', '');
+                }
+                setTimeout(() => {
+                    this._updateValues();
+                    this.restoreInProcess = false;
+                });
+            });
+    }
+
+    _updateValues() {
+        let ids = Object.keys(this.queryParams || {});
+        _.each(ids, (id) => {
+            let element = this.shadowRoot.querySelector(`#${id}`);
+            if (!element) {return;}
+
+            let isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
+            if (isDatepicker) {
+                element.parentElement.value = this.queryParams[id];
             } else {
-                this.set('searchString', '');
+                element.selected = this.queryParams[id];
             }
         });
     }
@@ -170,13 +198,25 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
             return;
         }
 
-        let query = e.currentTarget.id;
+        let query = e.currentTarget.id,
+            date = _.get(e, 'detail.prettyDate'),
+            queryObject;
 
-        if (e.detail.item && query) {
-            let queryObject = {page: '1'};
+        if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
+            e.currentTarget.parentElement.value = date;
+            this.dates[query] = date;
+            queryObject = {
+                page: '1',
+                [query]: date || true
+            };
+
+        } else if (e.detail.item && query) {
+            queryObject = {page: '1'};
             // e.detail.item.item doesn't from etools-dropdown
             queryObject[query] = e.detail.item.getAttribute('internal-id');
+        }
 
+        if (queryObject) {
             this.updateQueries(queryObject);
         }
     }
