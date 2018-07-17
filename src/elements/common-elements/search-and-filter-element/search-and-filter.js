@@ -146,11 +146,14 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
             let element = this.shadowRoot.querySelector(`#${id}`);
             if (!element) {return;}
 
+            let value = this.queryParams[id];
             let isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
             if (isDatepicker) {
-                element.parentElement.value = this.queryParams[id];
+                element.set('prettyDate', value);
+                this.dates[element.id] = value;
+                element.parentElement.value = this.prettyDate(value);
             } else {
-                element.selected = this.queryParams[id];
+                element.selected = value;
             }
         });
     }
@@ -185,7 +188,7 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
             queryObject;
 
         if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
-            e.currentTarget.parentElement.value = date;
+            e.currentTarget.parentElement.value = this.prettyDate(date);
             this.dates[query] = date;
             queryObject = {
                 page: '1',
