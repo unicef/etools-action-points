@@ -21,7 +21,8 @@
     "comma-dangle": ["error", "never"],
     "max-len": ["error", { "code": 120 }],
     "camelcase": ["error", {"properties": "never"}],
-    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }]
+    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
+    "one-var": ["off"]
   },
   "globals": {
     "moment": true,

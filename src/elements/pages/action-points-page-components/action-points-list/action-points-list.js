@@ -51,8 +51,8 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         selection: []
                     },
                     {
-                        name: 'Locations',
-                        query: 'locations',
+                        name: 'Location',
+                        query: 'location',
                         optionValue: 'id',
                         optionLabel: 'name',
                         selection: []
@@ -70,6 +70,39 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         optionValue: 'value',
                         optionLabel: 'display_name',
                         selection: []
+                    },
+                    {
+                        name: 'Status',
+                        query: 'status',
+                        optionValue: 'value',
+                        optionLabel: 'display_name',
+                        selection: []
+                    },
+                    {
+                        name: 'High Priority',
+                        query: 'high_priority',
+                        optionValue: 'value',
+                        optionLabel: 'display_name',
+                        selection: [{display_name: 'Yes', value: 'true'}, {display_name: 'No', value: 'false'}]
+                    },
+                    {
+                        name: 'PD/SSFA',
+                        query: 'intervention',
+                        optionValue: 'id',
+                        optionLabel: 'title',
+                        selection: []
+                    },
+                    {
+                        name: 'CP Output',
+                        query: 'cp_output',
+                        optionValue: 'id',
+                        optionLabel: 'name',
+                        selection: []
+                    },
+                    {
+                        name: 'Due Date',
+                        query: 'due_date',
+                        isDatePicker: true
                     }
                 ], (filter) => filter.name)
             },
@@ -152,10 +185,10 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         }
         this.updateQueries(this.queryParams, null, true);
         let hasNewEmptyFilter = oldQueryParams && _.some(_.map(queryParams, (value, key) => {
-            return !oldQueryParams[key] && value.length === 0;
+            return !oldQueryParams.hasOwnProperty(key) && value.length === 0;
         }), value => value);
         let hasOldEmptyFilter = oldQueryParams && _.some(_.map(oldQueryParams, (value, key) => {
-            return !queryParams[key] && value.length === 0;
+            return !queryParams.hasOwnProperty(key) && value.length === 0;
         }), value => value);
         if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
             this._requestData();
@@ -195,6 +228,9 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             {query: 'partner', dataKey: 'partnerOrganisations'},
             {query: 'office', dataKey: 'offices'},
             {query: 'location', dataKey: 'locations'},
+            {query: 'cp_output', dataKey: 'cpOutputsList'},
+            {query: 'intervention', dataKey: 'interventionsList'},
+            {query: 'status', dataKey: 'statuses'},
             {query: 'section', dataKey: 'sectionsCovered'},
             {query: 'related_module', dataKey: 'modules'}
         ];
