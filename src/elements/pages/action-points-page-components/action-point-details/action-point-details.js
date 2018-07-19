@@ -44,7 +44,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     }
 
     _setDrDOptions(permissionPath) {
-        if (!permissionPath) { return; }
+        if (!permissionPath) {return;}
         this.categories = this.getChoices(`${permissionPath}.category`);
     }
 
