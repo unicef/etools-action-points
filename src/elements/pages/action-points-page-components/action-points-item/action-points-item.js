@@ -136,14 +136,16 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     composed: true
                 }));
                 this.actionPoint = this._prepareActionPoint(data);
+            })
+            .catch((err) => {
+                this.errorHandler(err, this.permissionPath);
+            })
+            .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {
                     detail: {type: 'ap-complete'},
                     bubbles: true,
                     composed: true
                 }));
-            })
-            .catch((err) => {
-                this.errorHandler(err, this.permissionPath);
             });
     }
 
