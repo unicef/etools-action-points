@@ -104,7 +104,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         query: 'due_date',
                         isDatePicker: true
                     }
-                ], (filter) => filter.name)
+                ], (filter) => {return filter.name;})
             },
             isShowCompleted: {
                 type: Boolean,
