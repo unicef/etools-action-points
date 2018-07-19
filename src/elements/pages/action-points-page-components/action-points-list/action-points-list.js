@@ -71,7 +71,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         optionLabel: 'display_name',
                         selection: []
                     }
-                ], (filter) => filter.name)
+                ], (filter) => {return filter.name;})
             },
             isShowCompleted: {
                 type: Boolean,
