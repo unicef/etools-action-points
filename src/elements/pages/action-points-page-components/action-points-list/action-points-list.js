@@ -21,7 +21,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             },
             filters: {
                 type: Array,
-                value: [
+                value: () => _.sortBy([
                     {
                         name: 'Assigned To',
                         query: 'assigned_to',
@@ -65,13 +65,13 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         selection: []
                     },
                     {
-                        name: 'Module',
+                        name: 'Related App',
                         query: 'related_module',
                         optionValue: 'value',
                         optionLabel: 'display_name',
                         selection: []
                     }
-                ]
+                ], (filter) => filter.name)
             },
             isShowCompleted: {
                 type: Boolean,

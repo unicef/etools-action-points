@@ -9,7 +9,11 @@
 <dom-module id="app-shell">
     <template>
         <!-- inject styles './app-shell.scss'-->
-        <style include="page-layout-styles shared-styles"></style>
+        <style include="page-layout-styles shared-styles">
+            app-header {
+                background-color: var(--header-bg-color);
+            }
+        </style>
 
         <static-data></static-data>
 

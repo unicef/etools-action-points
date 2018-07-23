@@ -7,13 +7,13 @@
     <template>
         <style include="shared-styles module-styles tab-inputs-styles iron-flex"></style>
          <!--inject styles './search-and-filter.scss'-->
-        <div class="layout horizontal flex">
+        <div class="layout horizontal flex inputs-container">
             <div class="layout horizontal">
                 <paper-input
                         type="search"
                         value="{{searchString}}"
                         label="[[searchLabel]]"
-                        placeholder="Type and search"
+                        placeholder="Search"
                         on-value-changed="searchKeyDown"
                         always-float-label
                         inline>
@@ -28,6 +28,8 @@
                     <etools-dropdown
                             id="[[item.query]]"
                             class="filter-dropdown"
+                            selected="[[item.value]]"
+                            label="[[item.label]]"
                             placeholder$="Select [[item.name]]"
                             options="[[item.selection]]"
                             option-label="[[item.optionLabel]]"

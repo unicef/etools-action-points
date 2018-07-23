@@ -71,7 +71,7 @@
                     </div>
                     <div class="input-container">
                         <div class="reference-link">
-                            <label>[[getLabel('reference_number', permissionPath)]]</label>
+                            <label>[[getLabel('related_object_str', permissionPath)]]</label>
                             <a hidden$="[[!editedItem.related_object_url]]"
                                target="_blank"
                                href$="[[editedItem.related_object_url]]">[[editedItem.related_object_str]]</a>
@@ -100,8 +100,33 @@
                     </div>
                 </div>
             </template>
+
             <div class="row-h group">
-                <div class="input-container">
+                <div class="input-container input-container-l">
+                    <!-- Category -->
+                    <etools-dropdown
+                            class$="validate-input disabled-as-readonly [[_setRequired('category', permissionPath)]]"
+                            selected="{{editedItem.category}}"
+                            label="[[getLabel('category', permissionPath)]]"
+                            placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
+                            options="[[categories]]"
+                            option-label="display_name"
+                            option-value="value"
+                            required$="[[_setRequired('category', permissionPath)]]"
+                            disabled$="[[isReadOnly('category', permissionPath)]]"
+                            readonly$="[[isReadOnly('category', permissionPath)]]"
+                            invalid="{{errors.category}}"
+                            error-message="{{errors.category}}"
+                            on-focus="_resetFieldError"
+                            on-tap="_resetFieldError"
+                            allow-outside-scroll
+                            dynamic-align>
+                    </etools-dropdown>
+                </div>
+            </div>
+
+            <div class="row-h group">
+                <div class="input-container input-container-ms">
                     <!-- Implementing Partner -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('partner', permissionPath)]]"
@@ -123,7 +148,7 @@
                     </etools-dropdown>
                     <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading"></etools-loading>
                 </div>
-                <div class="input-container">
+                <div class="input-container input-container-ms">
                     <!-- PD/SSFA -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('intervention', permissionPath)]]"
@@ -149,7 +174,7 @@
 
 
             <div class="row-h group">
-                <div class="input-container">
+                <div class="input-container input-container-ms">
                     <!-- CP Output -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('cp_output', permissionPath)]]"
@@ -171,7 +196,7 @@
                     </etools-dropdown>
                 </div>
 
-                <div class="input-container">
+                <div class="input-container input-container-ms">
                     <!-- Locations -->
                     <etools-dropdown
                             class$="validate-input disabled-as-readonly [[_setRequired('location', permissionPath)]]"

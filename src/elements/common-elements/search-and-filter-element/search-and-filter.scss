@@ -2,6 +2,10 @@
     @apply --layout-horizontal;
     @apply --layout-center;
     @apply --layout-flex;
+
+    .inputs-container {
+        flex-wrap: wrap;
+    }
 }
 
 paper-input {

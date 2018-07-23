@@ -29,8 +29,7 @@
                             request-queries="{{queryParams}}"
                             list-length="{{totalResults}}"></action-points-data>
         <filters-element>
-            <search-and-filter search-label="Keywords"
-                               id="filters"
+            <search-and-filter id="filters"
                                filters="[[filters]]"
                                query-params="{{queryParams}}"
                                search-params="[[searchParams]]">
@@ -43,7 +42,7 @@
         <paper-card>
             <etools-data-table-header id="listHeader"
                                       no-collapse="[[!actionPoints.length]]"
-                                      label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show">
+                                      label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
                 <etools-data-table-column class="flex-1" field="reference_number" sortable>
                     [[getLabel('reference_number', basePermissionPath)]]
                 </etools-data-table-column>
