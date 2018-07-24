@@ -34,7 +34,7 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
                         },
                         {
                             title: 'Action Points',
-                            icon: 'app-icons:auditor',
+                            icon: 'app-icons:apd',
                             url: 'apd'
                         },
                         {
