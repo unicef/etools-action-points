@@ -38,11 +38,14 @@
                 this._loadData('sectionsCovered');
                 this._loadData('offices');
                 this._loadData('unicefUsers');
+                this._loadData('interventionsList');
+                this._loadData('cpOutputsList');
             }
 
             _allDataLoaded() {
                 if (this.dataLoaded.organizations && this.dataLoaded.apOptions &&
-                    this.dataLoaded.sectionsCovered && this.dataLoaded.offices && this.dataLoaded.unicefUsers) {
+                    this.dataLoaded.sectionsCovered && this.dataLoaded.offices && this.dataLoaded.unicefUsers &&
+                    this.dataLoaded.cpOutputsList && this.dataLoaded.interventionsList) {
                     this.dispatchEvent(new CustomEvent('static-data-loaded', {bubbles: true, composed: true}));
                 }
             }

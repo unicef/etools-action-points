@@ -19,3 +19,7 @@
   font-size: 11px;
   color: var(--list-secondary-text-color, #757575);
 }
+
+etools-dialog {
+  --etools-dialog-default-btn-bg: var(--module-primary);
+}
