@@ -23,7 +23,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                 type: Array,
                 value: () => _.sortBy([
                     {
-                        name: 'Assigned To',
+                        name: 'Assignee',
                         query: 'assigned_to',
                         optionValue: 'id',
                         optionLabel: 'name',
