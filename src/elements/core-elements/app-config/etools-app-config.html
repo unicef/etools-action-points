@@ -18,7 +18,8 @@
                 sections: 'id',
                 offices: 'id',
                 locations: 'id',
-                users: 'id'
+                users: 'id',
+                categories: 'id'
             });
             window.EtoolsRequestCacheDb = etoolsCustomDexieDb;
 
@@ -77,6 +78,11 @@
                     url: '/api/users/',
                     exp: 60 * 60 * 1000, // 1h
                     cacheTableName: 'users'
+                },
+                categoriesList: {
+                    url: '/api/action-points/categories/',
+                    exp: 60 * 60 * 1000, // 1h
+                    cacheTableName: 'categories'
                 }
             };
 

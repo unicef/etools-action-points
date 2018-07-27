@@ -13,7 +13,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     static get observers() {
         return [
             '_updateStyles(permissionPath)',
-            '_setDrDOptions(permissionPath)',
+            '_setDrDOptions(editedItem)',
             '_requestPartner(editedItem.partner)',
             '_updateCpOutputs(editedItem.intervention)',
             '_updateEditedItem(actionPoint)'
@@ -43,9 +43,16 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.updateStyles();
     }
 
-    _setDrDOptions(permissionPath) {
-        if (!permissionPath) {return;}
-        this.categories = this.getChoices(`${permissionPath}.category`);
+    _setDrDOptions(editedItem) {
+        let module = editedItem && editedItem.related_module,
+            categories = [];
+
+        if (module) {
+            let categoriesList = this.getData('categoriesList');
+            categories = _.filter(categoriesList, (category) => category.module === module);
+        }
+
+        this.categories = categories;
     }
 
     ready() {
