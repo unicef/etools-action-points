@@ -44,12 +44,12 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     }
 
     _setDrDOptions(editedItem) {
-        let module = editedItem && editedItem.related_module,
-            categories = [];
+        let module = editedItem && editedItem.related_module;
+        let categories = [];
 
         if (module) {
             let categoriesList = this.getData('categoriesList');
-            categories = _.filter(categoriesList, (category) => category.module === module);
+            categories = _.filter(categoriesList, (category) => {return category.module === module;});
         }
 
         this.categories = categories;
