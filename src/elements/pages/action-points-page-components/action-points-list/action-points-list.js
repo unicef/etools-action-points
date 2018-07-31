@@ -191,6 +191,10 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             return !queryParams.hasOwnProperty(key) && value.length === 0;
         }), value => value);
         if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
+            let listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
+            _.each(listElements, (element) => {
+                element.detailsOpened = false;
+            });
             this._requestData();
         }
     }
