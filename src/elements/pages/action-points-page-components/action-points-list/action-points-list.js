@@ -100,8 +100,18 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         selection: []
                     },
                     {
-                        name: 'Due Date',
+                        name: 'Due On',
                         query: 'due_date',
+                        isDatePicker: true
+                    },
+                    {
+                        name: 'Due Before',
+                        query: 'due_date__lte',
+                        isDatePicker: true
+                    },
+                    {
+                        name: 'Due After',
+                        query: 'due_date__gte',
                         isDatePicker: true
                     }
                 ], (filter) => {return filter.name;})
