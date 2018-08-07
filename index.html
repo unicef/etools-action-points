@@ -65,7 +65,7 @@
             'use strict';
             if (window.customElements) {
                 var adapter = document.createElement('script');
-                adapter.async = true;
+                // adapter.async = true;
                 adapter.src = window.baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
                 document.head.appendChild(adapter);
             }
@@ -81,7 +81,6 @@
             ];
             for (var i = 0; i < scripts.length; i++) {
                 var script = document.createElement('script');
-                script.async = true;
                 script.src = window.baseUrl + scripts[i];
                 document.head.appendChild(script);
             }
