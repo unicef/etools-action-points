@@ -11,10 +11,10 @@
         @apply --layout-horizontal;
         @apply --layout-center;
 
-        background-color: #00b8d4;
+        background-color: var(--module-color);
         color: white;
         //border-bottom: 1px solid var(--dark-divider-color);
-        border-bottom: 1px solid #00b8d4;
+        border-bottom: 1px solid var(--module-color);
         height: 59px;
         font-size: 14px;
         line-height: 18px;

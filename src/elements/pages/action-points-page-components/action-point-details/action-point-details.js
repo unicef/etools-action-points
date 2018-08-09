@@ -13,8 +13,8 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     static get observers() {
         return [
             '_updateStyles(permissionPath)',
+            '_setDrDOptions(editedItem)',
             '_requestPartner(editedItem.partner)',
-            '_updateCpOutputs(editedItem.intervention)',
             '_updateEditedItem(actionPoint)'
         ];
     }
@@ -42,12 +42,25 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.updateStyles();
     }
 
+    _setDrDOptions(editedItem) {
+        let module = editedItem && editedItem.related_module;
+        let categories = [];
+
+        if (module) {
+            let categoriesList = this.getData('categoriesList');
+            categories = _.filter(categoriesList, (category) => {return category.module === module;});
+        }
+
+        this.categories = categories;
+    }
+
     ready() {
         super.ready();
         this.modules = this.getData('modules');
         this.partners = this.getData('partnerOrganisations');
         this.offices = this.getData('offices');
         this.sectionsCovered = this.getData('sectionsCovered');
+        this.cpOutputs = this.getData('cpOutputsList');
         this.unicefUsers = (this.getData('unicefUsers') || []).map((user) => {
             return {
                 id: user.id,
@@ -88,7 +101,6 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
 
         this.partnerRequestInProcess = true;
         this.partner = null;
-        this.cpOutputs = undefined;
 
         let endpoint = this.getEndpoint('partnerOrganisationDetails', {id: partnerId});
         this.sendRequest({method: 'GET', endpoint})
@@ -100,47 +112,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
                 this.partnerRequestInProcess = false;
             });
     }
-
-    async _updateCpOutputs(interventionId) {
-        if (!interventionId) {return;}
-        try {
-            this.interventionRequestInProcess = true;
-            this.cpOutputs = undefined;
-            let interventionEndpoint = this.getEndpoint('interventionDetails', {id: interventionId});
-            let intervention = await this.sendRequest({method: 'GET', endpoint: interventionEndpoint});
-
-            let resultLinks = intervention && intervention.result_links;
-            if (!_.isArray(resultLinks)) {
-                this._finishCpoRequest();
-                return;
-            }
-
-            let cpIds = [];
-            resultLinks.forEach((link) => {
-                if (link && (link.cp_output || link.cp_output === 0)) {
-                    cpIds.push(link.cp_output);
-                }
-            });
-
-            if (!cpIds.length) {
-                this._finishCpoRequest();
-                return;
-            }
-
-            let endpoint = this.getEndpoint('cpOutputsV2', {ids: cpIds.join(',')});
-            this.cpOutputs = await this.sendRequest({method: 'GET', endpoint}) || [];
-            this.interventionRequestInProcess = false;
-        } catch (error) {
-            console.error('Can not load cpOutputs data');
-            this._finishCpoRequest();
-        }
-    }
     /* jshint ignore:end */
-
-    _finishCpoRequest() {
-        this.cpOutputs = [];
-        this.interventionRequestInProcess = false;
-    }
 
     isFieldReadonly(path, base, special) {
         return this.isReadOnly(path, base) || !special;

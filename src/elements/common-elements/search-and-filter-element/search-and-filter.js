@@ -1,5 +1,9 @@
-class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
-    static get is() {return 'search-and-filter';}
+class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
+    APDMixins.DateMixin,
+    APDMixins.QueryParamsMixin], Polymer.Element) {
+    static get is() {
+        return 'search-and-filter';
+    }
 
     static get properties() {
         return {
@@ -28,6 +32,10 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
             queryParams: {
                 type: Object,
                 notify: true
+            },
+            dates: {
+                type: Object,
+                value: () => ({})
             }
         };
     }
@@ -43,7 +51,8 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
         this._debounceSearch = Polymer.Debouncer.debounce(
             this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
             if (this.searchString.length !== 1) {
-                this.updateQueries({search: this.searchString || undefined, page: '1'});
+                let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
+                this.updateQueries({search: query, page: '1'});
             }
         });
     }
@@ -96,33 +105,56 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
     }
 
     _restoreFilters() {
+        this.restoreInProcess = true;
         this._debounceFilters = Polymer.Debouncer.debounce(this._debounceFilters,
             Polymer.Async.timeOut.after(50),
             () => {
-            let queryParams = this.queryParams;
+                let queryParams = this.queryParams;
 
-            if (!queryParams) {
-                return;
-            }
-
-            let availableFilters = [];
-
-            this.filters.forEach((filter) => {
-                let usedFilter = this.usedFilters.find(used => used.query === filter.query);
-
-                if (!usedFilter && queryParams[filter.query] !== undefined) {
-                    this.addFilter(filter.query);
-                } else if (queryParams[filter.query] === undefined) {
-                    this.removeFilter(filter.query);
-                    availableFilters.push(filter);
+                if (!queryParams) {
+                    return;
                 }
-            });
-            this.set('availableFilters', availableFilters);
 
-            if (queryParams.search) {
-                this.set('searchString', queryParams.search);
+                let availableFilters = [];
+
+                this.filters.forEach((filter) => {
+                    let usedFilter = this.usedFilters.find(used => used.query === filter.query);
+
+                    if (!usedFilter && queryParams[filter.query] !== undefined) {
+                        this.addFilter(filter.query);
+                    } else if (queryParams[filter.query] === undefined) {
+                        this.removeFilter(filter.query);
+                        availableFilters.push(filter);
+                    }
+                });
+                this.set('availableFilters', availableFilters);
+
+                if (queryParams.search) {
+                    this.set('searchString', queryParams.search);
+                } else {
+                    this.set('searchString', '');
+                }
+                setTimeout(() => {
+                    this._updateValues();
+                    this.restoreInProcess = false;
+                });
+            });
+    }
+
+    _updateValues() {
+        let ids = Object.keys(this.queryParams || {});
+        _.each(ids, (id) => {
+            let element = this.shadowRoot.querySelector(`#${id}`);
+            if (!element) {return;}
+
+            let value = this.queryParams[id];
+            let isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
+            if (isDatepicker) {
+                element.set('prettyDate', value);
+                this.dates[element.id] = value;
+                element.parentElement.value = this.prettyDate(value);
             } else {
-                this.set('searchString', '');
+                element.selected = value;
             }
         });
     }
@@ -132,25 +164,7 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
             return;
         }
 
-        let filterValue = this.get(`queryParams.${filter.query}`);
-
-        if (filterValue !== undefined) {
-            filter.value = this._getFilterValue(filterValue, filter);
-        } else {
-            filter.value = undefined;
-        }
-    }
-
-    _getFilterValue(filterValue, filter) {
-        if (!filter || !filter.selection || filterValue === undefined) {
-            return;
-        }
-
-        let optionValue = filter.optionValue;
-
-        return filter.selection.find((selectionItem) => {
-            return selectionItem[optionValue].toString() === filterValue;
-        });
+        filter.value = this.get(`queryParams.${filter.query}`);
     }
 
     _getFilter(query) {
@@ -170,13 +184,25 @@ class SearchAndFilter extends APDMixins.QueryParamsMixin(Polymer.Element) {
             return;
         }
 
-        let query = e.currentTarget.id;
+        let query = e.currentTarget.id,
+            date = _.get(e, 'detail.prettyDate'),
+            queryObject;
 
-        if (e.detail.item && query) {
-            let queryObject = {page: '1'};
+        if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
+            e.currentTarget.parentElement.value = this.prettyDate(date);
+            this.dates[query] = date;
+            queryObject = {
+                page: '1',
+                [query]: date || true
+            };
+
+        } else if (e.detail.item && query) {
+            queryObject = {page: '1'};
             // e.detail.item.item doesn't from etools-dropdown
             queryObject[query] = e.detail.item.getAttribute('internal-id');
+        }
 
+        if (queryObject) {
             this.updateQueries(queryObject);
         }
     }

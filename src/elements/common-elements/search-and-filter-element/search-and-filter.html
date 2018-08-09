@@ -1,19 +1,19 @@
 <!--import [polymer/polymer-element, paper-input, paper-card, iron-icon, iron-icons, etools-dropdown, paper-menu-button,
-            paper-button, paper-listbox, iron-flex-layout, paper-toggle-button]-->
+            paper-button, paper-listbox, iron-flex-layout, paper-toggle-button, etools-datepicker/etools-datepicker-button]-->
 
-<!--import [shared-styles, module-styles, tab-inputs-styles, query-params-mixin]-->
+<!--import [shared-styles, module-styles, tab-inputs-styles, query-params-mixin, date-mixin]-->
 
 <dom-module id="search-and-filter">
     <template>
         <style include="shared-styles module-styles tab-inputs-styles iron-flex"></style>
          <!--inject styles './search-and-filter.scss'-->
-        <div class="layout horizontal flex">
+        <div class="layout horizontal flex inputs-container">
             <div class="layout horizontal">
                 <paper-input
                         type="search"
                         value="{{searchString}}"
                         label="[[searchLabel]]"
-                        placeholder="Type and search"
+                        placeholder="Search"
                         on-value-changed="searchKeyDown"
                         always-float-label
                         inline>
@@ -24,22 +24,51 @@
 
             <!-- FILTERS -->
             <template is="dom-repeat" items="[[usedFilters]]">
-                <div class="layout horizontal">
-                    <etools-dropdown
-                            id="[[item.query]]"
-                            class="filter-dropdown"
-                            placeholder$="Select [[item.name]]"
-                            options="[[item.selection]]"
-                            option-label="[[item.optionLabel]]"
-                            option-value="[[item.optionValue]]"
-                            on-iron-select="_changeFilterValue"
-                            hide-search="[[item.hideSearch]]"
-                            allow-outside-scroll
-                            shown-items-limit="5">
-                    </etools-dropdown>
 
-                    <div class="filter-reset-button" on-click="removeFilter">×</div>
-                </div>
+                <template is="dom-if" if="[[item.isDatePicker]]">
+                    <div class="layout horizontal">
+                        <paper-input
+                                placeholder="Select [[item.name]]"
+                                data-selector$="[[item.query]]"
+                                on-tap="openDatePicker">
+                            <etools-datepicker-button
+                                    id="[[item.query]]"
+                                    slot="prefix"
+                                    format="YYYY-MM-DD"
+                                    fire-date-has-changed="[[!restoreInProcess]]"
+                                    on-date-has-changed="_changeFilterValue"
+                                    show-clear-btn
+                                    data-is-datepicker
+                                    no-init>
+                            </etools-datepicker-button>
+                        </paper-input>
+
+                        <div class="filter-reset-button" on-click="removeFilter">×</div>
+                    </div>
+                </template>
+
+
+                <template is="dom-if" if="[[!item.isDatePicker]]">
+                    <div class="layout horizontal">
+                        <etools-dropdown
+                                id="[[item.query]]"
+                                class="filter-dropdown"
+                                selected="[[item.value]]"
+                                label="[[item.label]]"
+                                placeholder$="Select [[item.name]]"
+                                options="[[item.selection]]"
+                                option-label="[[item.optionLabel]]"
+                                option-value="[[item.optionValue]]"
+                                on-iron-select="_changeFilterValue"
+                                hide-search="[[item.hideSearch]]"
+                                allow-outside-scroll
+                                shown-items-limit="5">
+                        </etools-dropdown>
+
+                        <div class="filter-reset-button" on-click="removeFilter">×</div>
+                    </div>
+                </template>
+
             </template>
         </div>
 

@@ -63,6 +63,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
     _changeActionPointId(data) {
         this.actionPointId = data.id;
         if (!this.actionPointId) {return;}
+        this.set('actionPoint', {});
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPointId});
         this._loadOptions(this.actionPointId);
         this.sendRequest({method: 'GET', endpoint})
@@ -97,6 +98,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
 
     _prepareActionPoint(actionPoint) {
         return this._resolveFields(actionPoint, [
+            'category',
             'partner',
             'intervention',
             'office',
@@ -136,14 +138,16 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     composed: true
                 }));
                 this.actionPoint = this._prepareActionPoint(data);
+            })
+            .catch((err) => {
+                this.errorHandler(err, this.permissionPath);
+            })
+            .finally(() => {
                 this.dispatchEvent(new CustomEvent('global-loading', {
                     detail: {type: 'ap-complete'},
                     bubbles: true,
                     composed: true
                 }));
-            })
-            .catch((err) => {
-                this.errorHandler(err, this.permissionPath);
             });
     }
 
