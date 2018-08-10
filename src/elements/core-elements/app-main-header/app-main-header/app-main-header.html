@@ -69,7 +69,7 @@
 
         <app-toolbar sticky class="content-align">
             <div class="titlebar content-align">
-                <etools-app-selector hidden$="[[!user.is_staff]]" menu-options="[[menuOptions]]"></etools-app-selector>
+                <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
 
                 <img src$="[[getAbsolutePath('images/etools_logo.svg')]]">
                 <dom-if id="envWarningIf">
