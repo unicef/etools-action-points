@@ -68,6 +68,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         this._loadOptions(this.actionPointId);
         this.sendRequest({method: 'GET', endpoint})
             .then((result) => {
+                this.set('originalActionPoint', _.cloneDeep(result));
                 this.set('actionPoint', this._prepareActionPoint(result));
             });
     }

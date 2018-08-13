@@ -15,7 +15,8 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
             '_updateStyles(permissionPath)',
             '_setDrDOptions(editedItem)',
             '_requestPartner(editedItem.partner)',
-            '_updateEditedItem(actionPoint)'
+            '_updateEditedItem(actionPoint)',
+            '_updateInterventions(originalActionPoint.intervention, partner)'
         ];
     }
 
@@ -34,7 +35,15 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
                 type: Object,
                 value: () => ({})
             },
-            cpOutputs: Array
+            cpOutputs: Array,
+            interventions: {
+                type: Array,
+                value: () => []
+            },
+            originalActionPoint: {
+                type: Object,
+                readonly: true
+            }
         };
     }
 
@@ -113,6 +122,17 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
             });
     }
     /* jshint ignore:end */
+
+    _updateInterventions(intervention, partner) {
+        let interventions = partner && partner.interventions || [];
+        let exists = intervention && _.find(interventions, (item) => {return item.id === intervention.id;});
+
+        if (intervention && !exists) {
+            interventions.push(intervention);
+        }
+
+        this.interventions = interventions;
+    }
 
     isFieldReadonly(path, base, special) {
         return this.isReadOnly(path, base) || !special;
