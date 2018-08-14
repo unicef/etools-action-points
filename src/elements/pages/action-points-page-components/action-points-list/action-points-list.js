@@ -298,6 +298,10 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             url: this.getEndpoint('actionPointsListExport').url
         }];
     }
+
+    _getPriorityValue(priority) {
+        return priority === true ? 'high' : '';
+    }
 }
 
 
