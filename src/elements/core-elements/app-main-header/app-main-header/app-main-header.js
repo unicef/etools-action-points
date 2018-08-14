@@ -7,44 +7,6 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
         return {
             user: {
                 type: Object
-            },
-            menuOptions: {
-                type: Array,
-                value: function() {
-                    return [
-                        {
-                            title: 'Dashboards',
-                            icon: 'app-selector-icons:dashIcon',
-                            url: 'dash'
-                        },
-                        {
-                            title: 'Partnership Management',
-                            icon: 'app-selector-icons:pmpIcon',
-                            url: 'pmp'
-                        },
-                        {
-                            title: 'Trip Management',
-                            icon: 'app-selector-icons:tripsIcon',
-                            url: 't2f'
-                        },
-                        {
-                            title: 'Financial Assurance Module',
-                            icon: 'app-icons:auditor',
-                            url: 'ap'
-                        },
-                        {
-                            title: 'Action Points',
-                            icon: 'app-icons:apd',
-                            url: 'apd'
-                        },
-                        {
-                            title: 'Admin (Permission Required)',
-                            icon: 'app-selector-icons:adminIcon',
-                            url: 'admin'
-                        }
-
-                    ];
-                }
             }
         };
     }
