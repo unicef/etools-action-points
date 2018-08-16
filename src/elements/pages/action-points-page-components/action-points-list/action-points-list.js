@@ -114,7 +114,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         query: 'due_date__gte',
                         isDatePicker: true
                     }
-                ], (filter) => {return filter.name;})
+                ], (filter) => {return filter.name.toLowerCase();})
             },
             isShowCompleted: {
                 type: Boolean,
