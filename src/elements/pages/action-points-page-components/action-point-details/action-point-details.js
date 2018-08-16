@@ -156,6 +156,10 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     getRefNumber(number) {
         return number || '-';
     }
+
+    showCategory(categories) {
+        return !!(categories && categories.length);
+    }
 }
 
 customElements.define(ActionPointDetails.is, ActionPointDetails);
