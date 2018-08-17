@@ -15,7 +15,9 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
             '_updateStyles(permissionPath)',
             '_setDrDOptions(editedItem)',
             '_requestPartner(editedItem.partner)',
-            '_updateEditedItem(actionPoint)'
+            '_updateCpOutputs(editedItem.intervention)',
+            '_updateEditedItem(actionPoint)',
+            '_updateInterventions(originalActionPoint.intervention, originalActionPoint.partner.id, partner)'
         ];
     }
 
@@ -34,7 +36,15 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
                 type: Object,
                 value: () => ({})
             },
-            cpOutputs: Array
+            cpOutputs: Array,
+            interventions: {
+                type: Array,
+                value: () => []
+            },
+            originalActionPoint: {
+                type: Object,
+                readonly: true
+            }
         };
     }
 
@@ -85,8 +95,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.editedItem = actionPoint && _.cloneDeep(actionPoint) || {};
     }
 
-    _updateLocations() {
-        this.locations = this.getData('locations') || [];
+    _updateLocations(filter) {
+        let locations = this.getData('locations') || [];
+        this.locations = locations.filter((location) => {
+            return !filter || !!~filter.indexOf(+location.id);
+        });
     }
 
     _requestPartner(partnerId) {
@@ -102,6 +115,12 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.partnerRequestInProcess = true;
         this.partner = null;
 
+        let originalPartner = _.get(this, 'originalActionPoint.partner.id');
+        let originalIntervention = _.get(this, 'originalActionPoint.intervention.id');
+        if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
+            this.set('editedItem.intervention', null);
+        }
+
         let endpoint = this.getEndpoint('partnerOrganisationDetails', {id: partnerId});
         this.sendRequest({method: 'GET', endpoint})
             .then((data) => {
@@ -112,7 +131,84 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
                 this.partnerRequestInProcess = false;
             });
     }
+
+    async _updateCpOutputs(interventionId) {
+        if (interventionId === undefined) {return;}
+        this._checkAndResetData(interventionId);
+        if (interventionId === null) {
+            this.cpOutputs = this.getData('cpOutputsList');
+            this._updateLocations();
+            return;
+        }
+        try {
+            this.interventionRequestInProcess = true;
+            this.cpOutputs = undefined;
+            let interventionEndpoint = this.getEndpoint('interventionDetails', {id: interventionId});
+            let intervention = await this.sendRequest({method: 'GET', endpoint: interventionEndpoint});
+
+            let locations = intervention && intervention.flat_locations || [];
+            this._updateLocations(locations);
+
+            let resultLinks = intervention && intervention.result_links;
+            if (!_.isArray(resultLinks)) {
+                this._finishCpoRequest();
+                return;
+            }
+
+            let cpIds = [];
+            resultLinks.forEach((link) => {
+                if (link && (link.cp_output || link.cp_output === 0)) {
+                    cpIds.push(link.cp_output);
+                }
+            });
+
+            if (!cpIds.length) {
+                this._finishCpoRequest();
+                return;
+            }
+
+            let endpoint = this.getEndpoint('cpOutputsV2', {ids: cpIds.join(',')});
+            this.cpOutputs = await this.sendRequest({method: 'GET', endpoint}) || [];
+            this.interventionRequestInProcess = false;
+        } catch (error) {
+            console.error('Can not load cpOutputs data');
+            this._finishCpoRequest();
+        }
+    }
     /* jshint ignore:end */
+
+    _checkAndResetData(intervention) {
+        let originalIntervention = _.get(this, 'originalActionPoint.intervention.id', null);
+        let originalOutput = _.get(this, 'originalActionPoint.cp_output.id', null);
+        let originalLocation = _.get(this, 'originalActionPoint.location.id', null);
+        let currentOutput = _.get(this, 'editedItem.cp_output');
+        let currentLocation = _.get(this, 'editedItem.location');
+
+        let interventionChanged = originalIntervention !== intervention;
+        if (interventionChanged || originalOutput !== currentOutput) {
+            this.set('editedItem.cp_output', null);
+        }
+        if (interventionChanged || originalLocation !== currentLocation) {
+            this.set('editedItem.location', null);
+        }
+    }
+
+    _finishCpoRequest() {
+        this.cpOutputs = [];
+        this.interventionRequestInProcess = false;
+    }
+
+    _updateInterventions(intervention, originalId, partner) {
+        let interventions = partner && partner.interventions || [];
+        let id = partner && partner.id;
+        let exists = intervention && _.find(interventions, (item) => {return item.id === intervention.id;});
+
+        if (intervention && id === originalId && !exists) {
+            interventions.push(intervention);
+        }
+
+        this.interventions = interventions;
+    }
 
     isFieldReadonly(path, base, special) {
         return this.isReadOnly(path, base) || !special;
