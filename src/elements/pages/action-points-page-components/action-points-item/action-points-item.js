@@ -138,6 +138,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     bubbles: true,
                     composed: true
                 }));
+                this.set('originalActionPoint', _.cloneDeep(data));
                 this.actionPoint = this._prepareActionPoint(data);
             })
             .catch((err) => {
@@ -179,6 +180,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
                     bubbles: true,
                     composed: true
                 }));
+                this.set('originalActionPoint', _.cloneDeep(data));
                 this.actionPoint = this._prepareActionPoint(data);
                 this.dispatchEvent(new CustomEvent('global-loading', {
                     detail: {type: 'ap-update'},

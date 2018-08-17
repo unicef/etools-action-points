@@ -1,7 +1,6 @@
 node_modules/
 bower_components/
 build/
-elements/
 src/bower_components/
 dist/
 .tmp
