@@ -43,15 +43,14 @@
     }
 
     .divider {
-        margin: 8px 0;
         border-bottom: 1px solid var(--dark-divider-color);
     }
 
     .nav-menu {
         @apply --layout-vertical;
-
         background: #fff;
         padding: 8px 0;
+        margin-bottom: 18px;
         width: 100%;
         overflow: hidden;
     }
@@ -63,8 +62,8 @@
 
     .secondary-header {
         color: var(--primary-text-color);
-        height: 60px;
-        line-height: 60px;
+        height: 48px;
+        line-height: 49px;
         text-align: center;
         font-size: 13px;
         font-weight: 500;
