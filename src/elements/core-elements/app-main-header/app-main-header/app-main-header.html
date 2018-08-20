@@ -1,4 +1,4 @@
-<!--import [polymer/polymer-element, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh]-->
+<!--import [polymer/polymer-element, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh, etools-profile-dropdown]-->
 <!--import [etools-app-config, etools-app-selector, countries-dropdown, user-dropdown, shared-styles, app-icons]-->
 
 <dom-module id="app-main-header">
@@ -60,6 +60,10 @@
                 font-size: 18px;
             }
 
+            etools-dialog {
+                --primary-color: red;
+            }
+
             @media (min-width: 851px) {
                 div[main-title] {
                     margin-left: 32px;
@@ -85,7 +89,7 @@
                         country-id="[[user.profile.country]]">
                 </countries-dropdown>
 
-                <user-dropdown is-admin="[[user.is_superuser]]"></user-dropdown>
+                <etools-profile-dropdown profile="[[user]]"></etools-profile-dropdown>
 
                 <etools-page-refresh id="refresh"></etools-page-refresh>
             </div>
