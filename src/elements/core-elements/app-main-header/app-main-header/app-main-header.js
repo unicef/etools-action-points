@@ -7,8 +7,7 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
         return {
             user: {
                 type: Object
-            },
-           
+            }
         };
     }
 
