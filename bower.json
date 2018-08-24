@@ -3,7 +3,7 @@
   "private": true,
   "license": "https://github.com/unicef-polymer/etools-frontend-template/blob/master/LICENSE.md",
   "dependencies": {
-    "polymer": "Polymer/polymer#^2.6.0",
+    "polymer": "Polymer/polymer#2.6.0",
     "paper-styles": "PolymerElements/paper-styles#^2.1.0",
     "paper-tooltip": "PolymerElements/paper-tooltip#^2.1.1",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.3",
@@ -43,13 +43,13 @@
   },
   "devDependencies": {},
   "resolutions": {
+    "polymer": "2.6.0",
     "paper-ripple": "2.1.1",
     "iron-icon": "2.1.0",
     "paper-styles": "2.1.0",
     "paper-icon-button": "2.2.0",
     "iron-flex-layout": "2.0.3",
     "iron-meta": "2.1.1",
-    "polymer": "2.6.0",
     "webcomponentsjs": "1.2.2"
   }
 }
