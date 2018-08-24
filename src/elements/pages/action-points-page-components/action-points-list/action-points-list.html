@@ -1,7 +1,7 @@
 <!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, iron-flex-layout/iron-flex-layout-classes,
             pages-header-element, search-and-filter, filters-element, etools-data-table, paper-card, iron-flex-layout,
             static-data-mixin, action-points-data, iron-location, localization-mixin, date-mixin, input-attrs-mixin,
-            text-content]-->
+            text-content, paper-tooltip]-->
 
 <dom-module id="action-points-list">
     <template>
@@ -87,42 +87,87 @@
             <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
                 <etools-data-table-row>
                     <div slot="row-data" class="layout horizontal">
-                        <div  class="col-data flex-1 truncate">
-                            <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
+                                <paper-tooltip offset="0">[[getStringValue(entry.reference_number)]]</paper-tooltip>
+                            </div>
                         </div>
-                        <div class="col-data flex-2 truncate">[[getStringValue(entry.cp_output.name)]]</div>
-                        <div class="col-data flex-2 truncate">[[getStringValue(entry.partner.name)]]</div>
-                        <div class="col-data flex-2 truncate">[[getStringValue(entry.office.name)]]</div>
-                        <div class="col-data flex-2 truncate">[[getStringValue(entry.section.name)]]</div>
-                        <div class="col-data flex-2 truncate">[[getStringValue(entry.assigned_to.name)]]</div>
-                        <div class="col-data flex-1 truncate">[[prettyDate(entry.due_date, null, '-')]]</div>
-                        <div class="col-data flex-1 truncate">[[getStringValue(entry.status, statuses, 'display_name')]]</div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.cp_output.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.cp_output.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.partner.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.partner.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.office.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.office.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.section.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.section.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                <span>[[getStringValue(entry.assigned_to.name)]]</span>
+                                <paper-tooltip offset="0">[[getStringValue(entry.assigned_to.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                [[prettyDate(entry.due_date, null, '-')]]
+                                <paper-tooltip offset="0">[[prettyDate(entry.due_date, null, '-')]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.status, statuses, 'display_name')]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.status, statuses, 'display_name')]]
+                                </paper-tooltip>
+                            </div>
+                        </div>
                     </div>
                     <div slot="row-data-details" class="layout horizontal">
                         <div class="row-details-content layout vertical flex">
                             <div class="rdc-title">[[getLabel('description', basePermissionPath)]]</div>
                             <text-content rows="3" text="[[getStringValue(entry.description)]]"></text-content>
+                            <paper-tooltip offset="0">[[getStringValue(entry.description)]]</paper-tooltip>
                         </div>
                         <div class="row-details-content layout vertical flex">
                             <div class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</div>
                             <div class="truncate">[[getStringValue(entry.intervention.number)]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.intervention.number)]]</paper-tooltip>
                         </div>
                         <div class="row-details-content layout vertical flex">
                             <div class="rdc-title">[[getLabel('location', basePermissionPath)]]</div>
                             <div class="truncate">[[getStringValue(entry.location.name)]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.location.name)]]</paper-tooltip>
                         </div>
                         <div class="row-details-content layout vertical flex">
                             <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div>
                             <div class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.related_module, modules, 'display_name')]]</paper-tooltip>
                         </div>
                         <div class="row-details-content layout vertical flex">
                             <div class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</div>
                             <div class="truncate">[[getStringValue(entry.assigned_by.name)]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.assigned_by.name)]]</paper-tooltip>
                         </div>
                         <div class="row-details-content layout vertical flex">
                             <template is="dom-if" if="[[entry.date_of_completion.length]]">
                                 <div class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</div>
                                 <div class="truncate">[[prettyDate(entry.date_of_completion)]]</div>
+                                <paper-tooltip offset="0">[[rettyDate(entry.date_of_completion)]]</paper-tooltip>
                             </template>
                         </div>
                     </div>
