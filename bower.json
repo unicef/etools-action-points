@@ -39,7 +39,8 @@
     "etools-dialog": "^2.0.1",
     "paper-toggle-button": "^2.1.1",
     "webcomponentsjs": "1.2.2",
-    "babel-polyfill": "^0.0.1"
+    "babel-polyfill": "^0.0.1",
+    "etools-profile-dropdown": "^3.1.0"
   },
   "devDependencies": {},
   "resolutions": {
