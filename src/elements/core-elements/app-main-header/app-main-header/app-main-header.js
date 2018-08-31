@@ -7,14 +7,14 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
         return {
             user: {
                 type: Object
-            },
-           
+            }
         };
     }
 
     connectedCallback() {
         super.connectedCallback();
         this.addEventListener('main_refresh', this._refreshPage);
+        this.addEventListener('sign-out', this._logout);
     }
 
     ready() {
@@ -35,6 +35,11 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
     _refreshPage(event) {
         event.stopImmediatePropagation();
         this.$.refresh.refresh();
+    }
+
+    _logout() {
+        this.resetOldUserData();
+        window.location.href = `${window.location.origin}/saml2/logout/`;
     }
 }
 

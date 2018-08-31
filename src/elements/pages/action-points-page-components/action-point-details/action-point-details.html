@@ -47,7 +47,9 @@
                 font-weight: 500;
             }
             .reference-link > span {
-                /*color: var(--paper-input-container-color, var(--secondary-text-color));*/
+                font-size: 16px;
+                line-height: 16px;
+                color: var(--paper-input-container-color, var(--gray-20));
             }
         </style>
         <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
@@ -75,7 +77,7 @@
                             <a hidden$="[[!editedItem.related_object_url]]"
                                target="_blank"
                                href$="[[editedItem.related_object_url]]">[[editedItem.related_object_str]]</a>
-                            <span hidden$="[[editedItem.related_object_url]]">[[getRefNumber(editedItem.reference_number)]]</span>
+                            <span hidden$="[[editedItem.related_object_url]]">[[getPlaceholderText('related_object_str', permissionPath, 'true')]]</span>
                         </div>
                     </div>
                     <div class="input-container">
@@ -102,27 +104,30 @@
             </template>
 
             <div class="row-h group">
-                <div class="input-container input-container-l">
-                    <!-- Category -->
-                    <etools-dropdown
-                            class$="validate-input disabled-as-readonly [[_setRequired('category', permissionPath)]]"
-                            selected="{{editedItem.category}}"
-                            label="[[getLabel('category', permissionPath)]]"
-                            placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
-                            options="[[categories]]"
-                            option-label="description"
-                            option-value="id"
-                            required$="[[_setRequired('category', permissionPath)]]"
-                            disabled$="[[isReadOnly('category', permissionPath)]]"
-                            readonly$="[[isReadOnly('category', permissionPath)]]"
-                            invalid="{{errors.category}}"
-                            error-message="{{errors.category}}"
-                            on-focus="_resetFieldError"
-                            on-tap="_resetFieldError"
-                            allow-outside-scroll
-                            dynamic-align>
-                    </etools-dropdown>
-                </div>
+                <template is="dom-if" if="[[showCategory(categories)]]">
+                    <div class="input-container input-container-l">
+                        <!-- Category -->
+                        <etools-dropdown
+                                class$="validate-input disabled-as-readonly [[_setRequired('category', permissionPath)]]"
+                                selected="{{editedItem.category}}"
+                                label="[[getLabel('category', permissionPath)]]"
+                                placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
+                                options="[[categories]]"
+                                option-label="description"
+                                option-value="id"
+                                required$="[[_setRequired('category', permissionPath)]]"
+                                disabled$="[[isReadOnly('category', permissionPath)]]"
+                                readonly$="[[isReadOnly('category', permissionPath)]]"
+                                invalid="{{errors.category}}"
+                                error-message="{{errors.category}}"
+                                on-focus="_resetFieldError"
+                                on-tap="_resetFieldError"
+                                allow-outside-scroll
+                                dynamic-align>
+                        </etools-dropdown>
+                    </div>
+                </template>
+
             </div>
 
             <div class="row-h group">
@@ -155,7 +160,7 @@
                             selected="{{editedItem.intervention}}"
                             label="[[getLabel('intervention', permissionPath)]]"
                             placeholder="[[getPlaceholderText('intervention', permissionPath, 'true')]]"
-                            options="[[partner.interventions]]"
+                            options="[[interventions]]"
                             option-label="title"
                             option-value="id"
                             required$="[[_setRequired('intervention', permissionPath)]]"

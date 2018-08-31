@@ -49,14 +49,18 @@
                 background-color: var(--dark-hover-color);
             }
 
-            :host a#main iron-icon#icon {
-                margin: 0 22px;
-                color: var(--module-color);
-                min-width: 26px;
-                min-height: 26px;
+            #name {
+                margin-left: 16px;
             }
 
-            :host #main #name { color: var(--module-color); }
+            :host a#main iron-icon#icon {
+                margin: 0 16px;
+                min-width: 24px;
+                min-height: 24px;
+            }
+            :host(:not(.lighter-item)) {
+                color: var(--module-color);
+            }
 
             iron-collapse {
                 display: none;
