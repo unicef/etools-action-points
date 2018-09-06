@@ -114,7 +114,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                         query: 'due_date__gte',
                         isDatePicker: true
                     }
-                ], (filter) => {return filter.name;})
+                ], (filter) => {return filter.name.toLowerCase();})
             },
             isShowCompleted: {
                 type: Boolean,
@@ -297,6 +297,10 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             name: 'Export CSV',
             url: this.getEndpoint('actionPointsListExport').url
         }];
+    }
+
+    _getPriorityValue(priority) {
+        return priority === true ? 'high' : '';
     }
 }
 

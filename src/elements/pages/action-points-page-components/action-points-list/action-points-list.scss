@@ -9,7 +9,11 @@
   }
 
   .row-details-content {
+    position: relative;
     min-width: 0;
+    paper-tooltip {
+      max-width: 100%;
+    }
   }
 
   .row-details-content .truncate {
@@ -48,6 +52,11 @@
   .ellipse {
     max-height: 4.4em;
     overflow: hidden;
+  }
+
+  .tooltip-container {
+    display: inline-block;
+    max-width: 100%;
   }
 }
 
