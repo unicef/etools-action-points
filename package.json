@@ -23,7 +23,7 @@
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-html": "^4.0.3",
     "express": "^4.15.3",
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "gulpjs/gulp",
     "gulp-babel": "^7.0.1",
     "gulp-compile-html-tags": "^1.0.1",
     "gulp-csslint": "^1.0.0",
