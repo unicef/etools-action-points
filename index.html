@@ -72,6 +72,14 @@
         })();
     </script>
     <!--endRemoveIf(prod)-->
+
+    <!-- Start of prphelp Zendesk Widget script -->
+    
+    <script id="ze-snippet"
+            src="https://static.zdassets.com/ekr/snippet.js?key=fd275a17-bb04-499b-bc03-ffe711fa1ba8"> 
+    </script>
+    
+    <!-- End of prphelp Zendesk Widget script -->
     <script>
         (function() {
             'use strict';
@@ -84,13 +92,14 @@
                 script.src = window.baseUrl + scripts[i];
                 document.head.appendChild(script);
             }
-
             var appShellImport = document.createElement('link');
             appShellImport.rel = 'import';
             appShellImport.href = window.baseUrl + 'elements/core-elements/app-shell-element/app-shell.html';
             document.head.appendChild(appShellImport);
         })();
     </script>
+
+    
 </head>
 <body unresolved>
 <app-shell></app-shell>
