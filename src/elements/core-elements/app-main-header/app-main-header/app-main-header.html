@@ -81,11 +81,11 @@
 
             <div class="content-align">
                 <countries-dropdown
-                        countries="[[user.profile.countries_available]]"
+                        countries="[[user.countries_available]]"
                         country-id="[[user.profile.country]]">
                 </countries-dropdown>
 
-                <etools-profile-dropdown profile="[[user]]"></etools-profile-dropdown>
+                <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
 
                 <etools-page-refresh id="refresh"></etools-page-refresh>
             </div>
