@@ -27,13 +27,9 @@ module.exports = function testElements(done) {
 
         let tests;
         if (argv.noxvfb) {
-            tests = spawn('node', [
-                './node_modules/.bin/wct', '--skip-selenium-install', `./build/tests/${indexFileName}`
-            ]);
+            tests = spawn('node', ['./node_modules/.bin/wct', `./build/tests/${indexFileName}`]);
         } else {
-            tests = spawn('xvfb-run', [
-                '-a', './node_modules/.bin/wct', '--skip-selenium-install', `./build/tests/${indexFileName}`
-            ]);
+            tests = spawn('xvfb-run', ['-a', './node_modules/.bin/wct', `./build/tests/${indexFileName}`]);
         }
 
         console.log(`\x1b[32mRunning ${indexFileName}.\x1b[0m`);

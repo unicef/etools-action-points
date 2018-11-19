@@ -7,44 +7,6 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
         return {
             user: {
                 type: Object
-            },
-            menuOptions: {
-                type: Array,
-                value: function() {
-                    return [
-                        {
-                            title: 'Dashboards',
-                            icon: 'app-selector-icons:dashIcon',
-                            url: 'dash'
-                        },
-                        {
-                            title: 'Partnership Management',
-                            icon: 'app-selector-icons:pmpIcon',
-                            url: 'pmp'
-                        },
-                        {
-                            title: 'Trip Management',
-                            icon: 'app-selector-icons:tripsIcon',
-                            url: 't2f'
-                        },
-                        {
-                            title: 'Financial Assurance Module',
-                            icon: 'app-icons:auditor',
-                            url: 'ap'
-                        },
-                        {
-                            title: 'Action Points',
-                            icon: 'app-icons:auditor',
-                            url: 'apd'
-                        },
-                        {
-                            title: 'Admin (Permission Required)',
-                            icon: 'app-selector-icons:adminIcon',
-                            url: 'admin'
-                        }
-
-                    ];
-                }
             }
         };
     }
@@ -52,6 +14,7 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
     connectedCallback() {
         super.connectedCallback();
         this.addEventListener('main_refresh', this._refreshPage);
+        this.addEventListener('sign-out', this._logout);
     }
 
     ready() {
@@ -72,6 +35,11 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
     _refreshPage(event) {
         event.stopImmediatePropagation();
         this.$.refresh.refresh();
+    }
+
+    _logout() {
+        this.resetOldUserData();
+        window.location.href = `${window.location.origin}/saml2/logout/`;
     }
 }
 

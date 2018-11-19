@@ -18,7 +18,8 @@
                 sections: 'id',
                 offices: 'id',
                 locations: 'id',
-                users: 'id'
+                users: 'id',
+                categories: 'id'
             });
             window.EtoolsRequestCacheDb = etoolsCustomDexieDb;
 
@@ -40,8 +41,14 @@
                 interventionDetails: {
                     template: '/api/v2/interventions/<%=id%>/'
                 },
+                interventionsList: {
+                    template: '/api/v2/interventions/'
+                },
                 cpOutputsV2: {
                     template: '/api/v2/reports/results/?values=<%=ids%>'
+                },
+                cpOutputsList: {
+                    template: '/api/v2/reports/results/?verbosity=minimal'
                 },
                 actionPointsList: {
                     url: '/api/action-points/action-points/'
@@ -77,6 +84,11 @@
                     url: '/api/users/',
                     exp: 60 * 60 * 1000, // 1h
                     cacheTableName: 'users'
+                },
+                categoriesList: {
+                    url: '/api/action-points/categories/',
+                    exp: 60 * 60 * 1000, // 1h
+                    cacheTableName: 'categories'
                 }
             };
 

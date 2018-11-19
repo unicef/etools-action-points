@@ -13,10 +13,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     static get observers() {
         return [
             '_updateStyles(permissionPath)',
-            '_setDrDOptions(permissionPath)',
+            '_setDrDOptions(editedItem)',
             '_requestPartner(editedItem.partner)',
             '_updateCpOutputs(editedItem.intervention)',
-            '_updateEditedItem(actionPoint)'
+            '_updateEditedItem(actionPoint)',
+            '_updateInterventions(originalActionPoint.intervention, originalActionPoint.partner.id, partner)'
         ];
     }
 
@@ -35,7 +36,15 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
                 type: Object,
                 value: () => ({})
             },
-            cpOutputs: Array
+            cpOutputs: Array,
+            interventions: {
+                type: Array,
+                value: () => []
+            },
+            originalActionPoint: {
+                type: Object,
+                readonly: true
+            }
         };
     }
 
@@ -43,9 +52,16 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.updateStyles();
     }
 
-    _setDrDOptions(permissionPath) {
-        if (!permissionPath) { return; }
-        this.categories = this.getChoices(`${permissionPath}.category`);
+    _setDrDOptions(editedItem) {
+        let module = editedItem && editedItem.related_module;
+        let categories = [];
+
+        if (module) {
+            let categoriesList = this.getData('categoriesList');
+            categories = _.filter(categoriesList, (category) => {return category.module === module;});
+        }
+
+        this.categories = categories;
     }
 
     ready() {
@@ -54,6 +70,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.partners = this.getData('partnerOrganisations');
         this.offices = this.getData('offices');
         this.sectionsCovered = this.getData('sectionsCovered');
+        this.cpOutputs = this.getData('cpOutputsList');
         this.unicefUsers = (this.getData('unicefUsers') || []).map((user) => {
             return {
                 id: user.id,
@@ -78,8 +95,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         this.editedItem = actionPoint && _.cloneDeep(actionPoint) || {};
     }
 
-    _updateLocations() {
-        this.locations = this.getData('locations') || [];
+    _updateLocations(filter) {
+        let locations = this.getData('locations') || [];
+        this.locations = locations.filter((location) => {
+            return !filter || !!~filter.indexOf(+location.id);
+        });
     }
 
     _requestPartner(partnerId) {
@@ -94,7 +114,12 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
 
         this.partnerRequestInProcess = true;
         this.partner = null;
-        this.cpOutputs = undefined;
+
+        let originalPartner = _.get(this, 'originalActionPoint.partner.id');
+        let originalIntervention = _.get(this, 'originalActionPoint.intervention.id');
+        if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
+            this.set('editedItem.intervention', null);
+        }
 
         let endpoint = this.getEndpoint('partnerOrganisationDetails', {id: partnerId});
         this.sendRequest({method: 'GET', endpoint})
@@ -108,12 +133,21 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     }
 
     async _updateCpOutputs(interventionId) {
-        if (!interventionId) {return;}
+        if (interventionId === undefined) {return;}
+        this._checkAndResetData(interventionId);
+        if (interventionId === null) {
+            this.cpOutputs = this.getData('cpOutputsList');
+            this._updateLocations();
+            return;
+        }
         try {
             this.interventionRequestInProcess = true;
             this.cpOutputs = undefined;
             let interventionEndpoint = this.getEndpoint('interventionDetails', {id: interventionId});
             let intervention = await this.sendRequest({method: 'GET', endpoint: interventionEndpoint});
+
+            let locations = intervention && intervention.flat_locations || [];
+            this._updateLocations(locations);
 
             let resultLinks = intervention && intervention.result_links;
             if (!_.isArray(resultLinks)) {
@@ -143,9 +177,37 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     }
     /* jshint ignore:end */
 
+    _checkAndResetData(intervention) {
+        let originalIntervention = _.get(this, 'originalActionPoint.intervention.id', null);
+        let originalOutput = _.get(this, 'originalActionPoint.cp_output.id', null);
+        let originalLocation = _.get(this, 'originalActionPoint.location.id', null);
+        let currentOutput = _.get(this, 'editedItem.cp_output');
+        let currentLocation = _.get(this, 'editedItem.location');
+
+        let interventionChanged = originalIntervention !== intervention;
+        if (interventionChanged || originalOutput !== currentOutput) {
+            this.set('editedItem.cp_output', null);
+        }
+        if (interventionChanged || originalLocation !== currentLocation) {
+            this.set('editedItem.location', null);
+        }
+    }
+
     _finishCpoRequest() {
         this.cpOutputs = [];
         this.interventionRequestInProcess = false;
+    }
+
+    _updateInterventions(intervention, originalId, partner) {
+        let interventions = partner && partner.interventions || [];
+        let id = partner && partner.id;
+        let exists = intervention && _.find(interventions, (item) => {return item.id === intervention.id;});
+
+        if (intervention && id === originalId && !exists) {
+            interventions.push(intervention);
+        }
+
+        this.interventions = interventions;
     }
 
     isFieldReadonly(path, base, special) {
@@ -169,6 +231,10 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
 
     getRefNumber(number) {
         return number || '-';
+    }
+
+    showCategory(categories) {
+        return !!(categories && categories.length);
     }
 }
 
