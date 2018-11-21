@@ -4,7 +4,7 @@
 
 <!--import [app-main-header, app-sidebar-menu, multi-notification-list, permission-controller, etools-app-config,
             user-controller, side-bar-item, countries-dropdown, static-data, shared-styles,
-            page-layout-styles, app-theme]-->
+            page-layout-styles, app-theme, page-footer]-->
 
 <dom-module id="app-shell">
     <template>
@@ -32,7 +32,7 @@
 
         <etools-loading id="global-loading" absolute></etools-loading>
 
-        <div id="layout">
+        <app-drawer-layout id="layout" opened-when-narrow force-narrow narrow="{{narrow}}" opened>
             <!-- Drawer content -->
             <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe opened>
                 <app-sidebar-menu class="opened" route="{{route}}" page="[[page]]"></app-sidebar-menu>
@@ -53,9 +53,10 @@
                 <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}"></action-points-page-main>
                 <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
-
-        </div>
-        <multi-notification-list></multi-notification-list>
+            
+            <multi-notification-list></multi-notification-list>
+            <page-footer></page-footer>
+        </app-drawer-layout>
     </template>
 
     <!-- inject scripts './app-shell.js'-->
