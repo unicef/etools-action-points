@@ -1,7 +1,17 @@
-<!--import [polymer/polymer-element, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh, etools-profile-dropdown]-->
-<!--import [etools-app-config, etools-app-selector, countries-dropdown, user-dropdown, shared-styles, app-icons]-->
+import { PolymerElement } from '@polymer/polymer/polymer-element.js'
+import '@polymer/app-layout/app-toolbar/app-toolbar'
+import '@polymer/paper-icon-button'
+import '@polymer/iron-flex-layout'
+import 'etools-page-refresh'
+import 'etools-profile-dropdown'
+import '../etools-app-config'
+// import 'etools-app-selector'
+import 'countries-dropdown.js'
+// import 'user-dropdown'
+import '../../styles-elements/shared-styles.html'
+import 'app-icons.js'
 
-class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
+class AppMainHeader extends APDMixins.AppConfig(PolymerElement) {
     static get template() {
         return html`
             <style include="shared-styles">

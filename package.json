@@ -1,10 +1,10 @@
 {
-  "name": "eTools-action-points-dashboard",
-  "version": "0.0.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:unicef/etools-apd"
   },
+  "name": "@polymer/apd",
+  "version": "1.0",
   "bugs": {
     "url": "https://github.com/unicef/etools-apd/issues"
   },
@@ -53,7 +53,38 @@
     "web-component-tester": "^6.9.0",
     "wct-headless": "^2.2.2",
     "wct-local": "^2.1.3",
-    "yargs": "^5.0.0"
+    "yargs": "^5.0.0",
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/paper-styles": "^3.0.0-pre.18",
+    "@polymer/paper-tooltip": "^3.0.0-pre.18",
+    "@polymer/iron-flex-layout": "^3.0.0-pre.18",
+    "@polymer/paper-button": "^3.0.0-pre.18",
+    "@polymer/app-route": "^3.0.0-pre.18",
+    "@polymer/app-layout": "^3.0.0-pre.18",
+    "@polymer/paper-icon-button": "^3.0.0-pre.18",
+    "@polymer/paper-material": "^3.0.0-pre.18",
+    "@polymer/iron-selector": "^3.0.0-pre.18",
+    "@polymer/iron-pages": "^3.0.0-pre.18",
+    "@polymer/iron-collapse": "^3.0.0-pre.18",
+    "@polymer/iron-icons": "^3.0.0-pre.18",
+    "@polymer/paper-dropdown-menu": "^3.0.0-pre.18",
+    "@polymer/paper-listbox": "^3.0.0-pre.18",
+    "@polymer/paper-item": "^3.0.0-pre.18",
+    "@polymer/iron-meta": "^3.0.0-pre.18",
+    "@polymer/neon-animation": "^3.0.0-pre.18",
+    "web-animations-js": "^2.3.1",
+    "@polymer/paper-card": "^3.0.0-pre.18",
+    "@polymer/paper-checkbox": "^3.0.0-pre.18",
+    "@polymer/paper-input": "^3.0.0-pre.18",
+    "@polymer/paper-toggle-button": "^3.0.0-pre.18",
+    "@webcomponents/webcomponentsjs": "^2.0.0"
   },
-  "scripts": {}
+  "scripts": {},
+  "resolutions": {
+    "inherits": "2.0.3",
+    "samsam": "1.1.3",
+    "supports-color": "3.1.2",
+    "type-detect": "1.0.0"
+  },
+  "license": "https://github.com/unicef-polymer/etools-frontend-template/blob/master/LICENSE.md"
 }

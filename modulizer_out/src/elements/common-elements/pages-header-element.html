@@ -1,0 +1,47 @@
+<!--import [polymer/polymer-element, iron-flex-layout/iron-flex-layout-classes, paper-button, paper-menu-button,
+            etools-ajax, paper-tooltip, paper-listbox, paper-item]-->
+<!--import [etools-app-config, shared-styles, module-styles]-->
+
+<dom-module id="pages-header-element">
+    <template>
+        <style include="iron-flex shared-styles module-styles"></style>
+        <!-- inject styles './pages-header-element.scss'-->
+
+        <div class="header-wrapper">
+            <div class="side-heading horizontal layout center around-justified">
+                <span class="flex title">[[_setTitle(pageData, pageTitle)]]</span>
+
+                <div class="horizontal layout center">
+                    <div class="export-buttons" hidden$="[[!exportLinks.length]]">
+                        <paper-menu-button id="dropdown" hidden$="[[!_isDropDown(exportLinks)]]" on-tap="_toggleOpened" horizontal-align="right">
+                            <paper-button slot="dropdown-trigger" class="grey-buttons">
+                                <iron-icon icon="file-download"></iron-icon>
+                                Export
+                            </paper-button>
+
+                            <paper-listbox id="dropdownMenu" slot="dropdown-content">
+                                <template is="dom-repeat" items="[[exportLinks]]">
+                                    <paper-item on-tap="exportData">[[item.name]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-menu-button>
+
+                        <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
+                            <iron-icon icon="file-download"></iron-icon>
+                            Export
+                        </paper-button>
+                    </div>
+
+                    <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
+                        <template is="dom-if" if="{{_showLink(link)}}"><a href$="{{link}}" class="btn-link"></a></template>
+                        <iron-icon icon="add"></iron-icon>
+                        <span>[[btnText]]</span>
+                    </paper-button>
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- inject scripts './pages-header-element.js'-->
+</dom-module>

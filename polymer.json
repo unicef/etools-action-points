@@ -1,9 +1,9 @@
 {
   "entrypoint": "index.html",
-  "shell": "elements/core-elements/app-shell-element/app-shell.html",
+  "shell": "elements/core-elements/app-shell-element/app-shell.js",
   "fragments": [
-    "elements/pages/action-points-page-components/action-points-page-main/action-points-page-main.html",
-    "elements/pages/not-found-page-view/not-found-page-view.html"
+    "elements/pages/action-points-page-components/action-points-page-main/action-points-page-main.js",
+    "elements/pages/not-found-page-view/not-found-page-view.js"
   ],
   "sources": [
     "images/**/*",

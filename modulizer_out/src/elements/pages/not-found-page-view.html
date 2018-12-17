@@ -1,0 +1,44 @@
+<!--import [polymer/polymer-element]-->
+<!--import [shared-styles, page-layout-styles, etools-app-config]-->
+
+<dom-module id="not-found-page-view">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            a.link {
+                color: #40c4ff;
+            }
+        </style>
+        <style include="page-layout-styles shared-styles"></style>
+
+        <div id="pageContent">
+            <paper-material elevation="1">
+                404 <a href$="[[getLink()]]" class="link">Head back home.</a>
+            </paper-material>
+        </div>
+    </template>
+
+    <script type="module">
+import { PolymerElement } from '../../../../build/bower_components/polymer/polymer-element.js';
+
+class NotFoundPageView extends APDMixins.AppConfig(PolymerElement) {
+    static get is() {return 'not-found-page-view';}
+
+    getLink() {
+        return this.getAbsolutePath('action-points');
+    }
+
+    openDrawer() {
+        this.dispatchEvent(new CustomEvent('drawer', {
+            bubbles: true,
+            composed: true
+        }));
+    }
+}
+
+customElements.define(NotFoundPageView.is, NotFoundPageView);
+</script>
+</dom-module>

@@ -1,0 +1,199 @@
+<!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, iron-flex-layout/iron-flex-layout-classes,
+            pages-header-element, search-and-filter, filters-element, etools-data-table, paper-card, iron-flex-layout,
+            static-data-mixin, action-points-data, iron-location, localization-mixin, date-mixin, input-attrs-mixin,
+            text-content, paper-tooltip]-->
+
+<dom-module id="action-points-list">
+    <template>
+        <!-- inject styles './action-points-list.scss'-->
+        <style include="module-styles shared-styles iron-flex iron-flex-factors data-table-styles"></style>
+        <iron-location path="{{path}}" query="{{query}}"></iron-location>
+        <iron-query-params
+                params-string="{{query}}"
+                params-object="{{queryParams}}">
+        </iron-query-params>
+        <app-route-converter
+                path="{{path}}"
+                query-params="{{queryParams}}"
+                route="{{route}}">
+        </app-route-converter>
+        <pages-header-element
+                hide-print-button
+                link="action-points/new"
+                show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
+                export-links="[[_setExportLinks()]]"
+                btn-text="Add Action Point"
+                page-title="Action Points">
+        </pages-header-element>
+        <action-points-data action-points="{{actionPoints}}"
+                            request-queries="{{queryParams}}"
+                            list-length="{{totalResults}}"></action-points-data>
+        <filters-element>
+            <search-and-filter id="filters"
+                               filters="[[filters]]"
+                               query-params="{{queryParams}}"
+                               search-params="[[searchParams]]">
+            </search-and-filter>
+            <div class="show-completed-toggle">
+                <span>Show Completed</span>
+                <paper-toggle-button checked="{{isShowCompleted}}"></paper-toggle-button>
+            </div>
+        </filters-element>
+        <paper-card>
+            <etools-data-table-header id="listHeader"
+                                      no-collapse="[[!actionPoints.length]]"
+                                      label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
+                <etools-data-table-column class="flex-1" field="reference_number" sortable>
+                    [[getLabel('reference_number', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
+                    [[getLabel('cp_output', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-2" field="partner__name" sortable>
+                    [[getLabel('partner', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-2" field="office__name" sortable>
+                    [[getLabel('office', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-2" field="section__name" sortable>
+                    [[getLabel('section', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
+                    [[getLabel('assigned_to', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-1" field="due_date" sortable>
+                    [[getLabel('due_date', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-1" field="status" sortable>
+                    [[getLabel('status', basePermissionPath)]]
+                </etools-data-table-column>
+                <etools-data-table-column class="flex-1" field="high_priority" sortable>
+                    Priority
+                </etools-data-table-column>
+            </etools-data-table-header>
+
+            <template is="dom-if" if="[[!actionPoints.length]]">
+                <etools-data-table-row no-collapse>
+                    <div slot="row-data" class="layout horizontal">
+                        <div  class="col-data flex-1 truncate">-</div>
+                        <div class="col-data flex-2 truncate">-</div>
+                        <div class="col-data flex-2 truncate">-</div>
+                        <div class="col-data flex-2 truncate">-</div>
+                        <div class="col-data flex-2 truncate">-</div>
+                        <div class="col-data flex-2 truncate">-</div>
+                        <div class="col-data flex-1 truncate">-</div>
+                        <div class="col-data flex-1 truncate">-</div>
+                        <div class="col-data flex-1 truncate"></div>
+                    </div>
+                </etools-data-table-row>
+            </template>
+
+            <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
+                <etools-data-table-row>
+                    <div slot="row-data" class="layout horizontal">
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
+                                <paper-tooltip offset="0">[[getStringValue(entry.reference_number)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.cp_output.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.cp_output.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.partner.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.partner.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.office.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.office.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.section.name)]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.section.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-2 truncate">
+                            <div class="tooltip-container">
+                                <span>[[getStringValue(entry.assigned_to.name)]]</span>
+                                <paper-tooltip offset="0">[[getStringValue(entry.assigned_to.name)]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                [[prettyDate(entry.due_date, null, '-')]]
+                                <paper-tooltip offset="0">[[prettyDate(entry.due_date, null, '-')]]</paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                [[getStringValue(entry.status, statuses, 'display_name')]]
+                                <paper-tooltip offset="0">[[getStringValue(entry.status, statuses, 'display_name')]]
+                                </paper-tooltip>
+                            </div>
+                        </div>
+                        <div class="col-data flex-1 truncate">
+                            <div class="tooltip-container">
+                                [[_getPriorityValue(entry.high_priority)]]
+                                <paper-tooltip offset="0">[[_getPriorityValue(entry.high_priority)]]
+                                </paper-tooltip>
+                            </div>
+                        </div>
+                    </div>
+                    <div slot="row-data-details" class="layout horizontal">
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('description', basePermissionPath)]]</div>
+                            <text-content rows="3" text="[[getStringValue(entry.description)]]"></text-content>
+                            <paper-tooltip offset="0">[[getStringValue(entry.description)]]</paper-tooltip>
+                        </div>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.intervention.number)]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.intervention.number)]]</paper-tooltip>
+                        </div>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('location', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.location.name)]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.location.name)]]</paper-tooltip>
+                        </div>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.related_module, modules, 'display_name')]]</paper-tooltip>
+                        </div>
+                        <div class="row-details-content layout vertical flex">
+                            <div class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</div>
+                            <div class="truncate">[[getStringValue(entry.assigned_by.name)]]</div>
+                            <paper-tooltip offset="0">[[getStringValue(entry.assigned_by.name)]]</paper-tooltip>
+                        </div>
+                        <div class="row-details-content layout vertical flex">
+                            <template is="dom-if" if="[[entry.date_of_completion.length]]">
+                                <div class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</div>
+                                <div class="truncate">[[prettyDate(entry.date_of_completion)]]</div>
+                                <paper-tooltip offset="0">[[prettyDate(entry.date_of_completion)]]</paper-tooltip>
+                            </template>
+                        </div>
+                    </div>
+                </etools-data-table-row>
+            </template>
+
+            <etools-data-table-footer
+                    page-size="{{pageSize}}"
+                    page-number="{{pageNumber}}"
+                    total-results="[[totalResults]]"
+                    visible-range="{{visibleRange}}"
+                    on-page-size-changed="_pageSizeSelected"
+                    on-page-number-changed="_pageNumberChanged">
+            </etools-data-table-footer>
+        </paper-card>
+    </template>
+    <!-- inject scripts './action-points-list.js' -->
+</dom-module>
