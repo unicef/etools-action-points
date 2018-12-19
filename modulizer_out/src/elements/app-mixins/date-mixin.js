@@ -1,7 +1,5 @@
-<!--import [polymer, lodash]-->
-
-<script type="module">
-import { dom } from '../../../build/bower_components/polymer/lib/legacy/polymer.dom.js';
+import '../common-elements/lodash';
+import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
 
 window.APDMixins = window.APDMixins || {};
 /**
@@ -74,4 +72,3 @@ window.APDMixins.DateMixin = superClass => class extends superClass {
         return date.toString() !== 'Invalid Date' ? moment(date) : '';
     }
 };
-</script>
