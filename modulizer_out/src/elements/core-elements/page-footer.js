@@ -1,13 +1,10 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js'
-import '@polymer/iron-flex-layout'
-import 'etools-app-config.js'
-
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout';
+import 'etools-app-config.js';
 /**
  * @polymer
  * @customElement
- * @extends PolymerElement
  */
-
 class PageFooter extends PolymerElement {
   static get template() {
     return html`

@@ -4,7 +4,8 @@
     "url": "git@github.com:unicef/etools-apd"
   },
   "name": "@polymer/apd",
-  "version": "1.0",
+  "version": "3.0.0",
+  "description": "Action Points Dashboard for UNICEF eTools",
   "bugs": {
     "url": "https://github.com/unicef/etools-apd/issues"
   },
@@ -22,6 +23,8 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-html": "^4.0.3",
+    "etools-data-table": "git+https://github.com/unicef-polymer/etools-data-table.git#upgrade-to-polymer3",
+    "etools-dialog": "git+https://github.com/unicef-polymer/etools-dialog.git#upgrade-to-polymer3",
     "express": "^4.15.3",
     "gulp": "gulpjs/gulp",
     "gulp-babel": "^7.0.1",
@@ -54,7 +57,7 @@
     "wct-headless": "^2.2.2",
     "wct-local": "^2.1.3",
     "yargs": "^5.0.0",
-    "@polymer/polymer": "^3.0.0",
+    "@polymer/polymer": "^3.0.5",
     "@polymer/paper-styles": "^3.0.0-pre.18",
     "@polymer/paper-tooltip": "^3.0.0-pre.18",
     "@polymer/iron-flex-layout": "^3.0.0-pre.18",
