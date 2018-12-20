@@ -1,9 +1,9 @@
-import { PolymerElement, html } from "@polymer/polymer/polymer-element";
-import "@polymer/iron-pages";
-import "action-points-list.js";
-import "action-points-item.js";
-import "action-points-new.js";
-import "../../common-elements/lodash.js";
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@polymer/iron-pages';
+import 'action-points-list';
+import 'action-points-item';
+import 'action-points-new';
+import '../../common-elements/lodash';
 /**
  * @polymer
  * @customElement
@@ -34,14 +34,14 @@ class ActionPointsPageMain extends PolymerElement {
   }
 
   static get observers() {
-    return ["_setRoutePath(route.path)"];
+    return ['_setRoutePath(route.path)'];
   }
 
   _setRoutePath(path) {
     if (!path.match(/[^\\/]/g)) {
-      this.set("route.path", "/list");
+      this.set('route.path', '/list');
     }
   }
 }
 
-window.customElements.define("action-points-page-main", ActionPointsPageMain);
+window.customElements.define('action-points-page-main', ActionPointsPageMain);
