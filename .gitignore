@@ -1,7 +1,7 @@
 node_modules/
 bower_components/
 build/
-src/bower_components/
+old/
 dist/
 .tmp
 .idea
