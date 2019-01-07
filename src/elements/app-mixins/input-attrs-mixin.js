@@ -1,4 +1,4 @@
-// import '../common-elements/lodash';
+import '../common-elements/lodash';
 import './permission-controller';
 
 window.APDMixins = window.APDMixins || {};

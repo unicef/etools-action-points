@@ -3,7 +3,7 @@ import '@polymer/iron-pages/iron-pages';
 import './action-points-list';
 import './action-points-item';
 import './action-points-new';
-// import '../../common-elements/lodash';
+import '../../common-elements/lodash';
 /**
 * @polymer
 * @extends HTMLElement

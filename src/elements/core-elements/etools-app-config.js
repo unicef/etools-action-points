@@ -1,6 +1,7 @@
 import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
 // import 'etools-dexiejs.html'
-// import '../common-elements/lodash';
+import Dexie from 'dexie'
+import '../common-elements/lodash';
 
 window.APDMixins = window.APDMixins || {};
 /**

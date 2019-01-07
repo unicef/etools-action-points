@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-collapse/iron-collapse';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
@@ -11,8 +12,8 @@ import {moduleStyles} from '../styles-elements/module-styles.js';
 class SideBarItem extends PolymerElement {
   static get template() {
     return html`
+      ${moduleStyles}
       <style>
-        ${moduleStyles}
         :host {
           display: block;
           font-size: 14px;

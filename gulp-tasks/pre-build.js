@@ -10,7 +10,7 @@ const sass = require('gulp-sass');
 function preBuild(done) {
     return gulp.src(['./src/elements/**/*.html'])
         .pipe(polytempl([{
-            path: `${process.cwd()}/bower_components/`, new_base: `${process.cwd()}/src/bower_components/`
+            path: `${process.cwd()}/node_modules/`, new_base: `${process.cwd()}/src/node_modules/`
         }]))
         .pipe(gulpif(
             function(file) {

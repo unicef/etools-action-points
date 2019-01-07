@@ -25,15 +25,6 @@ jobs:
           key: cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - restore_cache:
-          key: cache-{{ checksum "bower.json" }}
-      - run:
-          name: Install bower components
-          command: ./node_modules/.bin/bower install --allow-root --config.interactive=false
-      - save_cache:
-          key: cache-{{ checksum "bower.json" }}
-          paths:
-            - bower_components
       - run:
           name: Run Tests
           command: ./node_modules/.bin/gulp test --pc

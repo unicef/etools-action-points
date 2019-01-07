@@ -1,6 +1,8 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import 'etools-ajax/etools-ajax';
-// import '../common-elements/lodash';
+import {EtoolsAjaxRequestMixin} from 'etools-ajax/etools-ajax-request-mixin';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory'
+import '../common-elements/lodash';
 import '../app-mixins/static-data-mixin';
 import '../app-mixins/error-handler-mixin';
 import '../app-mixins/permission-controller';

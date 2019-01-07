@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/av-icons';
 import '@polymer/iron-flex-layout/iron-flex-layout';
@@ -14,8 +15,8 @@ class StatusElement extends EtoolsMixinFactory.combineMixins([
   APDMixins.StaticDataMixin], PolymerElement) {
   static get template() {
       return html`
+        ${moduleStyles}
         <style>
-          ${moduleStyles}
           :host {
             display: block;
         

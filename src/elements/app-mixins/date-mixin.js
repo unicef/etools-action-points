@@ -1,4 +1,4 @@
-// import '../common-elements/lodash';
+import '../common-elements/lodash';
 import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
 
 window.APDMixins = window.APDMixins || {};

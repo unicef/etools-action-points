@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
@@ -29,9 +30,9 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html`
+      ${moduleStyles}
+      ${sharedStyles}
       <style include="iron-flex-factors">
-        ${moduleStyles}
-        ${sharedStyles}
         :host {
           position: relative;
           display: block;

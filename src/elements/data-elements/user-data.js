@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import 'etools-ajax/etools-ajax';
-// import '../common-elements/lodash';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import '../common-elements/lodash';
 import '../app-mixins/permission-controller';
 import '../app-mixins/user-controller';
 

@@ -16,11 +16,10 @@ class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html`
-      <style>
-        ${pageLayoutStyles}
-        ${sharedStyles}
-        ${mainPageStyles}
-      </style>
+      ${pageLayoutStyles}
+      ${sharedStyles}
+      ${mainPageStyles}
+      
       <pages-header-element page-title="Add New Action Point"></pages-header-element>
 
       <div class="view-container">

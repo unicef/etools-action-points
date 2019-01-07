@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
@@ -23,10 +24,10 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html`
+      ${sharedStyles}
+      ${moduleStyles}
+      ${tabInputsStyles}
       <style include="iron-flex">
-        ${sharedStyles}
-        ${moduleStyles}
-        ${tabInputsStyles}
         :host {
           @apply --layout-horizontal;
           @apply --layout-center;

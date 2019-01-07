@@ -23,11 +23,11 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html`
+      ${pageLayoutStyles}
+      ${sharedStyles}
+      ${mainPageStyles}
+      ${moduleStyles}
       <style include="iron-flex">
-        ${pageLayoutStyles}
-        ${sharedStyles}
-        ${mainPageStyles}
-        ${moduleStyles}
         #pageContent>* {
           display: block;
           margin-bottom: 25px;

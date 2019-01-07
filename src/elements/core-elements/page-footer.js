@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import './etools-app-config';
 /**
@@ -53,7 +54,7 @@ class PageFooter extends PolymerElement {
       <footer>
         <div id="footer-content">
           <span id="unicef-logo">
-            <img src$="[[rootPath]]../../../../../../apd/images/UNICEF_logo.png" alt="UNICEF logo">
+            <img src$="[[rootPath]]../../../../../../images/UNICEF_logo.png" alt="UNICEF logo">
           </span>
         </div>
       </footer>

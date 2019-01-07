@@ -7,7 +7,7 @@ const polymerBuild = require('polymer-build');
 // Here we add tools that will be used to process our source files.
 // const imagemin = require('gulp-imagemin');
 const babel = require('gulp-babel');
-const uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify-es').default;
 const cssSlam = require('css-slam').gulp;
 const htmlMinifier = require('gulp-html-minifier');
 

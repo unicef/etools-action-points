@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout';
@@ -17,8 +18,8 @@ import {sharedStyles} from '../../styles-elements/shared-styles';
 class AppMainHeader extends APDMixins.AppConfig(PolymerElement) {
   static get template() {
     return html`
+      ${sharedStyles}
       <style>
-        ${sharedStyles}
         app-toolbar {
           background-color: var(--header-bg-color, #233944);
           padding: 0 8px 0 0;
@@ -86,7 +87,7 @@ class AppMainHeader extends APDMixins.AppConfig(PolymerElement) {
           <div class="titlebar content-align">
             <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
 
-            <img src$="[[getAbsolutePath('images/etools_logo.svg')]]">
+            <img src$="images/etools_logo.svg">
             <dom-if id="envWarningIf">
               <template>
                 <div class="envWarning">- STAGING TESTING ENVIRONMENT</div>

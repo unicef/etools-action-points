@@ -14,9 +14,9 @@ class PagesHeaderElement extends APDMixins.AppConfig(PolymerElement) {
 
   static get template() {
     return html`
+      ${sharedStyles}
+      ${moduleStyles}
       <style include="iron-flex">
-        ${sharedStyles}
-        ${moduleStyles}
         :host {
           position: relative;
           display: block;

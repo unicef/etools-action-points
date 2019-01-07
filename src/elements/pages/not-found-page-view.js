@@ -6,9 +6,9 @@ import {pageLayoutStyles} from '../styles-elements/page-layout-styles';
 class NotFoundPageView extends APDMixins.AppConfig(PolymerElement) {
   static get template() {
     return html`
+      ${sharedStyles}
+      ${pageLayoutStyles}
       <style>
-        ${sharedStyles}
-        ${pageLayoutStyles}
         :host {
           display: block;
         }

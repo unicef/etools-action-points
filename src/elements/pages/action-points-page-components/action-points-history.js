@@ -9,8 +9,8 @@ class ActionPointsHistory extends EtoolsMixinFactory.combineMixins([
 ], PolymerElement) {
   static get template() {
     return html`
+      ${moduleStyles}
       <style include="iron-flex">
-        ${moduleStyles}
         etools-data-table-header {
           --header-columns: {
             margin-left: 0;

@@ -1,6 +1,7 @@
 // This file will be dedicated to page layout and related layout elements
 
 import {html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 
 export const pageLayoutStyles = html`

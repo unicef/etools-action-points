@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
@@ -7,7 +8,7 @@ import 'etools-content-panel';
 import 'etools-ajax/etools-ajax';
 import 'etools-loading';
 // import 'etools-datepicker/etools-datepicker-button';
-// import '../../common-elements/lodash';
+import '../../common-elements/lodash';
 import '../../app-mixins/localization-mixin';
 import '../../app-mixins/textarea-max-rows-mixin';
 import '../../app-mixins/input-attrs-mixin';
@@ -31,11 +32,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html`
+      ${pageLayoutStyles}
+      ${sharedStyles}
+      ${tabInputsStyles}
+      ${moduleStyles}
       <style>
-        ${pageLayoutStyles}
-        ${sharedStyles}
-        ${tabInputsStyles}
-        ${moduleStyles}
         .loading {
           position: absolute;
           top: 28px;

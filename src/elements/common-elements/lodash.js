@@ -1,4 +1,4 @@
-// ximport '../../../node_modules/lodash/lodash';
+import '../../../node_modules/lodash/lodash';
 
 export default _.mixin({
   isJSONObj: (str) => {

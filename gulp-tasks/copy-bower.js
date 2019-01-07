@@ -2,15 +2,20 @@
 var gulp = require('gulp');
 
 function copyBowerComponents() {
-    return gulp.src(['./bower_components/**/*'], {since: gulp.lastRun(copyBowerComponents)})
-        .pipe(gulp.dest('./build/bower_components/'));
+  console.log('hi');
+  return gulp.src(['./node_modules/**/*'], {
+      since: gulp.lastRun(copyBowerComponents)
+    })
+    .pipe(gulp.dest('./build/node_modules/'));
 }
 
 function copyBowerToSrc() {
-    return gulp.src(['./bower_components/**/*'], {since: gulp.lastRun(copyBowerToSrc)})
-        .pipe(gulp.dest('./src/bower_components/'));
+  return gulp.src(['./node_modules/**/*'], {
+      since: gulp.lastRun(copyBowerToSrc)
+    })
+    .pipe(gulp.dest('./src/node_modules/'));
 }
 
 module.exports = function copyBower(toSrc) {
-    return toSrc ? copyBowerToSrc : copyBowerComponents;
+  return toSrc ? copyBowerToSrc : copyBowerComponents;
 };

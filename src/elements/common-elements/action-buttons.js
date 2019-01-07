@@ -1,5 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-// import '../common-elements/lodash';
+import '../common-elements/lodash';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-icon-button/paper-icon-button';
@@ -12,8 +12,8 @@ import {moduleStyles} from '../styles-elements/module-styles';
 class ActionButtons extends PolymerElement {
   static get template() {
     return html`
+      ${moduleStyles}
       <style>
-        ${moduleStyles}
         :host {
           position: relative;
           display: block;

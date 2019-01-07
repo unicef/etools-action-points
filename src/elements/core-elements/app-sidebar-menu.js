@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
@@ -13,8 +14,8 @@ import {moduleStyles} from '../styles-elements/module-styles.js';
 class AppSidebarMenu extends APDMixins.AppConfig(PolymerElement) {
   static get template() {
     return html`
+      ${moduleStyles}
       <style>
-        ${moduleStyles}
         :host {
           @apply --layout-vertical;
         

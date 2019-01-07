@@ -1,4 +1,4 @@
-// import '../common-elements/lodash';
+import '../common-elements/lodash';
 
 window.APDMixins = window.APDMixins || {};
 /*

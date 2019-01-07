@@ -1,16 +1,14 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
-// import 'etools-page-refresh/etools-refresh-behavior';
+import * as EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
 import '@polymer/paper-item/paper-item';
 import 'etools-ajax/etools-ajax';
 import '../etools-app-config';
-/**
- * @polymer
- * @customElement
- */
-class CountriesDropdown extends Polymer.mixinBehaviors(
-  [etoolsBehaviors.EtoolsRefreshBehavior],
+
+class CountriesDropdown extends mixinBehaviors(
+  [EtoolsPageRefreshMixin],
   APDMixins.AppConfig(PolymerElement)
 ) {
 
@@ -110,14 +108,15 @@ class CountriesDropdown extends Polymer.mixinBehaviors(
         }
 
         paper-listbox.no-focus {
-          --paper-menu-focused-item-after: #{'{
+          --paper-menu-focused-item-after: {
           background: var(--primary-background-color);
           opacity: 0;
         }
+      }
 
 
         paper-item {
-          --paper-item-focused-before: #{'{
+          --paper-item-focused-before: {
               background: var(--primary-background-color);
               opacity: 0;
             }
@@ -126,7 +125,7 @@ class CountriesDropdown extends Polymer.mixinBehaviors(
           paper-item:hover {
             background: #EEEEEE;
           }
-        }
+
       </style>
 
       <etools-ajax method="POST" url="{{url}}" body="{{countryData}}"
@@ -254,4 +253,4 @@ class CountriesDropdown extends Polymer.mixinBehaviors(
   }
 }
 
-window.customElements.define(CountriesDropdown.is, CountriesDropdown);
+window.customElements.define('countries-dropdown', CountriesDropdown);

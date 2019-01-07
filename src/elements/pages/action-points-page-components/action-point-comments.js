@@ -24,9 +24,9 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html`
+      ${tabInputsStyles}
+      ${moduleStyles}
       <style>
-        ${tabInputsStyles}
-        ${moduleStyles}
         .comments-list {
           padding: 8px 12px;
         }
