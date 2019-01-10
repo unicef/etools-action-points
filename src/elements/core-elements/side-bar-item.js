@@ -85,7 +85,7 @@ class SideBarItem extends PolymerElement {
           color: var(--dark-secondary-text-color);
         }
 
-        .content-wrapper ::content a {
+        .content-wrapper ::slotted a {
           display: block;
           white-space: nowrap;
           padding: 8px 24px 8px 72px;

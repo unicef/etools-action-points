@@ -1,9 +1,10 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/app-shell.js",
+  "shell": "./src/app-shell.js",
   "sources": [
     "images/**/*",
-    "src/**/*"
+    "src/**/*",
+    "elements/**/*"
   ],
   "fragments": [
     "src/elements/pages/**"
@@ -11,7 +12,7 @@
   "extraDependencies": [
     "manifest.json",
     "node_modules/@webcomponents/webcomponentsjs/**",
-    "push-manifest.json"
+    "node_modules/web-animations-js/*.js"
   ],
   "lint": {
     "rules": ["polymer-3"]
@@ -21,7 +22,8 @@
       "name": "esm-bundled",
       "browserCapabilities": [
         "es2015",
-        "modules"
+        "modules",
+        "serviceworker"
       ],
       "js": {
         "minify": true
@@ -32,16 +34,17 @@
       "html": {
         "minify": true
       },
-      "bundle": true,
+      "bundle": false,
       "addServiceWorker": true
     },
     {
       "name": "es6-bundled",
+      "preset": "es6-bundled",
       "browserCapabilities": [
         "es2015"
       ],
       "js": {
-        "compile": "es2015",
+        "compile": true,
         "minify": true,
         "transformModulesToAmd": true
       },
@@ -51,13 +54,14 @@
       "html": {
         "minify": true
       },
-      "bundle": true,
+      "bundle": false,
       "addServiceWorker": true
     },
     {
       "name": "es5-bundled",
+      "preset": "es5-bundled",
       "js": {
-        "compile": "es5",
+        "compile": true,
         "minify": true,
         "transformModulesToAmd": true
       },
@@ -67,7 +71,7 @@
       "html": {
         "minify": true
       },
-      "bundle": true,
+      "bundle": false,
       "addServiceWorker": true
     }
   ],

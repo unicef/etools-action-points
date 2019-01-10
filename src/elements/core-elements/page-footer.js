@@ -19,12 +19,12 @@ class PageFooter extends PolymerElement {
         }
 
         #footer-content {
-          @apply(--layout-horizontal);
+          @apply --layout-horizontal;
         }
 
         #unicef-logo {
-          @apply(--layout-horizontal);
-          @apply(--layout-inline);
+          @apply --layout-horizontal;
+          @apply --layout-inline;
 
           padding-right: 30px;
         }
@@ -54,7 +54,7 @@ class PageFooter extends PolymerElement {
       <footer>
         <div id="footer-content">
           <span id="unicef-logo">
-            <img src$="[[rootPath]]../../../../../../images/UNICEF_logo.png" alt="UNICEF logo">
+            <img src$="[[rootPath]]../../../../../../apd/images/UNICEF_logo.png" alt="UNICEF logo">
           </span>
         </div>
       </footer>

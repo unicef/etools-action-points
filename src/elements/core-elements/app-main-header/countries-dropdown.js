@@ -2,7 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
-import * as EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
+import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
 import '@polymer/paper-item/paper-item';
 import 'etools-ajax/etools-ajax';
 import '../etools-app-config';
