@@ -12,9 +12,9 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import 'etools-loading/etools-loading';
-import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
+import {EtoolsLoadingMixin} from 'etools-loading/etools-loading-mixin';
 import './elements/core-elements/app-main-header/app-main-header.js';
 import './elements/core-elements/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list.js';
@@ -28,12 +28,12 @@ import './elements/core-elements/page-footer';
 import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js';
 import {sharedStyles} from './elements/styles-elements/shared-styles.js';
 import {appTheme} from './elements/styles-elements/app-theme.js';
-import 'web-animations-js/web-animations-next-lite.min.js';
+// import 'web-animations-js/web-animations.min.js';
 
 class AppShell extends EtoolsMixinFactory.combineMixins([
   APDMixins.AppConfig,
   APDMixins.UserController,
-  LoadingMixin
+  EtoolsLoadingMixin
 ], PolymerElement) {
 
   static get template() {
@@ -304,7 +304,6 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
   }
 
   handleLoading(event) {
-    return
     if (!event.detail || !event.detail.type) {
       console.error('Bad details object', JSON.stringify(event.detail));
       return;

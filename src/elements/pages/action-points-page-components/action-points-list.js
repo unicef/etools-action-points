@@ -5,7 +5,7 @@ import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import '@polymer/iron-location/iron-location';
 import '@polymer/paper-tooltip/paper-tooltip';
-import 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';

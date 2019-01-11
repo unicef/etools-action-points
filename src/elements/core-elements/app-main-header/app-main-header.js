@@ -4,7 +4,7 @@ import '@polymer/app-layout/app-toolbar/app-toolbar';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import 'etools-behaviors/etools-page-refresh-mixin';
-import 'etools-profile-dropdown/etools-profile-dropdown';
+// import 'etools-profile-dropdown/etools-profile-dropdown';
 import '../etools-app-config';
 import 'etools-app-selector';
 import './countries-dropdown';
@@ -101,7 +101,7 @@ class AppMainHeader extends APDMixins.AppConfig(PolymerElement) {
                     country-id="[[user.profile.country]]">
             </countries-dropdown>
 
-            <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
+            // <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
 
             <etools-page-refresh id="refresh"></etools-page-refresh>
           </div>
