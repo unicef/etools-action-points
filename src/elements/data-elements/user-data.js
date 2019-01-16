@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import 'etools-ajax/etools-ajax';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+// import 'etools-ajax/etools-ajax';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import '../common-elements/lodash';
 import '../app-mixins/permission-controller';
 import '../app-mixins/user-controller';
@@ -8,27 +9,37 @@ import '../app-mixins/user-controller';
 class UserData extends EtoolsMixinFactory.combineMixins([
   APDMixins.AppConfig,
   APDMixins.PermissionController,
-  APDMixins.UserController
+  APDMixins.UserController,
+  EtoolsAjaxRequestMixin
 ], PolymerElement) {
 
-  static get template() {
-    return html`
-      <etools-ajax
-        endpoint="[[endpoint]]"
-        caching-storage="custom"
-        dexie-db-collection="profile"
-        on-success="_handleResponse"
-        on-forbidden="_forbidden"
-        on-fail="_handleError">
-      </etools-ajax>
-    `;
-  }
+  // static get template() {
+  //   return html`
+  //     <etools-ajax
+  //       endpoint="[[endpoint]]"
+  //       caching-storage="custom"
+  //       dexie-db-collection="profile"
+  //       on-success="_handleResponse"
+  //       on-forbidden="_forbidden"
+  //       on-fail="_handleError">
+  //     </etools-ajax>
+  //   `;
+  // }
 
   static get properties() {return {};}
 
   ready() {
+    debugger
     super.ready();
-    this.endpoint = this.getEndpoint('userProfile');
+    let endpoint = this.getEndpoint('userProfile');
+    this.sendRequest({
+      method: 'GET',
+      endpoint: endpoint,
+      dataType: 'jsonp'
+    }).then(
+        resp => this._handleResponse(resp)
+      ).catch(
+        resp => this._handleError(resp))
   }
 
   _handleResponse(data) {

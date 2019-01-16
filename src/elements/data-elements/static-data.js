@@ -1,7 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import 'etools-ajax/etools-ajax';
-import {EtoolsAjaxRequestMixin} from 'etools-ajax/etools-ajax-request-mixin';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+// import 'etools-ajax/etools-ajax';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import '../common-elements/lodash';
 import '../app-mixins/static-data-mixin';
 import '../app-mixins/error-handler-mixin';
@@ -9,6 +9,7 @@ import '../app-mixins/permission-controller';
 import '../app-mixins/user-controller';
 import './user-data';
 import '../core-elements/etools-app-config';
+import { log } from 'util';
 /**
  * @polymer
  * @customElement
@@ -33,6 +34,7 @@ class StaticData extends EtoolsMixinFactory.combineMixins([
   }
 
   ready() {
+    debugger
     super.ready();
     this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
         this.loadStaticData();
@@ -60,9 +62,11 @@ class StaticData extends EtoolsMixinFactory.combineMixins([
   }
 
   _loadAPOptions() {
+    debugger
     let endpoint = this.getEndpoint('actionPointsList');
-    this.sendRequest({method: 'OPTIONS', endpoint})
-      .then((data) => {
+    this.sendRequest({method: 'GET', endpoint: endpoint, dataType: 'json'})
+      .then(data => {
+        console.log(data)
         let actions = data && data.actions;
         if (!this.isValidCollection(actions)) {
           this._responseError('partners options');
@@ -87,7 +91,7 @@ class StaticData extends EtoolsMixinFactory.combineMixins([
   _loadPartners() {
     let endpoint = this.getEndpoint('partnerOrganisations');
     this.sendRequest({method: 'GET', endpoint})
-      .then((data) => {
+      .then(data => {
         let partnerOrganisations = _.sortBy(data, ['name']);
         this._setData('partnerOrganisations', partnerOrganisations);
         this.dataLoaded.organizations = true;

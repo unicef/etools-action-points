@@ -1,6 +1,8 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import 'etools-ajax/etools-ajax';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
@@ -330,4 +332,4 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
 
 }
 
-customElements.define(ActionPointsItem.is, ActionPointsItem);
+customElements.define('action-points-item', ActionPointsItem);

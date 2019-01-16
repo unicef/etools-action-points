@@ -1,9 +1,12 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {timeOut} from '@polymer/polymer/lib/utils/async';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import 'etools-dropdown/';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
@@ -243,8 +246,8 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
     if (!this.searchString) {
       return;
     }
-    this._debounceSearch = Polymer.Debouncer.debounce(
-      this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
+    this._debounceSearch = Debouncer.debounce(
+      this._debounceSearch, timeOut.after(300), () => {
         if (this.searchString.length !== 1) {
           let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
           this.updateQueries({
@@ -306,8 +309,8 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
 
   _restoreFilters() {
     this.restoreInProcess = true;
-    this._debounceFilters = Polymer.Debouncer.debounce(this._debounceFilters,
-      Polymer.Async.timeOut.after(50),
+    this._debounceFilters = Debouncer.debounce(this._debounceFilters,
+      timeOut.after(50),
       () => {
         let queryParams = this.queryParams;
 

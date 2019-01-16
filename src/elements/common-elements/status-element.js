@@ -4,6 +4,7 @@ import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/av-icons';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-button/paper-button';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import 'etools-content-panel';
 import '../app-mixins/static-data-mixin';
 import '../app-mixins/permission-controller';

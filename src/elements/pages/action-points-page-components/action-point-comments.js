@@ -1,6 +1,8 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-content-panel';
 import 'etools-data-table';
 import 'etools-dialog';
@@ -203,4 +205,4 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
   }
 }
 
-customElements.define(ActionPointComments.is, ActionPointComments);
+customElements.define('action-point-comments', ActionPointComments);

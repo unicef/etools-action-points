@@ -1,5 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import 'etools-data-table';
 
@@ -55,4 +56,4 @@ class ActionPointsHistory extends EtoolsMixinFactory.combineMixins([
     };
   }
 }
-customElements.define(ActionPointsHistory.is, ActionPointsHistory);
+customElements.define('action-points-history', ActionPointsHistory);

@@ -12,9 +12,10 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import 'etools-loading/etools-loading';
-import {EtoolsLoadingMixin} from 'etools-loading/etools-loading-mixin';
+import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
+import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header.js';
 import './elements/core-elements/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list.js';
@@ -33,7 +34,7 @@ import {appTheme} from './elements/styles-elements/app-theme.js';
 class AppShell extends EtoolsMixinFactory.combineMixins([
   APDMixins.AppConfig,
   APDMixins.UserController,
-  EtoolsLoadingMixin
+  LoadingMixin
 ], PolymerElement) {
 
   static get template() {
@@ -318,7 +319,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
       loadingElement.active = true;
     } else {
       loadingElement.active = false;
-      this.globalLoadingQueue = this.globalLoadingQueue.filter((element) => {
+      this.globalLoadingQueue = this.globalLoadingQueue.filter(element => {
         return element.detail.type !== event.detail.type;
       });
       if (this.globalLoadingQueue.length) {

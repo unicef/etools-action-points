@@ -1,9 +1,11 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import 'etools-ajax/etools-ajax';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import '../../app-mixins/error-handler-mixin';
 import './action-point-details';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
