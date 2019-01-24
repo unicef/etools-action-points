@@ -20,7 +20,7 @@
     "etools-ajax": "^3.0.0",
     "etools-loading": "^3.0.0",
     "etools-page-refresh": "^1.1.2",
-    "etools-app-selector": "2.1.8",
+    "etools-app-selector": "2.1.9",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.1.0",
     "paper-listbox": "PolymerElements/paper-listbox#^2.1.1",
     "paper-item": "PolymerElements/paper-item#^2.1.1",
