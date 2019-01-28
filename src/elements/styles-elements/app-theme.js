@@ -1,8 +1,8 @@
 // This file will be dedicated to theming variables used throughout the app
 
-import {html} from '@polymer/polymer/polymer-element';
-import '@polymer/paper-styles/typography';
-import '@polymer/paper-styles/color';
+import {html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-styles/typography.js';
+import '@polymer/paper-styles/color.js';
 
 export const appTheme = html`
   <style>

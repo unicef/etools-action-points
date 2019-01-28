@@ -38,6 +38,9 @@ class ActionPointsPageMain extends PolymerElement {
   }
 
   _setRoutePath(path) {
+    // if (!path) {
+    //   return
+    // }
     if (!path.match(/[^\\/]/g)) {
       this.set('route.path', '/list');
     }

@@ -1,6 +1,6 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import 'etools-ajax/etools-ajax';
-import '../core-elements/etools-app-config';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import 'etools-ajax/etools-ajax.js';
+import '../core-elements/etools-app-config.js';
 
 class ActionPointsData extends APDMixins.AppConfig(APDMixins.QueryParamsMixin(PolymerElement)) {
   static get template() {

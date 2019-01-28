@@ -1,5 +1,5 @@
-import {html} from '@polymer/polymer/polymer-element';
-import {moduleStyles} from './module-styles';
+import {html} from '@polymer/polymer/polymer-element.js';
+import {moduleStyles} from './module-styles.js';
 
 export const mainPageStyles = html`
   ${moduleStyles}

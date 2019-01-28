@@ -1,7 +1,7 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '../core-elements/etools-app-config';
-import {sharedStyles} from '../styles-elements/shared-styles';
-import {pageLayoutStyles} from '../styles-elements/page-layout-styles';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '../core-elements/etools-app-config.js';
+import {sharedStyles} from '../styles-elements/shared-styles.js';
+import {pageLayoutStyles} from '../styles-elements/page-layout-styles.js';
 
 class NotFoundPageView extends APDMixins.AppConfig(PolymerElement) {
   static get template() {

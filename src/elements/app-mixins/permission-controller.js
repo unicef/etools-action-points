@@ -1,4 +1,4 @@
-import '../common-elements/lodash';
+import '../common-elements/lodash.js';
 
 let _permissionCollection = {};
 

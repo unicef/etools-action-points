@@ -1,5 +1,5 @@
-import '../common-elements/lodash';
-import './permission-controller';
+import '../common-elements/lodash.js';
+import './permission-controller.js';
 
 window.APDMixins = window.APDMixins || {};
 /**

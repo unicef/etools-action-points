@@ -1,4 +1,4 @@
-import './permission-controller';
+import './permission-controller.js';
 
 window.APDMixins = window.APDMixins || {};
 /**

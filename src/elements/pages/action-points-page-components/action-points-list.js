@@ -32,84 +32,86 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     return html`
       ${moduleStyles}
       ${sharedStyles}
-      <style include="iron-flex-factors">
+      <style include="iron-flex-factors iron-flex">
         :host {
           position: relative;
           display: block;
-        
-          .col-data a {
-            color: var(--module-primary);
-            font-weight: 500;
-            cursor: pointer;
-          }
-        
-          .row-details-content {
-            position: relative;
-            min-width: 0;
-            paper-tooltip {
-              max-width: 100%;
-            }
-          }
-        
-          .row-details-content .truncate {
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-        
-          paper-card {
-            display: block;
-            margin-top: 25px;
-            --paper-card_-_background-color: white;
-            --paper-card_-_margin: 0 24px;
-            --paper-card_-_width: calc(100% - 48px);
-          }
-        
-          .no-content {
-            padding: 16px 24px;
-          }
-        
-          .show-completed-toggle {
-            @apply --layout-horizontal;
-            @apply --layout-center;
-            border-left: 2px solid var(--gray-lighter);
-            margin-left: 16px;
-            margin-right: 16px;
-            align-self: center;
-            padding: 18px 0 18px 10px;
-          }
-          .show-completed-toggle span {
-            padding: 0 12px;
-            font-size: 16px;
-          }
-        
-          .ellipse {
-            max-height: 4.4em;
-            overflow: hidden;
-          }
-        
-          .tooltip-container {
-            display: inline-block;
+        }
+
+        .col-data a {
+          color: var(--module-primary);
+          font-weight: 500;
+          cursor: pointer;
+        }
+      
+        .row-details-content {
+          position: relative;
+          min-width: 0;
+          paper-tooltip {
             max-width: 100%;
           }
+        }
+      
+        .row-details-content .truncate {
+          display: inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      
+        paper-card {
+          display: block;
+          margin-top: 25px;
+          --paper-card-background-color: white;
+          --paper-card-margin: 0 24px;
+          --paper-card-width: calc(100% - 48px);
+        }
+      
+        .no-content {
+          padding: 16px 24px;
+        }
+      
+        .show-completed-toggle {
+          @apply --layout-horizontal;
+          @apply --layout-center;
+          border-left: 2px solid var(--gray-lighter);
+          margin-left: 16px;
+          margin-right: 16px;
+          align-self: center;
+          padding: 18px 0 18px 10px;
+        }
+        .show-completed-toggle span {
+          padding: 0 12px;
+          font-size: 16px;
+        }
+      
+        .ellipse {
+          max-height: 4.4em;
+          overflow: hidden;
+        }
+      
+        .tooltip-container {
+          display: inline-block;
+          max-width: 100%;
         }
         
         pages-header-element { box-shadow: 1px -3px 9px 0 #000000; }
         etools-data-table-row {
-          --icon-wrapper: #{'{
-                            padding: 0 24px;
-                        }'};
-          --list-icon-color: rgba(0, 0, 0, 0.54);
+          --icon-wrapper: {
+            padding: 0 24px;
+          }
+          --list-icon-color: {
+            rgba(0, 0, 0, 0.54);
+          }
         }
         etools-data-table-header {
-          --header-title: #{'{
-                            padding-left: 47px;
-                            font-weight: 500;
-                        }'};
-          --header-columns: #{'{
-                            margin-left: 47px;
-                        }'};
+          --header-title: {
+            padding-left: 47px;
+            font-weight: 500;
+          }
+          --header-columns: {
+            margin-left: 47px;
+          }
         }    
       </style>
   
@@ -514,14 +516,13 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
 
   _initFilters() {
     let filtersElement = this.$.filters;
-    this.setFiltersSelections();
+    // this.setFiltersSelections();
     if (filtersElement) {
       filtersElement._reloadFilters();
     }
   }
 
   setFiltersSelections() {
-    debugger
     let usersList = this.getData('unicefUsers').map((user) => {
       return {
         id: user.id,

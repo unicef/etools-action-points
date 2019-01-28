@@ -45,6 +45,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
           margin-right: 8px;
         }
       </style>
+      
       <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
       <div hidden$="[[!actionPoint.id]]">
         <pages-header-element page-title="[[actionPoint.reference_number]]" 
@@ -101,7 +102,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
 
   static get observers() {
     return [
-      '_changeRoutePath(route.path)'
+      '_changeRoutePath(route.path)' 
     ];
   }
 
@@ -125,6 +126,9 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
   }
 
   _changeRoutePath(path) {
+    if (!path) {
+      return
+    }
     if (!path.match(/[^\\/]/g)) {
       this.dispatchEvent(new CustomEvent('404', {
         bubbles: true,
@@ -148,7 +152,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         method: 'GET',
         endpoint
       })
-      .then((result) => {
+      .then(result => {
         this.set('originalActionPoint', _.cloneDeep(result));
         this.set('actionPoint', this._prepareActionPoint(result));
       });
@@ -163,7 +167,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         method: 'OPTIONS',
         endpoint
       })
-      .then((data) => {
+      .then(data => {
         let actions = data && data.actions;
         if (!this.collectionExists(permissionPath)) {
           this._addToCollection(permissionPath, actions);

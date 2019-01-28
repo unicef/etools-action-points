@@ -1,8 +1,8 @@
 // shared styles for all views
 // not for styling index.html or pmp-shell
 
-import {html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
+import {html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 
 export const sharedStyles = html`
   <style>

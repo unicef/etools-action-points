@@ -1,10 +1,10 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-// import 'etools-ajax/etools-ajax';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-import '../common-elements/lodash';
-import '../app-mixins/permission-controller';
-import '../app-mixins/user-controller';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+// import 'etools-ajax/etools-ajax.js';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin.js';
+import '../common-elements/lodash.js';
+import '../app-mixins/permission-controller.js';
+import '../app-mixins/user-controller.js';
 
 class UserData extends EtoolsMixinFactory.combineMixins([
   APDMixins.AppConfig,
@@ -29,21 +29,21 @@ class UserData extends EtoolsMixinFactory.combineMixins([
   static get properties() {return {};}
 
   ready() {
-    debugger
     super.ready();
     let endpoint = this.getEndpoint('userProfile');
     this.sendRequest({
       method: 'GET',
-      endpoint: endpoint,
-      dataType: 'jsonp'
+      endpoint: endpoint
     }).then(
-        resp => this._handleResponse(resp)
+        resp => {
+          this._handleResponse(resp)
+        }
       ).catch(
         resp => this._handleError(resp))
   }
 
   _handleResponse(data) {
-    let user = data.detail;
+    let user = data;
     let lastUserId = JSON.parse(localStorage.getItem('userId'));
     let countriesAvailable = _.get(user, 'profile.countries_available') || [];
 

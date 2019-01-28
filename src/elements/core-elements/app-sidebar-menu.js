@@ -1,10 +1,10 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/iron-icon/iron-icon';
-import '@polymer/iron-icons/iron-icons';
-import '@polymer/iron-selector/iron-selector';
-import '@polymer/iron-icons/maps-icons';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-selector/iron-selector.js';
+import '@polymer/iron-icons/maps-icons.js';
 import './side-bar-item.js';
 import {moduleStyles} from '../styles-elements/module-styles.js';
 /**
@@ -24,7 +24,7 @@ class AppSidebarMenu extends APDMixins.AppConfig(PolymerElement) {
           overflow-x: hidden;
           box-shadow: 0 0 3px -1px #000;
           //outline: 1px solid var(--dark-divider-color);
-        
+        }
           .menu-header {
             @apply --layout-horizontal;
             @apply --layout-center;
@@ -58,7 +58,7 @@ class AppSidebarMenu extends APDMixins.AppConfig(PolymerElement) {
           }
         
           #close-drawer {
-            display: none;
+            // display: none;
           }
         
           .divider {
@@ -103,25 +103,14 @@ class AppSidebarMenu extends APDMixins.AppConfig(PolymerElement) {
           }
         }
         
-        :host(.opened) {
-          app-toolbar {
-            #close-drawer {
-              display: initial;
-            }
         
-            img,
-            iron-icon {
-              display: none;
-            }
-          }
-        }
       </style>
           
       <app-toolbar class="menu-header">
-        <iron-icon icon="flag" on-tap="_toggleDrawer"></iron-icon>
+        <iron-icon icon="flag" on-tap="_toggleSmallMenu"></iron-icon>
         <!--<img src$="[[getAbsolutePath('images/ap_icon_v2.svg')]]" on-tap="_toggleDrawer">-->
         <div main-title>Action Points</div>
-        <paper-icon-button id="close-drawer" on-tap="_toggleDrawer" icon="icons:chevron-left" drawer-toggle>
+        <paper-icon-button id="close-drawer" on-tap="_toggleSmallMenu" icon="icons:chevron-left" drawer-toggle>
         </paper-icon-button>
       </app-toolbar>
           
@@ -160,12 +149,26 @@ class AppSidebarMenu extends APDMixins.AppConfig(PolymerElement) {
 
   static get properties() {
     return {
-      page: String
+      page: String,
+      smallMenu: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_menuSizeChange'
+      }
     };
   }
 
-  _toggleDrawer() {
-    this.dispatchEvent(new CustomEvent('drawer-toggle-tap', {
+  _menuSizeChange(newVal, oldVal) {
+    if (newVal !== oldVal) {
+      setTimeout(() => this.dispatchEvent(new CustomEvent('resize-main-layout')));
+    }
+  }
+
+  _toggleSmallMenu(e) {
+    debugger
+    e.stopImmediatePropagation();
+    this.dispatchEvent(new CustomEvent('toggle-small-menu', {
       bubbles: true,
       composed: true
     }));

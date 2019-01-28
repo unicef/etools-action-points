@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import './etools-app-config';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import './etools-app-config.js';
 /**
 * @polymer
 * @extends HTMLElement

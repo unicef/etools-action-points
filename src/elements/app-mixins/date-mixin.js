@@ -1,5 +1,6 @@
-import '../common-elements/lodash';
+import '../common-elements/lodash.js';
 import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import moment from 'moment/src/moment';
 
 window.APDMixins = window.APDMixins || {};
 /**

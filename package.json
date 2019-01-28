@@ -53,7 +53,7 @@
     "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.1.0",
     "@webcomponents/shadycss": "^1.7.1",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "@webcomponents/webcomponentsjs": "^2.2.4",
     "dexie": "^2.0.4",
     "etools-ajax": "git+https://github.com/unicef-polymer/etools-ajax.git#update-to-polymer3",
     "etools-app-selector": "git+https://github.com/unicef-polymer/etools-app-selector.git#upgrade-to-polymer3",
@@ -73,12 +73,13 @@
     "gulp-sass": "^4.0.2",
     "gulp-uglify-es": "^1.0.4",
     "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "polytempl": "^1.0.3",
     "pwa-helpers": "^0.9.0",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "sinon": "^7.2.2",
+    "sinon": "^7.2.3",
     "stream-combiner2": "^1.1.1",
     "web-animations-js": "^2.3.1"
   },
@@ -100,7 +101,7 @@
     "polyserve": "^0.27.14",
     "prpl-server": "^1.3.0",
     "puppeteer": "^1.5.0",
-    "typescript": "^3.2.2",
+    "typescript": "^3.2.4",
     "wct-mocha": "^1.0.0"
   }
 }

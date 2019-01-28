@@ -4,6 +4,7 @@ import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-material/paper-material.js';
 import '@polymer/iron-selector/iron-selector.js';
@@ -13,15 +14,16 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
 import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
-import 'etools-loading/etools-loading';
+// import 'etools-loading/etools-loading';
 import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
 import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header.js';
-import './elements/core-elements/app-sidebar-menu';
+import './elements/core-elements/app-sidebar-menu.js';
 import './elements/common-elements/multi-notifications/multi-notification-list.js';
 import './elements/app-mixins/permission-controller.js';
 import './elements/core-elements/etools-app-config';
 import './elements/app-mixins/user-controller.js';
+import './elements/app-mixins/app-menu-mixin.js'
 import './elements/core-elements/side-bar-item';
 import './elements/core-elements/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
@@ -39,10 +41,10 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
 
   static get template() {
     return html `
+      ${appTheme}
+      ${pageLayoutStyles}
+      ${sharedStyles}
       <style>
-        ${appTheme}
-        ${pageLayoutStyles}
-        ${sharedStyles}
         :host {
           display: block;
         }
@@ -59,7 +61,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
           };
         }
                 
-        #layout {
+        #pages {
           padding-left: 220px;
           height: calc(100vh - 120px);
         }
@@ -81,42 +83,45 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
       <app-route
               route="{{route}}"
               pattern="[[basePath]]:page"
-              data="{{routeData}}">
+              data="{{routeData}}"
+              tail="{{actionPointsRoute}}">
       </app-route>
       <app-route
               route="{{route}}"
               pattern="[[basePath]]"
-              tail="{{actionPointsRoute}}">
+              data="{{subrouteData}}>
       </app-route>
-
-      <etools-loading id="global-loading" absolute></etools-loading>
-
-      <div id="layout">
-        <!-- Drawer content -->
-        <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe opened>
-          <app-sidebar-menu class="opened" route="{{route}}" page="[[page]]"></app-sidebar-menu>
+      
+      <!-- Drawer content -->
+      <app-drawer-layout id="layout" responsive-width="850px"
+                       fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]" small-menu$="[[smallMenu]]">
+        <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe small-menu$="[[smallMenu]]">
+          <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
-
+        
+        
         <!-- Main content -->
-
-        <app-header id="header" fixed shadow>
-          <app-main-header user="[[user]]"></app-main-header>
-        </app-header>
-
-        <iron-pages
-                id="pages"
-                selected="[[page]]"
-                attr-for-selected="name"
-                fallback-selection="not-found"
-                role="main">
+        
+        <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
+          <app-header id="header" fixed shadow>
+            <app-main-header user="[[user]]"></app-main-header>
+          </app-header>
+          
+          <iron-pages
+          id="pages"
+          selected="[[page]]"
+          attr-for-selected="name"
+          fallback-selection="not-found"
+          role="main">
           <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}">
           </action-points-page-main>
           <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
-        </iron-pages>
-        
-        <multi-notification-list></multi-notification-list>
-        <page-footer></page-footer>
-      </div>
+          </iron-pages>
+          
+          <multi-notification-list></multi-notification-list>
+          <page-footer></page-footer>
+        </app-header-layout>
+      </app-drawer-layout>
     `;
   }
 
@@ -157,7 +162,11 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
         type: Object,
         notify: true
       },
-      queryParams: Object
+      queryParams: Object,
+      staticDataLoaded: {
+        type: Boolean,
+        value: false
+      }
     };
   }
 
@@ -170,10 +179,10 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
   ready() {
     super.ready();
     this.addEventListener('toast', (e, detail) => this.queueToast(e, detail));
-    this.addEventListener('drawer-toggle-tap', e => this.toggleDrawer(e));
+    // this.addEventListener('drawer-toggle-tap', e => this.toggleDrawer(e));
     this.addEventListener('404', e => this._pageNotFound(e));
     this.addEventListener('static-data-loaded', e => this._staticDataLoaded(e));
-    this.addEventListener('global-loading', e => this.handleLoading(e));
+    // this.addEventListener('global-loading', e => this.handleLoading(e));
     this._setBgColor();
   }
 
@@ -191,6 +200,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
   }
 
   toggleDrawer() {
+    debugger
     let isClosed = !this.$.drawer.opened;
     let drawerWidth;
 
@@ -203,8 +213,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
     this.$.drawer.updateStyles({
       '--app-drawer-width': drawerWidth
     });
-
-    this.$.layout.style.paddingLeft = drawerWidth;
+    this.$.pages.style.paddingLeft = drawerWidth;
     this.$.header.style.paddingLeft = drawerWidth;
 
     this.$.drawer.querySelector('app-sidebar-menu').classList.toggle('opened', isClosed);
@@ -304,29 +313,30 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
     return 'action-points';
   }
 
-  handleLoading(event) {
-    if (!event.detail || !event.detail.type) {
-      console.error('Bad details object', JSON.stringify(event.detail));
-      return;
-    }
-    let loadingElement = this.$['global-loading'];
+  // handleLoading(event) {
+  //   debugger
+  //   if (!event.detail || !event.detail.type) {
+  //     console.error('Bad details object', JSON.stringify(event.detail));
+  //     return;
+  //   }
+  //   let loadingElement = this.$['global-loading'];
 
-    if (event.detail.active && loadingElement.active) {
-      this.globalLoadingQueue.push(event);
-    } else if (event.detail.active && typeof event.detail.message === 'string' && event.detail.message !==
-      '') {
-      loadingElement.loadingText = event.detail.message;
-      loadingElement.active = true;
-    } else {
-      loadingElement.active = false;
-      this.globalLoadingQueue = this.globalLoadingQueue.filter(element => {
-        return element.detail.type !== event.detail.type;
-      });
-      if (this.globalLoadingQueue.length) {
-        this.handleLoading(this.globalLoadingQueue.shift());
-      }
-    }
-  }
+  //   if (event.detail.active && loadingElement.active) {
+  //     this.globalLoadingQueue.push(event);
+  //   } else if (event.detail.active && typeof event.detail.message === 'string' && event.detail.message !==
+  //     '') {
+  //     loadingElement.loadingText = event.detail.message;
+  //     loadingElement.active = true;
+  //   } else {
+  //     loadingElement.active = false;
+  //     this.globalLoadingQueue = this.globalLoadingQueue.filter(element => {
+  //       return element.detail.type !== event.detail.type;
+  //     });
+  //     if (this.globalLoadingQueue.length) {
+  //       this.handleLoading(this.globalLoadingQueue.shift());
+  //     }
+  //   }
+  // }
 
   _setBgColor() {
     // If not production environment, changing header color to red
