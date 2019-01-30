@@ -1,23 +1,24 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/paper-card/paper-card';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import '@polymer/iron-location/iron-location';
-import '@polymer/paper-tooltip/paper-tooltip';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
-import '../../common-elements/pages-header-element';
-import '../../common-elements/search-and-filter';
-import '../../common-elements/filters-element';
-import 'etools-data-table';
-import '../../data-elements/action-points-data';
-import '../../app-mixins/static-data-mixin';
-import '../../app-mixins/localization-mixin';
-import '../../app-mixins/date-mixin';
-import '../../app-mixins/input-attrs-mixin';
-import '../../common-elements/text-content';
-import {moduleStyles} from '../../styles-elements/module-styles';
-import {sharedStyles} from '../../styles-elements/shared-styles';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/paper-card/paper-card.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@polymer/iron-location/iron-location.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
+import '../../common-elements/pages-header-element.js';
+import '../../common-elements/search-and-filter.js';
+import '../../common-elements/filters-element.js';
+import 'etools-data-table/etools-data-table.js';
+import '../../data-elements/action-points-data.js';
+import '../../app-mixins/static-data-mixin.js';
+import '../../app-mixins/localization-mixin.js';
+import '../../app-mixins/date-mixin.js';
+import '../../app-mixins/input-attrs-mixin.js';
+import '../../common-elements/text-content.js';
+import {moduleStyles} from '../../styles-elements/module-styles.js';
+import {sharedStyles} from '../../styles-elements/shared-styles.js';
+import {dataTableStyles} from '../../styles-elements/data-table-styles.js';
 
 class ActionPointsList extends EtoolsMixinFactory.combineMixins([
   APDMixins.AppConfig,
@@ -32,6 +33,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     return html`
       ${moduleStyles}
       ${sharedStyles}
+      ${dataTableStyles}
       <style include="iron-flex-factors iron-flex">
         :host {
           position: relative;
@@ -62,9 +64,9 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         paper-card {
           display: block;
           margin-top: 25px;
-          --paper-card-background-color: white;
-          --paper-card-margin: 0 24px;
-          --paper-card-width: calc(100% - 48px);
+          background-color: white;
+          margin: 24px 24px 0 24px;
+          width: calc(100% - 48px);
         }
       
         .no-content {
@@ -95,7 +97,10 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
           max-width: 100%;
         }
         
-        pages-header-element { box-shadow: 1px -3px 9px 0 #000000; }
+        pages-header-element { 
+          box-shadow: 1px -3px 9px 0 #000000; 
+        }
+
         etools-data-table-row {
           --icon-wrapper: {
             padding: 0 24px;
@@ -140,28 +145,36 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]" 
           label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
           <etools-data-table-column class="flex-1" field="reference_number" sortable>
-            [[getLabel('reference_number', basePermissionPath)]]
+          <!--[[getLabel('reference_number', basePermissionPath)]]-->
+          Reference Number
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
-            [[getLabel('cp_output', basePermissionPath)]]
+          <!--[[getLabel('cp_output', basePermissionPath)]]-->
+          CP Output
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="partner__name" sortable>
-            [[getLabel('partner', basePermissionPath)]]
+          <!--[[getLabel('partner', basePermissionPath)]]-->
+          Partner
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="office__name" sortable>
-            [[getLabel('office', basePermissionPath)]]
+          <!--[[getLabel('office', basePermissionPath)]]-->
+          Office
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="section__name" sortable>
-            [[getLabel('section', basePermissionPath)]]
+          <!--[[getLabel('section', basePermissionPath)]]-->
+          Section
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
-            [[getLabel('assigned_to', basePermissionPath)]]
+          <!--[[getLabel('assigned_to', basePermissionPath)]]-->
+          Assigned To
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="due_date" sortable>
-            [[getLabel('due_date', basePermissionPath)]]
+          <!--[[getLabel('due_date', basePermissionPath)]]-->
+          Due Date
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="status" sortable>
-            [[getLabel('status', basePermissionPath)]]
+          <!--[[getLabel('status', basePermissionPath)]]-->
+          Status
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="high_priority" sortable>
             Priority

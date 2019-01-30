@@ -1,6 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import './etools-app-config.js';
 /**
 * @polymer
@@ -9,24 +9,24 @@ import './etools-app-config.js';
 class PageFooter extends PolymerElement {
   static get template() {
     return html`
-      <style>
+      <style include="iron-flex">
         :host {
           display: flex;
           padding: 18px 24px;
           width: 100%;
           height: 60px;
           align-items: flex-end
+          padding-top: 50px;
         }
 
         #footer-content {
           @apply --layout-horizontal;
+          padding-left: 24px;
         }
 
         #unicef-logo {
           @apply --layout-horizontal;
           @apply --layout-inline;
-
-          padding-right: 30px;
         }
 
         #unicef-logo img {

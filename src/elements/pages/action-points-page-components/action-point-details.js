@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';

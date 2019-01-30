@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
 import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';

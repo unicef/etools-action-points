@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import 'etools-ajax/etools-ajax';
 import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
@@ -45,7 +45,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
           margin-right: 8px;
         }
       </style>
-      
+
       <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
       <div hidden$="[[!actionPoint.id]]">
         <pages-header-element page-title="[[actionPoint.reference_number]]" 

@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
@@ -35,10 +35,10 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
           @apply --layout-horizontal;
           @apply --layout-center;
           @apply --layout-flex;
+        }
       
-          .inputs-container {
-            flex-wrap: wrap;
-          }
+        :host.inputs-container {
+          flex-wrap: wrap;
         }
       
         paper-input {
@@ -54,32 +54,38 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
         
         .toggle-hidden-div {
           margin-right: 26px;
-          span {
-            color: var(--gray-dark);
-            font-size: 16px;
-            margin-right: 8px;
-          }
         }
         
+        span.toggle-hidden-div {
+          color: var(--gray-dark);
+          font-size: 16px;
+          margin-right: 8px;
+        }
         
         #add-filter-container {
           border-left: 2px solid var(--gray-lighter);
           margin-left: 16px;
           margin-right: 16px;
           padding-left: 10px;
+        }
       
-          .add-filter-text { margin-top: 4px; }
+        #add-filter-container.add-filter-text {
+          margin-top: 4px;
+        }
       
-          paper-button { color: var(--module-primary); font-weight: bold; }
+        #add-filter-containerpaper-button {
+          color: var(--module-primary);
+          font-weight: bold;
+        }
       
-          paper-menu-button {
-            padding: 0;
-            margin: 8px;
+        #add-filter-container paper-menu-button {
+          padding: 0;
+          margin: 8px;
+        }
       
-            paper-button {
-              margin: 0;
-            }
-          }
+        #add-filter-container paper-menu-button paper-button {
+          margin: 0;
+        }
         
           paper-listbox {
             background-color: #ffffff;
@@ -88,26 +94,24 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
             --paper-menu-focused-item-after: {
               background: var(--primary-background-color);
               opacity: 0;
+          };
+    
+          paper-listbox paper-item {
+            font-weight: normal;
+            height: 48px;
+            min-height: initial;
+            cursor: pointer;
+
+            --paper-item-focused-before: {
+              background: var(--primary-background-color);
+              opacity: 0;
             };
-    
-            paper-item {
-              font-weight: normal;
-              height: 48px;
-              min-height: initial;
-              cursor: pointer;
-  
-              --paper-item-focused-before: {
-                background: var(--primary-background-color);
-                opacity: 0;
-              };
-            }
-    
-            span.add-filter--item-name {
-              white-space: nowrap;
-              text-transform: capitalize;
-            }
           }
-        }
+    
+          paper-listbox span.add-filter--item-name {
+            white-space: nowrap;
+            text-transform: capitalize;
+          }
         
         .filter-dropdown {
           margin-left: 20px;

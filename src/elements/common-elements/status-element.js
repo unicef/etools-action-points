@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/av-icons';

@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import {moduleStyles} from '../../styles-elements/module-styles';

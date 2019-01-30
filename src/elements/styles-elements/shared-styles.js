@@ -2,7 +2,7 @@
 // not for styling index.html or pmp-shell
 
 import {html} from '@polymer/polymer/polymer-element.js';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+// import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 
 export const sharedStyles = html`
   <style>
@@ -83,8 +83,5 @@ export const sharedStyles = html`
       color: var(--light-icon-color);
       --paper-icon-button-ink-color: var(--light-ink-color);
     }
-
-    /* responsive css rules */
-    @media (min-width: 850px) {}
   </style>
 `;

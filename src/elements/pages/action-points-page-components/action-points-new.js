@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import 'etools-ajax/etools-ajax';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import '../../common-elements/pages-header-element';

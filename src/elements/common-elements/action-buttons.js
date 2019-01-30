@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '../common-elements/lodash';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';

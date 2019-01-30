@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
@@ -14,7 +14,6 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
 import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
-// import 'etools-loading/etools-loading';
 import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
 import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header.js';
@@ -30,20 +29,21 @@ import './elements/data-elements/static-data';
 import './elements/core-elements/page-footer';
 import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js';
 import {sharedStyles} from './elements/styles-elements/shared-styles.js';
-import {appTheme} from './elements/styles-elements/app-theme.js';
-// import 'web-animations-js/web-animations.min.js';
+import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
+import './elements/styles-elements/app-theme.js';
 
 class AppShell extends EtoolsMixinFactory.combineMixins([
   APDMixins.AppConfig,
   APDMixins.UserController,
+  ADPMixins.AppMenu,
   LoadingMixin
 ], PolymerElement) {
 
   static get template() {
     return html `
-      ${appTheme}
       ${pageLayoutStyles}
       ${sharedStyles}
+      ${appDrawerStyles}
       <style>
         :host {
           display: block;
@@ -60,17 +60,17 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
             background-color: var(--light-theme-content-color);
           };
         }
-                
-        #pages {
-          padding-left: 220px;
-          height: calc(100vh - 120px);
+
+        #pages, app-header, page-footer {
+          padding-left: 73px;
         }
-                
-        app-header {
+        
+        #pages:not([small-menu]),
+        app-header:not([small-menu]),
+        page-footer:not([small-menu]) {
           padding-left: 220px;
-          z-index: 60 !important;
         }
-            
+
         app-header {
           background-color: var(--header-bg-color);
         }
@@ -94,8 +94,8 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
       
       <!-- Drawer content -->
       <app-drawer-layout id="layout" responsive-width="850px"
-                       fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]" small-menu$="[[smallMenu]]">
-        <app-drawer slot="drawer" id="drawer" transition-duration="350" disable-swipe small-menu$="[[smallMenu]]">
+                       fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
+        <app-drawer slot="drawer" id="drawer" transition-duration="350" swipe-open="[[narrow]]" small-menu$="[[smallMenu]]">
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
         
@@ -103,23 +103,19 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
         <!-- Main content -->
         
         <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
-          <app-header id="header" fixed shadow>
-            <app-main-header user="[[user]]"></app-main-header>
+          <app-header id="header" slot="header" fixed shadow small-menu$="[[smallMenu]]">
+            <app-main-header id="pageheader" user="[[user]]"></app-main-header>
           </app-header>
           
-          <iron-pages
-          id="pages"
-          selected="[[page]]"
-          attr-for-selected="name"
-          fallback-selection="not-found"
-          role="main">
-          <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}">
-          </action-points-page-main>
-          <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
+          <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
+                      fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
+            <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}">
+            </action-points-page-main>
+            <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
           </iron-pages>
           
           <multi-notification-list></multi-notification-list>
-          <page-footer></page-footer>
+          <page-footer small-menu$="[[smallMenu]]"></page-footer>
         </app-header-layout>
       </app-drawer-layout>
     `;
@@ -200,7 +196,6 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
   }
 
   toggleDrawer() {
-    debugger
     let isClosed = !this.$.drawer.opened;
     let drawerWidth;
 
@@ -314,7 +309,6 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
   }
 
   // handleLoading(event) {
-  //   debugger
   //   if (!event.detail || !event.detail.type) {
   //     console.error('Bad details object', JSON.stringify(event.detail));
   //     return;

@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
@@ -15,14 +15,13 @@ class CountriesDropdown extends mixinBehaviors(
   static get template() {
     return html`
       <style>
-        :host {
           .arrow-up {
             display: none;
           }
 
           paper-menu-button {
-            padding: 0;
             font-size: 16px;
+            padding: 0;
           }
 
           paper-button {
@@ -32,50 +31,50 @@ class CountriesDropdown extends mixinBehaviors(
             min-width: 50px;
             text-transform: none;
             font-weight: normal !important;
+          }
 
-            .dropdown-text {
-              margin-left: 5px;
-              color: var(--light-secondary-text-color);
-            }
+          .dropdown-text {
+            margin-left: 5px;
+            color: var(--light-secondary-text-color);
+          }
 
-            .arrow-down,
-            .arrow-up {
-              color: var(--light-ink-color);
-            }
+          .arrow-don,
+          .arrow-up) {
+            color: var(--light-ink-color);
           }
 
           iron-icon {
             color: var(--light-ink-color);
+          }
 
-            &.mr-8 {
-              margin-right: 8px;
-            }
+          iron-icon > .mr-8 {
+            margin-right: 8px;
+          }
 
-            &.b-3 {
-              bottom: 3px;
-            }
+          iron-icon > .b-3 {
+            bottom: 3px;
           }
 
           paper-listbox {
             max-height: 296px;
-
-            iron-icon {
-              margin-right: 13px;
-              color: var(--dark-icon-color);
-            }
-
-            paper-item {
-              height: 48px;
-              min-height: initial;
-              font-weight: 500 !important;
-              color: var(--dark-primary-text-color);
-              cursor: pointer;
-              padding: 0 16px;
-              white-space: nowrap;
-              min-width: 140px;
-            }
           }
-        }
+
+          paper-listbox iron-icon {
+            margin-right: 13px;
+            color: var(--dark-icon-color);
+          }
+
+          paper-listbox paper-item {
+            height: 48px;
+            min-height: initial;
+            font-weight: 500 !important;
+            color: var(--dark-primary-text-color);
+            cursor: pointer;
+            padding: 0 16px;
+            white-space: nowrap;
+            min-width: 140px;
+          }
+        
 
         :host([opened]) {
           .arrow-up {
@@ -109,10 +108,10 @@ class CountriesDropdown extends mixinBehaviors(
 
         paper-listbox.no-focus {
           --paper-menu-focused-item-after: {
-          background: var(--primary-background-color);
-          opacity: 0;
+            background: var(--primary-background-color);
+            opacity: 0;
+          }
         }
-      }
 
 
         paper-item {

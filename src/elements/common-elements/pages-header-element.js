@@ -1,5 +1,5 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
 import 'etools-ajax/etools-ajax';
@@ -20,23 +20,23 @@ class PagesHeaderElement extends APDMixins.AppConfig(PolymerElement) {
         :host {
           position: relative;
           display: block;
-        
-          paper-menu.mw-150 {
-            min-width: 150px;
-            white-space: nowrap;
-          }
-        
-          paper-item {
-            cursor: pointer;
-          }
-        
-          .export-buttons:not([hidden]) {
-            display: inline-block;
-          }
-        
-          .visit-letter {
-            margin: 8px;
-          }
+        }
+
+        paper-menu-button.mw-150 {
+          min-width: 150px;
+          white-space: nowrap;
+        }
+      
+        paper-item {
+          cursor: pointer;
+        }
+      
+        .export-buttons:not([hidden]) {
+          display: inline-block;
+        }
+      
+        .visit-letter {
+          margin: 8px;
         }
       
         .header-wrapper {

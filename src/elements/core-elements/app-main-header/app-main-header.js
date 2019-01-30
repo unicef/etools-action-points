@@ -1,21 +1,25 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/app-layout/app-toolbar/app-toolbar';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import 'etools-behaviors/etools-page-refresh-mixin';
-// import 'etools-profile-dropdown/etools-profile-dropdown';
-import '../etools-app-config';
-import 'etools-app-selector';
-import './countries-dropdown';
-// import 'user-dropdown';
-import './app-icons';
-import {sharedStyles} from '../../styles-elements/shared-styles';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin.js';
+// import 'etools-profile-dropdown/etools-profile-dropdown.js';
+import '../etools-app-config.js';
+import 'etools-app-selector/etools-app-selector.js';
+import './countries-dropdown.js';
+// import 'user-dropdown.js';
+import {sharedStyles} from '../../styles-elements/shared-styles.js';
+import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
+
 /**
  * @polymer
  * @customElement
  */
-class AppMainHeader extends APDMixins.AppConfig(PolymerElement) {
+class AppMainHeader extends EtoolsMixinFactory.combineMixins([
+  APDMixins.AppConfig,
+  EtoolsPageRefreshMixin
+], PolymerElement) {
   static get template() {
     return html`
       ${sharedStyles}
@@ -81,72 +85,72 @@ class AppMainHeader extends APDMixins.AppConfig(PolymerElement) {
             margin-left: 32px;
           }
         }
-    </style>
+      </style>
 
-        <app-toolbar sticky class="content-align">
-          <div class="titlebar content-align">
-            <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
+      <app-toolbar sticky class="content-align">
+        <div class="titlebar content-align">
+          <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
 
-            <img src$="images/etools_logo.svg">
-            <dom-if id="envWarningIf">
-              <template>
-                <div class="envWarning">- STAGING TESTING ENVIRONMENT</div>
-              </template>
-            </dom-if>
-          </div>
+          <img src$="images/etools_logo.svg">
+          <dom-if id="envWarningIf">
+            <template>
+              <div class="envWarning">- STAGING TESTING ENVIRONMENT</div>
+            </template>
+          </dom-if>
+        </div>
 
-          <div class="content-align">
-            <countries-dropdown
-                    countries="[[user.countries_available]]"
-                    country-id="[[user.profile.country]]">
-            </countries-dropdown>
+        <div class="content-align">
+          <countries-dropdown
+                  countries="[[user.countries_available]]"
+                  country-id="[[user.profile.country]]">
+          </countries-dropdown>
 
-            // <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
+          <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
 
-            <etools-page-refresh id="refresh"></etools-page-refresh>
-          </div>
-        </app-toolbar>
-      `;
+          <paper-icon-button icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]"></paper-icon-button>
+        </div>
+      </app-toolbar>
+    `;
+  }
+
+  static get properties() {
+    return {
+      user: {
+        type: Object
+      }
+    };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('main_refresh', this._refreshPage);
+    this.addEventListener('sign-out', this._logout);
+  }
+
+  ready() {
+    super.ready();
+    this._isStaging();
+  }
+
+  _isStaging() {
+    if (this.isStagingServer()) {
+      this.$.envWarningIf.if = true;
     }
+  }
 
-    static get properties() {
-        return {
-            user: {
-                type: Object
-            }
-        };
-    }
+  openDrawer() {
+    this.dispatchEvent(new CustomEvent('drawer'));
+  }
 
-    connectedCallback() {
-        super.connectedCallback();
-        this.addEventListener('main_refresh', this._refreshPage);
-        this.addEventListener('sign-out', this._logout);
-    }
+  _refreshPage(event) {
+    event.stopImmediatePropagation();
+    this.$.refresh.refresh();
+  }
 
-    ready() {
-        super.ready();
-        this._isStaging();
-    }
-
-    _isStaging() {
-        if (this.isStagingServer()) {
-            this.$.envWarningIf.if = true;
-        }
-    }
-
-    openDrawer() {
-        this.dispatchEvent(new CustomEvent('drawer'));
-    }
-
-    _refreshPage(event) {
-        event.stopImmediatePropagation();
-        this.$.refresh.refresh();
-    }
-
-    _logout() {
-        this.resetOldUserData();
-        window.location.href = `${window.location.origin}/saml2/logout/`;
-    }
+  _logout() {
+    this.resetOldUserData();
+    window.location.href = `${window.location.origin}/saml2/logout/`;
+  }
 }
 
 customElements.define('app-main-header', AppMainHeader);
