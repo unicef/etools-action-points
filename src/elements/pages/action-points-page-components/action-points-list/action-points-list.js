@@ -142,6 +142,11 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             basePermissionPath: {
                 type: String,
                 value: 'action_points'
+            },
+            exportParams: {
+                type: Object,
+                observer: '_setExportLinks',
+                notify: true
             }
         };
     }
@@ -187,6 +192,11 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     }
 
     _updateQueries(queryParams, oldQueryParams) {
+        // deep clone queryParams, remove page/page_size, and set to exportParams
+        let exportParams = JSON.parse(JSON.stringify(queryParams));
+        delete exportParams['page_size'];
+        delete exportParams['page'];
+        this.set('exportParams', exportParams);
         if (!~this.path.indexOf('action-points/list')) return;
         if (this.queryParams.reload) {
             this.clearQueries();
@@ -293,9 +303,20 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         }
     }
     _setExportLinks() {
+        let paramString = '';
+        if (this.exportParams) {
+            let paramKeysArray = Object.keys(this.exportParams);
+            let paramArray = [];
+            if (paramKeysArray) {
+                paramArray = paramKeysArray.map(p => `${p}=${this.exportParams[p]}`);
+            }
+            paramString = paramArray.join('&');
+            paramString = '?'.concat(paramString)
+        }
+        debugger
         return [{
             name: 'Export CSV',
-            url: this.getEndpoint('actionPointsListExport').url
+            url: this.getEndpoint('actionPointsListExport').url + paramString
         }];
     }
 
