@@ -14,7 +14,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @returns {*}
    * @private
    */
-  _setRequired(field, basePermissionPath) {
+  _setRequired(field: string, basePermissionPath: any) {
     if (!basePermissionPath) {
       return false;
     }
@@ -30,7 +30,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @param base
    * @returns {*}
    */
-  getLabel(path, base) {
+  getLabel(path: string, base: string) {
     if (!base) {
       return '';
     }
@@ -44,7 +44,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @param special
    * @returns {*}
    */
-  getPlaceholderText(path, base, special) {
+  getPlaceholderText(path: string, base: string, special: boolean) {
     if (this.isReadonly(`${base}.${path}`)) {
       return 'Empty Field';
     }
@@ -61,7 +61,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @param inProcess
    * @returns {*}
    */
-  isReadOnly(field, basePermissionPath, inProcess) {
+  isReadOnly(field: string, basePermissionPath: string, inProcess: boolean) {
     if (!basePermissionPath || inProcess) {
       return true;
     }
@@ -80,7 +80,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @returns {boolean}
    * @private
    */
-  _resetFieldError(event) {
+  _resetFieldError(event: CustomEvent) {
     if (!event || !event.target) {
       return false;
     }

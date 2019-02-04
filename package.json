@@ -56,6 +56,7 @@
     "@types/moment": "^2.13.0",
     "@webcomponents/shadycss": "^1.7.1",
     "@webcomponents/webcomponentsjs": "^2.2.4",
+    "css-slam": "^2.1.2",
     "dexie": "^2.0.4",
     "eslint-plugin-html": "^5.0.0",
     "etools-ajax": "git+https://github.com/unicef-polymer/etools-ajax.git#update-to-polymer3",
@@ -84,7 +85,8 @@
     "reselect": "^4.0.0",
     "sinon": "^7.2.3",
     "stream-combiner2": "^1.1.1",
-    "web-animations-js": "^2.3.1"
+    "web-animations-js": "^2.3.1",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "@babel/plugin-external-helpers": "^7.2.0",

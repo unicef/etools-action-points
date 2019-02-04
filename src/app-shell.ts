@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/app-route/app-location';
 import '@polymer/app-route/app-route';
@@ -33,14 +33,15 @@ import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js
 import {sharedStyles} from './elements/styles-elements/shared-styles.js';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import './elements/styles-elements/app-theme.js';
+import * as _ from 'lodash';
 // import {customElement, property} from '@polymer/decorators';
 // @customElement('app-shell')
-class AppShell extends EtoolsMixinFactory.combineMixins([
+class AppShell extends (EtoolsMixinFactory.combineMixins([
   AppConfig,
   UserController,
   AppMenu,
   LoadingMixin
-], PolymerElement) {
+], PolymerElement) as any) {
 
   public static get template() {
     return html `
@@ -187,9 +188,10 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
   }
 
   ready() {
+    
     super.ready();
-    this.addEventListener('404', (e: object) => this._pageNotFound(e));
-    this.addEventListener('static-data-loaded', (e: object) => this._staticDataLoaded(e));
+    this.addEventListener('404', (e: CustomEvent) => this._pageNotFound(e));
+    this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
     // this.addEventListener('global-loading', e => this.handleLoading(e));
     this._setBgColor();
   }
@@ -228,7 +230,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
     this.$.drawer.toggleAttribute('opened', isClosed);
   }
 
-  _staticDataLoaded(e: object) {
+  _staticDataLoaded(e: CustomEvent) {
     if (e && e.type === 'static-data-loaded') {
       this.staticDataLoaded = true;
     }
@@ -238,7 +240,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
     }
   }
 
-  queueToast(e: object) {
+  queueToast(e: CustomEvent) {
     let detail = e.detail;
     let notificationList = this.shadowRoot.querySelector('multi-notification-list');
     if (!notificationList) {
@@ -296,7 +298,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
     // if (this.route.path === '/') { this._initRoute();}
   }
 
-  _pageNotFound(event: object) {
+  _pageNotFound(event: CustomEvent) {
     this.page = 'not-found';
     let message = event && event.detail && event.detail.message ?
       `${event.detail.message}` :

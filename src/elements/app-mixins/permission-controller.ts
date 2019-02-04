@@ -8,7 +8,7 @@ let _permissionCollection = {};
  * @mixinFunction
  */
 const PermissionController = (superClass: any) => class extends superClass {
-  _addToCollection(collectionName, data) {
+  _addToCollection(collectionName: string, data: any) {
     // check arguments
     if (!collectionName || !data) {
       console.warn('collectionName and data arguments must be provided!');
@@ -34,7 +34,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return true;
   }
 
-  _updateCollection(collectionName, data) {
+  _updateCollection(collectionName: string, data: any) {
     if (!_permissionCollection[collectionName]) {
       console.warn(`Collection ${collectionName} does not exist!`);
       return false;
@@ -49,7 +49,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return true;
   }
 
-  _manageActions(collectionName) {
+  _manageActions(collectionName: string) {
     let collection = _permissionCollection[collectionName];
     if (!collection) {
       console.warn(`Collection ${collectionName} does not exist!`);
@@ -80,7 +80,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     };
   }
 
-  getFieldAttribute(path, attribute, actionType) {
+  getFieldAttribute(path: string, attribute: string, actionType: string) {
     if (!path || !attribute) {
       throw new Error('path and attribute arguments must be provided');
     }
@@ -91,7 +91,7 @@ const PermissionController = (superClass: any) => class extends superClass {
       throw new Error('attribute argument must be a string');
     }
 
-    let value = this._getCollection(path, actionType);
+    let value: any = this._getCollection(path, actionType);
 
     if (value) {
       value = value[attribute];
@@ -101,16 +101,16 @@ const PermissionController = (superClass: any) => class extends superClass {
 
   }
 
-  isReadonly(path) {
+  isReadonly(path: string) {
     return !this.collectionExists(path, 'POST') && !this.collectionExists(path, 'PUT');
   }
 
-  isRequired(path) {
+  isRequired(path: string) {
     return this.getFieldAttribute(path, 'required', 'POST') ||
       this.getFieldAttribute(path, 'required', 'PUT');
   }
 
-  collectionExists(path, actionType) {
+  collectionExists(path: string, actionType: string) {
     if (!path) {
       throw new Error('path argument must be provided');
     }
@@ -121,15 +121,15 @@ const PermissionController = (superClass: any) => class extends superClass {
     return !!this._getCollection(path, actionType);
   }
 
-  getChoices(path) {
+  getChoices(path: string) {
     return this.getFieldAttribute(path, 'choices', 'GET') ||
       this.getFieldAttribute(path, 'choices', 'POST');
   }
 
-  _getCollection(path, actionType) {
+  _getCollection(path: any, actionType: string) {
     path = path.split('.');
 
-    let value = _permissionCollection;
+    let value: any = _permissionCollection;
 
     while (path.length) {
       let key = path.shift();
@@ -152,7 +152,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return value;
   }
 
-  isValidCollection(collection) {
+  isValidCollection(collection: string) {
     if (collection && Object.keys(collection).length) {
       return collection;
     } else {
@@ -160,7 +160,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     }
   }
 
-  actionAllowed(collection, action) {
+  actionAllowed(collection: string , action: string) {
     if (!action || !collection) {
       return false;
     }
@@ -184,7 +184,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return !!~actions.indexOf(action);
   }
 
-  noActionsAllowed(collection) {
+  noActionsAllowed(collection: string) {
     if (!collection) {
       return true;
     }
@@ -196,7 +196,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return !(collection && collection.allowed_actions && collection.allowed_actions.length);
   }
 
-  getActions(collection) {
+  getActions(collection: string) {
     if (!collection) {
       return null;
     }

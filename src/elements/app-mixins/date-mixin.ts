@@ -1,6 +1,7 @@
 import '../common-elements/lodash.js';
 import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
 import moment from 'moment/src/moment';
+import * as _ from 'lodash';
 
 /**
  * Mixin for parsing and format date by pattern
@@ -44,7 +45,7 @@ const DateMixin = (superClass: any) => class extends superClass {
      * Open input field assigned(as prefix or suffix) etools-datepicker on tap.
      * Make sure you also have the data-selector attribute set on the input field.
      */
-    openDatePicker(event: object) {
+    openDatePicker(event: CustomEvent) {
         // do not close datepicker on mouse up
         this.datepickerModal = true;
         let id = dom(event).localTarget.getAttribute('data-selector');

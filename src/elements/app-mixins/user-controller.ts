@@ -1,7 +1,7 @@
 import '../common-elements/lodash';
 
-let _user: object;
-let _groups: object;
+let _user: any;
+let _groups: any;
 
 /*
  * Mixin for manage user data.
@@ -9,7 +9,7 @@ let _groups: object;
  * @mixinFunction
  */
 const UserController = (superClass: any) => class extends superClass {
-  _setUserData(user: object) {
+  _setUserData(user: any) {
     if (_user) {
       throw new Error('User already exists!');
     }
@@ -25,7 +25,7 @@ const UserController = (superClass: any) => class extends superClass {
     this._setGroups(user);
   }
 
-  _setGroups(user: object) {
+  _setGroups(user: any) {
     if (!user.groups.length) {
       throw new Error('Can not find user group!');
     }

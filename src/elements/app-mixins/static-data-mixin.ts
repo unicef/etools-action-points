@@ -1,24 +1,24 @@
 import * as _ from 'lodash';
 
-let _staticData = {};
+let _staticData: any = {};
 /*
  * Mixin for manage static data application.
  * @polymer
  * @mixinFunction
  */
 const StaticDataMixin = (superClass: any) => class extends superClass {
-  _setData(key, data) {
+  _setData(key: string, data: any) {
     if (!key || !data || _staticData[key]) {
       return false;
     }
     _staticData[key] = _.cloneDeep(data);
     return true;
   }
-  getData(key) {
+  getData(key: string) {
     return _.cloneDeep(_staticData[key]);
   }
 
-  _updateData(key, data) {
+  _updateData(key: string, data: any) {
     if (!key || !data || !_staticData[key]) {
       return false;
     }

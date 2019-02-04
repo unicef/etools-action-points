@@ -58,20 +58,21 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
     return !!parseInt(menuTypeStoredVal, 10);
   }
 
-  _toggleSmallMenu(e) {
+  _toggleSmallMenu(e: any) {
     e.stopImmediatePropagation();
     this.set('smallMenu', !this.smallMenu);
     this._smallMenuValueChanged(this.smallMenu);
   }
 
-  _resizeMainLayout(e) {
+  _resizeMainLayout(e: any) {
     e.stopImmediatePropagation();
     this._updateDrawerStyles();
     this._notifyLayoutResize();
   }
 
-  _smallMenuValueChanged(newVal) {
+  _smallMenuValueChanged(newVal: boolean) {
     let localStorageVal = newVal ? 1 : 0;
+    //@ts-ignore
     localStorage.setItem('etoolsAppSmallMenuIsActive', localStorageVal);
   }
 

@@ -1,4 +1,4 @@
-import '../common-elements/lodash';
+import * as _ from 'lodash';
 
 /*
  * Mixin for edit query string in location.
@@ -11,13 +11,13 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @returns {{Object}} of queries key-value
    */
   parseQueries() {
-    let queriesObj = {};
+    let queriesObj: any = {};
     let queries = this.getQueriesString()
       .slice(1)
       .split('&');
 
     if (queries[0] === '') return {};
-    queries.forEach((query) => {
+    queries.forEach((query: string) => {
       let [key, value] = query.split('=');
       queriesObj[key] = value || true;
     });
@@ -30,7 +30,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @param property
    * @returns {Window|Location|String|*|string}
    */
-  getLocationProperty(property) {
+  getLocationProperty(property: string) {
     return window && window.location && window.location[property] || '';
   }
 
@@ -61,7 +61,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @param noNotify
    * @returns {boolean}
    */
-  updateQueries(newQueries, path, noNotify) {
+  updateQueries(newQueries: any, path: string, noNotify: boolean) {
     if (!_.isObject(newQueries)) {
       return false;
     }

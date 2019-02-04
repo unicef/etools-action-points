@@ -12,12 +12,12 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
     flush();
     let paperTextareas = this.shadowRoot.querySelectorAll('paper-textarea') || [];
 
-    paperTextareas.forEach((paperTextarea) => {
+    paperTextareas.forEach((paperTextarea: any) => {
       this.setMaxHeight(paperTextarea);
     });
   }
 
-  setMaxHeight(paperTextarea) {
+  setMaxHeight(paperTextarea: any) {
     if (!paperTextarea) {return false;}
 
     let paperInputContainer = paperTextarea.shadowRoot.querySelector('paper-input-container');
