@@ -1,7 +1,6 @@
-import '../common-elements/lodash.js';
-import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
-import moment from 'moment/src/moment';
 import * as _ from 'lodash';
+import {dom} from '@polymer/polymer/lib/legacy/polymer.dom';
+import moment from 'moment';
 
 /**
  * Mixin for parsing and format date by pattern
@@ -12,16 +11,16 @@ const DateMixin = (superClass: any) => class extends superClass {
     /**
      * Format date from string
      */
-    prettyDate(dateString: string, format: string, placeholder: string) {
+    prettyDate(dateString: string, format?: string | undefined, placeholder?: string) {
         format = this._getFormat(format);
-        let date = this._getMomentDate(dateString);
+        let date: any = this._getMomentDate(dateString);
         let ph = placeholder ? placeholder : '';
         return date ? date.utc().format(format) : ph;
     }
 
     formatDateInLocal(dateString: string, format: string) {
         format = this._getFormat(format);
-        let date = this._getMomentDate(dateString);
+        let date: any = this._getMomentDate(dateString);
 
         return date ? date.format(format) : '';
     }
@@ -48,6 +47,7 @@ const DateMixin = (superClass: any) => class extends superClass {
     openDatePicker(event: CustomEvent) {
         // do not close datepicker on mouse up
         this.datepickerModal = true;
+        // @ts-ignore
         let id = dom(event).localTarget.getAttribute('data-selector');
         if (id) {
             let datepickerId = '#' + id;
@@ -60,7 +60,7 @@ const DateMixin = (superClass: any) => class extends superClass {
         setTimeout(() => this.datepickerModal = false, 300);
     }
 
-    _getFormat(format: string) {
+    _getFormat(format: string | undefined) {
         return !format || !_.isString(format) ? 'D MMM YYYY' : format;
     }
 

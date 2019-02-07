@@ -43,6 +43,7 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
       // textareaAutogrow.textarea.style.overflow = 'auto';
       mirror.style.overflow = 'auto';
     });
+    return;
   }
 };
 

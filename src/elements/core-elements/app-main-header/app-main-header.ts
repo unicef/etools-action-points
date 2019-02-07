@@ -1,27 +1,26 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import {PolymerElement, html} from '@polymer/polymer';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
+import '@polymer/app-layout/app-toolbar/app-toolbar';
+import '@polymer/paper-icon-button/paper-icon-button';
+import '@polymer/iron-flex-layout/iron-flex-layout';
 // @ts-ignore
-import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin.js';
-// @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
-// import 'etools-profile-dropdown/etools-profile-dropdown.js';
-import AppConfig from '../etools-app-config.js';
-import 'etools-app-selector/etools-app-selector.js';
-import './countries-dropdown.js';
-// import 'user-dropdown.js';
-import {sharedStyles} from '../../styles-elements/shared-styles.js';
+import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
+// import 'etools-profile-dropdown/etools-profile-dropdown';
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import 'etools-app-selector/etools-app-selector';
+import './countries-dropdown';
+// import 'user-dropdown';
+import {sharedStyles} from '../../styles-elements/shared-styles';
 
 /**
  * @polymer
  * @customElement
  */
-class AppMainHeader extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  EtoolsPageRefreshMixin
-], PolymerElement) {
+class AppMainHeader extends
+  EndpointMixin(
+    EtoolsPageRefreshMixin(
+      PolymerElement)) {
+
   static get template() {
     return html`
       ${sharedStyles}
@@ -144,7 +143,7 @@ class AppMainHeader extends EtoolsMixinFactory.combineMixins([
     this.dispatchEvent(new CustomEvent('drawer'));
   }
 
-  _refreshPage(event: object) {
+  _refreshPage(event: CustomEvent) {
     event.stopImmediatePropagation();
     this.$.refresh.refresh();
   }

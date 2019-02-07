@@ -1,13 +1,14 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-collapse/iron-collapse';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/paper-tooltip/paper-tooltip';
 import {moduleStyles} from '../styles-elements/module-styles';
+
 /**
 * @polymer
-* @extends HTMLElement
+* @extends {PolymerElement}
 */
 class SideBarItem extends PolymerElement {
   static get template() {
@@ -119,16 +120,15 @@ class SideBarItem extends PolymerElement {
         type: Boolean,
         value: false
       }
-  };
-}
+    };
+  }
 
-_handleMainTap() {
-  this.dispatchEvent(new CustomEvent('selected'));
-}
+  _handleMainTap() {
+    this.dispatchEvent(new CustomEvent('selected'));
+  }
 
-_setTarget() {
-  if (this.external) {return '_blank';}
-    return '_self';
+  _setTarget(this: any) {
+    return this.external ? '_blank' : '_self';
   }
 }
 

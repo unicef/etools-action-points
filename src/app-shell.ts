@@ -14,15 +14,13 @@ import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
 // @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
-// @ts-ignore
 import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
 import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header.js';
 import './elements/core-elements/app-sidebar-menu.js';
 import './elements/common-elements/multi-notifications/multi-notification-list.js';
 import './elements/app-mixins/permission-controller.js';
-import AppConfig from './elements/core-elements/etools-app-config';
+import EndpointMixin from './elements/app-mixins/endpoint-mixin';
 import UserController from './elements/app-mixins/user-controller.js';
 import AppMenu from './elements/app-mixins/app-menu-mixin'
 import './elements/core-elements/side-bar-item';
@@ -35,13 +33,14 @@ import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import './elements/styles-elements/app-theme.js';
 import * as _ from 'lodash';
 // import {customElement, property} from '@polymer/decorators';
+
 // @customElement('app-shell')
-class AppShell extends (EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  UserController,
-  AppMenu,
-  LoadingMixin
-], PolymerElement) as any) {
+class AppShell extends
+  EndpointMixin(
+    UserController(
+      AppMenu(
+        LoadingMixin(
+          PolymerElement)))) {
 
   public static get template() {
     return html `

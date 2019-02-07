@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
@@ -6,7 +6,6 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import 'etools-dropdown/';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
@@ -15,15 +14,16 @@ import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-toggle-button/paper-toggle-button';
 // import 'etools-datepicker/etools-datepicker-button';
 import QueryParams from '../app-mixins/query-params-mixin';
-import Date from '../app-mixins/date-mixin';
+import DateMixin from '../app-mixins/date-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
+import * as _ from 'lodash';
 
-class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
-  Date,
-  QueryParams
-], PolymerElement) {
+class SearchAndFilter extends
+  DateMixin(
+    QueryParams(
+      PolymerElement)) {
 
   static get template() {
     return html`
@@ -262,14 +262,14 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
       });
   }
 
-  addFilter(e: object) {
+  addFilter(e: any) {
     let query = (typeof e === 'string') ? e : e.model.item.query;
-    let alreadySelected = this.usedFilters.findIndex((filter) => {
+    let alreadySelected = this.usedFilters.findIndex((filter: any) => {
       return filter.query === query;
     });
 
     if (alreadySelected === -1) {
-      let newFilter = this.filters.find((filter) => {
+      let newFilter = this.filters.find((filter: any) => {
         return filter.query === query;
       });
 
@@ -277,23 +277,23 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
       this.push('usedFilters', newFilter);
 
       if (this.queryParams[query] === undefined) {
-        let queryObject = {};
+        let queryObject: any = {};
         queryObject[query] = true;
         this.updateQueries(queryObject);
       }
     }
   }
 
-  removeFilter(e: object) {
+  removeFilter(e: any) {
     let query = (typeof e === 'string') ? e : e.model.item.query;
-    let indexToRemove = this.usedFilters.findIndex((filter) => {
+    let indexToRemove = this.usedFilters.findIndex((filter: any) => {
       return filter.query === query;
     });
     if (indexToRemove === -1) {
       return;
     }
 
-    let queryObject = {};
+    let queryObject: any = {};
     queryObject[query] = undefined;
 
     if (this.queryParams[query]) {
@@ -322,10 +322,10 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
           return;
         }
 
-        let availableFilters = [];
+        let availableFilters: any[] = [];
 
-        this.filters.forEach((filter) => {
-          let usedFilter = this.usedFilters.find(used => used.query === filter.query);
+        this.filters.forEach((filter: any) => {
+          let usedFilter = this.usedFilters.find((used: any) => used.query === filter.query);
 
           if (!usedFilter && queryParams[filter.query] !== undefined) {
             this.addFilter(filter.query);
@@ -368,7 +368,7 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
     });
   }
 
-  _setFilterValue(filter) {
+  _setFilterValue(filter: any) {
     if (!filter) {
       return;
     }
@@ -376,8 +376,8 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
     filter.value = this.get(`queryParams.${filter.query}`);
   }
 
-  _getFilter(query) {
-    let filterIndex = this.filters.findIndex((filter) => {
+  _getFilter(query: string) {
+    let filterIndex = this.filters.findIndex((filter: any) => {
       return filter.query === query;
     });
 
@@ -388,14 +388,14 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
     }
   }
 
-  _changeFilterValue(e: object) {
+  _changeFilterValue(e: any) {
     if (!e || !e.currentTarget) {
       return;
     }
 
     let query = e.currentTarget.id,
       date = _.get(e, 'detail.prettyDate'),
-      queryObject;
+      queryObject: any;
 
     if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
       e.currentTarget.parentElement.value = this.prettyDate(date);
@@ -406,9 +406,7 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
       };
 
     } else if (e.detail.item && query) {
-      queryObject = {
-        page: '1'
-      };
+      queryObject = {page: '1'};
       // e.detail.item.item doesn't from etools-dropdown
       queryObject[query] = e.detail.item.getAttribute('internal-id');
     }

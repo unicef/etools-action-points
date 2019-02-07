@@ -1,6 +1,6 @@
-import '../common-elements/lodash.js';
+import * as _ from 'lodash';
 
-let _permissionCollection = {};
+let _permissionCollection: any = {};
 
 /*
  * Mixin for manage permission data.
@@ -70,7 +70,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return true;
   }
 
-  _createAction(action, existedAction) {
+  _createAction(action: string, existedAction: any) {
     if (!existedAction || typeof existedAction === 'string') {
       return action;
     }
@@ -80,7 +80,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     };
   }
 
-  getFieldAttribute(path: string, attribute: string, actionType: string) {
+  getFieldAttribute(path: string, attribute: string, actionType?: string | undefined) {
     if (!path || !attribute) {
       throw new Error('path and attribute arguments must be provided');
     }
@@ -126,7 +126,7 @@ const PermissionController = (superClass: any) => class extends superClass {
       this.getFieldAttribute(path, 'choices', 'POST');
   }
 
-  _getCollection(path: any, actionType: string) {
+  _getCollection(path: any, actionType: string | undefined) {
     path = path.split('.');
 
     let value: any = _permissionCollection;
@@ -160,7 +160,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     }
   }
 
-  actionAllowed(collection: string , action: string) {
+  actionAllowed(collection: any , action: string) {
     if (!action || !collection) {
       return false;
     }
@@ -178,13 +178,13 @@ const PermissionController = (superClass: any) => class extends superClass {
       return false;
     }
     if (typeof actions[0] !== 'string') {
-      actions = actions.map(action => action.code);
+      actions = actions.map((action: any) => action.code);
     }
 
     return !!~actions.indexOf(action);
   }
 
-  noActionsAllowed(collection: string) {
+  noActionsAllowed(collection: any) {
     if (!collection) {
       return true;
     }
@@ -196,7 +196,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     return !(collection && collection.allowed_actions && collection.allowed_actions.length);
   }
 
-  getActions(collection: string) {
+  getActions(collection: any) {
     if (!collection) {
       return null;
     }

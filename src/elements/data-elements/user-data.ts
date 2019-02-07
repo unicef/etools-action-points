@@ -1,20 +1,18 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement} from '@polymer/polymer/polymer-element';
 // import 'etools-ajax/etools-ajax';
-// @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 // @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import * as _ from 'lodash';
 import PermissionController from '../app-mixins/permission-controller';
 import UserController from '../app-mixins/user-controller';
-import AppConfig from '../core-elements/etools-app-config';
+import EndpointMixin from '../app-mixins/endpoint-mixin';
 
-class UserData extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  PermissionController,
-  UserController,
-  EtoolsAjaxRequestMixin
-], PolymerElement) {
+class UserData extends
+  EndpointMixin(
+    PermissionController(
+      UserController(
+        EtoolsAjaxRequestMixin(
+          PolymerElement)))) {
 
   // static get template() {
   //   return html`
@@ -36,18 +34,19 @@ class UserData extends EtoolsMixinFactory.combineMixins([
     let endpoint = this.getEndpoint('userProfile');
     this.sendRequest({
       method: 'GET',
-      endpoint: endpoint
+      endpoint: {
+        url: endpoint,
+        cachingKey: 'profile'
+      }
     }).then(
-        resp => {
-          this._handleResponse(resp)
-        }
+        (resp: any) => this._handleResponse(resp)
       ).catch(
-        resp => this._handleError(resp))
+        () => this._handleError())
   }
 
-  _handleResponse(data) {
+  _handleResponse(data: any) {
     let user = data;
-    let lastUserId = JSON.parse(localStorage.getItem('userId'));
+    let lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
     let countriesAvailable = _.get(user, 'profile.countries_available') || [];
 
     countriesAvailable = _.sortBy(countriesAvailable, ['name']);
@@ -63,7 +62,7 @@ class UserData extends EtoolsMixinFactory.combineMixins([
     this.dispatchEvent(new CustomEvent('user-profile-loaded', {bubbles: true}));
   }
 
-  _handleError(rsp, err) {
+  _handleError() {
     console.error('Can\'t load user data');
   }
 

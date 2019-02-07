@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {flush} from '@polymer/polymer/lib/utils/flush';
 import './multi-notification-item';
 /**
 * @polymer
@@ -56,8 +57,8 @@ class MultiNotificationList extends PolymerElement {
     this.addEventListener('reset-notifications', () => this._resetNotifications());
   }
 
-  _onNotificationShift({detail}) {
-    let index = this.notifications.findIndex((notification) => {
+  _onNotificationShift(this: any, {detail}: any) {
+    let index = this.notifications.findIndex((notification: any) => {
       return notification.id === detail.id;
     });
 
@@ -65,14 +66,14 @@ class MultiNotificationList extends PolymerElement {
       this.splice('notifications', index, 1);
     }
 
-    Polymer.dom.flush();
+    flush();
     // Check and show notifications from queue
     if (this.notificationsQueue.length) {
       this.push('notifications', this.shift('notificationsQueue'));
     }
   }
 
-  _onNotificationPush({detail}) {
+  _onNotificationPush(this: any, {detail}: any) {
     let notification = detail;
     notification.id = `toast___${this.count++}`;
 

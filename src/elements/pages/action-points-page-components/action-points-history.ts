@@ -1,13 +1,15 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import 'etools-data-table';
+import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import DateMixin from '../../app-mixins/date-mixin';
 
-class ActionPointsHistory extends EtoolsMixinFactory.combineMixins([
-  APDMixins.InputAttrs,
-  APDMixins.DateMixin
-], PolymerElement) {
+class ActionPointsHistory extends 
+  InputAttrs(
+    DateMixin(
+      PolymerElement)) {
+        
   static get template() {
     return html`
       ${moduleStyles}

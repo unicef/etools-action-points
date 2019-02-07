@@ -1,5 +1,5 @@
 import PermissionController from './permission-controller.js';
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
 /**
  * Mixin for localization functionality
@@ -34,10 +34,10 @@ const LocalizationMixin = (superClass: any) => class extends PermissionControlle
    * @param field of option in list
    * @returns {string} value for displaying
    */
-  getStringValue(value: string, list, field: string) {
+  getStringValue(value: string, list: string[], field: string) {
     let stringValue = value;
     if (!_.isNil(list) && !_.isNil(field)) {
-      let item = _.find(list, {
+      let item: any = _.find(list, {
         value: value
       });
       stringValue = item && item[field] ? item[field] : '';

@@ -1,36 +1,38 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import 'etools-dropdown';
 import 'etools-content-panel';
-import 'etools-ajax/etools-ajax';
+// import 'etools-ajax/etools-ajax';
+// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-loading';
 // import 'etools-datepicker/etools-datepicker-button';
-import '../../common-elements/lodash';
-import '../../app-mixins/localization-mixin';
-import '../../app-mixins/textarea-max-rows-mixin';
-import '../../app-mixins/input-attrs-mixin';
-import '../../core-elements/etools-app-config';
-import '../../app-mixins/date-mixin';
+import * as _ from 'lodash';
+import LocalizationMixin from '../../app-mixins/localization-mixin';
+import TextareaMaxRowsMixin from '../../app-mixins/textarea-max-rows-mixin';
+import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import DateMixin from '../../app-mixins/date-mixin';
+import StaticData from '../../app-mixins/static-data-mixin';
+import PermissionController from '../../app-mixins/permission-controller';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 
-class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
-  APDMixins.AppConfig,
-  APDMixins.InputAttrs,
-  APDMixins.StaticDataMixin,
-  APDMixins.PermissionController,
-  APDMixins.LocalizationMixin,
-  APDMixins.DateMixin,
-  APDMixins.TextareaMaxRowsMixin,
-  EtoolsAjaxRequestMixin
-], PolymerElement) {
+class ActionPointDetails extends
+  EndpointMixin(
+    InputAttrs(
+      StaticData(
+        PermissionController(
+          LocalizationMixin(
+            DateMixin(
+              TextareaMaxRowsMixin(
+                EtoolsAjaxRequestMixin(
+                  PolymerElement)))))))) {
 
   static get template() {
     return html`
@@ -91,6 +93,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
           color: var(--paper-input-container-color, var(--gray-20));
         }
       </style>
+
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
         <template is="dom-if" if="[[!actionAllowed(permissionPath, 'create')]]">
           <div class="row-h group">
@@ -360,7 +363,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     this.updateStyles();
   }
 
-  _setDrDOptions(editedItem) {
+  _setDrDOptions(editedItem: any) {
     let module = editedItem && editedItem.related_module;
     let categories = [];
 
@@ -381,7 +384,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     this.offices = this.getData('offices');
     this.sectionsCovered = this.getData('sectionsCovered');
     this.cpOutputs = this.getData('cpOutputsList');
-    this.unicefUsers = (this.getData('unicefUsers') || []).map((user) => {
+    this.unicefUsers = (this.getData('unicefUsers') || []).map((user: any) => {
       return {
         id: user.id,
         name: `${user.first_name} ${user.last_name}`
@@ -390,9 +393,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
 
     this._updateLocations();
     document.addEventListener('locations-loaded', () => this._updateLocations());
-    this.addEventListener('reset-validation', ({
-      detail
-    }) => {
+    this.addEventListener('reset-validation', ({detail}: any) => {
       let elements = this.shadowRoot.querySelectorAll('.validate-input');
       for (let element of elements) {
         element.invalid = false;
@@ -403,18 +404,18 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     });
   }
 
-  _updateEditedItem(actionPoint) {
+  _updateEditedItem(actionPoint: any) {
     this.editedItem = actionPoint && _.cloneDeep(actionPoint) || {};
   }
 
-  _updateLocations(filter) {
+  _updateLocations(filter?: any) {
     let locations = this.getData('locations') || [];
-    this.locations = locations.filter((location) => {
+    this.locations = locations.filter((location: any) => {
       return !filter || !!~filter.indexOf(+location.id);
     });
   }
 
-  _requestPartner(partnerId) {
+  _requestPartner(partnerId: number) {
     if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
       return;
     }
@@ -438,9 +439,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     });
     this.sendRequest({
         method: 'GET',
-        endpoint
+        endpoint: {
+          url: endpoint
+        }
       })
-      .then((data) => {
+      .then((data: any) => {
         this.partner = data || null;
         this.partnerRequestInProcess = false;
       }, () => {
@@ -449,7 +452,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
       });
   }
 
-  async _updateCpOutputs(interventionId) {
+  async _updateCpOutputs(interventionId: number) {
     if (interventionId === undefined) {
       return;
     }
@@ -479,7 +482,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
         return;
       }
 
-      let cpIds = [];
+      let cpIds: any[] = [];
       resultLinks.forEach((link) => {
         if (link && (link.cp_output || link.cp_output === 0)) {
           cpIds.push(link.cp_output);
@@ -506,7 +509,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
   }
   /* jshint ignore:end */
 
-  _checkAndResetData(intervention) {
+  _checkAndResetData(intervention: any) {
     let originalIntervention = _.get(this, 'originalActionPoint.intervention.id', null);
     let originalOutput = _.get(this, 'originalActionPoint.cp_output.id', null);
     let originalLocation = _.get(this, 'originalActionPoint.location.id', null);
@@ -527,7 +530,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     this.interventionRequestInProcess = false;
   }
 
-  _updateInterventions(intervention, originalId, partner) {
+  _updateInterventions(intervention: any, originalId: number, partner: any) {
     let interventions = partner && partner.interventions || [];
     let id = partner && partner.id;
     let exists = intervention && _.find(interventions, (item) => {
@@ -541,7 +544,7 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     this.interventions = interventions;
   }
 
-  isFieldReadonly(path, base, special) {
+  isFieldReadonly(path: string, base: string, special: any) {
     return this.isReadOnly(path, base) || !special;
   }
 
@@ -560,11 +563,11 @@ class ActionPointDetails extends EtoolsMixinFactory.combineMixins([
     return valid;
   }
 
-  getRefNumber(number) {
+  getRefNumber(number: number) {
     return number || '-';
   }
 
-  showCategory(categories) {
+  showCategory(categories: string[]) {
     return !!(categories && categories.length);
   }
 }

@@ -2,15 +2,15 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
-import 'etools-ajax/etools-ajax';
+// import 'etools-ajax/etools-ajax';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
-import AppConfig from '../core-elements/etools-app-config';
+import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 
-class PagesHeaderElement extends AppConfig(PolymerElement) {
+class PagesHeaderElement extends EndpointMixin(PolymerElement) {
 
   static get template() {
     return html`
@@ -181,14 +181,14 @@ class PagesHeaderElement extends AppConfig(PolymerElement) {
     return !!link;
   }
 
-  _setTitle(pageData, title: string) {
+  _setTitle(pageData: any, title: string) {
     if (!pageData || !pageData.unique_id) {
       return title;
     }
     return pageData.unique_id;
   }
 
-  exportData(e: object) {
+  exportData(e: any) {
     if (this.exportLinks < 1) {
       throw new Error('Can not find export link!');
     }
@@ -196,7 +196,7 @@ class PagesHeaderElement extends AppConfig(PolymerElement) {
     window.open(url, '_blank');
   }
  
-  _isDropDown(exportLinks) {
+  _isDropDown(exportLinks: any[]) {
     return exportLinks && (exportLinks.length > 1 ||
       (exportLinks[0] && exportLinks[0].useDropdown));
   }

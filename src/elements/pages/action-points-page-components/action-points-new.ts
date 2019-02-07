@@ -1,21 +1,26 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import 'etools-ajax/etools-ajax';
+// import 'etools-ajax/etools-ajax';
+// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import './action-point-details';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+// @ts-ignore
+// import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+import * as _ from 'lodash';
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
-import AppConfig from '../../core-elements/etools-app-config';
-
-class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  ErrorHandlerMixin,
-  EtoolsAjaxRequestMixin
-], PolymerElement) {
+/**
+ * @polymer
+ * @customElement
+ */
+class ActionPointsNew extends EndpointMixin(
+    EtoolsAjaxRequestMixin(
+      ErrorHandlerMixin(
+        PolymerElement))) {
 
   static get template() {
     return html`
@@ -67,7 +72,7 @@ class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
   }
 
   _changeRoutePath() {
-    let details = this.shadowRoot.querySelector('action-point-details');
+    let details: any = this.shadowRoot.querySelector('action-point-details');
     this.set('actionPoint', {});
     details.dispatchEvent(new CustomEvent('reset-validation'));
   }
@@ -93,10 +98,12 @@ class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
 
     this.sendRequest({
         method: 'POST',
-        endpoint,
+        endpoint: {
+          url: endpoint
+        },
         body: data
       })
-      .then((data) => {
+      .then((data: any) => {
         this.actionPoint = {};
         this.dispatchEvent(new CustomEvent('toast', {
           detail: {
@@ -113,7 +120,7 @@ class ActionPointsNew extends EtoolsMixinFactory.combineMixins([
           bubbles: true,
           composed: true
         }));
-      }, (err) => {
+      }, (err: any) => {
         this.errorHandler(err, this.permissionPath);
       });
   }

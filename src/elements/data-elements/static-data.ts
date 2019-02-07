@@ -1,37 +1,40 @@
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-// import 'etools-ajax/etools-ajax.js';
+import {html, PolymerElement} from '@polymer/polymer/polymer-element';
+// import 'etools-ajax/etools-ajax';
 // @ts-ignore
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin.js';
-// @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import * as _ from 'lodash';
-import StaticDataMixin from '../app-mixins/static-data-mixin.js';
-import ErrorHandler from '../app-mixins/error-handler-mixin.js';
-import PermissionController from '../app-mixins/permission-controller.js';
-import UserController from '../app-mixins/user-controller.js';
-import AppConfig from'../core-elements/etools-app-config.js';
-// import { log } from 'util.js';
+import StaticDataMixin from '../app-mixins/static-data-mixin';
+import ErrorHandler from '../app-mixins/error-handler-mixin';
+import PermissionController from '../app-mixins/permission-controller';
+import UserController from '../app-mixins/user-controller';
+import EndpointMixin from '../app-mixins/endpoint-mixin';
+// import { log } from 'util';
 /**
  * @polymer
  * @customElement
  */
-class StaticData extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  EtoolsAjaxRequestMixin,
-  StaticDataMixin,
-  ErrorHandler,
-  PermissionController,
-  UserController], PolymerElement) {
-
-  constructor() {
-    super();
-    this.dataLoaded = {};
-  }
+class StaticData extends
+  EndpointMixin(
+    EtoolsAjaxRequestMixin(
+      StaticDataMixin(
+        ErrorHandler(
+          PermissionController(
+            UserController(
+              PolymerElement)))))) {
 
   static get template() {
     return html`
       <user-data></user-data>
     `;
+  }
+
+  static get properties() {
+    return {
+      dataLoaded: {
+        type: Object,
+        value: {}
+      }
+    }
   }
 
   ready() {
@@ -64,7 +67,7 @@ class StaticData extends EtoolsMixinFactory.combineMixins([
   _loadAPOptions() {
     let endpoint = this.getEndpoint('actionPointsList');
     this.sendRequest({method: 'OPTIONS', endpoint})
-      .then(data => {
+      .then((data: any) => {
         let actions = data && data.actions;
         if (!this.isValidCollection(actions)) {
           this._responseError('partners options');
@@ -83,43 +86,43 @@ class StaticData extends EtoolsMixinFactory.combineMixins([
 
         this.dataLoaded.apOptions = true;
         this._allDataLoaded();
-      }, error => this._responseError('Partners', 'request error'));
+      }, () => this._responseError('Partners', 'request error'));
   }
 
   _loadPartners() {
     let endpoint = this.getEndpoint('partnerOrganisations');
     this.sendRequest({method: 'GET', endpoint})
-      .then(data => {
+      .then((data: any) => {
         let partnerOrganisations = _.sortBy(data, ['name']);
         this._setData('partnerOrganisations', partnerOrganisations);
         this.dataLoaded.organizations = true;
         this._allDataLoaded();
-      }, error => this._responseError('Partners', 'request error'));
+      }, () => this._responseError('Partners', 'request error'));
   }
 
   _loadLocations() {
     let endpoint = this.getEndpoint('locations');
     this.sendRequest({method: 'GET', endpoint})
-      .then(data => {
+      .then((data: any) => {
         let locations = _.sortBy(data, ['name']);
         this._setData('locations', locations);
 
         let locationsLoaded = new CustomEvent('locations-loaded');
         document.dispatchEvent(locationsLoaded);
-      }, error => this._responseError('Locations', 'request error'));
+      }, () => this._responseError('Locations', 'request error'));
   }
 
-  _loadData(dataName) {
+  _loadData(dataName: string) {
     let endpoint = this.getEndpoint(dataName);
     this.sendRequest({method: 'GET', endpoint})
-      .then(data => {
+      .then((data: any) => {
         this._setData(dataName, data);
         this.dataLoaded[dataName] = true;
         this._allDataLoaded();
-      }).catch(error => this._responseError(dataName, 'request error'));
+      }).catch(() => this._responseError(dataName, 'request error'));
   }
 
-  _triggerGlobalEvent(eventName, data) {
+  _triggerGlobalEvent(eventName: string, data: any) {
     let detail = {detail: data};
     let event = new CustomEvent(eventName, detail);
     document.dispatchEvent(event);

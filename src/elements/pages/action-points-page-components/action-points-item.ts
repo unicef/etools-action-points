@@ -1,11 +1,9 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import 'etools-ajax/etools-ajax';
-// @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+// import 'etools-ajax/etools-ajax';
 // @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-import AppConfig from '../../core-elements/etools-app-config'
+import EndpointMixin from '../../app-mixins/endpoint-mixin'
 import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
@@ -19,15 +17,16 @@ import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
+import * as _ from'lodash';
 
-class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  InputAttrs,
-  DateMixin,
-  PermissionController,
-  ErrorHandler,
-  EtoolsAjaxRequestMixin
-], PolymerElement) {
+class ActionPointsItem extends 
+  EndpointMixin(
+    InputAttrs(
+      DateMixin(
+        PermissionController(
+          ErrorHandler(
+            EtoolsAjaxRequestMixin(
+              PolymerElement)))))) {
 
   static get template() {
     return html`
@@ -114,9 +113,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
 
   ready() {
     super.ready();
-    this.addEventListener('action-activated', ({
-      detail
-    }) => {
+    this.addEventListener('action-activated', ({detail}: any) => {
       if (detail.type === 'save') {
         let request = this._update();
         request && request.then(() => {
@@ -144,7 +141,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
     this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
   }
 
-  _changeActionPointId(data: object) {
+  _changeActionPointId(data: any) {
     this.actionPointId = data.id;
     if (!this.actionPointId) {
       return;
@@ -156,9 +153,11 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
     this._loadOptions(this.actionPointId);
     this.sendRequest({
         method: 'GET',
-        endpoint
+        endpoint: {
+          url: endpoint
+        }
       })
-      .then(result => {
+      .then((result: any) => {
         this.set('originalActionPoint', _.cloneDeep(result));
         this.set('actionPoint', this._prepareActionPoint(result));
       });
@@ -173,7 +172,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         method: 'OPTIONS',
         endpoint
       })
-      .then(data => {
+      .then((data: any) => {
         let actions = data && data.actions;
         if (!this.collectionExists(permissionPath)) {
           this._addToCollection(permissionPath, actions);
@@ -208,8 +207,8 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
     ]);
   }
 
-  _resolveFields(actionPoint: object, fields) {
-    let data = actionPoint || {};
+  _resolveFields(actionPoint: object, fields: any) {
+    let data: any = actionPoint || {};
     for (let field of fields) {
       let fieldValue = data[field];
       if (fieldValue && fieldValue.id) {
@@ -238,7 +237,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         method: 'POST',
         endpoint
       })
-      .then((data) => {
+      .then((data: any) => {
         this.dispatchEvent(new CustomEvent('toast', {
           detail: {
             text: ' Action Point successfully completed.'
@@ -249,7 +248,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         this.set('originalActionPoint', _.cloneDeep(data));
         this.actionPoint = this._prepareActionPoint(data);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
       })
       .finally(() => {
@@ -263,8 +262,8 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
       });
   }
 
-  _getChangedData(oldData, newData) {
-    return _.pickBy(newData, (value, key) => {
+  _getChangedData(oldData: any, newData: any) {
+    return _.pickBy(newData, (value: any, key: any) => {
       return !_.isEqual(oldData[key], value);
     });
   }
@@ -296,7 +295,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         endpoint,
         body: data
       })
-      .then((data) => {
+      .then((data: any) => {
         this.dispatchEvent(new CustomEvent('toast', {
           detail: {
             text: ' Action Point successfully updated.'
@@ -314,7 +313,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
           composed: true
         }));
       })
-      .catch((err) => {
+      .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
       });
   }
@@ -323,11 +322,11 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
     this.isOpenedHistory = true;
   }
 
-  hasHistory(history) {
+  hasHistory(history: string[]) {
     return history && history.length > 0;
   }
 
-  _setExportLinks(actionPoint) {
+  _setExportLinks(actionPoint: any) {
     if (!actionPoint || !actionPoint.id) {
       return '';
     }

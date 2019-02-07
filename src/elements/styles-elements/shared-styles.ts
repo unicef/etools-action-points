@@ -2,7 +2,6 @@
 // not for styling index.html or pmp-shell
 
 import {html} from '@polymer/polymer/polymer-element';
-// import '@webcomponents/shadycss/entrypoints/apply-shim';
 
 export const sharedStyles = html`
   <style>

@@ -1,16 +1,18 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import './lodash';
+import {PolymerElement, html} from '@polymer/polymer';
+import * as _ from 'lodash';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-icon/iron-icon';
 import {moduleStyles} from '../styles-elements/module-styles';
+
 /**
 * @polymer
-* @extends HTMLElement
+* @customElement
+* @extends {PolymerElement}
 */
 class ActionButtons extends PolymerElement {
-  static get template() {
+  public static get template() {
     return html`
       ${moduleStyles}
       <style>
@@ -139,15 +141,18 @@ class ActionButtons extends PolymerElement {
             'complete': 'assignment-turned-in'
           };
         }
+      },
+      statusBtnMenuOpened: {
+        type: Boolean
       }
     };
   }
 
-  closeMenu() {
+  closeMenu(this: any) {
     this.statusBtnMenuOpened = false;
   }
 
-  _setButtonText(item: object) {
+  _setButtonText(item: any) {
     if (!item) {
       return '';
     }
@@ -160,7 +165,7 @@ class ActionButtons extends PolymerElement {
     return text.toUpperCase();
   }
 
-  _btnClicked(event: object) {
+  _btnClicked(this: any, event: any) {
     if (!event || !event.target) {
       return;
     }
@@ -196,18 +201,18 @@ class ActionButtons extends PolymerElement {
     return length > 1 ? 'with-menu' : '';
   }
 
-  _filterActions(action) {
+  _filterActions(this: any, action: any) {
     return !_.isEqual(action, this.actions[0]);
   }
 
-  _setIcon(item, icons) {
+  _setIcon(item: any, icons: any) {
     if (!icons || !item) {
       return '';
     }
     return icons[(item.code || item)] || '';
   }
 
-  _setActionCode(item) {
+  _setActionCode(item: any) {
     return item && (item.code || item);
   }
 }

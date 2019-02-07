@@ -1,9 +1,9 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import AppConfig from '../core-elements/etools-app-config';
+import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles.js';
 import {pageLayoutStyles} from '../styles-elements/page-layout-styles.js';
 
-class NotFoundPageView extends AppConfig(PolymerElement) {
+class NotFoundPageView extends EndpointMixin(PolymerElement) {
   static get template() {
     return html`
       ${sharedStyles}

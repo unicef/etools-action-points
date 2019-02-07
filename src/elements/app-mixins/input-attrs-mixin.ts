@@ -1,4 +1,4 @@
-import '../common-elements/lodash.js';
+import * as _ from 'lodash';
 import PermissionController from './permission-controller.js';
 
 /*
@@ -80,7 +80,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @returns {boolean}
    * @private
    */
-  _resetFieldError(event: CustomEvent) {
+  _resetFieldError(event: any) {
     if (!event || !event.target) {
       return false;
     }
@@ -91,6 +91,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
     }
 
     event.target.invalid = false;
+    return
   }
 
   _resetInputs() {

@@ -30,24 +30,24 @@ global.config = {
     buildDirectory: 'build'
 };
 
-const build = require('./gulp-tasks/build');
+// const build = require('./gulp-tasks/build');
 
-gulp.task('watch', function() {
-    gulp.watch(['./src/elements/**'], gulp.series(jsLinter, buildElements));
-    gulp.watch(['./manifest.json', './index.html'], gulp.series(copyAssets));
-    gulp.watch(['./images/**/*.*'], gulp.series(copyImages));
-    gulp.watch(['./node_modules/**'], gulp.series(copyBower()));
-});
+// gulp.task('watch', function() {
+//     gulp.watch(['./src/elements/**'], gulp.series(jsLinter, buildElements));
+//     gulp.watch(['./manifest.json', './index.html'], gulp.series(copyAssets));
+//     gulp.watch(['./images/**/*.*'], gulp.series(copyImages));
+//     gulp.watch(['./node_modules/**'], gulp.series(copyBower()));
+// });
 
-gulp.task('lint', gulp.series(jsLinter));
-gulp.task('test', gulp.series(clean, gulp.parallel(buildElements, copyAssets), runTests));
+// gulp.task('lint', gulp.series(jsLinter));
+// gulp.task('test', gulp.series(clean, gulp.parallel(buildElements, copyAssets), runTests));
 
-gulp.task('startServer', () => {nodemon({script: 'express.js'});});
+// gulp.task('startServer', () => {nodemon({script: 'express.js'});});
 
-gulp.task('devBuild', gulp.series(clean, jsLinter, gulp.parallel(buildElements, copyAssets, copyImages)));
-gulp.task('prodBuild', gulp.series(clean, preBuild, build, postBuild));
+// gulp.task('devBuild', gulp.series(clean, jsLinter, gulp.parallel(buildElements, copyAssets, copyImages)));
+// gulp.task('prodBuild', gulp.series(clean, preBuild, build, postBuild));
 
-gulp.task('devup', gulp.series('devBuild', gulp.parallel('startServer', 'watch')));
+// gulp.task('devup', gulp.series('devBuild', gulp.parallel('startServer', 'watch')));
 
 // gulp.task('default', gulp.series(['prodBuild']));
 gulp.task('default', function() {

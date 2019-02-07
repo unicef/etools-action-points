@@ -1,17 +1,26 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
+import '@polymer/paper-item/paper-item';
 // @ts-ignore
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
-import '@polymer/paper-item/paper-item';
-import 'etools-ajax/etools-ajax';
-import AppConfig from '../etools-app-config';
+// @ts-ignore
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
 
-class CountriesDropdown extends mixinBehaviors(
-  [EtoolsPageRefreshMixin],
-  AppConfig(PolymerElement)
-) {
+/**
+ * @polymer
+ * @customElement
+ * @applies EtoolsPageRefreshMixin
+ * @applies EndpointMixin
+ * @applies EtoolsAjaxRequestMixin
+ * @extends {PolymerElement}
+ */
+class CountriesDropdown extends
+  EtoolsPageRefreshMixin(
+    EtoolsAjaxRequestMixin(
+      EndpointMixin(
+        PolymerElement))) {
 
   static get template() {
     return html`
@@ -128,10 +137,6 @@ class CountriesDropdown extends mixinBehaviors(
 
       </style>
 
-      <etools-ajax method="POST" url="{{url}}" body="{{countryData}}"
-                   on-success="_handleResponse" on-forbidden="_handleError" on-fail="_handleError">
-      </etools-ajax>
-
       <paper-menu-button id="dropdown" vertical-align="top" vertical-offset="56" horizontal-align="right">
         <paper-button slot="dropdown-trigger">
           <span class="dropdown-text">[[country.name]]</span>
@@ -172,42 +177,41 @@ class CountriesDropdown extends mixinBehaviors(
   }
 
   static get observers() {
-    return [
-      '_setCountryIndex(countries, countryId)'
-    ];
+    return ['_setCountryIndex(countries, countryId)'];
   }
 
-  connectedCallback() {
+  connectedCallback(this: any) {
     super.connectedCallback();
     this.addEventListener('paper-dropdown-close', this._toggleOpened);
     this.addEventListener('paper-dropdown-open', this._toggleOpened);
   }
-  _setCountryIndex(countries: object[], countryId: number) {
+  
+  _setCountryIndex(this: any,countries: object[], countryId: number) {
     if (!(countries instanceof Array)) {
       return;
     }
 
-    this.countryIndex = countries.findIndex((country: object) => {
+    this.countryIndex = countries.findIndex((country: any) => {
       return country.id === countryId;
     });
   }
 
-  _toggleOpened() {
+  _toggleOpened(this: any) {
     this.set('opened', this.$.dropdown.opened);
   }
 
-  _countrySelected(e: object) {
+  _countrySelected(this: any, e: CustomEvent) {
     this.set('country', this.$.repeat.itemForElement(e.detail.item));
   }
 
-  _changeCountry(event: object) {
+  _changeCountry(this: any, event: any) {
     let country = event && event.model && event.model.item;
     let id = country && country.id;
 
     if (Number(parseFloat(id)) !== id) {
       throw new Error('Can not find country id!');
     }
-
+    
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
         type: 'change-country',
@@ -217,13 +221,22 @@ class CountriesDropdown extends mixinBehaviors(
       bubbles: true,
       composed: true
     }));
-    this.countryData = {
+    let url = this.getEndpoint('changeCountry').url;
+    let countryData = {
       country: id
     };
-    this.url = this.getEndpoint('changeCountry').url;
+    this.sendRequest({
+      method: 'POST',
+      endpoint: {
+        url: url
+      },
+      body: {
+        countryData
+      }
+    }).then(() => this._handleResponse).catch(() => this._handleError)
   }
 
-  _handleError() {
+  _handleError(this: any) {
     this.countryData = null;
     this.url = null;
     this.dispatchEvent(new CustomEvent('global-loading', {
@@ -242,12 +255,12 @@ class CountriesDropdown extends mixinBehaviors(
     }));
   }
 
-  _handleResponse() {
+  _handleResponse(this: any) {
     this.refreshInProgress = true;
     this.clearDexieDbs();
   }
 
-  _refreshPage() {
+  _refreshPage(this: any) {
     this.refreshInProgress = false;
     window.location.href = `${window.location.origin}/apd/`;
   }

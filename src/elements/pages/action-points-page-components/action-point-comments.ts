@@ -2,32 +2,29 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
 // @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-content-panel';
 import 'etools-data-table';
-import 'etools-dialog';
+// import 'etools-dialog';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import TextareaMaxRows from '../../app-mixins/textarea-max-rows-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
-import AppConfig from '../../core-elements/etools-app-config';
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import PermissionController from '../../app-mixins/permission-controller';
 import DateMixin from '../../app-mixins/date-mixin';
 
-class ActionPointComments extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  InputAttrs,
-  PermissionController,
-  LocalizationMixin,
-  DateMixin,
-  ErrorHandlerMixin,
-  TextareaMaxRows,
-  EtoolsAjaxRequestMixin
-], PolymerElement) {
+class ActionPointComments extends 
+  EndpointMixin(
+    InputAttrs(
+      PermissionController(
+        LocalizationMixin(
+          DateMixin(
+            ErrorHandlerMixin(
+              TextareaMaxRows(
+                EtoolsAjaxRequestMixin(PolymerElement)))))))) {
 
   static get template() {
     return html`
@@ -168,18 +165,20 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
     this.isSaveComment = true;
     this.sendRequest({
         method: 'PATCH',
-        endpoint,
+        endpoint: {
+          url: endpoint
+        },
         body: {
           comments: comments
         }
       })
-      .then((response) => {
+      .then((response: any) => {
         this.set('actionPoint.comments', response.comments);
         this.set('actionPoint.history', response.history);
         this.openedCommentDialog = false;
         this.isSaveComment = false;
       })
-      .catch((err) => {
+      .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
         this.isSaveComment = false;
       });
@@ -200,7 +199,7 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
     return valid;
   }
 
-  _filterComments(comments, pageNumber: number, pageSize: number) {
+  _filterComments(comments: string[], pageNumber: number, pageSize: number) {
     if (!comments) {
       return;
     }

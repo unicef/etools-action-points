@@ -1,4 +1,4 @@
-import '../common-elements/lodash';
+import * as _ from 'lodash';
 
 let _user: any;
 let _groups: any;
@@ -29,7 +29,7 @@ const UserController = (superClass: any) => class extends superClass {
     if (!user.groups.length) {
       throw new Error('Can not find user group!');
     }
-    _groups = user.groups.map((group: object) => {
+    _groups = user.groups.map((group: any) => {
       return group.name;
     });
   }

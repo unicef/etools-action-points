@@ -1,35 +1,33 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/paper-card/paper-card.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
-import '@polymer/iron-location/iron-location.js';
-import '@polymer/paper-tooltip/paper-tooltip.js';
-// @ts-ignore
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory.js';
-import AppConfig from '../../core-elements/etools-app-config';
-import '../../common-elements/pages-header-element.js';
-import '../../common-elements/search-and-filter.js';
-import '../../common-elements/filters-element.js';
-import 'etools-data-table/etools-data-table.js';
-import '../../data-elements/action-points-data.js';
-import StaticData from '../../app-mixins/static-data-mixin.js';
-import Localization from '../../app-mixins/localization-mixin.js';
-import Date from '../../app-mixins/date-mixin.js';
-import InputAttrs from '../../app-mixins/input-attrs-mixin.js';
-import '../../common-elements/text-content.js';
-import {moduleStyles} from '../../styles-elements/module-styles.js';
-import {sharedStyles} from '../../styles-elements/shared-styles.js';
-import {dataTableStyles} from '../../styles-elements/data-table-styles.js';
+import {PolymerElement, html} from '@polymer/polymer';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
+import '@polymer/paper-card/paper-card';
+import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes';
+import '@polymer/iron-location/iron-location';
+import '@polymer/paper-tooltip/paper-tooltip';
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import '../../common-elements/pages-header-element';
+import '../../common-elements/search-and-filter';
+import '../../common-elements/filters-element';
+import 'etools-data-table/etools-data-table';
+import '../../data-elements/action-points-data';
+import StaticData from '../../app-mixins/static-data-mixin';
+import Localization from '../../app-mixins/localization-mixin';
+import DateMixin from '../../app-mixins/date-mixin';
+import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import '../../common-elements/text-content';
+import {moduleStyles} from '../../styles-elements/module-styles';
+import {sharedStyles} from '../../styles-elements/shared-styles';
+import {dataTableStyles} from '../../styles-elements/data-table-styles';
+import * as _ from 'lodash';
 
-class ActionPointsList extends EtoolsMixinFactory.combineMixins([
-  AppConfig,
-  StaticData,
-  InputAttrs,
-  QueryParams,
-  Localization,
-  Date
-], PolymerElement) {
+class ActionPointsList extends 
+  EndpointMixin(
+    StaticData(
+      InputAttrs(
+        Localization(
+          DateMixin(
+            PolymerElement))))) {
 
   static get template() {
     return html`
@@ -415,7 +413,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             query: 'due_date__gte',
             isDatePicker: true
           }
-        ], (filter) => {
+        ], (filter: any) => {
           return filter.name.toLowerCase();
         })
       },
@@ -463,7 +461,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     this._initFilters();
     this._initSort();
     this.isShowCompleted = this.queryParams.status !== 'open';
-    this.addEventListener('sort-changed', e => this._sort(e));
+    this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
   _initSort() {
@@ -492,7 +490,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     }
   }
 
-  _updateQueries(queryParams, oldQueryParams) {
+  _updateQueries(queryParams: any, oldQueryParams: any) {
     if (!~this.path.indexOf('action-points/list')) return;
     if (this.queryParams.reload) {
       this.clearQueries();
@@ -515,9 +513,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     }
   }
 
-  _sort({
-    detail
-  }) {
+  _sort({detail}: any) {
     let ordering = detail.field;
     if (this.queryParams.ordering && this.queryParams.ordering === ordering) {
       ordering = this.queryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
@@ -525,7 +521,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     this.set('queryParams.ordering', ordering);
   }
 
-  _getLink(actionPointId) {
+  _getLink(actionPointId: number) {
     return `action-points/detail/${actionPointId}`;
   }
 
@@ -538,7 +534,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
   }
 
   setFiltersSelections() {
-    let usersList = this.getData('unicefUsers').map((user) => {
+    let usersList = this.getData('unicefUsers').map((user: any) => {
       return {
         id: user.id,
         name: `${user.first_name} ${user.last_name}`
@@ -593,21 +589,22 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     });
   }
 
-  _getFilterIndex(query) {
+  _getFilterIndex(query: any) {
     if (!this.filters) {
       return -1;
     }
 
-    return this.filters.findIndex((filter) => {
+    return this.filters.findIndex((filter: any) => {
       return filter.query === query;
     });
   }
 
-  setFilterSelection(filterIndex, data) {
+  setFilterSelection(filterIndex: number, data: any) {
     if (filterIndex !== undefined && filterIndex !== -1) {
       this.set(`filters.${filterIndex}.selection`, data);
       return true;
     }
+    return;
   }
 
   _requestData() {
@@ -615,15 +612,11 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
   }
 
-  _pageNumberChanged({
-    detail
-  }) {
+  _pageNumberChanged({detail}: any) {
     this.set('queryParams.page', detail.value);
   }
 
-  _pageSizeSelected({
-    detail
-  }) {
+  _pageSizeSelected({detail}: any) {
     this.set('queryParams.page_size', detail.value);
   }
   _setShowCompleted(isShowCompleted: boolean) {

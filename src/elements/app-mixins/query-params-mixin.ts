@@ -31,6 +31,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @returns {Window|Location|String|*|string}
    */
   getLocationProperty(property: string) {
+    // @ts-ignore
     return window && window.location && window.location[property] || '';
   }
 

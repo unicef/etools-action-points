@@ -1,19 +1,21 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/av-icons';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-button/paper-button';
-import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 import 'etools-content-panel';
 import StaticData from '../app-mixins/static-data-mixin';
 import PermissionController from '../app-mixins/permission-controller';
 import './action-buttons';
 import {moduleStyles} from '../styles-elements/module-styles';
+import * as _ from 'lodash';
 
-class StatusElement extends EtoolsMixinFactory.combineMixins([
-  PermissionController,
-  StaticData], PolymerElement) {
+class StatusElement extends
+  PermissionController(
+    StaticData(
+      PolymerElement)) {
+
   static get template() {
       return html`
         ${moduleStyles}
@@ -276,7 +278,10 @@ class StatusElement extends EtoolsMixinFactory.combineMixins([
         type: Array,
         value() {return [];}
       },
-      permissionPath: String
+      permissionPath: String,
+      statuses: {
+        type: Array
+      }
     };
   }
 
@@ -285,7 +290,7 @@ class StatusElement extends EtoolsMixinFactory.combineMixins([
     this.statuses = this.getData('statuses') || [];
   }
 
-  _isStatusFinish(actionPoint, status) {
+  _isStatusFinish(actionPoint: any, status: string) {
     let currentStatus = actionPoint.status;
     if (!currentStatus) {return false;}
     let currentStatusIndex = _.findIndex(this.statuses, {value: currentStatus});
@@ -293,7 +298,7 @@ class StatusElement extends EtoolsMixinFactory.combineMixins([
     return (currentStatusIndex >= statusIndex);
   }
 
-  _getStatusClass(actionPoint, status: string) {
+  _getStatusClass(actionPoint: any, status: string) {
     let currentStatus = actionPoint.status;
 
     if (!currentStatus && status === 'open') {
@@ -309,7 +314,7 @@ class StatusElement extends EtoolsMixinFactory.combineMixins([
     return index + 1;
   }
 
-  hideDivider(status, statuses) {
+  hideDivider(status: string, statuses: any) {
     let lastStatus = statuses[statuses.length - 1];
     return !!(lastStatus && lastStatus.value === status);
   }

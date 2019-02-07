@@ -7,7 +7,7 @@ import '@polymer/iron-selector/iron-selector';
 import '@polymer/iron-icons/maps-icons';
 import '@polymer/app-layout/app-layout';
 import './side-bar-item';
-import AppConfig from './etools-app-config'
+import EndpointMixin from '../app-mixins/endpoint-mixin'
 import {moduleStyles} from '../styles-elements/module-styles';
 import {navMenuStyles} from '../styles-elements/nav-menu-styles';
 
@@ -15,7 +15,7 @@ import {navMenuStyles} from '../styles-elements/nav-menu-styles';
  * @polymer
  * @customElement
  */
-class AppSidebarMenu extends AppConfig(PolymerElement) {
+class AppSidebarMenu extends EndpointMixin(PolymerElement) {
   static get template() {
     return html`
       ${navMenuStyles}
@@ -154,7 +154,7 @@ class AppSidebarMenu extends AppConfig(PolymerElement) {
     };
   }
 
-  _menuSizeChange(newVal, oldVal) {
+  _menuSizeChange(newVal: string, oldVal: string) {
     if (newVal !== oldVal) {
       this.dispatchEvent(new CustomEvent('resize-main-layout', {
         bubbles: true,
@@ -163,7 +163,7 @@ class AppSidebarMenu extends AppConfig(PolymerElement) {
     }
   }
 
-  _toggleSmallMenu(e: object) {
+  _toggleSmallMenu(e: CustomEvent) {
     e.stopImmediatePropagation();
     this.dispatchEvent(new CustomEvent('toggle-small-menu', {
       bubbles: true,

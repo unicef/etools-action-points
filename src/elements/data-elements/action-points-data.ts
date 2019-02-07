@@ -1,16 +1,12 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import 'etools-ajax/etools-ajax.js';
-import AppConfig from '../core-elements/etools-app-config.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element';
+// import 'etools-ajax/etools-ajax';
+import EndpointMixin from '../app-mixins/endpoint-mixin';
 import QueryParams from '../app-mixins/query-params-mixin'
+// @ts-ignore
+import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import ErrorHandler from '../app-mixins/error-handler-mixin';
 
-class ActionPointsData extends AppConfig(QueryParams(PolymerElement)) {
-  static get template() {
-    return html`
-      <etools-ajax endpoint="[[endpoint]]" on-success="_actionPointsLoaded" on-fail="_responseError">
-      </etools-ajax>
-    `;
-  }
-
+class ActionPointsData extends EndpointMixin(ErrorHandler(QueryParams(PolymerElement))) {
   static get properties() {
     return {
       actionPoints: {
@@ -42,16 +38,18 @@ class ActionPointsData extends AppConfig(QueryParams(PolymerElement)) {
       bubbles: true,
       composed: true
     }));
-    this.endpoint = this.getEndpoint('actionPointsList');
-    this.endpoint.url += this.getQueriesString();
+    let endpoint = this.getEndpoint('actionPointsList');
+    endpoint.url += this.getQueriesString();
+
+    this.sendRequest({
+      method: 'GET',
+      endpoint: {
+        url: endpoint.url
+      }
+    }).then((resp: any) => this._actionPointsLoaded(resp)).catch((err: any) => this._responseError(err))
   }
 
-  _actionPointsLoaded(e: object, detail) {
-    if (!detail || !detail.results || detail.count === undefined) {
-      this._responseError(e, detail);
-      return;
-    }
-
+  _actionPointsLoaded(detail: any) {
     this.actionPoints = detail.results;
     this.listLength = detail.count;
 

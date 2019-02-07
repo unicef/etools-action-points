@@ -1,4 +1,4 @@
-import '../common-elements/lodash.js';
+import * as _ from 'lodash';
 import PermissionController from './permission-controller.js';
 
 /**
@@ -7,7 +7,8 @@ import PermissionController from './permission-controller.js';
  * @constructor
  */
 const ErrorHandlerMixin = (superClass: any) => class extends PermissionController(superClass) {
-  refactorErrorObject(errorData) {
+  // @ts-ignore
+  refactorErrorObject(errorData: any) {
     if (!errorData) {
       return {};
     }
@@ -32,7 +33,7 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
     return !!value;
   }
 
-  errorHandler(errorObject, permissionPath) {
+  errorHandler(errorObject: any, permissionPath: string) {
     let errorMessages = errorObject ? this._getErrors(errorObject.response, permissionPath) : [];
     let nonFieldMessage = this._getNonFieldsMessage(errorObject);
     if (nonFieldMessage) {
@@ -57,8 +58,8 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
    * @returns {Array}
    * @private
    */
-  _getErrors(errors, permissionPath, basePath = []) {
-    let messages = [];
+  _getErrors(errors: string[], permissionPath: string, basePath: number[] = []) {
+    let messages: string[] = [];
     if (!errors) {
       return messages;
     }
@@ -86,20 +87,21 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
    * @returns {string}
    * @private
    */
-  _getErrorMessage(field, error, permissionPath) {
+  _getErrorMessage(field: string, error: string, permissionPath: string) {
     let fieldLabel = this.getFieldAttribute(`${permissionPath}.${field}`, 'label');
     return `${fieldLabel}: ${error}`;
   }
 
-  _getNonFieldsMessage(errorObj) {
+  // @ts-ignore
+  _getNonFieldsMessage(errorObj: any) {
     if (!_.isObject(errorObj)) {
       return null;
     }
 
-    let message = null;
+    let message: string | null = null;
     if (_.isArray(errorObj)) {
       for (let value of errorObj) {
-        let recursive = this._getNonFieldsMessage(value);
+        let recursive: string | null = this._getNonFieldsMessage(value);
         recursive && !message ? message = recursive : null;
       }
     } else {
@@ -115,7 +117,8 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
     return message;
   }
 
-  _responseError(message, type, eventType = 'error') {
+  _responseError(message: string, type?: string, eventType: string = 'error') {
+    var console: any
     console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
   }
 };

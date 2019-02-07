@@ -71,7 +71,7 @@ class MultiNotificationItem extends PolymerElement {
     this.addEventListener('transitionend', e => this._onTransitionEnd(e));
   }
 
-  _onTransitionEnd(e) {
+  _onTransitionEnd(this: any, e: any) {
     if (e && e.target === this && e.propertyName === 'opacity') {
       if (!this.opened) {
         this.dispatchEvent(new CustomEvent('notification-shift', {
@@ -97,7 +97,7 @@ class MultiNotificationItem extends PolymerElement {
     });
   }
 
-  _openedChanged(opened) {
+  _openedChanged(opened: boolean) {
     if (opened) {
       this._renderOpened();
     } else {
@@ -105,7 +105,7 @@ class MultiNotificationItem extends PolymerElement {
     }
   }
 
-  close() {
+  close(this: any) {
     this.opened = false;
   }
 }
