@@ -57,7 +57,6 @@ class PagesHeader extends APDMixins.AppConfig(Polymer.Element) {
     }
 
     exportData(e) {
-        debugger;
         if (this.exportLinks < 1) {throw new Error('Can not find export link!');}
         let url = (e && e.model && e.model.item) ? e.model.item.url : this.exportLinks[0].url;
         window.open(url, '_blank');

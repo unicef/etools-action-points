@@ -147,6 +147,10 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
                 type: Object,
                 observer: '_setExportLinks',
                 notify: true
+            },
+            exportLinks: {
+                type: Array,
+                notify: true
             }
         };
     }
@@ -304,20 +308,26 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     }
     _setExportLinks() {
         let paramString = '';
-        if (this.exportParams) {
+        if (!this._isEmpty(this.exportParams)) {
             let paramKeysArray = Object.keys(this.exportParams);
             let paramArray = [];
             if (paramKeysArray) {
                 paramArray = paramKeysArray.map(p => `${p}=${this.exportParams[p]}`);
             }
             paramString = paramArray.join('&');
-            paramString = '?'.concat(paramString)
+            paramString = '?'.concat(paramString);
         }
-        debugger
-        return [{
+        this.set('exportLinks', [{
             name: 'Export CSV',
             url: this.getEndpoint('actionPointsListExport').url + paramString
-        }];
+        }]);
+    }
+
+    _isEmpty(obj) {
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {return false;}
+        }
+        return true;
     }
 
     _getPriorityValue(priority) {
