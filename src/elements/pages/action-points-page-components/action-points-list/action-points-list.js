@@ -307,33 +307,19 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         }
     }
     _setExportLinks() {
-        let paramString = '';
-        if (!this._isEmpty(this.exportParams)) {
-            let paramKeysArray = Object.keys(this.exportParams);
-            let paramArray = [];
-            if (paramKeysArray) {
-                paramArray = paramKeysArray.map(p => `${p}=${this.exportParams[p]}`);
-            }
-            paramString = paramArray.join('&');
-            paramString = '?'.concat(paramString);
+        let qs = '';
+        if (!_.isEmpty(this.exportParams)) {
+            qs =`?${queryString.stringify(this.exportPrams)}`;
         }
         this.set('exportLinks', [{
             name: 'Export CSV',
-            url: this.getEndpoint('actionPointsListExport').url + paramString
+            url: this.getEndpoint('actionPointsListExport').url + qs
         }]);
-    }
-
-    _isEmpty(obj) {
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {return false;}
-        }
-        return true;
     }
 
     _getPriorityValue(priority) {
         return priority === true ? 'high' : '';
     }
 }
-
 
 customElements.define(ActionPointsList.is, ActionPointsList);
