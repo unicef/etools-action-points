@@ -309,7 +309,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     _setExportLinks() {
         let qs = '';
         if (!_.isEmpty(this.exportParams)) {
-			qs = querystring.stringify(this.exportParams);
+			qs = `?${querystring.stringify(this.exportParams)}`;
         }
         this.set('exportLinks', [{
             name: 'Export CSV',
