@@ -48,7 +48,6 @@
     "polymer-build": "^3.0.1",
     "polymer-cli": "^1.6.0",
     "polytempl": "^1.0.3",
-    "query-string": "^6.2.0",
     "stream-combiner2": "^1.1.1",
     "through2": "^2.0.3",
     "wct-headless": "^2.2.2",

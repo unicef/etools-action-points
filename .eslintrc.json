@@ -15,6 +15,7 @@
     "brace-style": "off",
     "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools..|^APDMixins.." }],
     "no-var": "off",
+    "no-debugger": "off",
     "no-console": 0,
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
@@ -36,6 +37,7 @@
     "EtoolsMixins": true,
     "APDMixins": true,
     "_": true,
+    "queryString":true,
     "ShadyCSS": true,
     "Set": true
   }
