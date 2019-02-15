@@ -1,7 +1,9 @@
 <!--import [polymer/polymer-element, etools-behaviors/etools-mixin-factory, iron-flex-layout/iron-flex-layout-classes,
             pages-header-element, search-and-filter, filters-element, etools-data-table, paper-card, iron-flex-layout,
             static-data-mixin, action-points-data, iron-location, localization-mixin, date-mixin, input-attrs-mixin,
-            text-content, paper-tooltip]-->
+            text-content, paper-tooltip, query-string]-->
+
+<!-- <link ref="import" href="../../../common-elements/query-string/query-string.html"> -->
 
 <dom-module id="action-points-list">
     <template>
@@ -21,7 +23,7 @@
                 hide-print-button
                 link="action-points/new"
                 show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
-                export-links="[[_setExportLinks()]]"
+                export-links="[[exportLinks]]"
                 btn-text="Add Action Point"
                 page-title="Action Points">
         </pages-header-element>

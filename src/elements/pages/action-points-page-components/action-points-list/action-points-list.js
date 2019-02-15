@@ -142,6 +142,15 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
             basePermissionPath: {
                 type: String,
                 value: 'action_points'
+            },
+            exportParams: {
+                type: Object,
+                observer: '_setExportLinks',
+                notify: true
+            },
+            exportLinks: {
+                type: Array,
+                notify: true
             }
         };
     }
@@ -187,6 +196,11 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
     }
 
     _updateQueries(queryParams, oldQueryParams) {
+        // deep clone queryParams, remove page/page_size, and set to exportParams
+        let exportParams = JSON.parse(JSON.stringify(queryParams));
+        delete exportParams['page_size'];
+        delete exportParams['page'];
+        this.set('exportParams', exportParams);
         if (!~this.path.indexOf('action-points/list')) return;
         if (this.queryParams.reload) {
             this.clearQueries();
@@ -293,16 +307,19 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         }
     }
     _setExportLinks() {
-        return [{
+        let qs = '';
+        if (!_.isEmpty(this.exportParams)) {
+			qs = `?${querystring.stringify(this.exportParams)}`;
+        }
+        this.set('exportLinks', [{
             name: 'Export CSV',
-            url: this.getEndpoint('actionPointsListExport').url
-        }];
+            url: this.getEndpoint('actionPointsListExport').url + qs
+        }]);
     }
 
     _getPriorityValue(priority) {
         return priority === true ? 'high' : '';
     }
 }
-
 
 customElements.define(ActionPointsList.is, ActionPointsList);
