@@ -19,6 +19,11 @@ import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
+// import sortBy from 'lodash/sortBy';
+// import some from 'lodash/some';
+// import map from 'lodash/map';
+// import each from 'lodash/each';
+// import omit from 'lodash/omit';
 import * as _ from 'lodash';
 
 class ActionPointsList extends 
@@ -315,7 +320,7 @@ class ActionPointsList extends
       },
       filters: {
         type: Array,
-        value: () => _.sortBy([{
+        value: [{
             name: 'Assignee',
             query: 'assigned_to',
             optionValue: 'id',
@@ -413,9 +418,7 @@ class ActionPointsList extends
             query: 'due_date__gte',
             isDatePicker: true
           }
-        ], (filter: any) => {
-          return filter.name.toLowerCase();
-        })
+        ]
       },
       isShowCompleted: {
         type: Boolean,
@@ -455,6 +458,7 @@ class ActionPointsList extends
   }
 
   connectedCallback() {
+    debugger
     super.connectedCallback();
     this.modules = this.getData('modules') || [];
     this.statuses = this.getData('statuses') || [];
@@ -622,7 +626,7 @@ class ActionPointsList extends
   _setShowCompleted(isShowCompleted: boolean) {
     if (!isShowCompleted) {
       this.set('queryParams.status', 'open');
-    } else {
+    } else if (this.queryParams) {
       this.queryParams = _.omit(this.queryParams, ['status']);
     }
   }

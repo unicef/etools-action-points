@@ -1,8 +1,6 @@
-import * as _ from 'lodash';
-// import _ from '../common-elements/lodash
-// import 'lodash/fp/cloneDeep';
-// import * as cloneDeep from 'lodash/cloneeep';
-// import {clone} from 'ramda';
+// import cloneDeep from 'lodash/cloneDeep';
+// import * as _ from 'lodash/index.js';
+// import cloneDeep from 'lodash-es/cloneDeep.js'
 
 let _staticData: any = {};
 /*
@@ -15,19 +13,22 @@ const StaticDataMixin = (superClass: any) => class extends superClass {
     if (!key || !data || _staticData[key]) {
       return false;
     }
-    _staticData[key] = _.cloneDeep(data);
+    _staticData[key] = JSON.parse(JSON.stringify(data));
     return true;
   }
 
   getData(key: string) {
-    return _.cloneDeep(_staticData[key]);
+    if (!key || !_staticData[key]) {
+      return;
+    }
+    return JSON.parse(JSON.stringify(_staticData[key]));
   }
 
   _updateData(key: string, data: any) {
     if (!key || !data || !_staticData[key]) {
       return false;
     }
-    _staticData[key] = _.cloneDeep(data);
+    _staticData[key] = JSON.parse(JSON.stringify(data));
     return true;
   }
 };

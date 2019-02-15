@@ -1,6 +1,6 @@
 {
   "entrypoint": "index.html",
-  "shell": "./src/app-shell.js",
+  "shell": "src/app-shell.js",
   "sources": [
     "images/**/*",
     "src/**/*",
@@ -22,17 +22,16 @@
       "name": "esm-bundled",
       "browserCapabilities": [
         "es2015",
-        "modules",
-        "serviceworker"
+        "modules"
       ],
       "js": {
-        "minify": true
+        "minify": false
       },
       "css": {
-        "minify": true
+        "minify": false
       },
       "html": {
-        "minify": true
+        "minify": false
       },
       "bundle": false,
       "addServiceWorker": true
@@ -45,14 +44,14 @@
       ],
       "js": {
         "compile": true,
-        "minify": true,
+        "minify": false,
         "transformModulesToAmd": true
       },
       "css": {
-        "minify": true
+        "minify": false
       },
       "html": {
-        "minify": true
+        "minify": false
       },
       "bundle": false,
       "addServiceWorker": true
@@ -62,14 +61,14 @@
       "preset": "es5-bundled",
       "js": {
         "compile": true,
-        "minify": true,
+        "minify": false,
         "transformModulesToAmd": true
       },
       "css": {
-        "minify": true
+        "minify": false
       },
       "html": {
-        "minify": true
+        "minify": false
       },
       "bundle": false,
       "addServiceWorker": true

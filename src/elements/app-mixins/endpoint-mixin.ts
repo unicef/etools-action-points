@@ -1,6 +1,7 @@
 import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin';
 import * as config from '../core-elements/etools-app-config';
 import * as _ from 'lodash';
+// import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * App global configuration
@@ -17,8 +18,7 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
     if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
       endpoint.url = config.baseSite + _.template(endpoint.template)(data);
     }
-    debugger
-    return _.clone(endpoint);
+    return JSON.parse(JSON.stringify(endpoint));
   }
 
   resetOldUserData() {

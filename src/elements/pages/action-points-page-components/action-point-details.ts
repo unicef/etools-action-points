@@ -10,7 +10,12 @@ import 'etools-content-panel';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-loading';
 // import 'etools-datepicker/etools-datepicker-button';
+// import filter from 'lodash/filter';
+// import cloneDeep from 'lodash/cloneDeep';
+// import get from 'lodash/get';
 import * as _ from 'lodash';
+// import isArray from 'lodash/isArray';
+// import find from 'lodash/find';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import TextareaMaxRowsMixin from '../../app-mixins/textarea-max-rows-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
@@ -446,7 +451,7 @@ class ActionPointDetails extends
       .then((data: any) => {
         this.partner = data || null;
         this.partnerRequestInProcess = false;
-      }, () => {
+      }).catch(() => {
         console.error('Can not load partner data');
         this.partnerRequestInProcess = false;
       });

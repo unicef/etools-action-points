@@ -1,5 +1,6 @@
+// import isObject from 'lodash/isObject';
+// import isString from 'lodash/isString';
 import * as _ from 'lodash';
-
 /*
  * Mixin for edit query string in location.
  * @polymer

@@ -18,6 +18,8 @@ import DateMixin from '../app-mixins/date-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
+// import each from 'lodash/each';
+// import get from 'lodash/get';
 import * as _ from 'lodash';
 
 class SearchAndFilter extends
@@ -312,6 +314,7 @@ class SearchAndFilter extends
   }
 
   _restoreFilters() {
+    debugger
     this.restoreInProcess = true;
     this._debounceFilters = Debouncer.debounce(this._debounceFilters,
       timeOut.after(50),
@@ -350,7 +353,7 @@ class SearchAndFilter extends
 
   _updateValues() {
     let ids = Object.keys(this.queryParams || {});
-    _.each(ids, (id) => {
+    ids.forEach(id => {
       let element = this.shadowRoot.querySelector(`#${id}`);
       if (!element) {
         return;

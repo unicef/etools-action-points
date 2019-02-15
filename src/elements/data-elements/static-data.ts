@@ -86,7 +86,7 @@ class StaticData extends
 
         this.dataLoaded.apOptions = true;
         this._allDataLoaded();
-      }, () => this._responseError('Partners', 'request error'));
+      }).catch(() => this._responseError('Partners', 'request error'));
   }
 
   _loadPartners() {
@@ -97,7 +97,7 @@ class StaticData extends
         this._setData('partnerOrganisations', partnerOrganisations);
         this.dataLoaded.organizations = true;
         this._allDataLoaded();
-      }, () => this._responseError('Partners', 'request error'));
+      }).catch(() => this._responseError('Partners', 'request error'));
   }
 
   _loadLocations() {
@@ -109,7 +109,7 @@ class StaticData extends
 
         let locationsLoaded = new CustomEvent('locations-loaded');
         document.dispatchEvent(locationsLoaded);
-      }, () => this._responseError('Locations', 'request error'));
+      }).catch(() => this._responseError('Locations', 'request error'));
   }
 
   _loadData(dataName: string) {

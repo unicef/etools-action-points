@@ -8,6 +8,7 @@ import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import './action-point-details';
 // @ts-ignore
 // import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
+// import cloneDeep from 'lodash/cloneDeep';
 import * as _ from 'lodash';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
@@ -83,7 +84,7 @@ class ActionPointsNew extends EndpointMixin(
       return;
     }
 
-    let data = _.clone(detailsElement.editedItem);
+    let data = _.cloneDeep(detailsElement.editedItem);
     let endpoint = this.getEndpoint('actionPointsList');
 
     this.dispatchEvent(new CustomEvent('global-loading', {
@@ -120,7 +121,7 @@ class ActionPointsNew extends EndpointMixin(
           bubbles: true,
           composed: true
         }));
-      }, (err: any) => {
+      }).catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
       });
   }

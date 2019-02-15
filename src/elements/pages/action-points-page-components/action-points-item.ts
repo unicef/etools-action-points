@@ -17,7 +17,11 @@ import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
-import * as _ from'lodash';
+// import cloneDeep from'lodash/cloneDeep';
+// import pickBy from'lodash/pickBy';
+// import isEqual from'lodash/isEqual';
+// import clone from'lodash/clone';
+import * as _ from 'lodash';
 
 class ActionPointsItem extends 
   EndpointMixin(
@@ -118,12 +122,12 @@ class ActionPointsItem extends
         let request = this._update();
         request && request.then(() => {
           this._loadOptions(this.actionPointId);
-        });
+        }).catch((err: any) => console.log(err));
       } else if (detail.type === 'complete') {
         let request = this._complete();
         request && request.then(() => {
           this._loadOptions(this.actionPointId);
-        });
+        }).catch((err: any) => console.log(err));
       }
     });
   }
@@ -160,7 +164,7 @@ class ActionPointsItem extends
       .then((result: any) => {
         this.set('originalActionPoint', _.cloneDeep(result));
         this.set('actionPoint', this._prepareActionPoint(result));
-      });
+      }).catch((err: any) => console.log(err));
   }
 
   _loadOptions(id: number) {
@@ -274,7 +278,7 @@ class ActionPointsItem extends
       return;
     }
 
-    let editedData = _.clone(detailsElement.editedItem);
+    let editedData = _.cloneDeep(detailsElement.editedItem);
     let data = this._getChangedData(this.actionPoint, editedData);
     let endpoint = this.getEndpoint('actionPoint', {
       id: this.actionPointId

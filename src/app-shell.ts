@@ -32,9 +32,7 @@ import {sharedStyles} from './elements/styles-elements/shared-styles.js';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import './elements/styles-elements/app-theme.js';
 import * as _ from 'lodash';
-// import {customElement, property} from '@polymer/decorators';
 
-// @customElement('app-shell')
 class AppShell extends
   EndpointMixin(
     UserController(
@@ -125,16 +123,6 @@ class AppShell extends
     `;
   }
 
-  // @property()
-  // page: string = ''
-  // narrow: boolean = false
-  // _toast: object = {}
-  // _toastQueue: object[] = []
-  // globalLoadingQueue: object[] = []
-  // user: object = {}
-  // route: object = {}
-  // queryParams: object = {}
-  // staticDataLoaded: boolean = false
   public static get properties() {
     return {
       page: {

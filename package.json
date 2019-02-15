@@ -9,6 +9,7 @@
     "type": "git",
     "url": "git@github.com:unicef/etools-action-points"
   },
+  "main": "app-shell.js",
   "bugs": {
     "url": "https://github.com/unicef/etools-action-points/issues"
   },
@@ -52,11 +53,13 @@
     "@polymer/paper-toggle-button": "^3.0.1",
     "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.1.0",
+    "@types/lodash-es": "^4.17.1",
     "@types/moment": "^2.13.0",
     "@webcomponents/shadycss": "^1.7.1",
     "@webcomponents/webcomponentsjs": "^2.2.4",
     "css-slam": "^2.1.2",
     "dexie": "^2.0.4",
+    "eslint-config-google": "^0.12.0",
     "eslint-plugin-html": "^5.0.0",
     "etools-ajax": "git+https://github.com/unicef-polymer/etools-ajax.git#update-to-polymer3",
     "etools-app-selector": "git+https://github.com/unicef-polymer/etools-app-selector.git#upgrade-to-polymer3",
@@ -84,19 +87,16 @@
     "sinon": "^7.2.3",
     "stream-combiner2": "^1.1.1",
     "tslint": "^5.12.1",
-    "@types/lodash": "^4.14.120",
-    "@types/ramda": "github:types/npm-ramda#dist",
     "web-animations-js": "^2.3.1",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
     "@babel/plugin-external-helpers": "^7.2.0",
     "@polymer/test-fixture": "^4.0.2",
-    "@types/lodash": "^4.14.120",
-    "@types/ramda": "github:types/npm-ramda#dist",
     "axe-core": "^3.0.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "browserify": "^16.2.3",
     "chai": "^4.1.2",
     "del": "^3.0.0",
     "gulp": "^4.0.0",
@@ -110,7 +110,9 @@
     "polyserve": "^0.27.14",
     "prpl-server": "^1.3.0",
     "puppeteer": "^1.5.0",
+    "tsify": "^4.0.1",
     "typescript": "^3.2.4",
+    "vinyl-source-stream": "^2.0.0",
     "wct-mocha": "^1.0.0"
   }
 }
