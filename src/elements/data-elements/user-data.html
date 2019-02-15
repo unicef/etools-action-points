@@ -30,7 +30,6 @@
             }
 
             _handleResponse(data) {
-                // debugger
                 let user = data.detail;
                 let lastUserId = JSON.parse(localStorage.getItem('userId'));
                 let countriesAvailable = _.get(user, 'profile.countries_available') || [];
