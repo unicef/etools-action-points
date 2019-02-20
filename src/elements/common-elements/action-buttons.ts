@@ -1,6 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer';
 // import isEqual from 'lodash/isEqual';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-icon-button/paper-icon-button';
@@ -203,7 +203,7 @@ class ActionButtons extends PolymerElement {
   }
 
   _filterActions(this: any, action: any) {
-    return !_.isEqual(action, this.actions[0]);
+    return !(action === this.actions[0]);
   }
 
   _setIcon(item: any, icons: any) {

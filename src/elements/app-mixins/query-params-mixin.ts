@@ -1,6 +1,3 @@
-// import isObject from 'lodash/isObject';
-// import isString from 'lodash/isString';
-import * as _ from 'lodash';
 /*
  * Mixin for edit query string in location.
  * @polymer
@@ -64,7 +61,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @returns {boolean}
    */
   updateQueries(newQueries: any, path: string, noNotify: boolean) {
-    if (!_.isObject(newQueries)) {
+    if (typeof newQueries != 'object') {
       return false;
     }
     let keys = Object.keys(newQueries);
@@ -73,7 +70,7 @@ const QueryParams = (superClass: any) => class extends superClass {
       return false;
     }
 
-    path = path && _.isString(path) ? path : this.getPath();
+    path = path && typeof path === 'string' ? path : this.getPath();
     let queries = this.parseQueries();
 
     keys.forEach((key) => {

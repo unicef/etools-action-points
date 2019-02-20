@@ -3,7 +3,7 @@
 // import forOwn from 'lodash/forOwn';
 // import each from 'lodash/each';
 // import isString from 'lodash/isString';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import PermissionController from './permission-controller.js';
 
 /**
@@ -12,25 +12,24 @@ import PermissionController from './permission-controller.js';
  * @constructor
  */
 const ErrorHandlerMixin = (superClass: any) => class extends PermissionController(superClass) {
-  // @ts-ignore
   refactorErrorObject(errorData: any) {
     if (!errorData) {
       return {};
     }
 
-    if (!_.isObject(errorData)) {
+    if (typeof errorData != 'object') {
       return errorData;
     }
 
-    if (_.isArray(errorData)) {
-      return _.isObject(errorData[0]) && !!errorData[0] ?
-        errorData.map(object => this.refactorErrorObject(object)) : errorData[0];
-    } else {
-      _.forOwn(errorData, (value, key) => {
-        errorData[key] = this.refactorErrorObject(value);
-      });
-      return errorData;
-    }
+    // if (typeof errorData === 'array') {
+    //   return typeof errorData[0] === 'object' && !!errorData[0] ?
+    //     errorData.map(object => this.refactorErrorObject(object)) : errorData[0];
+    // } else {
+    //   _.forOwn(errorData, (value, key) => {
+    //     errorData[key] = this.refactorErrorObject(value);
+    //   });
+    //   return errorData;
+    // }
 
   }
 
@@ -63,16 +62,16 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
    * @returns {Array}
    * @private
    */
-  _getErrors(errors: string[], permissionPath: string, basePath: number[] = []) {
+  _getErrors(errors: any, permissionPath: string, basePath: string[] = []) {
     let messages: string[] = [];
     if (!errors) {
       return messages;
     }
-    _.each(errors, (errorData, errorField) => {
+    Object.keys(errors).forEach(errorField => {
       let fieldPath = basePath.concat([errorField]);
-      let data = _.isArray(errorData) ? errorData : [errorData];
+      let data = Array.isArray(errors[errorField]) ? errors[errorField] : [errors[errorField]];
       for (let error of data) {
-        if (_.isString(error)) {
+        if (typeof error === 'string') {
           let message = this._getErrorMessage(fieldPath.join('.'), error, permissionPath);
           messages.push(message);
         } else {
@@ -99,22 +98,22 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
 
   // @ts-ignore
   _getNonFieldsMessage(errorObj: any) {
-    if (!_.isObject(errorObj)) {
+    if (typeof errorObj != 'object') {
       return null;
     }
 
     let message: string | null = null;
-    if (_.isArray(errorObj)) {
+    if (Array.isArray(errorObj)) {
       for (let value of errorObj) {
         let recursive: string | null = this._getNonFieldsMessage(value);
         recursive && !message ? message = recursive : null;
       }
     } else {
-      _.each(errorObj, (value, key) => {
+      Object.keys(errorObj).forEach(key => {
         if (key === 'non_field_errors') {
-          message = value;
+          message = errorObj[key];
         } else {
-          let recursive = this._getNonFieldsMessage(value);
+          let recursive = this._getNonFieldsMessage(errorObj[key]);
           recursive && !message ? message = recursive : null;
         }
       });

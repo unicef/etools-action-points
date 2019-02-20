@@ -1,7 +1,7 @@
 // import cloneDeep from 'lodash/cloneDeep';
 // import isObject from 'lodash/isObject';
 // import isArray from 'lodash/isArray';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 let _user: any;
 let _groups: any;
@@ -17,14 +17,14 @@ const UserController = (superClass: any) => class extends superClass {
       throw new Error('User already exists!');
     }
 
-    if (!user || !_.isObject(user) || _.isArray(user)) {
+    if (!user || !(typeof user === 'object') || Array.isArray(user)) {
       throw new Error('User must be an object');
     }
     if (!user.id || !user.groups) {
       throw new Error('User must have id and groups fields!');
     }
 
-    _user = _.cloneDeep(user);
+    _user = JSON.parse(JSON.stringify(user));
     this._setGroups(user);
   }
 
@@ -38,7 +38,7 @@ const UserController = (superClass: any) => class extends superClass {
   }
 
   getUserData() {
-    return _.cloneDeep(_user);
+    return JSON.parse(JSON.stringify(_user));
   }
 
   isAuditor() {

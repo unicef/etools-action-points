@@ -10,7 +10,7 @@ import PermissionController from '../app-mixins/permission-controller';
 import './action-buttons';
 import {moduleStyles} from '../styles-elements/module-styles';
 // import findIndex from 'lodash/findIndex';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 class StatusElement extends
   PermissionController(
@@ -294,8 +294,8 @@ class StatusElement extends
   _isStatusFinish(actionPoint: any, status: string) {
     let currentStatus = actionPoint.status;
     if (!currentStatus) {return false;}
-    let currentStatusIndex = _.findIndex(this.statuses, {value: currentStatus});
-    let statusIndex = _.findIndex(this.statuses, {value: status});
+    let currentStatusIndex = this.statuses.findIndex({value: currentStatus})
+    let statusIndex = this.statuses.findIndex({value: status});
     return (currentStatusIndex >= statusIndex);
   }
 

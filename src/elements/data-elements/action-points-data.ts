@@ -6,7 +6,7 @@ import QueryParams from '../app-mixins/query-params-mixin'
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import ErrorHandler from '../app-mixins/error-handler-mixin';
 
-class ActionPointsData extends EndpointMixin(ErrorHandler(QueryParams(PolymerElement))) {
+class ActionPointsData extends EndpointMixin(EtoolsAjaxRequestMixin(ErrorHandler(QueryParams(PolymerElement)))) {
   static get properties() {
     return {
       actionPoints: {

@@ -62,11 +62,11 @@ const DateMixin = (superClass: any) => class extends superClass {
     }
 
     _getFormat(format: string | undefined) {
-        return !format || !_.isString(format) ? 'D MMM YYYY' : format;
+        return !format || typeof format != 'string' ? 'D MMM YYYY' : format;
     }
 
     _getMomentDate(dateString: string) {
-        if (!_.isString(dateString)) {
+        if (typeof dateString === 'string') {
             return '';
         }
 

@@ -13,7 +13,7 @@ import 'etools-loading';
 // import filter from 'lodash/filter';
 // import cloneDeep from 'lodash/cloneDeep';
 // import get from 'lodash/get';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import isArray from 'lodash/isArray';
 // import find from 'lodash/find';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
@@ -374,9 +374,7 @@ class ActionPointDetails extends
 
     if (module) {
       let categoriesList = this.getData('categoriesList');
-      categories = _.filter(categoriesList, (category) => {
-        return category.module === module;
-      });
+      categories = categoriesList.filter((category: any) => category.module === module);
     }
 
     this.categories = categories;
@@ -410,7 +408,7 @@ class ActionPointDetails extends
   }
 
   _updateEditedItem(actionPoint: any) {
-    this.editedItem = actionPoint && _.cloneDeep(actionPoint) || {};
+    this.editedItem = actionPoint && JSON.parse(JSON.stringify(actionPoint)) || {};
   }
 
   _updateLocations(filter?: any) {
@@ -433,8 +431,8 @@ class ActionPointDetails extends
     this.partnerRequestInProcess = true;
     this.partner = null;
 
-    let originalPartner = _.get(this, 'originalActionPoint.partner.id');
-    let originalIntervention = _.get(this, 'originalActionPoint.intervention.id');
+    let originalPartner = this.originalActionPoint.partner.id;
+    let originalIntervention = this.originalActionPoint.intervention.id;
     if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
       this.set('editedItem.intervention', null);
     }
@@ -482,7 +480,7 @@ class ActionPointDetails extends
       this._updateLocations(locations);
 
       let resultLinks = intervention && intervention.result_links;
-      if (!_.isArray(resultLinks)) {
+      if (!Array.isArray(resultLinks)) {
         this._finishCpoRequest();
         return;
       }
@@ -515,11 +513,11 @@ class ActionPointDetails extends
   /* jshint ignore:end */
 
   _checkAndResetData(intervention: any) {
-    let originalIntervention = _.get(this, 'originalActionPoint.intervention.id', null);
-    let originalOutput = _.get(this, 'originalActionPoint.cp_output.id', null);
-    let originalLocation = _.get(this, 'originalActionPoint.location.id', null);
-    let currentOutput = _.get(this, 'editedItem.cp_output');
-    let currentLocation = _.get(this, 'editedItem.location');
+    let originalIntervention = this.originalActionPoint.intervention.id;
+    let originalOutput = this.originalActionPoint.cp_output.id;
+    let originalLocation = this.originalActionPoint.location.id;
+    let currentOutput = this.editedItem.cp_output;
+    let currentLocation = this.editedItem.location;
 
     let interventionChanged = originalIntervention !== intervention;
     if (interventionChanged || originalOutput !== currentOutput) {
@@ -538,7 +536,7 @@ class ActionPointDetails extends
   _updateInterventions(intervention: any, originalId: number, partner: any) {
     let interventions = partner && partner.interventions || [];
     let id = partner && partner.id;
-    let exists = intervention && _.find(interventions, (item) => {
+    let exists = intervention && interventions.find((item: any) => {
       return item.id === intervention.id;
     });
 

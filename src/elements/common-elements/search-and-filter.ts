@@ -20,7 +20,7 @@ import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
 // import each from 'lodash/each';
 // import get from 'lodash/get';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 class SearchAndFilter extends
   DateMixin(
@@ -314,7 +314,6 @@ class SearchAndFilter extends
   }
 
   _restoreFilters() {
-    debugger
     this.restoreInProcess = true;
     this._debounceFilters = Debouncer.debounce(this._debounceFilters,
       timeOut.after(50),
@@ -397,7 +396,7 @@ class SearchAndFilter extends
     }
 
     let query = e.currentTarget.id,
-      date = _.get(e, 'detail.prettyDate'),
+      date = e.detail.prettyDate,
       queryObject: any;
 
     if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {

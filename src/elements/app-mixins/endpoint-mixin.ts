@@ -1,6 +1,6 @@
 import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin';
 import * as config from '../core-elements/etools-app-config';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import cloneDeep from 'lodash/cloneDeep';
 
 /**
@@ -16,7 +16,15 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
   getEndpoint(endpointName: string, data?: object) {
     let endpoint = config.epsData[endpointName];
     if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
-      endpoint.url = config.baseSite + _.template(endpoint.template)(data);
+      endpoint.url = typeof endpoint.template === 'function' ? 
+                      config.baseSite + endpoint.template(data) :
+                      config.baseSite + endpoint.template
+      
+      // if (typeof endpoint.template === 'function') {
+      //   endpoint.url = config.baseSite + endpoint.template(data);
+      // } else {
+      //   endpoint.url = config.baseSite + endpoint.template;
+      // }
     }
     return JSON.parse(JSON.stringify(endpoint));
   }

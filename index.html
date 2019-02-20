@@ -66,6 +66,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- Performance tip: hint to the browser to start the handshake for the fonts site -->
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <script>
+      (function() {
+            'use strict';
+            window.baseUrl = window.location.port !== '8080' ? '/apd/' : '/';
+            var base = document.createElement('base');
+            base.href = window.baseUrl;
+            document.head.appendChild(base);
+        })();
+    </script>
+    <script>
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {

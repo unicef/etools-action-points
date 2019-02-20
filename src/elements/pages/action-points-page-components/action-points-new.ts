@@ -9,7 +9,7 @@ import './action-point-details';
 // @ts-ignore
 // import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
 // import cloneDeep from 'lodash/cloneDeep';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
@@ -84,7 +84,7 @@ class ActionPointsNew extends EndpointMixin(
       return;
     }
 
-    let data = _.cloneDeep(detailsElement.editedItem);
+    let data = JSON.parse(JSON.stringify(detailsElement.editedItem));
     let endpoint = this.getEndpoint('actionPointsList');
 
     this.dispatchEvent(new CustomEvent('global-loading', {

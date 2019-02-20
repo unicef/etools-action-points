@@ -2,12 +2,13 @@ import {html, PolymerElement} from '@polymer/polymer/polymer-element';
 // import 'etools-ajax/etools-ajax';
 // @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import StaticDataMixin from '../app-mixins/static-data-mixin';
 import ErrorHandler from '../app-mixins/error-handler-mixin';
 import PermissionController from '../app-mixins/permission-controller';
 import UserController from '../app-mixins/user-controller';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
+import './user-data';
 // import { log } from 'util';
 /**
  * @polymer
@@ -36,9 +37,9 @@ class StaticData extends
       }
     }
   }
-
-  ready() {
-    super.ready();
+  
+  connectedCallback() {
+    super.connectedCallback();
     this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
         this.loadStaticData();
     });
@@ -89,24 +90,21 @@ class StaticData extends
       }).catch(() => this._responseError('Partners', 'request error'));
   }
 
-  _loadPartners() {
+  _loadPartners(this: any) {
     let endpoint = this.getEndpoint('partnerOrganisations');
     this.sendRequest({method: 'GET', endpoint})
       .then((data: any) => {
-        let partnerOrganisations = _.sortBy(data, ['name']);
-        this._setData('partnerOrganisations', partnerOrganisations);
+        this._setData('partnerOrganisations', data);
         this.dataLoaded.organizations = true;
         this._allDataLoaded();
       }).catch(() => this._responseError('Partners', 'request error'));
   }
 
-  _loadLocations() {
+  _loadLocations(this: any) {
     let endpoint = this.getEndpoint('locations');
     this.sendRequest({method: 'GET', endpoint})
       .then((data: any) => {
-        let locations = _.sortBy(data, ['name']);
-        this._setData('locations', locations);
-
+        this._setData('locations', data);
         let locationsLoaded = new CustomEvent('locations-loaded');
         document.dispatchEvent(locationsLoaded);
       }).catch(() => this._responseError('Locations', 'request error'));

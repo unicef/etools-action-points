@@ -92,7 +92,7 @@ class AppMainHeader extends
         <div class="titlebar content-align">
           <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
 
-          <img src$="images/etools_logo.svg">
+          <img src$="[[rootPath]]../../../../../../apd/images/etools-logo-color-white.svg">
           <dom-if id="envWarningIf">
             <template>
               <div class="envWarning">- STAGING TESTING ENVIRONMENT</div>

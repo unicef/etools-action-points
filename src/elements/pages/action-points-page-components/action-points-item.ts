@@ -21,7 +21,7 @@ import {moduleStyles} from '../../styles-elements/module-styles';
 // import pickBy from'lodash/pickBy';
 // import isEqual from'lodash/isEqual';
 // import clone from'lodash/clone';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 class ActionPointsItem extends 
   EndpointMixin(
@@ -162,7 +162,7 @@ class ActionPointsItem extends
         }
       })
       .then((result: any) => {
-        this.set('originalActionPoint', _.cloneDeep(result));
+        this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
         this.set('actionPoint', this._prepareActionPoint(result));
       }).catch((err: any) => console.log(err));
   }
@@ -249,7 +249,7 @@ class ActionPointsItem extends
           bubbles: true,
           composed: true
         }));
-        this.set('originalActionPoint', _.cloneDeep(data));
+        this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
         this.actionPoint = this._prepareActionPoint(data);
       })
       .catch((err: any) => {
@@ -267,9 +267,13 @@ class ActionPointsItem extends
   }
 
   _getChangedData(oldData: any, newData: any) {
-    return _.pickBy(newData, (value: any, key: any) => {
-      return !_.isEqual(oldData[key], value);
-    });
+    let obj: any = {}
+    Object.keys(newData).forEach(key => {
+      if (oldData[key] !== newData[key]) {
+        obj[key] = newData[key]
+      }
+    })
+    return obj;
   }
 
   _update() {
@@ -278,7 +282,7 @@ class ActionPointsItem extends
       return;
     }
 
-    let editedData = _.cloneDeep(detailsElement.editedItem);
+    let editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     let data = this._getChangedData(this.actionPoint, editedData);
     let endpoint = this.getEndpoint('actionPoint', {
       id: this.actionPointId
@@ -307,7 +311,7 @@ class ActionPointsItem extends
           bubbles: true,
           composed: true
         }));
-        this.set('originalActionPoint', _.cloneDeep(data));
+        this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
         this.actionPoint = this._prepareActionPoint(data);
         this.dispatchEvent(new CustomEvent('global-loading', {
           detail: {

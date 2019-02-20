@@ -36,15 +36,13 @@ const LocalizationMixin = (superClass: any) => class extends PermissionControlle
    * @param field of option in list
    * @returns {string} value for displaying
    */
-  getStringValue(value: string, list: string[], field: string) {
+  getStringValue(value: string, list: [], field: string) {
     let stringValue = value;
-    if (!_.isNil(list) && !_.isNil(field)) {
-      let item: any = _.find(list, {
-        value: value
-      });
+    if (list && field) {
+      let item: any = list.find(i => i === {value: value});
       stringValue = item && item[field] ? item[field] : '';
     }
-    return _.isNil(stringValue) || !stringValue.length ? '-' : stringValue;
+    return !stringValue || !stringValue.length ? '-' : stringValue;
   }
 };
 

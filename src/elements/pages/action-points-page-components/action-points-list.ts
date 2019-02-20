@@ -15,6 +15,7 @@ import StaticData from '../../app-mixins/static-data-mixin';
 import Localization from '../../app-mixins/localization-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import QueryParams from '../../app-mixins/query-params-mixin';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
@@ -24,15 +25,16 @@ import {dataTableStyles} from '../../styles-elements/data-table-styles';
 // import map from 'lodash/map';
 // import each from 'lodash/each';
 // import omit from 'lodash/omit';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 class ActionPointsList extends 
   EndpointMixin(
     StaticData(
-      InputAttrs(
-        Localization(
-          DateMixin(
-            PolymerElement))))) {
+      QueryParams(
+        InputAttrs(
+          Localization(
+            DateMixin(
+              PolymerElement)))))) {
 
   static get template() {
     return html`
@@ -452,13 +454,12 @@ class ActionPointsList extends
 
   static get observers() {
     return [
-      // '_updateQueries(queryParams.*)',
+      '_updateQueries(queryParams.*)',
       '_setPath(path)'
     ];
   }
 
   connectedCallback() {
-    debugger
     super.connectedCallback();
     this.modules = this.getData('modules') || [];
     this.statuses = this.getData('statuses') || [];
@@ -494,7 +495,7 @@ class ActionPointsList extends
     }
   }
 
-  _updateQueries(queryParams: any, oldQueryParams: any) {
+  _updateQueries(queryParams: any, oldQueryParams: any = {}) {
     if (!~this.path.indexOf('action-points/list')) return;
     if (this.queryParams.reload) {
       this.clearQueries();
@@ -502,17 +503,17 @@ class ActionPointsList extends
       this.set('queryParams.page', this.pageNumber);
     }
     this.updateQueries(this.queryParams, null, true);
-    let hasNewEmptyFilter = oldQueryParams && _.some(_.map(queryParams, (value, key) => {
-      return !oldQueryParams.hasOwnProperty(key) && value.length === 0;
-    }), value => value);
-    let hasOldEmptyFilter = oldQueryParams && _.some(_.map(oldQueryParams, (value, key) => {
-      return !queryParams.hasOwnProperty(key) && value.length === 0;
-    }), value => value);
+    let x = Object.keys(queryParams).map(param => {
+      return !oldQueryParams.hasOwnProperty(param) && queryParams[param].length === 0;
+    })
+    let y = Object.keys(oldQueryParams).map(param => {
+      return !queryParams.hasOwnProperty(param) && oldQueryParams[param].length === 0;
+    })
+    let hasNewEmptyFilter = oldQueryParams && x.some((value: any) => value);
+    let hasOldEmptyFilter = oldQueryParams && y.some((value: any) => value);
     if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
       let listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
-      _.each(listElements, (element) => {
-        element.detailsOpened = false;
-      });
+      listElements.forEach((element: any) => element.detailsOpened = false);
       this._requestData();
     }
   }
@@ -627,7 +628,8 @@ class ActionPointsList extends
     if (!isShowCompleted) {
       this.set('queryParams.status', 'open');
     } else if (this.queryParams) {
-      this.queryParams = _.omit(this.queryParams, ['status']);
+
+      this.queryParams = delete this.queryParams.status;
     }
   }
   _setExportLinks() {

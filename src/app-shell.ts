@@ -31,7 +31,9 @@ import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js
 import {sharedStyles} from './elements/styles-elements/shared-styles.js';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import './elements/styles-elements/app-theme.js';
-import * as _ from 'lodash';
+import {basePath} from './elements/core-elements/etools-app-config'
+import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
+setRootPath(basePath);
 
 class AppShell extends
   EndpointMixin(
@@ -71,8 +73,6 @@ class AppShell extends
           padding-left: 220px;
         }
 
-
-
         app-header {
           background-color: var(--header-bg-color);
         }
@@ -84,13 +84,13 @@ class AppShell extends
 
       <app-route
               route="{{route}}"
-              pattern="[[basePath]]:page"
+              pattern="[[rootPath]]:page"
               data="{{routeData}}"
               tail="{{actionPointsRoute}}">
       </app-route>
       <app-route
-              route="{{route}}"
-              pattern="[[basePath]]"
+              route="{{actionPointsRoute}}"
+              pattern=":subpage"
               data="{{subrouteData}}>
       </app-route>
       
@@ -100,7 +100,6 @@ class AppShell extends
         <app-drawer slot="drawer" id="drawer" transition-duration="350" swipe-open="[[narrow]]" small-menu$="[[smallMenu]]">
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
-        
         
         <!-- Main content -->
         
@@ -164,7 +163,8 @@ class AppShell extends
       staticDataLoaded: {
         type: Boolean,
         value: false
-      }
+      },
+      basePath: String
     };
   }
 
@@ -175,11 +175,10 @@ class AppShell extends
   }
 
   ready() {
-    
     super.ready();
     this.addEventListener('404', (e: CustomEvent) => this._pageNotFound(e));
     this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
-    // this.addEventListener('global-loading', e => this.handleLoading(e));
+    this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this._setBgColor();
   }
 
@@ -223,7 +222,7 @@ class AppShell extends
     }
     if (this.staticDataLoaded) {
       this.user = this.getUserData();
-      this.page = _.get(this, 'routeData.page') || this._initRoute();
+      this.page = this.routeData.page ? this.routeData.page : this._initRoute();
     }
   }
 
@@ -247,7 +246,7 @@ class AppShell extends
     if (!this.initLoadingComplete || !this.routeData.page) {
       return;
     }
-    this.page = this.routeData.page || 'action-points';
+    this.page = this.routeData.page ? this.routeData.page : this._initRoute();
     this.scroll(0, 0);
   }
 
@@ -263,14 +262,14 @@ class AppShell extends
       }
     }));
 
-    // var resolvedPageUrl;
-    // if (page === 'not-found') {
-    //   resolvedPageUrl = 'elements/pages/not-found-page-view.js';
-    // } else {
-    //   resolvedPageUrl =
-    //     `elements/pages/${page}-page-components/${page}-page-main.js`;
-    // }
-    // import(resolvedPageUrl).then(() => this._loadPage(), event => this._pageNotFound(event));
+    var resolvedPageUrl;
+    if (page === 'not-found') {
+      resolvedPageUrl = 'elements/pages/not-found-page-view.js';
+    } else {
+      resolvedPageUrl =
+        `elements/pages/${page}-page-components/${page}-page-main.js`;
+    }
+    import(resolvedPageUrl).then(() => this._loadPage(), event => this._pageNotFound(event));
   }
 
   _loadPage() {
@@ -282,7 +281,7 @@ class AppShell extends
         type: 'initialisation'
       }
     }));
-    // if (this.route.path === '/') { this._initRoute();}
+    if (this.route.path === '/') { this._initRoute();}
   }
 
   _pageNotFound(event: CustomEvent) {

@@ -11,16 +11,16 @@ const apdEndpoints = {
     cacheTableName: 'partners'
   },
   partnerOrganisationDetails: {
-    template: '/api/v2/partners/<%=id%>/'
+    template: (id: string) => `/api/v2/partners/${id}/`
   },
   interventionDetails: {
-    template: '/api/v2/interventions/<%=id%>/'
+    template: (id: string) => `/api/v2/interventions/${id}/`
   },
   interventionsList: {
     template: '/api/v2/interventions/'
   },
   cpOutputsV2: {
-    template: '/api/v2/reports/results/?values=<%=ids%>'
+    template: (ids: string) => `/api/v2/reports/results/?values=${ids}>`
   },
   cpOutputsList: {
     template: '/api/v2/reports/results/?verbosity=minimal'
@@ -32,13 +32,13 @@ const apdEndpoints = {
     url: '/api/action-points/action-points/export/csv/'
   },
   actionPoint: {
-    template: '/api/action-points/action-points/<%=id%>/'
+    template: (id: string) => `/api/action-points/action-points/${id}/`
   },
   actionPointExport: {
-    template: '/api/action-points/action-points/<%=id%>/export/csv/'
+    template: (id: string) => `/api/action-points/action-points/${id}/export/csv/`
   },
   actionPointComplete: {
-    template: '/api/action-points/action-points/<%=id%>/complete/'
+    template: (id: string) => `/api/action-points/action-points/${id}/complete/`
   },
   locations: {
     url: '/api/locations-light/',

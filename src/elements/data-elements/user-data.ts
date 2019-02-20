@@ -2,7 +2,7 @@ import {PolymerElement} from '@polymer/polymer/polymer-element';
 // import 'etools-ajax/etools-ajax';
 // @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import PermissionController from '../app-mixins/permission-controller';
 import UserController from '../app-mixins/user-controller';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
@@ -35,7 +35,7 @@ class UserData extends
     this.sendRequest({
       method: 'GET',
       endpoint: {
-        url: endpoint,
+        url: endpoint.url,
         cachingKey: 'profile'
       }
     }).then(
@@ -44,13 +44,11 @@ class UserData extends
         () => this._handleError())
   }
 
-  _handleResponse(data: any) {
+  _handleResponse(this: any, data: any) {
     let user = data;
     let lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
-    let countriesAvailable = _.get(user, 'profile.countries_available') || [];
-
-    countriesAvailable = _.sortBy(countriesAvailable, ['name']);
-    _.set(user, 'countries_available', countriesAvailable);
+    let countriesAvailable = user.profile.countries_available || [];
+    this.set('user.countries_available', countriesAvailable);
 
     if (!lastUserId || lastUserId !== user.id) {
       this.resetOldUserData();
