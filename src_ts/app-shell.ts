@@ -63,13 +63,10 @@ class AppShell extends
             background-color: var(--light-theme-content-color);
           };
         }
-
-        #pages, app-header, page-footer {
+        app-header {
           padding-left: 73px;
         }
-        #pages:not([small-menu]),
-        app-header:not([small-menu]),
-        page-footer:not([small-menu]) {
+        app-header:not([small-menu]){
           padding-left: 220px;
         }
 
@@ -82,16 +79,15 @@ class AppShell extends
 
       <app-location route="{{route}}"></app-location>
 
-      <app-route
-              route="{{route}}"
-              pattern="[[rootPath]]:page"
-              data="{{routeData}}"
-              tail="{{actionPointsRoute}}">
+      <app-route route="{{route}}"
+                 pattern="[[rootPath]]:page"
+                 data="{{routeData}}"
+                 tail="{{subroute}}">
       </app-route>
-      <app-route
-              route="{{actionPointsRoute}}"
-              pattern=":subpage"
-              data="{{subrouteData}}>
+
+      <app-route route="{{route}}"
+                 pattern="[[rootPath]]action-points"
+                 tail="{{actionPointsRoute}}">
       </app-route>
       
       <!-- Drawer content -->
@@ -176,7 +172,7 @@ class AppShell extends
 
   ready() {
     super.ready();
-    this.addEventListener('404', (e: CustomEvent) => this._pageNotFound(e));
+    this.addEventListener('404', () => this._pageNotFound());
     this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this._setBgColor();
@@ -184,14 +180,14 @@ class AppShell extends
 
   connectedCallback() {
     super.connectedCallback();
-    // let eventData = {
-    //   message: 'Loading...',
-    //   active: true,
-    //   type: 'initialisation'
-    // };
-    // this.dispatchEvent(new CustomEvent('global-loading', {
-    //   detail: eventData
-    // }));
+    let eventData = {
+      message: 'Loading...',
+      active: true,
+      type: 'initialisation'
+    };
+    this.dispatchEvent(new CustomEvent('global-loading', {
+      detail: eventData
+    }));
     // this.$.drawer.$.scrim.remove();
   }
 
@@ -251,9 +247,9 @@ class AppShell extends
   }
 
   _pageChanged(page: string) {
-    if (this.$[`${page}`] instanceof PolymerElement) {
-      return;
-    }
+    // if (this.$[`${page}`] instanceof PolymerElement) {
+    //   return;
+    // }
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
         message: 'Loading...',
@@ -262,14 +258,19 @@ class AppShell extends
       }
     }));
 
-    var resolvedPageUrl;
-    if (page === 'not-found') {
-      resolvedPageUrl = 'elements/pages/not-found-page-view.js';
+    // var resolvedPageUrl;
+    // if (page === 'not-found') {
+    //   resolvedPageUrl = 'elements/pages/not-found-page-view.ts';
+    // } else {
+    //   resolvedPageUrl =
+    //     `./elements/pages/${page}-page-components/${page}-page-main.ts`;
+    // }
+    // import(resolvedPageUrl).then(() => this._loadPage(), event => this._pageNotFound(event));
+    if (page === "action-points") {
+      this._loadPage()
     } else {
-      resolvedPageUrl =
-        `elements/pages/${page}-page-components/${page}-page-main.js`;
+      this._pageNotFound()
     }
-    import(resolvedPageUrl).then(() => this._loadPage(), event => this._pageNotFound(event));
   }
 
   _loadPage() {
@@ -284,11 +285,13 @@ class AppShell extends
     if (this.route.path === '/') { this._initRoute();}
   }
 
-  _pageNotFound(event: CustomEvent) {
+  _pageNotFound() {
+    // console.log(event)
     this.page = 'not-found';
-    let message = event && event.detail && event.detail.message ?
-      `${event.detail.message}` :
-      'Oops you hit a 404!';
+    // let message = event && event.detail && event.detail.message ?
+    //   `${event.detail.message}` :
+    //   'Oops you hit a 404!';
+    let message = 'Oops you hit a 404!'
 
     this.dispatchEvent(new CustomEvent('toast', {
       detail: {
@@ -303,7 +306,7 @@ class AppShell extends
   }
 
   _initRoute() {
-    let path = `${this.basePath}action-points`;
+    let path = `${this.rootPath}action-points`;
     this.set('route.path', path);
     return 'action-points';
   }

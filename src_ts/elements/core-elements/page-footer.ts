@@ -15,7 +15,7 @@ class PageFooter extends PolymerElement {
           padding: 18px 24px;
           width: 100%;
           height: 60px;
-          align-items: flex-end
+          align-items: flex-end;
           padding-top: 50px;
         }
 

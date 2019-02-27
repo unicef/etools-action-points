@@ -2,6 +2,9 @@ import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
+import '@polymer/paper-menu-button/paper-menu-button';
+import '@polymer/paper-button/paper-button';
+import '@polymer/iron-icon/iron-icon';
 // @ts-ignore
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
 // @ts-ignore
@@ -48,7 +51,7 @@ class CountriesDropdown extends
             color: var(--light-secondary-text-color);
           }
 
-          .arrow-don,
+          .arrow-down,
           .arrow-up) {
             color: var(--light-ink-color);
           }
@@ -85,55 +88,49 @@ class CountriesDropdown extends
             min-width: 140px;
           }
         
-
-        :host([opened]) {
-          .arrow-up {
-            display: block;
-          }
-
-          .arrow-down {
-            display: none;
-          }
-
-          iron-icon {
-            color: var(--dark-icon-color);
-          }
-
-          paper-menu-button {
-            color: var(--dark-icon-color);
-            background-color: var(--primary-background-color);
-          }
-
-          paper-button {
-            .dropdown-text {
-              color: var(--dark-primary-text-color);
-            }
-
-            .arrow-down,
-            .arrow-up {
-              color: var(--dark-icon-color);
-            }
-          }
+        :host([opened]) .arrow-up {
+          display: block;
         }
 
-        paper-listbox.no-focus {
+        :host([opened]) .arrow-down {
+          display: none;
+        }
+
+        :host([opened]) iron-icon {
+          color: var(--dark-icon-color);
+        }
+
+        :host([opened]) paper-menu-button {
+          color: var(--dark-icon-color);
+          background-color: var(--primary-background-color);
+        }
+
+        :host([opened]) paper-button.dropdown-text {
+          color: var(--dark-primary-text-color);
+        }
+
+        :host([opened]) paper-button.arrow-down,
+        :host([opened]) paper-button.arrow-up {
+          color: var(--dark-icon-color);
+        }
+
+        :host([opened]) paper-listbox.no-focus {
           --paper-menu-focused-item-after: {
             background: var(--primary-background-color);
             opacity: 0;
           }
         }
 
-
-        paper-item {
-          --paper-item-focused-before: {
-              background: var(--primary-background-color);
-              opacity: 0;
-            }
+      paper-item {
+        --paper-item-focused-before: {
+            background: var(--primary-background-color);
+            opacity: 0;
           }
+        }
 
-          paper-item:hover {
-            background: #EEEEEE;
-          }
+        paper-item:hover {
+          background: #EEEEEE;
+        }
 
       </style>
 

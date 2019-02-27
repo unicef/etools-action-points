@@ -11,9 +11,11 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "src"
   },
   "include": [
-    "src/**/*.ts"
+    "src_ts/**/*.ts"
   ],
   "exclude": []
 }

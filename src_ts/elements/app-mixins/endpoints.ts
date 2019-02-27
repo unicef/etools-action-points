@@ -29,7 +29,7 @@ const apdEndpoints = {
     url: '/api/action-points/action-points/'
   },
   actionPointsListExport: {
-    url: '/api/action-points/action-points/export/csv/'
+    url: '/api/action-points/action-points/export/csv'
   },
   actionPoint: {
     template: (id: string) => `/api/action-points/action-points/${id}/`

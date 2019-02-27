@@ -5,7 +5,7 @@ import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 // @ts-ignore
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
-// import 'etools-profile-dropdown/etools-profile-dropdown';
+import 'etools-profile-dropdown/etools-profile-dropdown';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import 'etools-app-selector/etools-app-selector';
 import './countries-dropdown';
@@ -30,29 +30,14 @@ class AppMainHeader extends
           padding: 0 8px 0 0;
         }
 
-        div[main-title] {
-          position: relative;
-          bottom: 1px;
-          margin-left: 24px;
-          min-height: 30px;
-          background: url('../../../images/etools_logo_icon.png') no-repeat center left;
-          background-size: auto 48px;
-          padding-left: 48px;
-          font-size: 30px;
-          color: var(--light-primary-text-color);
-        }
-
-        etools-page-refresh {
+        #pageRefresh {
           color: #BCC1C6;
+          margin-left: 8px;
         }
 
         .right-side {
           @apply --layout-horizontal;
           @apply --layout-center;
-        }
-
-        etools-page-refresh {
-          margin-left: 8px;
         }
 
         .titlebar {
@@ -80,12 +65,6 @@ class AppMainHeader extends
           font-weight: 700;
           font-size: 18px;
         }
-
-        @media (min-width: 851px) {
-          div[main-title] {
-            margin-left: 32px;
-          }
-        }
       </style>
 
       <app-toolbar sticky class="content-align">
@@ -102,13 +81,13 @@ class AppMainHeader extends
 
         <div class="content-align">
           <countries-dropdown
-                  countries="[[user.countries_available]]"
+                  countries="[[user.profile.countries_available]]"
                   country-id="[[user.profile.country]]">
           </countries-dropdown>
 
           <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
 
-          <paper-icon-button icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]"></paper-icon-button>
+          <paper-icon-button id="pageRefresh" icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]"></paper-icon-button>
         </div>
       </app-toolbar>
     `;
@@ -124,7 +103,7 @@ class AppMainHeader extends
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('main_refresh', this._refreshPage);
+    // this.addEventListener('main_refresh', this._refreshPage);
     this.addEventListener('sign-out', this._logout);
   }
 
@@ -143,14 +122,14 @@ class AppMainHeader extends
     this.dispatchEvent(new CustomEvent('drawer'));
   }
 
-  _refreshPage(event: CustomEvent) {
-    event.stopImmediatePropagation();
-    this.$.refresh.refresh();
-  }
+  // _refreshPage(event: CustomEvent) {
+  //   event.stopImmediatePropagation();
+  //   this.$.refresh.refresh();
+  // }
 
   _logout() {
     this.resetOldUserData();
-    window.location.href = `${window.location.origin}/saml2/logout/`;
+    window.location.href = `${window.location.origin}/logout/`;
   }
 }
 

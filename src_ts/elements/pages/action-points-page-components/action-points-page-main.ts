@@ -1,16 +1,12 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-pages/iron-pages';
 import './action-points-list';
 import './action-points-item';
 import './action-points-new';
-// import * as _ from 'lodash';
-// import {customElement, property} from '@polymer/decorators';
+import {customElement, property} from '@polymer/decorators';
 
-/**
-* @polymer
-* @extends HTMLElement
-*/
-// @customElement('action-points-page-main')
+@customElement('action-points-page-main')
+// @ts-ignore
 class ActionPointsPageMain extends PolymerElement {
   static get template() {
     return html`
@@ -25,35 +21,22 @@ class ActionPointsPageMain extends PolymerElement {
       </iron-pages>
     `;
   }
-// @property()
-// route: object = {}
-// routeData: object = {}
-  static get properties() {
-    return {
-      route: {
-        type: Object,
-        notify: true
-      },
-      routeData: Object
-    };
-  }
+    
+  @property({type: Object, notify: true})
+  route: any = {}
+  @property({type: Object})
+  routeData: any = {}
 
   static get observers() {
     return ['_setRoutePath(route.path)'];
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
   _setRoutePath(path: string) {
-    // if (!path) {
-    //   return
-    // }
+    if (path === null || path === undefined) {
+      return
+    }
     if (!path.match(/[^\\/]/g)) {
       this.set('route.path', '/list');
     }
   }
 }
-
-window.customElements.define('action-points-page-main', ActionPointsPageMain);

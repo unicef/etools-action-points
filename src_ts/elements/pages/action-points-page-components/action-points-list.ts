@@ -20,12 +20,7 @@ import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
-// import sortBy from 'lodash/sortBy';
-// import some from 'lodash/some';
-// import map from 'lodash/map';
-// import each from 'lodash/each';
-// import omit from 'lodash/omit';
-// import * as _ from 'lodash';
+// import * as queryString from 'query-string';
 
 class ActionPointsList extends 
   EndpointMixin(
@@ -126,7 +121,7 @@ class ActionPointsList extends
           }
         }    
       </style>
-  
+
       <iron-location path="{{path}}" query="{{query}}"></iron-location>
       <iron-query-params params-string="{{query}}" params-object="{{queryParams}}">
       </iron-query-params>
@@ -134,7 +129,7 @@ class ActionPointsList extends
       </app-route-converter>
       <pages-header-element hide-print-button link="action-points/new" 
         show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
-        export-links="[[_setExportLinks()]]" btn-text="Add Action Point" page-title="Action Points">
+        export-links="[[exportLinks]]" btn-text="Add Action Point" page-title="Action Points">
       </pages-header-element>
       <action-points-data action-points="{{actionPoints}}" request-queries="{{queryParams}}" 
         list-length="{{totalResults}}">
@@ -448,6 +443,20 @@ class ActionPointsList extends
       basePermissionPath: {
         type: String,
         value: 'action_points'
+      },
+      exportParams: {
+        type: Object,
+        observer: '_setExportLinks',
+        notify: true
+      },
+      exportLinks: {
+        type: Array,
+        notify: true
+      },
+      unicefUsers: {
+        type: Array,
+        observer: '_initFilters',
+        statePath: 'users'
       }
     };
   }
@@ -459,11 +468,11 @@ class ActionPointsList extends
     ];
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
     this.modules = this.getData('modules') || [];
     this.statuses = this.getData('statuses') || [];
-    this._initFilters();
+    // this._initFilters();
     this._initSort();
     this.isShowCompleted = this.queryParams.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
@@ -496,6 +505,10 @@ class ActionPointsList extends
   }
 
   _updateQueries(queryParams: any, oldQueryParams: any = {}) {
+    let exportParams = JSON.parse(JSON.stringify(queryParams));
+    delete exportParams['page_size'];
+    delete exportParams['page'];
+    this.set('exportParams', exportParams);
     if (!~this.path.indexOf('action-points/list')) return;
     if (this.queryParams.reload) {
       this.clearQueries();
@@ -532,7 +545,7 @@ class ActionPointsList extends
 
   _initFilters() {
     let filtersElement = this.$.filters;
-    // this.setFiltersSelections();
+    this.setFiltersSelections();
     if (filtersElement) {
       filtersElement._reloadFilters();
     }
@@ -633,10 +646,14 @@ class ActionPointsList extends
     }
   }
   _setExportLinks() {
-    return [{
-      name: 'Export CSV',
-      url: this.getEndpoint('actionPointsListExport').url
-    }];
+    let qs = '';
+    if (this.exportParams) {
+			// qs = `?${queryString.stringify(this.exportParams)}`;
+    }
+    this.set('exportLinks', [{
+        name: 'Export CSV',
+        url: this.getEndpoint('actionPointsListExport').url + qs
+    }]);
   }
 
   _getPriorityValue(priority: boolean) {
