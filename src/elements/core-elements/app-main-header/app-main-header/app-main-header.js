@@ -39,7 +39,7 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
 
     _logout() {
         this.resetOldUserData();
-        window.location.href = `${window.location.origin}/saml2/logout/`;
+        window.location.href = `${window.location.origin}/logout/`;
     }
 }
 
