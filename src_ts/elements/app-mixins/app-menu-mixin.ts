@@ -72,8 +72,7 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
 
   _smallMenuValueChanged(newVal: boolean) {
     let localStorageVal = newVal ? 1 : 0;
-    //@ts-ignore
-    localStorage.setItem('etoolsAppSmallMenuIsActive', localStorageVal);
+    localStorage.setItem('etoolsAppSmallMenuIsActive', localStorageVal.toString());
   }
 
   _updateDrawerStyles() {

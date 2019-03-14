@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
-    "strict": true,
+    "allowJs": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "src"
+    "outDir": "./src/",
+    "sourceMap": true,
+    "noImplicitAny": false
   },
   "include": [
     "src_ts/**/*.ts"

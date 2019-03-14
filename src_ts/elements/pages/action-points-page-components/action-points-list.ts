@@ -622,7 +622,7 @@ class ActionPointsList extends
       this.set(`filters.${filterIndex}.selection`, data);
       return true;
     }
-    return;
+    return false;
   }
 
   _requestData() {

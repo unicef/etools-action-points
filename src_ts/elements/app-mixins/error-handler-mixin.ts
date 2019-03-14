@@ -4,7 +4,7 @@
 // import each from 'lodash/each';
 // import isString from 'lodash/isString';
 // import * as _ from 'lodash';
-import PermissionController from './permission-controller.js';
+import PermissionController from './permission-controller';
 
 /**
  * Mixin error handling

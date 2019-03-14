@@ -1,4 +1,4 @@
-import PermissionController from './permission-controller.js';
+import PermissionController from './permission-controller';
 // import isNil from 'lodash/isNil';
 // import find from 'lodash/find';
 import * as _ from 'lodash';

@@ -1,5 +1,5 @@
 // import * as _ from 'lodash';
-import PermissionController from './permission-controller.js';
+import PermissionController from './permission-controller';
 
 /*
  * Mixin for input field functionality.
@@ -91,7 +91,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
     }
 
     event.target.invalid = false;
-    return
+    return true;
   }
 
   _resetInputs() {

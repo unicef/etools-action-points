@@ -16,23 +16,23 @@ import '@polymer/iron-icons/av-icons';
 // @ts-ignore
 import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
 import './elements/pages/action-points-page-components/action-points-page-main'
-import './elements/core-elements/app-main-header/app-main-header.js';
-import './elements/core-elements/app-sidebar-menu.js';
-import './elements/common-elements/multi-notifications/multi-notification-list.js';
-import './elements/app-mixins/permission-controller.js';
+import './elements/core-elements/app-main-header/app-main-header';
+import './elements/core-elements/app-sidebar-menu';
+import './elements/common-elements/multi-notifications/multi-notification-list';
+import './elements/app-mixins/permission-controller';
 import EndpointMixin from './elements/app-mixins/endpoint-mixin';
-import UserController from './elements/app-mixins/user-controller.js';
+import UserController from './elements/app-mixins/user-controller';
 import AppMenu from './elements/app-mixins/app-menu-mixin'
 import './elements/core-elements/side-bar-item';
 import './elements/core-elements/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/core-elements/page-footer';
-import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js';
-import {sharedStyles} from './elements/styles-elements/shared-styles.js';
+import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles';
+import {sharedStyles} from './elements/styles-elements/shared-styles';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
-import './elements/styles-elements/app-theme.js';
+import './elements/styles-elements/app-theme';
 import {basePath} from './elements/core-elements/etools-app-config'
-import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
+import {setRootPath} from '@polymer/polymer/lib/utils/settings';
 setRootPath(basePath);
 
 class AppShell extends
@@ -42,7 +42,7 @@ class AppShell extends
         LoadingMixin(
           PolymerElement)))) {
 
-  public static get template() {
+  static get template() {
     return html `
       ${pageLayoutStyles}
       ${sharedStyles}
@@ -118,7 +118,7 @@ class AppShell extends
     `;
   }
 
-  public static get properties() {
+  static get properties() {
     return {
       page: {
         type: String,
@@ -164,7 +164,7 @@ class AppShell extends
     };
   }
 
-  public static get observers() {
+  static get observers() {
     return [
       '_routePageChanged(route.path)'
     ];
@@ -173,8 +173,8 @@ class AppShell extends
   ready() {
     super.ready();
     this.addEventListener('404', () => this._pageNotFound());
-    this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
-    this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
+    this.addEventListener('static-data-loaded', (event: CustomEvent) => this._staticDataLoaded(event));
+    this.addEventListener('global-loading', (event: any) => this.handleLoading(event));
     this._setBgColor();
   }
 
@@ -312,7 +312,7 @@ class AppShell extends
   }
 
   _setBgColor() {
-    // If not production environment, changing header color to red
+    // if not production environment, change header color to red
     if (!this.isProductionServer()) {
       this.updateStyles({
         '--header-bg-color': 'var(--nonprod-header-color)'

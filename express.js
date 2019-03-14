@@ -52,13 +52,28 @@
 
 
 const prpl = require('prpl-server');
+const path = require('path');
 const express = require('express');
 const port = 8080;
-const app = express();
+// const app = express();
 
 app.get('/api/launch', (req, res, next) => res.send('boom'));
 
-app.get('/apd/', prpl.makeHandler('./build/', {
+// const isDeveloping = process.env.NODE_ENV !== 'production';
+// if (isDeveloping) {
+// let webpack = require('webpack');
+// let webpackMiddleware = require('webpack-dev-middleware');
+// let webpackHotMiddleware = require('webpack-hot-middleware');
+// let config = require('./webpack.config.js');
+// serve the content using webpack
+// app.use(middleware);
+// app.use(webpackHotMiddleware(compiler));
+// } else {
+// serve the content using static directory
+// app.use(express.static(staticPath));
+// }
+
+app.get('/apd/', prpl.makeHandler('./src', {
   builds: [
     {name: 'esm-bundled', browserCapabilities: ['es2015', 'push']},
     {name: 'es6-bundled', browserCapabilities: ['es2015']},
@@ -66,4 +81,17 @@ app.get('/apd/', prpl.makeHandler('./build/', {
   ]
 }));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+const app = express(),
+  DIST_DIR = __dirname,
+  HTML_FILE = path.join(DIST_DIR, 'index.html');
+app.use(express.static(DIST_DIR));
+app.get('*', (req, res) => {
+  res.sendFile(HTML_FILE);
+});
+// const PORT = process.env.PORT || 8080;
+// app.listen(port, () => {
+//   console.log(`App listening to ${port}....`);
+//   console.log('Press Ctrl+C to quit.');
+// });
+app.listen(port, () => console.log(`APD app listening on port ${port}!`));

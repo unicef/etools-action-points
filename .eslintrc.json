@@ -42,6 +42,7 @@
     "_": true,
     "queryString": true,
     "ShadyCSS": true,
-    "Set": true
+    "Set": true,
+    "EtoolsApdApp": true
   }
 }

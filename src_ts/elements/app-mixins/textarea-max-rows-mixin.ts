@@ -26,13 +26,13 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
 
     if (!textareaAutogrow) {return false;}
 
-    let textareaAutogrowStyles = window.getComputedStyle(textareaAutogrow, null) || {};
+    let textareaAutogrowStyles: any = window.getComputedStyle(textareaAutogrow, null) || {};
     let maxRows = +paperTextarea.getAttribute('max-rows');
 
     if (!maxRows || maxRows <= 1) {return false;}
 
     microTask.run(() => {
-      let lineHeight = textareaAutogrowStyles.lineHeight || '';
+      let lineHeight = textareaAutogrowStyles.lineHeight ? textareaAutogrowStyles.lineHeight : '';
       let lineHeightPx = parseInt(lineHeight, 10);
 
       if (lineHeightPx) {
@@ -43,7 +43,7 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
       // textareaAutogrow.textarea.style.overflow = 'auto';
       mirror.style.overflow = 'auto';
     });
-    return;
+    return true;
   }
 };
 
