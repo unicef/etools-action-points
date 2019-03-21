@@ -72,11 +72,9 @@
                 <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
 
                 <img src$="[[getAbsolutePath('images/etools_logo.svg')]]">
-                <dom-if id="envWarningIf">
-                    <template>
-                        <div class="envWarning">- STAGING TESTING ENVIRONMENT</div>
-                    </template>
-                </dom-if>
+                <template is="dom-if" if="[[environment]]">
+                    <div class="envWarning">- [[environment]] TESTING ENVIRONMENT</div>
+                </template>
             </div>
 
             <div class="content-align">

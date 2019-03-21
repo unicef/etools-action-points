@@ -7,6 +7,9 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
         return {
             user: {
                 type: Object
+            },
+            environment: {
+                type: String
             }
         };
     }
@@ -19,13 +22,6 @@ class AppMainHeader extends APDMixins.AppConfig(Polymer.Element) {
 
     ready() {
         super.ready();
-        this._isStaging();
-    }
-
-    _isStaging() {
-        if (this.isStagingServer()) {
-            this.$.envWarningIf.if = true;
-        }
     }
 
     openDrawer() {
