@@ -101,6 +101,9 @@
             this.appDexieDb = etoolsCustomDexieDb;
             this.stagingDomain = 'etools-staging.unicef.org';
             this.productionDomain = 'etools.unicef.org';
+            this.demoDomain = 'etools-demo.unicef.org';
+            this.devDomain = 'etools-dev.unicef.org';
+            this.localDomain = 'localhost';
 
         }
 
@@ -122,15 +125,22 @@
             path = path || '';
             return this.basePath + path;
         }
-
-        isProductionServer() {
+        
+        _checkEnvironment() {
             let location = window.location.href;
-            return location.indexOf(this.productionDomain) > -1;
-        }
-
-        isStagingServer() {
-            let location = window.location.href;
-            return location.indexOf(this.stagingDomain) > -1;
+            if (location.indexOf(this.stagingDomain) > -1) {
+                return 'STAGING'
+            }
+            if (location.indexOf(this.demoDomain) > -1) {
+                return 'DEMO'
+            }
+            if (location.indexOf(this.devDomain) > -1) {
+                return 'DEVELOPMENT'
+            } 
+            if (location.indexOf(this.localDomain) > -1) {
+                return 'LOCAL'
+            }
+            return null
         }
     });
 </script>

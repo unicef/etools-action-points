@@ -40,7 +40,11 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
                 type: Object,
                 notify: true
             },
-            queryParams: Object
+            queryParams: Object,
+            environment: {
+                type: String,
+                observer: '_setBgColor'
+            }
         };
     }
 
@@ -57,7 +61,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
         this.addEventListener('404', e => this._pageNotFound(e));
         this.addEventListener('static-data-loaded', e => this._staticDataLoaded(e));
         this.addEventListener('global-loading', e => this.handleLoading(e));
-        this._setBgColor();
+        this.set('environment', this._checkEnvironment());
     }
 
     connectedCallback() {
@@ -178,7 +182,7 @@ class AppShell extends EtoolsMixinFactory.combineMixins([
 
     _setBgColor() {
         // If not production environment, changing header color to red
-        if (!this.isProductionServer()) {
+        if (this.environment) {
             this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
         }
     }
