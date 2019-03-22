@@ -15,7 +15,7 @@
   },
   "description": "Action Points Dashboard for UNICEF eTools",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js --hot",
+    "start": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.prod.js",
     "test": "npm run build && wct --npm && npm run test:integration"
   },

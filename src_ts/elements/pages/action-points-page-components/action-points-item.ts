@@ -1,7 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-// import 'etools-ajax/etools-ajax';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin'
 import '../../common-elements/pages-header-element';
@@ -17,20 +15,13 @@ import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
-// import cloneDeep from'lodash/cloneDeep';
-// import pickBy from'lodash/pickBy';
-// import isEqual from'lodash/isEqual';
-// import clone from'lodash/clone';
-// import * as _ from 'lodash';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
 
-class ActionPointsItem extends 
-  EndpointMixin(
-    InputAttrs(
-      DateMixin(
-        PermissionController(
-          ErrorHandler(
-            EtoolsAjaxRequestMixin(
-              PolymerElement)))))) {
+const ActionPointsItemMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, InputAttrs, DateMixin, PermissionController, ErrorHandler, EtoolsAjaxRequestMixin 
+], PolymerElement)
+
+class ActionPointsItem extends ActionPointsItemMixin{
 
   static get template() {
     return html`

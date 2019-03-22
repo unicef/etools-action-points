@@ -3,23 +3,24 @@ import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout';
-// @ts-ignore
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
 import 'etools-profile-dropdown/etools-profile-dropdown';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory'
 import 'etools-app-selector/etools-app-selector';
 import './countries-dropdown';
-// import 'user-dropdown';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 
 /**
  * @polymer
  * @customElement
  */
-class AppMainHeader extends
-  EndpointMixin(
-    EtoolsPageRefreshMixin(
-      PolymerElement)) {
+
+const AppMainHeaderMixins = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, EtoolsPageRefreshMixin], PolymerElement
+) 
+
+class AppMainHeader extends AppMainHeaderMixins {
 
   static get template() {
     return html`

@@ -5,17 +5,9 @@ import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
 import 'etools-dropdown';
 import 'etools-content-panel';
-// import 'etools-ajax/etools-ajax';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-loading';
 // import 'etools-datepicker/etools-datepicker-button';
-// import filter from 'lodash/filter';
-// import cloneDeep from 'lodash/cloneDeep';
-// import get from 'lodash/get';
-// import * as _ from 'lodash';
-// import isArray from 'lodash/isArray';
-// import find from 'lodash/find';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import TextareaMaxRowsMixin from '../../app-mixins/textarea-max-rows-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
@@ -27,17 +19,14 @@ import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
 
-class ActionPointDetails extends
-  EndpointMixin(
-    InputAttrs(
-      StaticData(
-        PermissionController(
-          LocalizationMixin(
-            DateMixin(
-              TextareaMaxRowsMixin(
-                EtoolsAjaxRequestMixin(
-                  PolymerElement)))))))) {
+const ActionPointDetailsMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, InputAttrs, StaticData, PermissionController, LocalizationMixin, DateMixin, 
+  TextareaMaxRowsMixin, EtoolsAjaxRequestMixin
+], PolymerElement)
+
+class ActionPointDetails extends ActionPointDetailsMixin {
 
   static get template() {
     return html`

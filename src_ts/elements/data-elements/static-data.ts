@@ -1,27 +1,22 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element';
-// import 'etools-ajax/etools-ajax';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-// import * as _ from 'lodash';
 import StaticDataMixin from '../app-mixins/static-data-mixin';
 import ErrorHandler from '../app-mixins/error-handler-mixin';
 import PermissionController from '../app-mixins/permission-controller';
 import UserController from '../app-mixins/user-controller';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import './user-data';
-// import { log } from 'util';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
+
+const StaticDataMixins = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, EtoolsAjaxRequestMixin, StaticDataMixin, ErrorHandler, PermissionController, UserController
+], PolymerElement)
+
 /**
  * @polymer
  * @customElement
  */
-class StaticData extends
-  EndpointMixin(
-    EtoolsAjaxRequestMixin(
-      StaticDataMixin(
-        ErrorHandler(
-          PermissionController(
-            UserController(
-              PolymerElement)))))) {
+class StaticData extends StaticDataMixins {
 
   static get template() {
     return html`

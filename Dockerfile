@@ -35,15 +35,14 @@ RUN npm install -g --unsafe-perm polymer-cli
 
 ENV NODE_OPTIONS --max-old-space-size=3072
 WORKDIR /tmp
-ADD package.json /tmp/
+COPY package.json /tmp/
 
 RUN npm install
 
 RUN mkdir /code/
-ADD . /code/
+COPY /src/ /code/
 WORKDIR /code
 RUN cp -a /tmp/node_modules /code/node_modules
-RUN webpack
 RUN npm run build
 EXPOSE 8080
-CMD ["node", "express.js"]
+CMD npm run start

@@ -1,27 +1,24 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-// import 'etools-ajax/etools-ajax';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import './action-point-details';
-// @ts-ignore
-// import EtoolsMixinFactory from 'etools-behaviors/etools-mixin-factory';
-// import cloneDeep from 'lodash/cloneDeep';
-// import * as _ from 'lodash';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
+
+const ActionPointsNewMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, EtoolsAjaxRequestMixin, ErrorHandlerMixin
+], PolymerElement)
+
 /**
  * @polymer
  * @customElement
  */
-class ActionPointsNew extends EndpointMixin(
-    EtoolsAjaxRequestMixin(
-      ErrorHandlerMixin(
-        PolymerElement))) {
+class ActionPointsNew extends ActionPointsNewMixin{
 
   static get template() {
     return html`

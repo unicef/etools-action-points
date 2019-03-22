@@ -1,7 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-content-panel';
 import 'etools-data-table';
@@ -15,16 +14,13 @@ import {moduleStyles} from '../../styles-elements/module-styles';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import PermissionController from '../../app-mixins/permission-controller';
 import DateMixin from '../../app-mixins/date-mixin';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
 
-class ActionPointComments extends 
-  EndpointMixin(
-    InputAttrs(
-      PermissionController(
-        LocalizationMixin(
-          DateMixin(
-            ErrorHandlerMixin(
-              TextareaMaxRows(
-                EtoolsAjaxRequestMixin(PolymerElement)))))))) {
+const ActionPointCommentsMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, InputAttrs, PermissionController, LocalizationMixin, DateMixin, ErrorHandlerMixin, TextareaMaxRows, EtoolsAjaxRequestMixin
+], PolymerElement)
+
+class ActionPointComments extends ActionPointCommentsMixin {
 
   static get template() {
     return html`

@@ -1,7 +1,5 @@
 import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin';
 import * as config from '../core-elements/etools-app-config';
-// import * as _ from 'lodash';
-// import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * App global configuration

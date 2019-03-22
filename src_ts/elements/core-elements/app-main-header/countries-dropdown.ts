@@ -5,11 +5,14 @@ import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
 import '@polymer/iron-icon/iron-icon';
-// @ts-ignore
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
+
+const CountriesDropdownMixin = EtoolsMixinFactory.combineMixins([
+  EtoolsPageRefreshMixin, EtoolsAjaxRequestMixin, EndpointMixin
+], PolymerElement)
 
 /**
  * @polymer
@@ -19,11 +22,7 @@ import EndpointMixin from '../../app-mixins/endpoint-mixin';
  * @applies EtoolsAjaxRequestMixin
  * @extends {PolymerElement}
  */
-class CountriesDropdown extends
-  EtoolsPageRefreshMixin(
-    EtoolsAjaxRequestMixin(
-      EndpointMixin(
-        PolymerElement))) {
+class CountriesDropdown extends CountriesDropdownMixin {
 
   static get template() {
     return html`

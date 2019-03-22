@@ -8,7 +8,8 @@ module.exports = merge(common, {
   devServer: {
     contentBase: '.',
     compress: true,
-    port: 8080
+    port: 8080,
+    publicPath: 'http://localhost:8082/apd/'
   },
   plugins: [
     new CopyWebpackPlugin([

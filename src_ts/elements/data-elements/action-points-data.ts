@@ -1,12 +1,15 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element';
-// import 'etools-ajax/etools-ajax';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import QueryParams from '../app-mixins/query-params-mixin'
-// @ts-ignore
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import ErrorHandler from '../app-mixins/error-handler-mixin';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
 
-class ActionPointsData extends EndpointMixin(EtoolsAjaxRequestMixin(ErrorHandler(QueryParams(PolymerElement)))) {
+const ActionPointsDataMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, EtoolsAjaxRequestMixin, ErrorHandler, QueryParams
+], PolymerElement)
+
+class ActionPointsData extends ActionPointsDataMixin {
   static get properties() {
     return {
       actionPoints: {

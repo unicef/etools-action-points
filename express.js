@@ -50,14 +50,7 @@
 // console.log('APD server started on port', port);
 // app.listen(port);
 
-
-const prpl = require('prpl-server');
-const path = require('path');
-const express = require('express');
-const port = 8080;
 // const app = express();
-
-app.get('/api/launch', (req, res, next) => res.send('boom'));
 
 // const isDeveloping = process.env.NODE_ENV !== 'production';
 // if (isDeveloping) {
@@ -73,25 +66,30 @@ app.get('/api/launch', (req, res, next) => res.send('boom'));
 // app.use(express.static(staticPath));
 // }
 
-app.get('/apd/', prpl.makeHandler('./src', {
-  builds: [
-    {name: 'esm-bundled', browserCapabilities: ['es2015', 'push']},
-    {name: 'es6-bundled', browserCapabilities: ['es2015']},
-    {name: 'es5-bundled'}
-  ]
-}));
-
-
-const app = express(),
-  DIST_DIR = __dirname,
-  HTML_FILE = path.join(DIST_DIR, 'index.html');
-app.use(express.static(DIST_DIR));
-app.get('*', (req, res) => {
-  res.sendFile(HTML_FILE);
-});
 // const PORT = process.env.PORT || 8080;
 // app.listen(port, () => {
 //   console.log(`App listening to ${port}....`);
 //   console.log('Press Ctrl+C to quit.');
 // });
-app.listen(port, () => console.log(`APD app listening on port ${port}!`));
+
+// app.get('/api/launch', (req, res, next) => res.send('boom'));
+// const prpl = require('prpl-server');
+// const path = require('path');
+// const express = require('express');
+// const port = 8080;
+
+// app.get('/apd/', prpl.makeHandler('./src', {
+//   builds: [
+//     {name: 'esm-bundled', browserCapabilities: ['es2015', 'push']},
+//     {name: 'es6-bundled', browserCapabilities: ['es2015']},
+//     {name: 'es5-bundled'}
+//   ]
+// }));
+// const app = express(),
+//   DIST_DIR = __dirname,
+//   HTML_FILE = path.join(DIST_DIR, 'index.html');
+// app.use(express.static(DIST_DIR));
+// app.get('*', (req, res) => {
+//   res.sendFile(HTML_FILE);
+// });
+// app.listen(port, () => console.log(`APD app listening on port ${port}!`));

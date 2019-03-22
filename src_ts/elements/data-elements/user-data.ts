@@ -1,31 +1,15 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element';
-// import 'etools-ajax/etools-ajax';
-// @ts-ignore
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-// import * as _ from 'lodash';
 import PermissionController from '../app-mixins/permission-controller';
 import UserController from '../app-mixins/user-controller';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 
-class UserData extends
-  EndpointMixin(
-    PermissionController(
-      UserController(
-        EtoolsAjaxRequestMixin(
-          PolymerElement)))) {
+const UserDataMixins = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, PermissionController, UserController, EtoolsAjaxRequestMixin
+], PolymerElement)
 
-  // static get template() {
-  //   return html`
-  //     <etools-ajax
-  //       endpoint="[[endpoint]]"
-  //       caching-storage="custom"
-  //       dexie-db-collection="profile"
-  //       on-success="_handleResponse"
-  //       on-forbidden="_forbidden"
-  //       on-fail="_handleError">
-  //     </etools-ajax>
-  //   `;
-  // }
+class UserData extends UserDataMixins {
 
   static get properties() {return {};}
 

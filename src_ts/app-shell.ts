@@ -13,8 +13,7 @@ import '@polymer/iron-collapse/iron-collapse';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
-// @ts-ignore
-import {LoadingMixin} from 'etools-loading/etools-loading-mixin';
+import LoadingMixin from 'etools-loading/etools-loading-mixin';
 import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header';
 import './elements/core-elements/app-sidebar-menu';
@@ -33,14 +32,14 @@ import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import './elements/styles-elements/app-theme';
 import {basePath} from './elements/core-elements/etools-app-config'
 import {setRootPath} from '@polymer/polymer/lib/utils/settings';
+import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
 setRootPath(basePath);
 
-class AppShell extends
-  EndpointMixin(
-    UserController(
-      AppMenu(
-        LoadingMixin(
-          PolymerElement)))) {
+const AppShellMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, UserController, AppMenu, LoadingMixin
+], PolymerElement)
+
+class AppShell extends AppShellMixin {
 
   static get template() {
     return html `
@@ -286,7 +285,6 @@ class AppShell extends
   }
 
   _pageNotFound() {
-    // console.log(event)
     this.page = 'not-found';
     // let message = event && event.detail && event.detail.message ?
     //   `${event.detail.message}` :
