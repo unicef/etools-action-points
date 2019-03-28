@@ -1,5 +1,5 @@
 <!--import [polymer/polymer-element, app-layout/app-toolbar/app-toolbar, paper-icon-button, iron-flex-layout, etools-page-refresh, etools-profile-dropdown]-->
-<!--import [etools-app-config, etools-app-selector, countries-dropdown, user-dropdown, shared-styles, app-icons]-->
+<!--import [etools-app-config, etools-app-selector, countries-dropdown, user-dropdown, shared-styles, app-icons, support-btn]-->
 
 <dom-module id="app-main-header">
     <template>
@@ -32,6 +32,11 @@
 
             etools-page-refresh {
                 margin-left: 8px;
+            }
+
+            support-btn {
+                color: var(--light-secondary-text-color);
+                margin: 0 16px;
             }
 
             .titlebar {
@@ -84,6 +89,8 @@
                         countries="[[user.countries_available]]"
                         country-id="[[user.profile.country]]">
                 </countries-dropdown>
+
+                <support-btn></support-btn>
 
                 <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
 
