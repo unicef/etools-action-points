@@ -1,7 +1,3 @@
-// import cloneDeep from 'lodash/cloneDeep';
-// import * as _ from 'lodash/index.js';
-// import cloneDeep from 'lodash-es/cloneDeep.js'
-
 let _staticData: any = {};
 /*
  * Mixin for manage static data application.

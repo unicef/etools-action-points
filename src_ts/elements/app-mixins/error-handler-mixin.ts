@@ -1,9 +1,3 @@
-// import isObject from 'lodash/isObject';
-// import isArray from 'lodash/isArray';
-// import forOwn from 'lodash/forOwn';
-// import each from 'lodash/each';
-// import isString from 'lodash/isString';
-// import * as _ from 'lodash';
 import PermissionController from './permission-controller.js';
 
 /**

@@ -1,5 +1,3 @@
-// import isString from 'lodash/isString';
-import * as _ from 'lodash';
 import {dom} from '@polymer/polymer/lib/legacy/polymer.dom';
 import moment from 'moment';
 

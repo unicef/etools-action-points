@@ -1,4 +1,3 @@
-// import * as _ from 'lodash';
 import PermissionController from './permission-controller.js';
 
 /*

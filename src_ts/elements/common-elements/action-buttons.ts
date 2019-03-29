@@ -1,6 +1,4 @@
 import {PolymerElement, html} from '@polymer/polymer';
-// import isEqual from 'lodash/isEqual';
-// import * as _ from 'lodash';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-icon-button/paper-icon-button';

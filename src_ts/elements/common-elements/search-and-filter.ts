@@ -6,7 +6,7 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
-import 'etools-dropdown/';
+// import 'etools-dropdown/';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-listbox/paper-listbox';
@@ -18,9 +18,6 @@ import DateMixin from '../app-mixins/date-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
-// import each from 'lodash/each';
-// import get from 'lodash/get';
-// import * as _ from 'lodash';
 
 class SearchAndFilter extends
   DateMixin(

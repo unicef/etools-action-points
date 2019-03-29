@@ -18,24 +18,7 @@
     "rules": ["polymer-3"]
   },
   "builds": [
-    {
-      "name": "esm-bundled",
-      "browserCapabilities": [
-        "es2015",
-        "modules"
-      ],
-      "js": {
-        "minify": false
-      },
-      "css": {
-        "minify": false
-      },
-      "html": {
-        "minify": false
-      },
-      "bundle": false,
-      "addServiceWorker": true
-    },
+    
     {
       "name": "es6-bundled",
       "preset": "es6-bundled",
