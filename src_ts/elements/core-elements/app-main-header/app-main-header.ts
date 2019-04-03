@@ -9,7 +9,8 @@ import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import 'etools-app-selector/etools-app-selector';
 import './countries-dropdown';
 import {sharedStyles} from '../../styles-elements/shared-styles';
-import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import '../../common-elements/support-btn';
 
 const AppMainHeaderMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin, EtoolsPageRefreshMixin
@@ -38,6 +39,11 @@ class AppMainHeader extends AppMainHeaderMixin {
         .right-side {
           @apply --layout-horizontal;
           @apply --layout-center;
+        }
+
+        support-btn {
+          color: var(--light-secondary-text-color);
+          margin: 0 16px;
         }
 
         .titlebar {
@@ -84,6 +90,8 @@ class AppMainHeader extends AppMainHeaderMixin {
                   countries="[[user.profile.countries_available]]"
                   country-id="[[user.profile.country]]">
           </countries-dropdown>
+
+          <support-btn></support-btn>
 
           <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
 
