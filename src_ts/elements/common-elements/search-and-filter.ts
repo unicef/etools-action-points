@@ -140,8 +140,11 @@ class SearchAndFilter extends
 
       <div class="layout horizontal flex inputs-container">
         <div class="layout horizontal">
-          <paper-input type="search" value="{{searchString}}" label="[[searchLabel]]" placeholder="Search"
-            on-value-changed="searchKeyDown" always-float-label inline>
+          <paper-input type="search"
+                       value="{{searchString}}"
+                       label="[[searchLabel]]"
+                       placeholder="Search"
+                       always-float-label inline>
 
             <iron-icon icon="search" slot="prefix"></iron-icon>
           </paper-input>
@@ -163,7 +166,6 @@ class SearchAndFilter extends
               <div class="filter-reset-button" on-click="removeFilter">×</div>
             </div>
           </template>
-
 
           <template is="dom-if" if="[[!item.isDatePicker]]">
             <div class="layout horizontal">
@@ -216,7 +218,8 @@ class SearchAndFilter extends
         type: String
       },
       searchString: {
-        type: String
+        type: String,
+        observer: 'searchKeyDown'
       },
       usedFilters: {
         type: Array,
@@ -246,18 +249,13 @@ class SearchAndFilter extends
   }
 
   searchKeyDown() {
-    if (!this.searchString) {
-      return;
-    }
     this._debounceSearch = Debouncer.debounce(
       this._debounceSearch, timeOut.after(300), () => {
-        if (this.searchString.length !== 1) {
-          let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
-          this.updateQueries({
-            search: query,
-            page: '1'
-          });
-        }
+        let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
+        this.updateQueries({
+          search: query,
+          page: '1'
+        });
       });
   }
 
