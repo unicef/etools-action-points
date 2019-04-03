@@ -17,7 +17,8 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
                 type: String
             },
             searchString: {
-                type: String
+                type: String,
+                observer: 'searchKeyDown'
             },
             usedFilters: {
                 type: Array,
@@ -47,13 +48,10 @@ class SearchAndFilter extends EtoolsMixinFactory.combineMixins([
     }
 
     searchKeyDown() {
-        if (!this.searchString) {return;}
         this._debounceSearch = Polymer.Debouncer.debounce(
             this._debounceSearch, Polymer.Async.timeOut.after(300), () => {
-            if (this.searchString.length !== 1) {
                 let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
                 this.updateQueries({search: query, page: '1'});
-            }
         });
     }
 
