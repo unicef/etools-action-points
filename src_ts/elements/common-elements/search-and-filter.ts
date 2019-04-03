@@ -285,9 +285,7 @@ class SearchAndFilter extends
 
   removeFilter(e: any) {
     let query = (typeof e === 'string') ? e : e.model.item.query;
-    let indexToRemove = this.usedFilters.findIndex((filter: any) => {
-      return filter.query === query;
-    });
+    let indexToRemove = this.usedFilters.indexOf(query);
     if (indexToRemove === -1) {
       return;
     }

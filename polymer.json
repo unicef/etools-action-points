@@ -27,16 +27,16 @@
       ],
       "js": {
         "compile": true,
-        "minify": false,
+        "minify": true,
         "transformModulesToAmd": true
       },
       "css": {
-        "minify": false
+        "minify": true
       },
       "html": {
-        "minify": false
+        "minify": true
       },
-      "bundle": false,
+      "bundle": true,
       "addServiceWorker": true
     },
     {
@@ -44,16 +44,16 @@
       "preset": "es5-bundled",
       "js": {
         "compile": true,
-        "minify": false,
+        "minify": true,
         "transformModulesToAmd": true
       },
       "css": {
-        "minify": false
+        "minify": true
       },
       "html": {
-        "minify": false
+        "minify": true
       },
-      "bundle": false,
+      "bundle": true,
       "addServiceWorker": true
     }
   ],

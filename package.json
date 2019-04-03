@@ -54,7 +54,6 @@
     "@polymer/paper-toggle-button": "^3.0.1",
     "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.1.0",
-    "@types/moment": "^2.13.0",
     "@webcomponents/shadycss": "^1.7.1",
     "@webcomponents/webcomponentsjs": "^2.2.4",
     "css-slam": "^2.1.2",

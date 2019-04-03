@@ -159,7 +159,11 @@ class AppShell extends AppShellMixin {
         type: Boolean,
         value: false
       },
-      basePath: String
+      basePath: String,
+      smallMenu: {
+        type: Boolean,
+        observer: 'toggleDrawer'
+      }
     };
   }
 
@@ -191,13 +195,14 @@ class AppShell extends AppShellMixin {
   }
 
   toggleDrawer() {
+    debugger
     let isClosed = !this.$.drawer.opened;
     let drawerWidth;
 
     if (isClosed) {
-      drawerWidth = '220px';
-    } else {
       drawerWidth = '70px';
+    } else {
+      drawerWidth = '220px';
     }
 
     this.$.drawer.updateStyles({

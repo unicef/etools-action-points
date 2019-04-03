@@ -187,9 +187,10 @@ class CountriesDropdown extends CountriesDropdownMixin {
       return;
     }
 
-    this.countryIndex = countries.findIndex((country: any) => {
+    let countryObj: any = countries.find((country: any) => {
       return country.id === countryId;
-    });
+    })
+    this.countryIndex = countries.indexOf(countryObj);
   }
 
   _toggleOpened(this: any) {

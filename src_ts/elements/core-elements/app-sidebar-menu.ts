@@ -83,14 +83,14 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
           app-toolbar {
             padding: 0;
         
-            [main-title] {
-              display: none;
-            }
+        [small-menu] [main-title] {
+          display: none;
+        }
         }
       </style>
 
       <div class="menu-header">
-        <span id="app-name" main-title>Action Points</span>
+        <span id="app-name" small-menu="[[smallMenu]]" main-title>Action Points</span>
 
         <span class="ripple-wrapper main menu-header">
           <iron-icon id="menu-header-top-icon"
@@ -111,7 +111,7 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
         </span>
       </div>
 
-      <div class="nav-menu" smallMenu$="[[smallMenu]]">
+      <div class="nav-menu" small-menu$="[[smallMenu]]">
         <iron-selector
                 selected="action-points"
                 attr-for-selected="view"
@@ -154,7 +154,8 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
     };
   }
 
-  _menuSizeChange(newVal: string, oldVal: string) {
+  _menuSizeChange(newVal: boolean, oldVal: boolean) {
+    console.log(this.smallMenu)
     if (newVal !== oldVal) {
       this.dispatchEvent(new CustomEvent('resize-main-layout', {
         bubbles: true,
