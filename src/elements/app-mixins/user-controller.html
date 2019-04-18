@@ -17,7 +17,7 @@
             if (_user) {throw new Error('User already exists!');}
 
             if (!user || !_.isObject(user) || _.isArray(user)) {throw new Error('User must be an object');}
-            if (!user.id || !user.groups) {throw new Error('User must have id and groups fields!');}
+            if (!user.user || !user.groups) {throw new Error('User must have id and groups fields!');}
 
             _user = _.cloneDeep(user);
             this._setGroups(user);
