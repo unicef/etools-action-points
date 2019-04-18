@@ -32,7 +32,7 @@
             _handleResponse(data) {
                 let user = data.detail;
                 let lastUserId = JSON.parse(localStorage.getItem('userId'));
-                let countriesAvailable = _.get(user, 'profile.countries_available') || [];
+                let countriesAvailable = _.get(user, 'countries_available') || [];
 
                 countriesAvailable = _.sortBy(countriesAvailable, ['name']);
                 _.set(user, 'countries_available', countriesAvailable);
