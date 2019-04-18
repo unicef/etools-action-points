@@ -1,6 +1,6 @@
 <!--import [polymer/polymer-element, shadycss/apply-shim, etools-behaviors/etools-mixin-factory, app-route/app-location, app-route,
             app-layout, paper-icon-button, paper-material, iron-selector, iron-pages, iron-collapse, iron-icons,
-            iron-icons/social-icons, iron-icons/av-icons, etools-loading/etools-loading-mixin]-->
+            iron-icons/social-icons, iron-icons/av-icons, etools-loading/etools-loading-mixin, etools-piwik-analytics]-->
 
 <!--import [app-main-header, app-sidebar-menu, multi-notification-list, permission-controller, etools-app-config,
             user-controller, side-bar-item, countries-dropdown, static-data, shared-styles,
@@ -16,6 +16,8 @@
         </style>
 
         <static-data></static-data>
+
+        <etools-piwik-analytics user="[[user]]" toast="[[_toast]]" page="[[page]]"></etools-piwik-analytics>
 
         <app-location route="{{route}}"></app-location>
 
