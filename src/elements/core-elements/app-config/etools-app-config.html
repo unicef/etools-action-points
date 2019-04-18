@@ -25,7 +25,7 @@
 
             const endpoints = {
                 userProfile: {
-                    url: '/users/api/profile/'
+                    url: '/api/v3/users/profile/'
                 },
                 changeCountry: {
                     url: '/users/api/changecountry/'
@@ -54,13 +54,13 @@
                     url: '/api/action-points/action-points/'
                 },
                 actionPointsListExport: {
-                    url: '/api/action-points/action-points/export/csv'
+                    url: '/api/action-points/action-points/export/xlsx'
                 },
                 actionPoint: {
                     template: '/api/action-points/action-points/<%=id%>/'
                 },
                 actionPointExport: {
-                    template: '/api/action-points/action-points/<%=id%>/export/csv/'
+                    template: '/api/action-points/action-points/<%=id%>/export/xlsx/'
                 },
                 actionPointComplete: {
                     template: '/api/action-points/action-points/<%=id%>/complete/'
