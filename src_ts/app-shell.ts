@@ -117,7 +117,7 @@ class AppShell extends AppShellMixin {
           
           <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
                       fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
-            <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}">
+            <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}" data-loaded="[[staticDataLoaded]]">
             </action-points-page-main>
             <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
           </iron-pages>
@@ -270,14 +270,14 @@ class AppShell extends AppShellMixin {
       }
     }));
 
-    // var resolvedPageUrl;
-    // if (page === 'not-found') {
-    //   resolvedPageUrl = 'elements/pages/not-found-page-view.ts';
-    // } else {
-    //   resolvedPageUrl =
-    //     `./elements/pages/${page}-page-components/${page}-page-main.ts`;
-    // }
-    // import(resolvedPageUrl).then(() => this._loadPage(), event => this._pageNotFound(event));
+    var resolvedPageUrl;
+    if (page === 'not-found') {
+      resolvedPageUrl = 'elements/pages/not-found-page-view.js';
+    } else {
+      resolvedPageUrl =
+        `./elements/pages/${page}-page-components/${page}-page-main.js`;
+    }
+    import(resolvedPageUrl).then(() => this._loadPage(), () => this._pageNotFound());
     if (page === "action-points") {
       this._loadPage()
     } else {

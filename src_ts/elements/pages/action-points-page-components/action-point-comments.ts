@@ -153,9 +153,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
 
   saveComment() {
     if (!this.validate()) return;
-    let endpoint = this.getEndpoint('actionPoint', {
-      id: this.actionPoint.id
-    });
+    let endpoint = this.getEndpoint('actionPoint', this.actionPoint.id);
     let comments = [{
       comment: this.commentText
     }];

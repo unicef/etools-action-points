@@ -142,15 +142,11 @@ class ActionPointsItem extends ActionPointsItemMixin {
       return;
     }
     this.set('actionPoint', {});
-    let endpoint = this.getEndpoint('actionPoint', {
-      id: this.actionPointId
-    });
+    let endpoint = this.getEndpoint('actionPoint', this.actionPointId);
     this._loadOptions(this.actionPointId);
     this.sendRequest({
         method: 'GET',
-        endpoint: {
-          url: endpoint
-        }
+        endpoint: endpoint
       })
       .then((result: any) => {
         this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
@@ -160,9 +156,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
 
   _loadOptions(id: number) {
     let permissionPath = `action_points_${id}`;
-    let endpoint = this.getEndpoint('actionPoint', {
-      id: id
-    });
+    let endpoint = this.getEndpoint('actionPoint', id);
     return this.sendRequest({
         method: 'OPTIONS',
         endpoint
@@ -214,9 +208,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
   }
 
   _complete() {
-    let endpoint = this.getEndpoint('actionPointComplete', {
-      id: this.actionPointId
-    });
+    let endpoint = this.getEndpoint('actionPointComplete', this.actionPointId);
 
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
@@ -275,9 +267,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
 
     let editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     let data = this._getChangedData(this.actionPoint, editedData);
-    let endpoint = this.getEndpoint('actionPoint', {
-      id: this.actionPointId
-    });
+    let endpoint = this.getEndpoint('actionPoint', this.actionPointId);
 
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
@@ -332,9 +322,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
 
     return [{
       name: 'Export CSV',
-      url: this.getEndpoint('actionPointExport', {
-        id: actionPoint.id
-      }).url
+      url: this.getEndpoint('actionPointExport', actionPoint.id).url
     }];
   }
 

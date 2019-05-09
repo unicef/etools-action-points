@@ -90,7 +90,11 @@ class AppMainHeader extends AppMainHeaderMixin {
 
           <support-btn></support-btn>
 
-          <etools-profile-dropdown profile="{{user}}"></etools-profile-dropdown>
+          <etools-profile-dropdown profile="{{user}}"
+                                   users="[[allUsers]]"
+                                   offices="[[offices]]"
+                                   sections="[[sections]]">
+          </etools-profile-dropdown>
 
           <paper-icon-button id="pageRefresh" icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]"></paper-icon-button>
         </div>

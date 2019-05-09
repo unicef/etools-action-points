@@ -147,36 +147,36 @@ class ActionPointsList extends
         <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]" 
           label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
           <etools-data-table-column class="flex-1" field="reference_number" sortable>
-          <!--[[getLabel('reference_number', basePermissionPath)]]-->
-          Reference Number
+          [[getLabel('reference_number', basePermissionPath)]]
+          <!--Reference Number-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
-          <!--[[getLabel('cp_output', basePermissionPath)]]-->
-          CP Output
+          [[getLabel('cp_output', basePermissionPath)]]
+          <!--CP Output-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="partner__name" sortable>
-          <!--[[getLabel('partner', basePermissionPath)]]-->
-          Partner
+          [[getLabel('partner', basePermissionPath)]]
+          <!--Partner-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="office__name" sortable>
-          <!--[[getLabel('office', basePermissionPath)]]-->
-          Office
+          [[getLabel('office', basePermissionPath)]]
+          <!--Office-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="section__name" sortable>
-          <!--[[getLabel('section', basePermissionPath)]]-->
-          Section
+          [[getLabel('section', basePermissionPath)]]
+          <!--Section-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
-          <!--[[getLabel('assigned_to', basePermissionPath)]]-->
-          Assigned To
+          [[getLabel('assigned_to', basePermissionPath)]]
+          <!--Assigned To-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="due_date" sortable>
-          <!--[[getLabel('due_date', basePermissionPath)]]-->
-          Due Date
+          [[getLabel('due_date', basePermissionPath)]]
+          <!--Due Date-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="status" sortable>
-          <!--[[getLabel('status', basePermissionPath)]]-->
-          Status
+          [[getLabel('status', basePermissionPath)]]
+          <!--Status-->
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="high_priority" sortable>
             Priority
@@ -453,17 +453,17 @@ class ActionPointsList extends
         type: Array,
         notify: true
       },
-      unicefUsers: {
-        type: Array,
-        observer: '_initFilters',
-        statePath: 'users'
+      dataLoaded: {
+        type: Boolean,
+        value: false,
+        observer: '_initFilters'
       }
     };
   }
 
   static get observers() {
     return [
-      '_updateQueries(queryParams.*)',
+      // '_updateQueries(queryParams.*)',
       '_setPath(path)'
     ];
   }
@@ -472,7 +472,6 @@ class ActionPointsList extends
     super.ready();
     this.modules = this.getData('modules') || [];
     this.statuses = this.getData('statuses') || [];
-    // this._initFilters();
     this._initSort();
     this.isShowCompleted = this.queryParams.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
@@ -540,10 +539,11 @@ class ActionPointsList extends
   }
 
   _getLink(actionPointId: number) {
-    return `action-points/detail/${actionPointId}`;
+    return `apd/action-points/detail/${actionPointId}`;
   }
 
   _initFilters() {
+    if (!this.dataLoaded) {return};
     let filtersElement = this.$.filters;
     this.setFiltersSelections();
     if (filtersElement) {

@@ -72,7 +72,7 @@ class SearchAndFilter extends
           margin-top: 4px;
         }
       
-        #add-filter-containerpaper-button {
+        #add-filter-container paper-button {
           color: var(--module-primary);
           font-weight: bold;
         }

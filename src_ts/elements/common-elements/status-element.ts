@@ -22,74 +22,83 @@ class StatusElement extends
           :host {
             display: block;
         
-            --ecp-content: #{'{
-                padding: 0;
-            }'};
+            --ecp-content: {
+              padding: 0;
+            };
         
             .actions {
               border-top: solid 1px #e8e8e8;
               padding: 24px;
             }
         
-            .status-list { width: 100%; padding: 25px; box-sizing: border-box; }
+            .status-list { 
+              width: 100%;
+              padding: 25px;
+              box-sizing: border-box;
+            }
+            
             .status-buttons {
               width: 100%;
               padding: 25px;
               border-top: solid 1px #e8e8e8;
               text-align: center;
               box-sizing: border-box;
-      
-              paper-button {
-                height: 35px;
-                color: #ffffff;
-                background-color: var(--module-primary);
-                &.with-actions { padding-right: 0; }
-    
-                span { padding: 0 29px; }
-              }
-              paper-menu-button {
-                padding: 0;
-                border-left: solid 1px rgba(255, 255, 255, 0.5);
-              }
-      
-              .dropdown-content { padding: 6px 0; }
-      
-              .other-title {
-                cursor: default;
-                padding: 10px 20px;
-                text-transform: uppercase;
-                color: var(--gray-mid);
-                white-space: nowrap;
-                font-weight: 500;
-              }
-      
-              .other-options {
-                min-width: 150px;
-                text-align: left;
-                padding: 13px;
-                color: var(--gray-dark);
-                font-weight: 500;
-                white-space: nowrap;
-                &:hover { background-color: rgba(0, 0, 0, 0.1); }
-    
-                .option-icon {
-                  width: 22px;
-                  height: 22px;
-                  margin-right: 15px;
-                  margin-left: 5px;
-                  color: var(--gray-mid);
-                  vertical-align: top;
-                }
-    
-                span {
-                  vertical-align: top;
-                  margin-top: 1px;
-                  padding: 0;
-                  display: inline-block;
-                  height: 22px;
-                }
-              }
             }
+      
+            .status-buttons > paper-button {
+              height: 35px;
+              color: #ffffff;
+              background-color: var(--module-primary);
+              &.with-actions { padding-right: 0; }
+            }
+  
+              .status-buttons > paper-button span {
+                padding: 0 29px;
+              }
+
+            .status-buttons > paper-menu-button {
+              padding: 0;
+              border-left: solid 1px rgba(255, 255, 255, 0.5);
+            }
+    
+            .status-buttons > .dropdown-content { padding: 6px 0; }
+    
+            .status-buttons > .other-title {
+              cursor: default;
+              padding: 10px 20px;
+              text-transform: uppercase;
+              color: var(--gray-mid);
+              white-space: nowrap;
+              font-weight: 500;
+            }
+    
+            .status-buttons > .other-options {
+              min-width: 150px;
+              text-align: left;
+              padding: 13px;
+              color: var(--gray-dark);
+              font-weight: 500;
+              white-space: nowrap;
+              &:hover { background-color: rgba(0, 0, 0, 0.1); }
+            }
+  
+            .status-buttons > .other-options.option-icon {
+              width: 22px;
+              height: 22px;
+              margin-right: 15px;
+              margin-left: 5px;
+              color: var(--gray-mid);
+              vertical-align: top;
+            }
+  
+            .status-buttons > .other-optionsspan {
+              vertical-align: top;
+              margin-top: 1px;
+              padding: 0;
+              display: inline-block;
+              height: 22px;
+            }
+          }
         
             .status-container, .divider {
               height: 40px;

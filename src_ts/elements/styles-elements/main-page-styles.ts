@@ -79,34 +79,26 @@ export const mainPageStyles = html`
       color: var(--gray-28);
       font-size: 14px;
       font-weight: 600;
-
     }
 
     --ecp-header-bg: var(--module-primary);
-    }
 
     etools-content-panel.cancellation-tab {
       margin-bottom: 20px;
-      --ecp-header-title: #{'{
-font-weight: 500;
-      line-height: 51px;
+      --ecp-header-title: {
+        font-weight: 500;
+        line-height: 51px;
     }
 
-    '};
-
-    --epc-toolbar: #{'{
-height: 4px;
-    padding: 2px;
-    background-color: var(--module-warning);
+    --epc-toolbar: {
+      height: 4px;
+      padding: 2px;
+      background-color: var(--module-warning);
     }
 
-    '};
-
-    --ecp-content: #{'{
-padding-left: 100px;
+    --ecp-content: {
+      padding-left: 100px;
     }
-
-    '};
 
     --ecp-header-btns-wrapper: #{'{
 opacity: 1;

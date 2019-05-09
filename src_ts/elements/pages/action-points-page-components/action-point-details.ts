@@ -426,9 +426,7 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
       this.set('editedItem.intervention', null);
     }
 
-    let endpoint = this.getEndpoint('partnerOrganisationDetails', {
-      id: partnerId
-    });
+    let endpoint = this.getEndpoint('partnerOrganisationDetails', partnerId);
     this.sendRequest({
         method: 'GET',
         endpoint: {
@@ -457,9 +455,7 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
     try {
       this.interventionRequestInProcess = true;
       this.cpOutputs = undefined;
-      let interventionEndpoint = this.getEndpoint('interventionDetails', {
-        id: interventionId
-      });
+      let interventionEndpoint = this.getEndpoint('interventionDetails', interventionId);
       let intervention = await this.sendRequest({
         method: 'GET',
         endpoint: interventionEndpoint
@@ -486,9 +482,7 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
         return;
       }
 
-      let endpoint = this.getEndpoint('cpOutputsV2', {
-        ids: cpIds.join(',')
-      });
+      let endpoint = this.getEndpoint('cpOutputsV2', cpIds.join(','));
       this.cpOutputs = await this.sendRequest({
         method: 'GET',
         endpoint
