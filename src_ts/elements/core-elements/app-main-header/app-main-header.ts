@@ -1,8 +1,7 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/iron-flex-layout/iron-flex-layout';
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
 import 'etools-profile-dropdown/etools-profile-dropdown';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
@@ -27,7 +26,7 @@ class AppMainHeader extends AppMainHeaderMixin {
       ${sharedStyles}
       <style>
         app-toolbar {
-          background-color: var(--header-bg-color, #233944);
+          background-color: var(--nonprod-header-color);
           padding: 0 8px 0 0;
         }
 
@@ -78,17 +77,15 @@ class AppMainHeader extends AppMainHeaderMixin {
           <etools-app-selector hidden$="[[!user.is_staff]]"></etools-app-selector>
 
           <img src$="[[rootPath]]../../../../../../apd/images/etools-logo-color-white.svg">
-          <dom-if id="envWarningIf">
-            <template>
-              <div class="envWarning">- STAGING TESTING ENVIRONMENT</div>
-            </template>
-          </dom-if>
+          <template is="dom-if" if="[[environment]]">
+            <div class="envWarning">- [[environment]] TESTING ENVIRONMENT</div>
+          </template>
         </div>
 
         <div class="content-align">
           <countries-dropdown
-                  countries="[[user.profile.countries_available]]"
-                  country-id="[[user.profile.country]]">
+                  countries="[[user.countries_available]]"
+                  country-id="[[user.country.id]]">
           </countries-dropdown>
 
           <support-btn></support-btn>
@@ -105,39 +102,39 @@ class AppMainHeader extends AppMainHeaderMixin {
     return {
       user: {
         type: Object
+      },
+      environment: {
+        type: String,
+        observer: '_setBgColor'
       }
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // this.addEventListener('main_refresh', this._refreshPage);
     this.addEventListener('sign-out', this._logout);
   }
 
   ready() {
     super.ready();
-    this._isStaging();
-  }
-
-  _isStaging() {
-    if (this.isStagingServer()) {
-      this.$.envWarningIf.if = true;
-    }
   }
 
   openDrawer() {
     this.dispatchEvent(new CustomEvent('drawer'));
   }
 
-  // _refreshPage(event: CustomEvent) {
-  //   event.stopImmediatePropagation();
-  //   this.$.refresh.refresh();
-  // }
-
   _logout() {
     this.resetOldUserData();
     window.location.href = `${window.location.origin}/logout/`;
+  }
+
+  _setBgColor() {
+    // If not production environment, changing header color to red
+    if (this.environment) {
+      this.updateStyles({
+        '--header-bg-color': 'var(--nonprod-header-color)'
+      });
+    }
   }
 }
 

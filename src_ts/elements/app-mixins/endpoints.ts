@@ -1,9 +1,9 @@
 const apdEndpoints = {
   userProfile: {
-    url: '/users/api/profile/'
+    url: '/api/v3/users/profile/'
   },
   changeCountry: {
-    url: '/users/api/changecountry/'
+    url: '/api/v3/changecountry/'
   },
   partnerOrganisations: {
     url: '/api/v2/partners/?hidden=false',
@@ -29,13 +29,13 @@ const apdEndpoints = {
     url: '/api/action-points/action-points/'
   },
   actionPointsListExport: {
-    url: '/api/action-points/action-points/export/csv'
+    url: '/api/action-points/action-points/export/xlsx'
   },
   actionPoint: {
     template: (id: string) => `/api/action-points/action-points/${id}/`
   },
   actionPointExport: {
-    template: (id: string) => `/api/action-points/action-points/${id}/export/csv/`
+    template: (id: string) => `/api/action-points/action-points/${id}/export/xlsx/`
   },
   actionPointComplete: {
     template: (id: string) => `/api/action-points/action-points/${id}/complete/`
@@ -56,7 +56,7 @@ const apdEndpoints = {
     cacheTableName: 'offices'
   },
   unicefUsers: {
-    url: '/api/users/',
+    url: '/api/v3/users/',
     exp: 60 * 60 * 1000, // 1h
     cacheTableName: 'users'
   },

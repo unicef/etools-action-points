@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';

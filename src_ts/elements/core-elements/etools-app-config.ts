@@ -29,3 +29,5 @@ export const appDexieDb = window.EtoolsApdApp.etoolsCustomDexieDb;
 export const stagingDomain = 'etools-staging.unicef.org';
 export const productionDomain = 'etools.unicef.org';
 export const demoDomain = 'etools-demo.unicef.org';
+export const devDomain = 'etools-dev.unicef.org';
+export const localDomain = 'localhost';

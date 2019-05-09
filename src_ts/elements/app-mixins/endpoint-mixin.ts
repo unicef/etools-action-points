@@ -38,15 +38,22 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
     return config.basePath + path;
   }
 
-  isProductionServer() {
+  _checkEnvironment() {
     let location = window.location.href;
-    return location.indexOf(config.productionDomain) > -1;
-  }
-
-  isStagingServer() {
-    let location = window.location.href;
-    return location.indexOf(config.stagingDomain) > -1;
-  }
+      if (location.indexOf(config.stagingDomain) > -1) {
+          return 'STAGING'
+      }
+      if (location.indexOf(config.demoDomain) > -1) {
+          return 'DEMO'
+      }
+      if (location.indexOf(config.devDomain) > -1) {
+          return 'DEVELOPMENT'
+      } 
+      if (location.indexOf(config.localDomain) > -1) {
+          return 'LOCAL'
+      }
+      return null
+    }
 });
 
 export default EndpointMixin;

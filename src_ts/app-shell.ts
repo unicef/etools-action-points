@@ -13,6 +13,7 @@ import '@polymer/iron-collapse/iron-collapse';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
+import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from 'etools-loading/etools-loading-mixin';
 import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header.js';
@@ -29,10 +30,10 @@ import './elements/core-elements/page-footer';
 import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js';
 import {sharedStyles} from './elements/styles-elements/shared-styles.js';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
-import './elements/styles-elements/app-theme.js';
 import {basePath} from './elements/core-elements/etools-app-config'
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
-import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import './elements/styles-elements/app-theme';
 setRootPath(basePath);
 
 const AppShellMixin = EtoolsMixinFactory.combineMixins([
@@ -40,9 +41,8 @@ const AppShellMixin = EtoolsMixinFactory.combineMixins([
 ], PolymerElement)
 
 class AppShell extends AppShellMixin {
-
   public static get template() {
-    return html `
+    return html`
       ${pageLayoutStyles}
       ${sharedStyles}
       ${appDrawerStyles}
@@ -62,17 +62,29 @@ class AppShell extends AppShellMixin {
             background-color: var(--light-theme-content-color);
           };
         }
+
         app-header {
           padding-left: 73px;
         }
+
         app-header:not([small-menu]){
           padding-left: 220px;
         }
-
-        app-header {
-          background-color: var(--header-bg-color);
+        
+        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+          app-header {
+            padding-left: 0;
+          }
+          app-header:not([small-menu]){
+            padding-left: 0;
+          }
         }
       </style>
+
+      <etools-piwik-analytics user="[[user]]"
+                              page="[[page]]"
+                              toast="[[_toast]]">
+      </etools-piwik-analytics>
 
       <static-data></static-data>
 
@@ -100,7 +112,7 @@ class AppShell extends AppShellMixin {
         
         <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
           <app-header id="header" slot="header" fixed shadow small-menu$="[[smallMenu]]">
-            <app-main-header id="pageheader" user="[[user]]"></app-main-header>
+            <app-main-header id="pageheader" user="[[user]]" environment="[[environment]]"></app-main-header>
           </app-header>
           
           <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
@@ -155,15 +167,13 @@ class AppShell extends AppShellMixin {
         notify: true
       },
       queryParams: Object,
+      environment: String,
       staticDataLoaded: {
         type: Boolean,
         value: false
       },
       basePath: String,
-      smallMenu: {
-        type: Boolean,
-        observer: 'toggleDrawer'
-      }
+      smallMenu: Boolean
     };
   }
 
@@ -178,7 +188,7 @@ class AppShell extends AppShellMixin {
     this.addEventListener('404', () => this._pageNotFound());
     this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
-    this._setBgColor();
+    this.set('environment', this._checkEnvironment());
   }
 
   connectedCallback() {
@@ -191,11 +201,9 @@ class AppShell extends AppShellMixin {
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: eventData
     }));
-    // this.$.drawer.$.scrim.remove();
   }
 
   toggleDrawer() {
-    debugger
     let isClosed = !this.$.drawer.opened;
     let drawerWidth;
 
@@ -290,7 +298,6 @@ class AppShell extends AppShellMixin {
   }
 
   _pageNotFound() {
-    // console.log(event)
     this.page = 'not-found';
     // let message = event && event.detail && event.detail.message ?
     //   `${event.detail.message}` :
@@ -313,15 +320,6 @@ class AppShell extends AppShellMixin {
     let path = `${this.rootPath}action-points`;
     this.set('route.path', path);
     return 'action-points';
-  }
-
-  _setBgColor() {
-    // If not production environment, changing header color to red
-    if (!this.isProductionServer()) {
-      this.updateStyles({
-        '--header-bg-color': 'var(--nonprod-header-color)'
-      });
-    }
   }
 }
 

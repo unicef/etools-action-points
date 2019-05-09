@@ -1,5 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
@@ -82,10 +82,10 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
 
           app-toolbar {
             padding: 0;
+          }
         
-        [small-menu] [main-title] {
+        [small-menu][main-title] {
           display: none;
-        }
         }
       </style>
 
@@ -154,14 +154,14 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
     };
   }
 
-  _menuSizeChange(newVal: boolean, oldVal: boolean) {
-    console.log(this.smallMenu)
-    if (newVal !== oldVal) {
+  _menuSizeChange() {
+    // debugger
+    // if (newVal !== oldVal) {
       this.dispatchEvent(new CustomEvent('resize-main-layout', {
         bubbles: true,
         composed: true
       }));
-    }
+    // }
   }
 
   _toggleSmallMenu(e: CustomEvent) {

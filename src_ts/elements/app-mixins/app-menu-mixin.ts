@@ -1,4 +1,4 @@
-import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js'
+import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
 
 /**
  * App menu functionality mixin
@@ -71,8 +71,7 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
   }
 
   _smallMenuValueChanged(newVal: boolean) {
-    let localStorageVal = newVal ? 1 : 0;
-    //@ts-ignore
+    let localStorageVal: string = newVal ? '1' : '0';
     localStorage.setItem('etoolsAppSmallMenuIsActive', localStorageVal);
   }
 

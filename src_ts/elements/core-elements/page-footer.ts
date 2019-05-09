@@ -1,5 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 
 /**

@@ -1,5 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
@@ -20,7 +20,6 @@ import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
-// import * as queryString from 'query-string';
 
 class ActionPointsList extends 
   EndpointMixin(
@@ -97,6 +96,7 @@ class ActionPointsList extends
         .tooltip-container {
           display: inline-block;
           max-width: 100%;
+          overflow: hidden;
         }
         
         pages-header-element { 
@@ -555,7 +555,7 @@ class ActionPointsList extends
     let usersList = this.getData('unicefUsers').map((user: any) => {
       return {
         id: user.id,
-        name: `${user.first_name} ${user.last_name}`
+        name: user.name
       };
     });
     let queryDataPairs = [{

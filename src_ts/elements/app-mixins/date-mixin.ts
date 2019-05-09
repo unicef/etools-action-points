@@ -1,5 +1,5 @@
 import {dom} from '@polymer/polymer/lib/legacy/polymer.dom';
-import moment from 'moment';
+// import moment from 'moment/moment';
 
 /**
  * Mixin for parsing and format date by pattern

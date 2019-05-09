@@ -15,7 +15,7 @@ const UserController = (superClass: any) => class extends superClass {
     if (!user || !(typeof user === 'object') || Array.isArray(user)) {
       throw new Error('User must be an object');
     }
-    if (!user.id || !user.groups) {
+    if (!user.user || !user.groups) {
       throw new Error('User must have id and groups fields!');
     }
 
