@@ -21,13 +21,12 @@ import {sharedStyles} from '../../styles-elements/shared-styles';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 
-const ActionPointsDetailsMixin = EtoolsMixinFactory.combineMixins([
+const ActionPointDetailsMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin, InputAttrs, StaticData, PermissionController, LocalizationMixin, 
   DateMixin, TextareaMaxRowsMixin, EtoolsAjaxRequestMixin
 ], PolymerElement)
 
-class ActionPointDetails extends ActionPointsDetailsMixin {
-
+class ActionPointDetails extends ActionPointDetailsMixin {
   static get template() {
     return html`
       ${pageLayoutStyles}
@@ -371,6 +370,20 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
 
   ready() {
     super.ready();
+    document.addEventListener('static-data-loaded', () => this.setData())
+    document.addEventListener('locations-loaded', () => this._updateLocations());
+    this.addEventListener('reset-validation', ({detail}: any) => {
+      let elements = this.shadowRoot.querySelectorAll('.validate-input');
+      for (let element of elements) {
+        element.invalid = false;
+        if (detail && detail.resetValues) {
+          element.value = '';
+        }
+      }
+    });
+  }
+
+  setData() {
     this.modules = this.getData('modules');
     this.partners = this.getData('partnerOrganisations');
     this.offices = this.getData('offices');
@@ -384,16 +397,6 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
     });
 
     this._updateLocations();
-    document.addEventListener('locations-loaded', () => this._updateLocations());
-    this.addEventListener('reset-validation', ({detail}: any) => {
-      let elements = this.shadowRoot.querySelectorAll('.validate-input');
-      for (let element of elements) {
-        element.invalid = false;
-        if (detail && detail.resetValues) {
-          element.value = '';
-        }
-      }
-    });
   }
 
   _updateEditedItem(actionPoint: any) {
@@ -419,9 +422,8 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
 
     this.partnerRequestInProcess = true;
     this.partner = null;
-
     let originalPartner = this.originalActionPoint.partner.id;
-    let originalIntervention = this.originalActionPoint.intervention.id;
+    let originalIntervention = this.originalActionPoint.intervention ? this.originalActionPoint.intervention.id : null;
     if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
       this.set('editedItem.intervention', null);
     }
@@ -429,9 +431,7 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
     let endpoint = this.getEndpoint('partnerOrganisationDetails', partnerId);
     this.sendRequest({
         method: 'GET',
-        endpoint: {
-          url: endpoint
-        }
+        endpoint
       })
       .then((data: any) => {
         this.partner = data || null;
@@ -496,9 +496,9 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
   /* jshint ignore:end */
 
   _checkAndResetData(intervention: any) {
-    let originalIntervention = this.originalActionPoint.intervention.id;
+    let originalIntervention = this.originalActionPoint.intervention ? this.originalActionPoint.intervention.id : null;
     let originalOutput = this.originalActionPoint.cp_output.id;
-    let originalLocation = this.originalActionPoint.location.id;
+    let originalLocation = this.originalActionPoint.location ? this.originalActionPoint.location.id : null;
     let currentOutput = this.editedItem.cp_output;
     let currentLocation = this.editedItem.location;
 
@@ -558,4 +558,4 @@ class ActionPointDetails extends ActionPointsDetailsMixin {
   }
 }
 
-customElements.define('action-points-details', ActionPointDetails);
+customElements.define('action-point-details', ActionPointDetails);

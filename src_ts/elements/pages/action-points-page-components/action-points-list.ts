@@ -452,11 +452,6 @@ class ActionPointsList extends
       exportLinks: {
         type: Array,
         notify: true
-      },
-      dataLoaded: {
-        type: Boolean,
-        value: false,
-        observer: '_initFilters'
       }
     };
   }
@@ -470,11 +465,16 @@ class ActionPointsList extends
 
   ready() {
     super.ready();
-    this.modules = this.getData('modules') || [];
-    this.statuses = this.getData('statuses') || [];
+    document.addEventListener('static-data-loaded', () => this.setData());
     this._initSort();
     this.isShowCompleted = this.queryParams.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
+  }
+  
+  setData() {
+    this.modules = this.getData('modules') || [];
+    this.statuses = this.getData('statuses') || [];
+    this._initFilters();
   }
 
   _initSort() {

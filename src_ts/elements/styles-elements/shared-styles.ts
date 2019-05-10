@@ -32,24 +32,18 @@ export const sharedStyles = html`
     paper-tabs {
       color: var(--light-primary-text-color);
       --paper-tabs-selection-bar-color: var(--accent-color);
-      --paper-tabs: #{'{
+      --paper-tabs: {
       font-size: 14px;
       font-weight: 500;
       text-transform: uppercase;
-    }
-
-    '};
-
+      }
     }
 
     paper-tabs>* {
       --paper-tab-ink: var(--accent-color);
-      --paper-tab-content-unselected: #{'{
-      color: var(--light-secondary-text-color);
-    }
-
-    '};
-
+      --paper-tab-content-unselected: {
+        color: var(--light-secondary-text-color);
+      }
     }
 
     .tab-link {

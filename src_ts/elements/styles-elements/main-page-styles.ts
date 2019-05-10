@@ -7,69 +7,57 @@ export const mainPageStyles = html`
     :host {
       position: relative;
       display: block;
-
-      .view-container {
-        position: relative;
-        width: 100%;
-        display: flex;
-        padding: 25px 265px 25px 25px;
-        box-sizing: border-box;
+      --paper-tab-content-unselected: {
+        color: var(--gray-light);
       }
-
-      .tab-selector {
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -ms-flex-direction: row;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-        -ms-flex-pack: start;
-        -webkit-justify-content: flex-start;
-        justify-content: flex-start;
-        margin-top: -13px;
-        padding-left: 22px;
-        box-sizing: border-box;
-        background-color: #ffffff;
-        box-shadow: 1px -3px 9px 0 #000000;
-
-
-        paper-tabs {
-          color: var(--module-primary);
-          font-size: 14px;
-          font-weight: bold;
-
-
-          span {
-            text-transform: uppercase;
-          }
-        }
-
-        .tab-content {
-          padding: 0 13px;
-        }
-      }
-
-      --paper-tab-content-unselected: #{'{
-        color: var(--gray-light)
-      }
-
-    '};
-
-
-    #pageContent {
+      --ecp-header-bg: var(--module-primary);
+    }
+    :host .view-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      padding: 25px 265px 25px 25px;
+      box-sizing: border-box;
+    }
+    :host .tab-selector {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -ms-flex-direction: row;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      -ms-flex-pack: start;
+      -webkit-justify-content: flex-start;
+      justify-content: flex-start;
+      margin-top: -13px;
+      padding-left: 22px;
+      box-sizing: border-box;
+      background-color: #fff;
+      box-shadow: 1px -3px 9px 0 #000;
+    }
+    :host .tab-selector paper-tabs {
+      color: var(--module-primary);
+      font-size: 14px;
+      font-weight: bold;
+    }
+    :host .tab-selector paper-tabs span {
+      text-transform: uppercase;
+    }
+    :host .tab-selector .tab-content {
+      padding: 0 13px;
+    }
+    :host #pageContent {
       position: relative;
       width: 100%;
     }
-
-    #sidebar {
+    :host #sidebar {
       position: absolute;
       top: 25px;
       right: 25px;
       width: 215px;
       margin-bottom: 24px;
     }
-
-    .submitted-message {
+    :host .submitted-message {
       position: relative;
       width: 100%;
       height: 48px;
@@ -80,34 +68,25 @@ export const mainPageStyles = html`
       font-size: 14px;
       font-weight: 600;
     }
-
-    --ecp-header-bg: var(--module-primary);
-
     etools-content-panel.cancellation-tab {
       margin-bottom: 20px;
       --ecp-header-title: {
         font-weight: 500;
         line-height: 51px;
+      }
+      --epc-toolbar: {
+        height: 4px;
+        padding: 2px;
+        background-color: var(--module-warning);
+      }
+      --ecp-content: {
+        padding-left: 100px;
+      }
+      --ecp-header-btns-wrapper: {
+        opacity: 1;
+      }
     }
-
-    --epc-toolbar: {
-      height: 4px;
-      padding: 2px;
-      background-color: var(--module-warning);
-    }
-
-    --ecp-content: {
-      padding-left: 100px;
-    }
-
-    --ecp-header-btns-wrapper: #{'{
-opacity: 1;
-    }
-
-    '};
-
-
-    .cancellation-title {
+    etools-content-panel.cancellation-tab .cancellation-title {
       font-weight: 500;
       font-size: 19px;
       text-transform: uppercase;
@@ -115,15 +94,12 @@ opacity: 1;
       margin: 15px 0 26px;
       padding-left: 80px;
     }
-
-    .cancellation-text {
+    etools-content-panel.cancellation-tab .cancellation-text {
       font-size: 17px;
       white-space: pre-wrap;
       color: var(--gray-darkest);
       padding-left: 80px;
     }
-    }
-
     div[slot="panel-btns"].bookmark {
       position: absolute;
       top: 2px;
@@ -135,22 +111,16 @@ opacity: 1;
       -ms-transform: scale(0.9, 1.5);
       -o-transform: scale(0.9, 1.5);
       transform: scale(0.9, 1.5);
-
-
-      iron-icon {
-        width: 70px !important;
-        height: 70px !important;
-      }
     }
-
+    div[slot="panel-btns"].bookmark iron-icon {
+      width: 70px !important;
+      height: 70px !important;
+    }
     paper-tab {
       margin-right: 10px;
-      --paper-tab-content: #{'{
-width: auto;
-    }
-
-    '}
-
+      --paper-tab-content: {
+        width: auto;
+      }
     }
   </style>
 `;

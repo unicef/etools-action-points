@@ -20,10 +20,6 @@ export const pageLayoutStyles = html`
       z-index: 1;
     }
 
-    app-header-layout {
-      min-height: calc(100% + 100px);
-    }
-
     .page {
       @apply --layout-horizontal;
       @apply --layout-wrap;
@@ -38,6 +34,12 @@ export const pageLayoutStyles = html`
     #sidebar {
       @apply --layout-flex-3;
       padding-left: 25px;
+    }
+
+    <!-- what is this stuff? -->
+
+    app-header-layout {
+      min-height: calc(100% + 100px);
     }
 
     @media only screen and (max-width: 1359px)  {
