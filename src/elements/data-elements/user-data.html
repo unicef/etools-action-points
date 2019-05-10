@@ -32,16 +32,16 @@
             _handleResponse(data) {
                 let user = data.detail;
                 let lastUserId = JSON.parse(localStorage.getItem('userId'));
-                let countriesAvailable = _.get(user, 'profile.countries_available') || [];
+                let countriesAvailable = _.get(user, 'countries_available') || [];
 
                 countriesAvailable = _.sortBy(countriesAvailable, ['name']);
                 _.set(user, 'countries_available', countriesAvailable);
 
-                if (!lastUserId || lastUserId !== user.id) {
+                if (!lastUserId || lastUserId !== user.user) {
                     this.resetOldUserData();
                 }
 
-                localStorage.setItem('userId', user.id);
+                localStorage.setItem('userId', user.user);
 
                 this._setUserData(user);
                 this.dispatchEvent(new CustomEvent('user-profile-loaded', {bubbles: true}));

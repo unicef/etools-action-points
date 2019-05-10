@@ -247,7 +247,7 @@ class ActionPointsList extends EtoolsMixinFactory.combineMixins([
         let usersList = this.getData('unicefUsers').map((user) => {
             return {
                 id: user.id,
-                name: `${user.first_name} ${user.last_name}`
+                name: user.name
             };
         });
         let queryDataPairs = [
