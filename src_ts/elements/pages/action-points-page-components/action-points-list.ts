@@ -322,56 +322,64 @@ class ActionPointsList extends
             query: 'assigned_to',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Assigned By',
             query: 'assigned_by',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Partner',
             query: 'partner',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Office',
             query: 'office',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Location',
             query: 'location',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Section',
             query: 'section',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Related App',
             query: 'related_module',
             optionValue: 'value',
             optionLabel: 'display_name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Status',
             query: 'status',
             optionValue: 'value',
             optionLabel: 'display_name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'High Priority',
@@ -384,36 +392,42 @@ class ActionPointsList extends
             }, {
               display_name: 'No',
               value: 'false'
-            }]
+            }],
+            selected: false
           },
           {
             name: 'PD/SSFA',
             query: 'intervention',
             optionValue: 'id',
             optionLabel: 'title',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'CP Output',
             query: 'cp_output',
             optionValue: 'id',
             optionLabel: 'name',
-            selection: []
+            selection: [],
+            selected: false
           },
           {
             name: 'Due On',
             query: 'due_date',
-            isDatePicker: true
+            isDatePicker: true,
+            selected: false
           },
           {
             name: 'Due Before',
             query: 'due_date__lte',
-            isDatePicker: true
+            isDatePicker: true,
+            selected: false
           },
           {
             name: 'Due After',
             query: 'due_date__gte',
-            isDatePicker: true
+            isDatePicker: true,
+            selected: false
           }
         ]
       },
@@ -458,7 +472,6 @@ class ActionPointsList extends
 
   static get observers() {
     return [
-      // '_updateQueries(queryParams.*)',
       '_setPath(path)'
     ];
   }
@@ -543,7 +556,6 @@ class ActionPointsList extends
   }
 
   _initFilters() {
-    if (!this.dataLoaded) {return};
     let filtersElement = this.$.filters;
     this.setFiltersSelections();
     if (filtersElement) {
@@ -622,7 +634,7 @@ class ActionPointsList extends
       this.set(`filters.${filterIndex}.selection`, data);
       return true;
     }
-    return;
+    return false;
   }
 
   _requestData() {

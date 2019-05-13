@@ -497,7 +497,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
 
   _checkAndResetData(intervention: any) {
     let originalIntervention = this.originalActionPoint.intervention ? this.originalActionPoint.intervention.id : null;
-    let originalOutput = this.originalActionPoint.cp_output.id;
+    let originalOutput = this.originalActionPoint.cp_output ? this.originalActionPoint.cp_output.id : null;
     let originalLocation = this.originalActionPoint.location ? this.originalActionPoint.location.id : null;
     let currentOutput = this.editedItem.cp_output;
     let currentLocation = this.editedItem.location;

@@ -32,6 +32,7 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
     if (!maxRows || maxRows <= 1) {return false;}
 
     microTask.run(() => {
+      //@ts-ignore
       let lineHeight = textareaAutogrowStyles.lineHeight || '';
       let lineHeightPx = parseInt(lineHeight, 10);
 
@@ -43,7 +44,7 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
       // textareaAutogrow.textarea.style.overflow = 'auto';
       mirror.style.overflow = 'auto';
     });
-    return;
+    return true;
   }
 };
 

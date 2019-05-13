@@ -90,7 +90,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
     }
 
     event.target.invalid = false;
-    return
+    return true;
   }
 
   _resetInputs() {

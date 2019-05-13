@@ -12,6 +12,7 @@ import '@polymer/paper-button/paper-button';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-toggle-button/paper-toggle-button';
+import '@polymer/paper-item/paper-icon-item';
 import 'etools-date-time/datepicker-lite';
 import QueryParams from '../app-mixins/query-params-mixin';
 import DateMixin from '../app-mixins/date-mixin';
@@ -151,19 +152,15 @@ class SearchAndFilter extends
         </div>
 
         <!-- FILTERS -->
-        <template is="dom-repeat" items="[[usedFilters]]">
+        <template is="dom-repeat" items="[[selectedFilters]]">
 
           <template is="dom-if" if="[[item.isDatePicker]]">
             <div class="layout horizontal">
-              <paper-input placeholder="Select [[item.name]]" data-selector$="[[item.query]]" on-tap="openDatePicker">
-                <etools-datepicker-button id="[[item.query]]" slot="prefix" format="YYYY-MM-DD"
-                  fire-date-has-changed="[[!restoreInProcess]]"
-                  on-date-has-changed="_changeFilterValue"
-                  show-clear-btn data-is-datepicker no-init>
-                </etools-datepicker-button>
-              </paper-input>
-
-              <div class="filter-reset-button" on-click="removeFilter">×</div>
+              <datepicker-lite id="[[item.query]]" slot="prefix" format="YYYY-MM-DD"
+                fire-date-has-changed="[[!restoreInProcess]]"
+                on-date-has-changed="_changeFilterValue"
+                clear-btn-inside-dr="true" data-is-datepicker no-init>
+              </datepicker-lite>
             </div>
           </template>
 
@@ -177,8 +174,6 @@ class SearchAndFilter extends
                 hide-search="[[item.hideSearch]]"
                 allow-outside-scroll shown-items-limit="5">
               </etools-dropdown>
-
-              <div class="filter-reset-button" on-click="removeFilter">×</div>
             </div>
           </template>
 
@@ -196,8 +191,11 @@ class SearchAndFilter extends
             </paper-button>
 
             <paper-listbox slot="dropdown-content">
-              <template is="dom-repeat" items="[[availableFilters]]">
-                <paper-item on-click="addFilter"><span class="add-filter--item-name">[[item.name]]</span></paper-item>
+              <template is="dom-repeat" items="[[filters]]">
+                <paper-icon-item on-tap="selectFilter">
+                  <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
+                  <paper-item><span class="add-filter--item-name">[[item.name]]</span></paper-item>
+                </paper-icon-item>
               </template>
             </paper-listbox>
           </paper-menu-button>
@@ -226,6 +224,10 @@ class SearchAndFilter extends
         value: () => {
           return [];
         }
+      },
+      selectedFilters: {
+        type: Array,
+        value: []
       },
       availableFilters: {
         type: Array,
@@ -259,31 +261,9 @@ class SearchAndFilter extends
       });
   }
 
-  addFilter(e: any) {
-    let query = (typeof e === 'string') ? e : e.model.item.query;
-    let alreadySelected = this.usedFilters.findIndex((filter: any) => {
-      return filter.query === query;
-    });
-
-    if (alreadySelected === -1) {
-      let newFilter = this.filters.find((filter: any) => {
-        return filter.query === query;
-      });
-
-      this._setFilterValue(newFilter);
-      this.push('usedFilters', newFilter);
-
-      if (this.queryParams[query] === undefined) {
-        let queryObject: any = {};
-        queryObject[query] = true;
-        this.updateQueries(queryObject);
-      }
-    }
-  }
-
   removeFilter(e: any) {
-    let query = (typeof e === 'string') ? e : e.model.item.query;
-    let indexToRemove = this.usedFilters.indexOf(query);
+    let query = (typeof e === 'string') ? e : e.query;
+    let indexToRemove = this.selectedFilters.indexOf(query);
     if (indexToRemove === -1) {
       return;
     }
@@ -319,15 +299,14 @@ class SearchAndFilter extends
 
         let availableFilters: any[] = [];
 
-        this.filters.forEach((filter: any) => {
-          let usedFilter = this.usedFilters.find((used: any) => used.query === filter.query);
-
-          if (!usedFilter && queryParams[filter.query] !== undefined) {
-            this.addFilter(filter.query);
-          } else if (queryParams[filter.query] === undefined) {
-            this.removeFilter(filter.query);
-            availableFilters.push(filter);
-          }
+        this.selectedFilters.forEach((filter: any) => {
+          this.selectFilter(filter);
+          // if (!filter && queryParams[filter.query] !== undefined) {
+          //   this.selectFilter(filter);
+          // } else if (queryParams[filter.query] === undefined) {
+          //   this.removeFilter(filter.query);
+          //   availableFilters.push(filter);
+          // }
         });
         this.set('availableFilters', availableFilters);
 
@@ -350,11 +329,10 @@ class SearchAndFilter extends
       if (!element) {
         return;
       }
-
       let value = this.queryParams[id];
       let isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
       if (isDatepicker) {
-        element.set('prettyDate', value);
+        element.set('value', value);
         this.dates[element.id] = value;
         element.parentElement.value = this.prettyDate(value);
       } else {
@@ -382,6 +360,38 @@ class SearchAndFilter extends
       return {};
     }
   }
+
+  // select a filter from ADD FILTER menu
+  selectFilter({ model: { item: selectedOption, index: selectedIdx } }) {
+    if (!this._isAlreadySelected(selectedOption)) {
+      this._setFilterValue(selectedOption);
+      this.push('selectedFilters', selectedOption);
+      this.set(['filters', selectedIdx, 'selected'], true);
+
+      if (this.queryParams[selectedOption.query] === undefined) {
+        let queryObject: any = {};
+        queryObject[selectedOption.query] = true;
+        this.updateQueries(queryObject);
+      }
+    } else {
+      let paredFilters = this.selectedFilters.filter((fil) => fil.query != selectedOption.query);
+      this.set('selectedFilters', paredFilters);
+      this.set(['filters', selectedIdx, 'selected'], false);
+      let newQueryObj = this.queryParams
+      newQueryObj[selectedOption.query] = undefined;
+      this.updateQueries(newQueryObj);
+      delete newQueryObj[selectedOption.query]
+      this.set('queryParams', newQueryObj)
+
+    }
+  }
+
+  _isAlreadySelected(filter) {
+    return Boolean(
+      this.selectedFilters.find((sF) => sF.query === filter.query)
+      );
+    }
+    
 
   _changeFilterValue(e: any) {
     if (!e || !e.currentTarget) {
