@@ -1,4 +1,4 @@
-let _permissionCollection: any = {};
+const _permissionCollection: any = {};
 
 /*
  * Mixin for manage permission data.
@@ -20,7 +20,6 @@ const PermissionController = (superClass: any) => class extends superClass {
       console.warn('data must be an object');
       return false;
     }
-
     // check existence
     if (_permissionCollection[collectionName]) {
       return false;
@@ -28,6 +27,8 @@ const PermissionController = (superClass: any) => class extends superClass {
 
     _permissionCollection[collectionName] = data;
     this._manageActions(collectionName);
+
+    this.dispatchEvent(new CustomEvent('permissions-loaded', {bubbles: true, composed: true}));
 
     return true;
   }
@@ -88,7 +89,6 @@ const PermissionController = (superClass: any) => class extends superClass {
     if (typeof attribute !== 'string') {
       throw new Error('attribute argument must be a string');
     }
-
     let value: any = this._getCollection(path, actionType);
 
     if (value) {

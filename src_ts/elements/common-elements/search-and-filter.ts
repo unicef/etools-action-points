@@ -219,17 +219,7 @@ class SearchAndFilter extends
         type: String,
         observer: 'searchKeyDown'
       },
-      usedFilters: {
-        type: Array,
-        value: () => {
-          return [];
-        }
-      },
       selectedFilters: {
-        type: Array,
-        value: []
-      },
-      availableFilters: {
         type: Array,
         value: []
       },
@@ -261,28 +251,7 @@ class SearchAndFilter extends
       });
   }
 
-  removeFilter(e: any) {
-    let query = (typeof e === 'string') ? e : e.query;
-    let indexToRemove = this.selectedFilters.indexOf(query);
-    if (indexToRemove === -1) {
-      return;
-    }
-
-    let queryObject: any = {};
-    queryObject[query] = undefined;
-
-    if (this.queryParams[query]) {
-      queryObject.page = '1';
-    }
-
-    if (indexToRemove !== -1) {
-      this.splice('usedFilters', indexToRemove, 1);
-    }
-    this.updateQueries(queryObject);
-  }
-
   _reloadFilters() {
-    this.set('usedFilters', []);
     this._restoreFilters();
   }
 
@@ -297,7 +266,7 @@ class SearchAndFilter extends
           return;
         }
 
-        let availableFilters: any[] = [];
+        // let availableFilters: any[] = [];
 
         this.selectedFilters.forEach((filter: any) => {
           this.selectFilter(filter);
@@ -308,7 +277,7 @@ class SearchAndFilter extends
           //   availableFilters.push(filter);
           // }
         });
-        this.set('availableFilters', availableFilters);
+        // this.set('availableFilters', availableFilters);
 
         if (queryParams.search) {
           this.set('searchString', queryParams.search);
@@ -362,12 +331,11 @@ class SearchAndFilter extends
   }
 
   // select a filter from ADD FILTER menu
-  selectFilter({ model: { item: selectedOption, index: selectedIdx } }) {
+  selectFilter({model: {item: selectedOption, index: selectedIdx}}) {
     if (!this._isAlreadySelected(selectedOption)) {
       this._setFilterValue(selectedOption);
       this.push('selectedFilters', selectedOption);
       this.set(['filters', selectedIdx, 'selected'], true);
-
       if (this.queryParams[selectedOption.query] === undefined) {
         let queryObject: any = {};
         queryObject[selectedOption.query] = true;
@@ -382,7 +350,6 @@ class SearchAndFilter extends
       this.updateQueries(newQueryObj);
       delete newQueryObj[selectedOption.query]
       this.set('queryParams', newQueryObj)
-
     }
   }
 

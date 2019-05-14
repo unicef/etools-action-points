@@ -147,36 +147,36 @@ class ActionPointsList extends
         <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]" 
           label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
           <etools-data-table-column class="flex-1" field="reference_number" sortable>
-          [[getLabel('reference_number', basePermissionPath)]]
-          <!--Reference Number-->
+          <!-- [[getLabel('reference_number', basePermissionPath)]] -->
+          Reference Number
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
-          [[getLabel('cp_output', basePermissionPath)]]
-          <!--CP Output-->
+          <!-- [[getLabel('cp_output', basePermissionPath)]] -->
+          CP Output
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="partner__name" sortable>
-          [[getLabel('partner', basePermissionPath)]]
-          <!--Partner-->
+          <!-- [[getLabel('partner', basePermissionPath)]] -->
+          Partner
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="office__name" sortable>
-          [[getLabel('office', basePermissionPath)]]
-          <!--Office-->
+          <!-- [[getLabel('office', basePermissionPath)]] -->
+          Office
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="section__name" sortable>
-          [[getLabel('section', basePermissionPath)]]
-          <!--Section-->
+          <!-- [[getLabel('section', basePermissionPath)]] -->
+          Section
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
-          [[getLabel('assigned_to', basePermissionPath)]]
-          <!--Assigned To-->
+          <!-- [[getLabel('assigned_to', basePermissionPath)]] -->
+          Assigned To
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="due_date" sortable>
-          [[getLabel('due_date', basePermissionPath)]]
-          <!--Due Date-->
+          <!-- [[getLabel('due_date', basePermissionPath)]] -->
+          Due Date
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="status" sortable>
-          [[getLabel('status', basePermissionPath)]]
-          <!--Status-->
+          <!-- [[getLabel('status', basePermissionPath)]] -->
+          Status
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="high_priority" sortable>
             Priority
@@ -261,34 +261,40 @@ class ActionPointsList extends
             </div>
             <div slot="row-data-details" class="layout horizontal">
               <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('description', basePermissionPath)]]</div>
+                <!-- <div class="rdc-title">[[getLabel('description', basePermissionPath)]]</div> -->
+                <div class="rdc-title">Description</div>
                 <text-content rows="3" text="[[getStringValue(entry.description)]]"></text-content>
                 <paper-tooltip offset="0">[[getStringValue(entry.description)]]</paper-tooltip>
               </div>
               <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</div>
+                <!-- <div class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</div> -->
+                <div class="rdc-title">Intervention</div>
                 <div class="truncate">[[getStringValue(entry.intervention.number)]]</div>
                 <paper-tooltip offset="0">[[getStringValue(entry.intervention.number)]]</paper-tooltip>
               </div>
               <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('location', basePermissionPath)]]</div>
+                <!-- <div class="rdc-title">[[getLabel('location', basePermissionPath)]]</div> -->
+                <div class="rdc-title">Location</div>
                 <div class="truncate">[[getStringValue(entry.location.name)]]</div>
                 <paper-tooltip offset="0">[[getStringValue(entry.location.name)]]</paper-tooltip>
               </div>
               <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div>
+                <!-- <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div> -->
+                <div class="rdc-title">Related Module</div>
                 <div class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</div>
                 <paper-tooltip offset="0">[[getStringValue(entry.related_module, modules, 'display_name')]]
                 </paper-tooltip>
               </div>
               <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</div>
+                <!-- <div class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</div> -->
+                <div class="rdc-title">Assigned By</div>
                 <div class="truncate">[[getStringValue(entry.assigned_by.name)]]</div>
                 <paper-tooltip offset="0">[[getStringValue(entry.assigned_by.name)]]</paper-tooltip>
               </div>
               <div class="row-details-content layout vertical flex">
                 <template is="dom-if" if="[[entry.date_of_completion.length]]">
-                  <div class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</div>
+                  <!-- <div class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</div> -->
+                  <div class="rdc-title">Date of Completion</div>
                   <div class="truncate">[[prettyDate(entry.date_of_completion)]]</div>
                   <paper-tooltip offset="0">[[prettyDate(entry.date_of_completion)]]</paper-tooltip>
                 </template>
@@ -310,6 +316,10 @@ class ActionPointsList extends
     return {
       actionPoints: {
         type: Array
+      },
+      labels: {
+        type: Object,
+        notify: true
       },
       createLink: {
         type: String,
@@ -479,6 +489,7 @@ class ActionPointsList extends
   ready() {
     super.ready();
     document.addEventListener('static-data-loaded', () => this.setData());
+    document.addEventListener('permissions-loaded', () => this.getLabels());
     this._initSort();
     this.isShowCompleted = this.queryParams.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
@@ -508,6 +519,15 @@ class ActionPointsList extends
     column.set('selected', true);
     column.set('direction', direction);
   }
+
+  // getLabels() {
+  //   let labelObj = {};
+  //   let labels = ['reference_number', 'cp_output', 'partner', 'office', 'section', 'assigned_to',
+  //                 'due_date', 'status', 'description', 'intervention', 'location', 'related_module',
+  //                 'assigned_by', 'date_of_completion'];
+  //   labels.forEach(label => labelObj[label] = this.getLabel(label));
+  //   this.set('labels', labelObj);
+  // }
 
   _setPath(path: string) {
     if (~path.indexOf('/list')) {
@@ -660,7 +680,9 @@ class ActionPointsList extends
   _setExportLinks() {
     let qs = '';
     if (this.exportParams) {
-			// qs = `?${queryString.stringify(this.exportParams)}`;
+      let keys = Object.keys(this.exportParams);
+      let queryArray = keys.map(k => k + '=' + this.exportParams[k]);
+      qs = '?' + queryArray.join('&');
     }
     this.set('exportLinks', [{
         name: 'Export CSV',

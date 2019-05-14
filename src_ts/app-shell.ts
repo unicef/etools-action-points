@@ -19,7 +19,7 @@ import './elements/pages/action-points-page-components/action-points-page-main'
 import './elements/core-elements/app-main-header/app-main-header.js';
 import './elements/core-elements/app-sidebar-menu.js';
 import './elements/common-elements/multi-notifications/multi-notification-list.js';
-import './elements/app-mixins/permission-controller.js';
+// import './elements/app-mixins/permission-controller.js';
 import EndpointMixin from './elements/app-mixins/endpoint-mixin';
 import UserController from './elements/app-mixins/user-controller.js';
 import AppMenu from './elements/app-mixins/app-menu-mixin'
@@ -81,12 +81,12 @@ class AppShell extends AppShellMixin {
         }
       </style>
 
+      <static-data></static-data>
+
       <etools-piwik-analytics user="[[user]]"
                               page="[[page]]"
                               toast="[[_toast]]">
       </etools-piwik-analytics>
-
-      <static-data></static-data>
 
       <app-location route="{{route}}"></app-location>
 

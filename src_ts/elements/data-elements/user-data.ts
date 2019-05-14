@@ -10,20 +10,6 @@ const UserDataMixin = EtoolsMixinFactory.combineMixins([
 ], PolymerElement)
 
 class UserData extends UserDataMixin {
-
-  // static get template() {
-  //   return html`
-  //     <etools-ajax
-  //       endpoint="[[endpoint]]"
-  //       caching-storage="custom"
-  //       dexie-db-collection="profile"
-  //       on-success="_handleResponse"
-  //       on-forbidden="_forbidden"
-  //       on-fail="_handleError">
-  //     </etools-ajax>
-  //   `;
-  // }
-
   static get properties() {return {};}
 
   ready() {
