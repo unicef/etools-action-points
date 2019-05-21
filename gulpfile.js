@@ -113,6 +113,7 @@ const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const del = require('del');
 const spawn = require('child_process').spawn;
+const runTests = require('./gulp-tasks/test');
 
 /**
  * Cleans the prpl-server build in the server directory.
@@ -137,6 +138,8 @@ gulp.task('prpl-server:build', () => {
       .pipe(replace(pattern, replacement))
       .pipe(gulp.dest('server/build'));
 });
+
+gulp.task('test', gulp.series('prpl-server:clean', 'prpl-server:build', runTests));
 
 gulp.task('prpl-server', gulp.series(
     'prpl-server:clean',

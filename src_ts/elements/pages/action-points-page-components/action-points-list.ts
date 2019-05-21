@@ -489,7 +489,6 @@ class ActionPointsList extends
   ready() {
     super.ready();
     document.addEventListener('static-data-loaded', () => this.setData());
-    document.addEventListener('permissions-loaded', () => this.getLabels());
     this._initSort();
     this.isShowCompleted = this.queryParams.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
@@ -519,15 +518,6 @@ class ActionPointsList extends
     column.set('selected', true);
     column.set('direction', direction);
   }
-
-  // getLabels() {
-  //   let labelObj = {};
-  //   let labels = ['reference_number', 'cp_output', 'partner', 'office', 'section', 'assigned_to',
-  //                 'due_date', 'status', 'description', 'intervention', 'location', 'related_module',
-  //                 'assigned_by', 'date_of_completion'];
-  //   labels.forEach(label => labelObj[label] = this.getLabel(label));
-  //   this.set('labels', labelObj);
-  // }
 
   _setPath(path: string) {
     if (~path.indexOf('/list')) {
