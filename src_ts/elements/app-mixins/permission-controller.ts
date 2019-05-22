@@ -158,7 +158,7 @@ const PermissionController = (superClass: any) => class extends superClass {
     }
   }
 
-  actionAllowed(collection: any , action: string) {
+  actionAllowed(collection: any, action: string) {
     if (!action || !collection) {
       return false;
     }

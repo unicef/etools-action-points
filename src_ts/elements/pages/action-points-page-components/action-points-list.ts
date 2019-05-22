@@ -20,16 +20,18 @@ import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 
-class ActionPointsList extends 
-  EndpointMixin(
-    StaticData(
-      QueryParams(
-        InputAttrs(
-          Localization(
-            DateMixin(
-              PolymerElement)))))) {
+const ActionPointsListMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin,
+  StaticData,
+  QueryParams,
+  InputAttrs,
+  Localization,
+  DateMixin
+], PolymerElement);
 
+class ActionPointsList extends ActionPointsListMixin {
   static get template() {
     return html`
       ${moduleStyles}
@@ -328,118 +330,117 @@ class ActionPointsList extends
       filters: {
         type: Array,
         value: [{
-            name: 'Assignee',
-            query: 'assigned_to',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Assigned By',
-            query: 'assigned_by',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Partner',
-            query: 'partner',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Office',
-            query: 'office',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Location',
-            query: 'location',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Section',
-            query: 'section',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Related App',
-            query: 'related_module',
-            optionValue: 'value',
-            optionLabel: 'display_name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Status',
-            query: 'status',
-            optionValue: 'value',
-            optionLabel: 'display_name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'High Priority',
-            query: 'high_priority',
-            optionValue: 'value',
-            optionLabel: 'display_name',
-            selection: [{
-              display_name: 'Yes',
-              value: 'true'
-            }, {
-              display_name: 'No',
-              value: 'false'
-            }],
-            selected: false
-          },
-          {
-            name: 'PD/SSFA',
-            query: 'intervention',
-            optionValue: 'id',
-            optionLabel: 'title',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'CP Output',
-            query: 'cp_output',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selection: [],
-            selected: false
-          },
-          {
-            name: 'Due On',
-            query: 'due_date',
-            isDatePicker: true,
-            selected: false
-          },
-          {
-            name: 'Due Before',
-            query: 'due_date__lte',
-            isDatePicker: true,
-            selected: false
-          },
-          {
-            name: 'Due After',
-            query: 'due_date__gte',
-            isDatePicker: true,
-            selected: false
-          }
-        ]
+          name: 'Assignee',
+          query: 'assigned_to',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Assigned By',
+          query: 'assigned_by',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Partner',
+          query: 'partner',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Office',
+          query: 'office',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Location',
+          query: 'location',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Section',
+          query: 'section',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Related App',
+          query: 'related_module',
+          optionValue: 'value',
+          optionLabel: 'display_name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Status',
+          query: 'status',
+          optionValue: 'value',
+          optionLabel: 'display_name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'High Priority',
+          query: 'high_priority',
+          optionValue: 'value',
+          optionLabel: 'display_name',
+          selection: [{
+            display_name: 'Yes',
+            value: 'true'
+          }, {
+            display_name: 'No',
+            value: 'false'
+          }],
+          selected: false
+        },
+        {
+          name: 'PD/SSFA',
+          query: 'intervention',
+          optionValue: 'id',
+          optionLabel: 'title',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'CP Output',
+          query: 'cp_output',
+          optionValue: 'id',
+          optionLabel: 'name',
+          selection: [],
+          selected: false
+        },
+        {
+          name: 'Due On',
+          query: 'due_date',
+          isDatePicker: true,
+          selected: false
+        },
+        {
+          name: 'Due Before',
+          query: 'due_date__lte',
+          isDatePicker: true,
+          selected: false
+        },
+        {
+          name: 'Due After',
+          query: 'due_date__gte',
+          isDatePicker: true,
+          selected: false
+        }]
       },
       isShowCompleted: {
         type: Boolean,
@@ -493,7 +494,7 @@ class ActionPointsList extends
     this.isShowCompleted = this.queryParams.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
-  
+
   setData() {
     this.modules = this.getData('modules') || [];
     this.statuses = this.getData('statuses') || [];
@@ -538,12 +539,12 @@ class ActionPointsList extends
       this.set('queryParams.page', this.pageNumber);
     }
     this.updateQueries(this.queryParams, null, true);
-    let x = Object.keys(queryParams).map(param => {
+    let x = Object.keys(queryParams).map((param) => {
       return !oldQueryParams.hasOwnProperty(param) && queryParams[param].length === 0;
-    })
-    let y = Object.keys(oldQueryParams).map(param => {
+    });
+    let y = Object.keys(oldQueryParams).map((param) => {
       return !queryParams.hasOwnProperty(param) && oldQueryParams[param].length === 0;
-    })
+    });
     let hasNewEmptyFilter = oldQueryParams && x.some((value: any) => value);
     let hasOldEmptyFilter = oldQueryParams && y.some((value: any) => value);
     if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
@@ -581,46 +582,45 @@ class ActionPointsList extends
       };
     });
     let queryDataPairs = [{
-        query: 'assigned_to',
-        data: usersList
-      },
-      {
-        query: 'assigned_by',
-        data: usersList
-      },
-      {
-        query: 'partner',
-        dataKey: 'partnerOrganisations'
-      },
-      {
-        query: 'office',
-        dataKey: 'offices'
-      },
-      {
-        query: 'location',
-        dataKey: 'locations'
-      },
-      {
-        query: 'cp_output',
-        dataKey: 'cpOutputsList'
-      },
-      {
-        query: 'intervention',
-        dataKey: 'interventionsList'
-      },
-      {
-        query: 'status',
-        dataKey: 'statuses'
-      },
-      {
-        query: 'section',
-        dataKey: 'sectionsCovered'
-      },
-      {
-        query: 'related_module',
-        dataKey: 'modules'
-      }
-    ];
+      query: 'assigned_to',
+      data: usersList
+    },
+    {
+      query: 'assigned_by',
+      data: usersList
+    },
+    {
+      query: 'partner',
+      dataKey: 'partnerOrganisations'
+    },
+    {
+      query: 'office',
+      dataKey: 'offices'
+    },
+    {
+      query: 'location',
+      dataKey: 'locations'
+    },
+    {
+      query: 'cp_output',
+      dataKey: 'cpOutputsList'
+    },
+    {
+      query: 'intervention',
+      dataKey: 'interventionsList'
+    },
+    {
+      query: 'status',
+      dataKey: 'statuses'
+    },
+    {
+      query: 'section',
+      dataKey: 'sectionsCovered'
+    },
+    {
+      query: 'related_module',
+      dataKey: 'modules'
+    }];
 
     queryDataPairs.forEach((pair) => {
       let filterIndex = this._getFilterIndex(pair.query);
@@ -675,8 +675,8 @@ class ActionPointsList extends
       qs = '?' + queryArray.join('&');
     }
     this.set('exportLinks', [{
-        name: 'Export CSV',
-        url: this.getEndpoint('actionPointsListExport').url + qs
+      name: 'Export CSV',
+      url: this.getEndpoint('actionPointsListExport').url + qs
     }]);
   }
 

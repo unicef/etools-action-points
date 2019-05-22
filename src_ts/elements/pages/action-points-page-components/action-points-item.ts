@@ -2,7 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
-import EndpointMixin from '../../app-mixins/endpoint-mixin'
+import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
@@ -18,8 +18,13 @@ import {mainPageStyles} from '../../styles-elements/main-page-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 
 const ActionPointsItemMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, InputAttrs, DateMixin, PermissionController, ErrorHandler, EtoolsAjaxRequestMixin
-], PolymerElement)
+  EndpointMixin,
+  InputAttrs,
+  DateMixin,
+  PermissionController,
+  ErrorHandler,
+  EtoolsAjaxRequestMixin
+], PolymerElement);
 
 class ActionPointsItem extends ActionPointsItemMixin {
 
@@ -102,7 +107,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
 
   static get observers() {
     return [
-      '_changeRoutePath(route.path)' 
+      '_changeRoutePath(route.path)'
     ];
   }
 
@@ -125,7 +130,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
 
   _changeRoutePath(path: string) {
     if (!path) {
-      return
+      return;
     }
     if (!path.match(/[^\\/]/g)) {
       this.dispatchEvent(new CustomEvent('404', {
@@ -145,40 +150,40 @@ class ActionPointsItem extends ActionPointsItemMixin {
     let endpoint = this.getEndpoint('actionPoint', this.actionPointId);
     this._loadOptions(this.actionPointId);
     this.sendRequest({
-        method: 'GET',
-        endpoint: endpoint
-      })
-      .then((result: any) => {
-        this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
-        this.set('actionPoint', this._prepareActionPoint(result));
-      }).catch((err: any) => console.log(err));
+      method: 'GET',
+      endpoint: endpoint
+    })
+        .then((result: any) => {
+          this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
+          this.set('actionPoint', this._prepareActionPoint(result));
+        }).catch((err: any) => console.log(err));
   }
 
   _loadOptions(id: number) {
     let permissionPath = `action_points_${id}`;
     let endpoint = this.getEndpoint('actionPoint', id);
     return this.sendRequest({
-        method: 'OPTIONS',
-        endpoint
-      })
-      .then((data: any) => {
-        let actions = data && data.actions;
-        if (!this.collectionExists(permissionPath)) {
-          this._addToCollection(permissionPath, actions);
-        } else {
-          this._updateCollection(permissionPath, actions);
-          this.set('permissionPath', '');
-        }
-        this.set('permissionPath', permissionPath);
-      })
-      .catch(() => {
-        this._responseError('Action Point Permissions', 'request error');
-        this.dispatchEvent(new CustomEvent('404', {
-          bubbles: true,
-          composed: true
-        }));
-        this.permissionPath = permissionPath;
-      });
+      method: 'OPTIONS',
+      endpoint
+    })
+        .then((data: any) => {
+          let actions = data && data.actions;
+          if (!this.collectionExists(permissionPath)) {
+            this._addToCollection(permissionPath, actions);
+          } else {
+            this._updateCollection(permissionPath, actions);
+            this.set('permissionPath', '');
+          }
+          this.set('permissionPath', permissionPath);
+        })
+        .catch(() => {
+          this._responseError('Action Point Permissions', 'request error');
+          this.dispatchEvent(new CustomEvent('404', {
+            bubbles: true,
+            composed: true
+          }));
+          this.permissionPath = permissionPath;
+        });
   }
 
   _prepareActionPoint(actionPoint: object) {
@@ -221,41 +226,41 @@ class ActionPointsItem extends ActionPointsItemMixin {
     }));
 
     return this.sendRequest({
-        method: 'POST',
-        endpoint
-      })
-      .then((data: any) => {
-        this.dispatchEvent(new CustomEvent('toast', {
-          detail: {
-            text: ' Action Point successfully completed.'
-          },
-          bubbles: true,
-          composed: true
-        }));
-        this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
-        this.actionPoint = this._prepareActionPoint(data);
-      })
-      .catch((err: any) => {
-        this.errorHandler(err, this.permissionPath);
-      })
-      .finally(() => {
-        this.dispatchEvent(new CustomEvent('global-loading', {
-          detail: {
-            type: 'ap-complete'
-          },
-          bubbles: true,
-          composed: true
-        }));
-      });
+      method: 'POST',
+      endpoint
+    })
+        .then((data: any) => {
+          this.dispatchEvent(new CustomEvent('toast', {
+            detail: {
+              text: ' Action Point successfully completed.'
+            },
+            bubbles: true,
+            composed: true
+          }));
+          this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
+          this.actionPoint = this._prepareActionPoint(data);
+        })
+        .catch((err: any) => {
+          this.errorHandler(err, this.permissionPath);
+        })
+        .finally(() => {
+          this.dispatchEvent(new CustomEvent('global-loading', {
+            detail: {
+              type: 'ap-complete'
+            },
+            bubbles: true,
+            composed: true
+          }));
+        });
   }
 
   _getChangedData(oldData: any, newData: any) {
-    let obj: any = {}
-    Object.keys(newData).forEach(key => {
+    let obj: any = {};
+    Object.keys(newData).forEach((key) => {
       if (oldData[key] !== newData[key]) {
-        obj[key] = newData[key]
+        obj[key] = newData[key];
       }
-    })
+    });
     return obj;
   }
 
@@ -280,31 +285,31 @@ class ActionPointsItem extends ActionPointsItemMixin {
     }));
 
     return this.sendRequest({
-        method: 'PATCH',
-        endpoint,
-        body: data
-      })
-      .then((data: any) => {
-        this.dispatchEvent(new CustomEvent('toast', {
-          detail: {
-            text: ' Action Point successfully updated.'
-          },
-          bubbles: true,
-          composed: true
-        }));
-        this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
-        this.actionPoint = this._prepareActionPoint(data);
-        this.dispatchEvent(new CustomEvent('global-loading', {
-          detail: {
-            type: 'ap-update'
-          },
-          bubbles: true,
-          composed: true
-        }));
-      })
-      .catch((err: any) => {
-        this.errorHandler(err, this.permissionPath);
-      });
+      method: 'PATCH',
+      endpoint,
+      body: data
+    })
+        .then((data: any) => {
+          this.dispatchEvent(new CustomEvent('toast', {
+            detail: {
+              text: ' Action Point successfully updated.'
+            },
+            bubbles: true,
+            composed: true
+          }));
+          this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
+          this.actionPoint = this._prepareActionPoint(data);
+          this.dispatchEvent(new CustomEvent('global-loading', {
+            detail: {
+              type: 'ap-update'
+            },
+            bubbles: true,
+            composed: true
+          }));
+        })
+        .catch((err: any) => {
+          this.errorHandler(err, this.permissionPath);
+        });
   }
 
   showHistory() {

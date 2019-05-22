@@ -9,9 +9,13 @@ import EndpointMixin from '../app-mixins/endpoint-mixin';
 import './user-data';
 
 const StaticDataMixins = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, EtoolsAjaxRequestMixin, StaticDataMixin, ErrorHandler, 
-  PermissionController, UserController
-], PolymerElement)
+  EndpointMixin,
+  EtoolsAjaxRequestMixin,
+  StaticDataMixin,
+  ErrorHandler,
+  PermissionController,
+  UserController
+], PolymerElement);
 
 /**
  * @polymer
@@ -31,13 +35,13 @@ class StaticData extends StaticDataMixins {
         type: Object,
         value: {}
       }
-    }
+    };
   }
-  
+
   connectedCallback() {
     super.connectedCallback();
     this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
-        this.loadStaticData();
+      this.loadStaticData();
     });
   }
 
@@ -64,56 +68,56 @@ class StaticData extends StaticDataMixins {
   _loadAPOptions() {
     let endpoint = this.getEndpoint('actionPointsList');
     this.sendRequest({method: 'OPTIONS', endpoint})
-      .then((data: any) => {
-        let actions = data && data.actions;
-        if (!this.isValidCollection(actions)) {
-          this._responseError('partners options');
-          return;
-        }
+        .then((data: any) => {
+          let actions = data && data.actions;
+          if (!this.isValidCollection(actions)) {
+            this._responseError('partners options');
+            return;
+          }
 
-        this._addToCollection('action_points', actions);
+          this._addToCollection('action_points', actions);
 
-        let statusesData = this.getChoices('action_points.status');
-        if (!statusesData) {console.error('Can not load action points statuses data');}
-        this._setData('statuses', statusesData);
+          let statusesData = this.getChoices('action_points.status');
+          if (!statusesData) {console.error('Can not load action points statuses data');}
+          this._setData('statuses', statusesData);
 
-        let modulesData = this.getChoices('action_points.related_module');
-        if (!modulesData) {console.error('Can not load action points modules data');}
-        this._setData('modules', modulesData);
+          let modulesData = this.getChoices('action_points.related_module');
+          if (!modulesData) {console.error('Can not load action points modules data');}
+          this._setData('modules', modulesData);
 
-        this.dataLoaded.apOptions = true;
-        this._allDataLoaded();
-      }).catch(() => this._responseError('Partners', 'request error'));
+          this.dataLoaded.apOptions = true;
+          this._allDataLoaded();
+        }).catch(() => this._responseError('Partners', 'request error'));
   }
 
   _loadPartners(this: any) {
     let endpoint = this.getEndpoint('partnerOrganisations');
     this.sendRequest({method: 'GET', endpoint})
-      .then((data: any) => {
-        this._setData('partnerOrganisations', data);
-        this.dataLoaded.organizations = true;
-        this._allDataLoaded();
-      }).catch(() => this._responseError('Partners', 'request error'));
+        .then((data: any) => {
+          this._setData('partnerOrganisations', data);
+          this.dataLoaded.organizations = true;
+          this._allDataLoaded();
+        }).catch(() => this._responseError('Partners', 'request error'));
   }
 
   _loadLocations(this: any) {
     let endpoint = this.getEndpoint('locations');
     this.sendRequest({method: 'GET', endpoint})
-      .then((data: any) => {
-        this._setData('locations', data);
-        let locationsLoaded = new CustomEvent('locations-loaded');
-        document.dispatchEvent(locationsLoaded);
-      }).catch(() => this._responseError('Locations', 'request error'));
+        .then((data: any) => {
+          this._setData('locations', data);
+          let locationsLoaded = new CustomEvent('locations-loaded');
+          document.dispatchEvent(locationsLoaded);
+        }).catch(() => this._responseError('Locations', 'request error'));
   }
 
   _loadData(dataName: string) {
     let endpoint = this.getEndpoint(dataName);
     this.sendRequest({method: 'GET', endpoint})
-      .then((data: any) => {
-        this._setData(dataName, data);
-        this.dataLoaded[dataName] = true;
-        this._allDataLoaded();
-      }).catch(() => this._responseError(dataName, 'request error'));
+        .then((data: any) => {
+          this._setData(dataName, data);
+          this.dataLoaded[dataName] = true;
+          this._allDataLoaded();
+        }).catch(() => this._responseError(dataName, 'request error'));
   }
 
   _triggerGlobalEvent(eventName: string, data: any) {

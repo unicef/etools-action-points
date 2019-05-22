@@ -19,12 +19,14 @@ import DateMixin from '../app-mixins/date-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 
-class SearchAndFilter extends
-  DateMixin(
-    QueryParams(
-      PolymerElement)) {
+const SearchAndFilterMixin = EtoolsMixinFactory.combineMixins([
+  DateMixin,
+  QueryParams
+], PolymerElement);
 
+class SearchAndFilter extends SearchAndFilterMixin {
   static get template() {
     return html`
       ${sharedStyles}
@@ -87,31 +89,31 @@ class SearchAndFilter extends
           margin: 0;
         }
         
-          paper-listbox {
-            background-color: #ffffff;
-    
-            --paper-menu-background-color: #ffffff;
-            --paper-menu-focused-item-after: {
-              background: var(--primary-background-color);
-              opacity: 0;
-          };
-    
-          paper-listbox paper-item {
-            font-weight: normal;
-            height: 48px;
-            min-height: initial;
-            cursor: pointer;
+        paper-listbox {
+          background-color: #ffffff;
 
-            --paper-item-focused-before: {
-              background: var(--primary-background-color);
-              opacity: 0;
-            };
-          }
-    
-          paper-listbox span.add-filter--item-name {
-            white-space: nowrap;
-            text-transform: capitalize;
-          }
+          --paper-menu-background-color: #ffffff;
+          --paper-menu-focused-item-after: {
+            background: var(--primary-background-color);
+            opacity: 0;
+        };
+
+        paper-listbox paper-item {
+          font-weight: normal;
+          height: 48px;
+          min-height: initial;
+          cursor: pointer;
+
+          --paper-item-focused-before: {
+            background: var(--primary-background-color);
+            opacity: 0;
+          };
+        }
+
+        paper-listbox span.add-filter--item-name {
+          white-space: nowrap;
+          text-transform: capitalize;
+        }
         
         .filter-dropdown {
           margin-left: 20px;
@@ -242,13 +244,13 @@ class SearchAndFilter extends
 
   searchKeyDown() {
     this._debounceSearch = Debouncer.debounce(
-      this._debounceSearch, timeOut.after(300), () => {
-        let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
-        this.updateQueries({
-          search: query,
-          page: '1'
+        this._debounceSearch, timeOut.after(300), () => {
+          let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
+          this.updateQueries({
+            search: query,
+            page: '1'
+          });
         });
-      });
   }
 
   _reloadFilters() {
@@ -258,42 +260,42 @@ class SearchAndFilter extends
   _restoreFilters() {
     this.restoreInProcess = true;
     this._debounceFilters = Debouncer.debounce(this._debounceFilters,
-      timeOut.after(50),
-      () => {
-        let queryParams = this.queryParams;
+        timeOut.after(50),
+        () => {
+          let queryParams = this.queryParams;
 
-        if (!queryParams) {
-          return;
-        }
+          if (!queryParams) {
+            return;
+          }
 
-        // let availableFilters: any[] = [];
+          // let availableFilters: any[] = [];
 
-        this.selectedFilters.forEach((filter: any) => {
-          this.selectFilter(filter);
-          // if (!filter && queryParams[filter.query] !== undefined) {
-          //   this.selectFilter(filter);
-          // } else if (queryParams[filter.query] === undefined) {
-          //   this.removeFilter(filter.query);
-          //   availableFilters.push(filter);
-          // }
+          this.selectedFilters.forEach((filter: any) => {
+            this.selectFilter(filter);
+            // if (!filter && queryParams[filter.query] !== undefined) {
+            //   this.selectFilter(filter);
+            // } else if (queryParams[filter.query] === undefined) {
+            //   this.removeFilter(filter.query);
+            //   availableFilters.push(filter);
+            // }
+          });
+          // this.set('availableFilters', availableFilters);
+
+          if (queryParams.search) {
+            this.set('searchString', queryParams.search);
+          } else {
+            this.set('searchString', '');
+          }
+          setTimeout(() => {
+            this._updateValues();
+            this.restoreInProcess = false;
+          });
         });
-        // this.set('availableFilters', availableFilters);
-
-        if (queryParams.search) {
-          this.set('searchString', queryParams.search);
-        } else {
-          this.set('searchString', '');
-        }
-        setTimeout(() => {
-          this._updateValues();
-          this.restoreInProcess = false;
-        });
-      });
   }
 
   _updateValues() {
     let ids = Object.keys(this.queryParams || {});
-    ids.forEach(id => {
+    ids.forEach((id) => {
       let element = this.shadowRoot.querySelector(`#${id}`);
       if (!element) {
         return;
@@ -342,23 +344,22 @@ class SearchAndFilter extends
         this.updateQueries(queryObject);
       }
     } else {
-      let paredFilters = this.selectedFilters.filter((fil) => fil.query != selectedOption.query);
+      let paredFilters = this.selectedFilters.filter(fil => fil.query != selectedOption.query);
       this.set('selectedFilters', paredFilters);
       this.set(['filters', selectedIdx, 'selected'], false);
-      let newQueryObj = this.queryParams
+      let newQueryObj = this.queryParams;
       newQueryObj[selectedOption.query] = undefined;
       this.updateQueries(newQueryObj);
-      delete newQueryObj[selectedOption.query]
-      this.set('queryParams', newQueryObj)
+      delete newQueryObj[selectedOption.query];
+      this.set('queryParams', newQueryObj);
     }
   }
 
   _isAlreadySelected(filter) {
     return Boolean(
-      this.selectedFilters.find((sF) => sF.query === filter.query)
-      );
-    }
-    
+        this.selectedFilters.find(sF => sF.query === filter.query)
+    );
+  }
 
   _changeFilterValue(e: any) {
     if (!e || !e.currentTarget) {

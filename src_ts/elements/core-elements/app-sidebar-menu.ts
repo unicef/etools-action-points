@@ -7,7 +7,7 @@ import '@polymer/iron-selector/iron-selector';
 import '@polymer/iron-icons/maps-icons';
 import '@polymer/app-layout/app-layout';
 import './side-bar-item';
-import EndpointMixin from '../app-mixins/endpoint-mixin'
+import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {navMenuStyles} from '../styles-elements/nav-menu-styles';
 
@@ -125,7 +125,9 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
           </side-bar-item>
         </iron-selector>
 
-        <div class="secondary-header nav-menu-item section-title" small-menu$="[[smallMenu]]">eTools Community Channels</div>
+        <div class="secondary-header nav-menu-item section-title" small-menu$="[[smallMenu]]">
+          eTools Community Channels
+        </div>
 
         <side-bar-item class="lighter-item" name="Knowledge Base" icon="maps:local-library" 
                        side-bar-link="http://etools.zendesk.com" external>
@@ -155,13 +157,10 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
   }
 
   _menuSizeChange() {
-    // debugger
-    // if (newVal !== oldVal) {
-      this.dispatchEvent(new CustomEvent('resize-main-layout', {
-        bubbles: true,
-        composed: true
-      }));
-    // }
+    this.dispatchEvent(new CustomEvent('resize-main-layout', {
+      bubbles: true,
+      composed: true
+    }));
   }
 
   _toggleSmallMenu(e: CustomEvent) {

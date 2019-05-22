@@ -17,12 +17,17 @@ import PermissionController from '../../app-mixins/permission-controller';
 import DateMixin from '../../app-mixins/date-mixin';
 
 const ActionPointCommentsMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, InputAttrs, PermissionController, LocalizationMixin, 
-  DateMixin, ErrorHandlerMixin, TextareaMaxRows, EtoolsAjaxRequestMixin
-], PolymerElement)
+  EndpointMixin,
+  InputAttrs,
+  PermissionController,
+  LocalizationMixin,
+  DateMixin,
+  ErrorHandlerMixin,
+  TextareaMaxRows,
+  EtoolsAjaxRequestMixin
+], PolymerElement);
 
 class ActionPointComments extends ActionPointCommentsMixin {
-
   static get template() {
     return html`
       ${tabInputsStyles}
@@ -159,24 +164,24 @@ class ActionPointComments extends ActionPointCommentsMixin {
     }];
     this.isSaveComment = true;
     this.sendRequest({
-        method: 'PATCH',
-        endpoint: {
-          url: endpoint
-        },
-        body: {
-          comments: comments
-        }
-      })
-      .then((response: any) => {
-        this.set('actionPoint.comments', response.comments);
-        this.set('actionPoint.history', response.history);
-        this.openedCommentDialog = false;
-        this.isSaveComment = false;
-      })
-      .catch((err: any) => {
-        this.errorHandler(err, this.permissionPath);
-        this.isSaveComment = false;
-      });
+      method: 'PATCH',
+      endpoint: {
+        url: endpoint
+      },
+      body: {
+        comments: comments
+      }
+    })
+        .then((response: any) => {
+          this.set('actionPoint.comments', response.comments);
+          this.set('actionPoint.history', response.history);
+          this.openedCommentDialog = false;
+          this.isSaveComment = false;
+        })
+        .catch((err: any) => {
+          this.errorHandler(err, this.permissionPath);
+          this.isSaveComment = false;
+        });
   }
 
   validate() {

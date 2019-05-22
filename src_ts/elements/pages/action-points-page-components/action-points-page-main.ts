@@ -3,10 +3,7 @@ import '@polymer/iron-pages/iron-pages';
 import './action-points-list';
 import './action-points-item';
 import './action-points-new';
-import {customElement, property} from '@polymer/decorators';
 
-@customElement('action-points-page-main')
-// @ts-ignore
 class ActionPointsPageMain extends PolymerElement {
   static get template() {
     return html`
@@ -21,11 +18,20 @@ class ActionPointsPageMain extends PolymerElement {
       </iron-pages>
     `;
   }
-    
-  @property({type: Object, notify: true})
-  route: any = {}
-  @property({type: Object})
-  routeData: any = {}
+
+  static get properties() {
+    return {
+      route: {
+        type: Object,
+        notify: true,
+        value: () => {}
+      },
+      routeData: {
+        type: Object,
+        value: () => {}
+      }
+    };
+  }
 
   static get observers() {
     return ['_setRoutePath(route.path)'];
@@ -33,10 +39,12 @@ class ActionPointsPageMain extends PolymerElement {
 
   _setRoutePath(path: string) {
     if (path === null || path === undefined) {
-      return
+      return;
     }
     if (!path.match(/[^\\/]/g)) {
       this.set('route.path', '/list');
     }
   }
 }
+
+customElements.define('action-points-page-main', ActionPointsPageMain);

@@ -14,15 +14,9 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
   getEndpoint(endpointName: string, data?: object) {
     let endpoint = config.epsData[endpointName];
     if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
-      endpoint.url = typeof endpoint.template === 'function' ? 
+      endpoint.url = typeof endpoint.template === 'function' ?
                       config.baseSite + endpoint.template(data) :
-                      config.baseSite + endpoint.template
-      
-      // if (typeof endpoint.template === 'function') {
-      //   endpoint.url = config.baseSite + endpoint.template(data);
-      // } else {
-      //   endpoint.url = config.baseSite + endpoint.template;
-      // }
+                      config.baseSite + endpoint.template;
     }
     return JSON.parse(JSON.stringify(endpoint));
   }
@@ -40,20 +34,20 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
 
   _checkEnvironment() {
     let location = window.location.href;
-      if (location.indexOf(config.stagingDomain) > -1) {
-          return 'STAGING'
-      }
-      if (location.indexOf(config.demoDomain) > -1) {
-          return 'DEMO'
-      }
-      if (location.indexOf(config.devDomain) > -1) {
-          return 'DEVELOPMENT'
-      } 
-      if (location.indexOf(config.localDomain) > -1) {
-          return 'LOCAL'
-      }
-      return null
+    if (location.indexOf(config.stagingDomain) > -1) {
+      return 'STAGING';
     }
+    if (location.indexOf(config.demoDomain) > -1) {
+      return 'DEMO';
+    }
+    if (location.indexOf(config.devDomain) > -1) {
+      return 'DEVELOPMENT';
+    }
+    if (location.indexOf(config.localDomain) > -1) {
+      return 'LOCAL';
+    }
+    return null;
+  }
 });
 
 export default EndpointMixin;

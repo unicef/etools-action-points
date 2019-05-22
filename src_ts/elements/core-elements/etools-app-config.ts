@@ -1,4 +1,4 @@
-import Dexie from 'dexie'
+import Dexie from 'dexie';
 import endpoints from '../app-mixins/endpoints';
 
 declare global {

@@ -24,12 +24,23 @@ class SupportBtn extends PolymerElement {
         }
       </style>
 
-      <a href="https://unicef.service-now.com/cc/?id=sc_cat_item&sys_id=35b00b1bdb255f00085184735b9619e6&sysparm_category=c6ab1444db5b5700085184735b961920"
+      <a href="[[url]]"
         target="_blank">
         <iron-icon icon="communication:textsms"></iron-icon>
         Support
       </a>
     `;
-  };
+  }
+
+  static get properties() {
+    return {
+      url: {
+        type: String,
+        value: 'https://unicef.service-now.com/' +
+               'cc/?id=sc_cat_item&sys_id=35b00b1bdb255f00085184735b9619e6' +
+               '&sysparm_category=c6ab1444db5b5700085184735b961920'
+      }
+    };
+  }
 }
 customElements.define('support-btn', SupportBtn);

@@ -8,11 +8,11 @@ import '@polymer/iron-icon/iron-icon';
 import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import { EtoolsMixinFactory } from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 
 const CountriesDropdownMixin = EtoolsMixinFactory.combineMixins([
   EtoolsPageRefreshMixin, EtoolsAjaxRequestMixin, EndpointMixin
-], PolymerElement)
+], PolymerElement);
 
 /**
  * @polymer
@@ -27,65 +27,65 @@ class CountriesDropdown extends CountriesDropdownMixin {
   static get template() {
     return html`
       <style>
-          .arrow-up {
-            display: none;
-          }
+        .arrow-up {
+          display: none;
+        }
 
-          paper-menu-button {
-            font-size: 16px;
-            padding: 0;
-          }
+        paper-menu-button {
+          font-size: 16px;
+          padding: 0;
+        }
 
-          paper-button {
-            height: 60px;
-            margin: 0;
-            padding: 12px 12px 12px 12px;
-            min-width: 50px;
-            text-transform: none;
-            font-weight: normal !important;
-          }
+        paper-button {
+          height: 60px;
+          margin: 0;
+          padding: 12px 12px 12px 12px;
+          min-width: 50px;
+          text-transform: none;
+          font-weight: normal !important;
+        }
 
-          .dropdown-text {
-            margin-left: 5px;
-            color: var(--light-secondary-text-color);
-          }
+        .dropdown-text {
+          margin-left: 5px;
+          color: var(--light-secondary-text-color);
+        }
 
-          .arrow-down,
-          .arrow-up) {
-            color: var(--light-ink-color);
-          }
+        .arrow-down,
+        .arrow-up) {
+          color: var(--light-ink-color);
+        }
 
-          iron-icon {
-            color: var(--light-ink-color);
-          }
+        iron-icon {
+          color: var(--light-ink-color);
+        }
 
-          iron-icon > .mr-8 {
-            margin-right: 8px;
-          }
+        iron-icon > .mr-8 {
+          margin-right: 8px;
+        }
 
-          iron-icon > .b-3 {
-            bottom: 3px;
-          }
+        iron-icon > .b-3 {
+          bottom: 3px;
+        }
 
-          paper-listbox {
-            max-height: 296px;
-          }
+        paper-listbox {
+          max-height: 296px;
+        }
 
-          paper-listbox iron-icon {
-            margin-right: 13px;
-            color: var(--dark-icon-color);
-          }
+        paper-listbox iron-icon {
+          margin-right: 13px;
+          color: var(--dark-icon-color);
+        }
 
-          paper-listbox paper-item {
-            height: 48px;
-            min-height: initial;
-            font-weight: 500 !important;
-            color: var(--dark-primary-text-color);
-            cursor: pointer;
-            padding: 0 16px;
-            white-space: nowrap;
-            min-width: 140px;
-          }
+        paper-listbox paper-item {
+          height: 48px;
+          min-height: initial;
+          font-weight: 500 !important;
+          color: var(--dark-primary-text-color);
+          cursor: pointer;
+          padding: 0 16px;
+          white-space: nowrap;
+          min-width: 140px;
+        }
         
         :host([opened]) .arrow-up {
           display: block;
@@ -181,15 +181,15 @@ class CountriesDropdown extends CountriesDropdownMixin {
     this.addEventListener('paper-dropdown-close', this._toggleOpened);
     this.addEventListener('paper-dropdown-open', this._toggleOpened);
   }
-  
-  _setCountryIndex(this: any,countries: object[], countryId: number) {
+
+  _setCountryIndex(this: any, countries: object[], countryId: number) {
     if (!(countries instanceof Array)) {
       return;
     }
 
     let countryObj: any = countries.find((country: any) => {
       return country.id === countryId;
-    })
+    });
     this.countryIndex = countries.indexOf(countryObj);
   }
 
@@ -208,7 +208,7 @@ class CountriesDropdown extends CountriesDropdownMixin {
     if (Number(parseFloat(id)) !== id) {
       throw new Error('Can not find country id!');
     }
-    
+
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
         type: 'change-country',
@@ -230,7 +230,7 @@ class CountriesDropdown extends CountriesDropdownMixin {
       body: {
         countryData
       }
-    }).then(() => this._handleResponse).catch(() => this._handleError)
+    }).then(() => this._handleResponse).catch(() => this._handleError);
   }
 
   _handleError(this: any) {

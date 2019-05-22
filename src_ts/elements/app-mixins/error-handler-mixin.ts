@@ -61,7 +61,7 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
     if (!errors) {
       return messages;
     }
-    Object.keys(errors).forEach(errorField => {
+    Object.keys(errors).forEach((errorField) => {
       let fieldPath = basePath.concat([errorField]);
       let data = Array.isArray(errors[errorField]) ? errors[errorField] : [errors[errorField]];
       for (let error of data) {
@@ -103,7 +103,7 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
         recursive && !message ? message = recursive : null;
       }
     } else {
-      Object.keys(errorObj).forEach(key => {
+      Object.keys(errorObj).forEach((key) => {
         if (key === 'non_field_errors') {
           message = errorObj[key];
         } else {
@@ -116,7 +116,7 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
   }
 
   _responseError(message: string, type?: string, eventType: string = 'error') {
-    var console: any
+    let console: any;
     console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
   }
 };

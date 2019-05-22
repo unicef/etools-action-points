@@ -2,7 +2,6 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
-// import 'etools-ajax/etools-ajax';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
@@ -195,7 +194,7 @@ class PagesHeaderElement extends endpointMixin(PolymerElement) {
     let url = (e && e.model && e.model.item) ? e.model.item.url : this.exportLinks[0].url;
     window.open(url, '_blank');
   }
- 
+
   _isDropDown(exportLinks: any[]) {
     return exportLinks && (exportLinks.length > 1 ||
       (exportLinks[0] && exportLinks[0].useDropdown));

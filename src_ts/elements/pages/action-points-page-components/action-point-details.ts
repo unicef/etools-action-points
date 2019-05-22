@@ -3,12 +3,12 @@ import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
-// import 'etools-dropdown';
+import 'etools-dropdown';
 import 'etools-content-panel';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-loading';
-// import 'etools-datepicker/etools-datepicker-button';
+import 'etools-datepicker/etools-datepicker-button';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import TextareaMaxRowsMixin from '../../app-mixins/textarea-max-rows-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
@@ -22,9 +22,15 @@ import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 
 const ActionPointDetailsMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, InputAttrs, StaticData, PermissionController, LocalizationMixin, 
-  DateMixin, TextareaMaxRowsMixin, EtoolsAjaxRequestMixin
-], PolymerElement)
+  EndpointMixin,
+  InputAttrs,
+  StaticData,
+  PermissionController,
+  LocalizationMixin,
+  DateMixin,
+  TextareaMaxRowsMixin,
+  EtoolsAjaxRequestMixin
+], PolymerElement);
 
 class ActionPointDetails extends ActionPointDetailsMixin {
   static get template() {
@@ -370,7 +376,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
 
   ready() {
     super.ready();
-    document.addEventListener('static-data-loaded', () => this.setData())
+    document.addEventListener('static-data-loaded', () => this.setData());
     document.addEventListener('locations-loaded', () => this._updateLocations());
     this.addEventListener('reset-validation', ({detail}: any) => {
       let elements = this.shadowRoot.querySelectorAll('.validate-input');
@@ -430,16 +436,16 @@ class ActionPointDetails extends ActionPointDetailsMixin {
 
     let endpoint = this.getEndpoint('partnerOrganisationDetails', partnerId);
     this.sendRequest({
-        method: 'GET',
-        endpoint
-      })
-      .then((data: any) => {
-        this.partner = data || null;
-        this.partnerRequestInProcess = false;
-      }).catch(() => {
-        console.error('Can not load partner data');
-        this.partnerRequestInProcess = false;
-      });
+      method: 'GET',
+      endpoint
+    })
+        .then((data: any) => {
+          this.partner = data || null;
+          this.partnerRequestInProcess = false;
+        }).catch(() => {
+          console.error('Can not load partner data');
+          this.partnerRequestInProcess = false;
+        });
   }
 
   async _updateCpOutputs(interventionId: number) {

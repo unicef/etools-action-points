@@ -11,8 +11,8 @@ const QueryParams = (superClass: any) => class extends superClass {
   parseQueries() {
     let queriesObj: any = {};
     let queries = this.getQueriesString()
-      .slice(1)
-      .split('&');
+        .slice(1)
+        .split('&');
 
     if (queries[0] === '') return {};
     queries.forEach((query: string) => {

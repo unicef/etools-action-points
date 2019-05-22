@@ -6,8 +6,11 @@ import UserController from '../app-mixins/user-controller';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 
 const UserDataMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, PermissionController, UserController, EtoolsAjaxRequestMixin
-], PolymerElement)
+  EndpointMixin,
+  PermissionController,
+  UserController,
+  EtoolsAjaxRequestMixin
+], PolymerElement);
 
 class UserData extends UserDataMixin {
   static get properties() {return {};}
@@ -23,8 +26,8 @@ class UserData extends UserDataMixin {
       }
     }).then(
         (resp: any) => this._handleResponse(resp)
-      ).catch(
-        () => this._handleError())
+    ).catch(
+        () => this._handleError());
   }
 
   _handleResponse(this: any, data: any) {

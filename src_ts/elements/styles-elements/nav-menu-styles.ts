@@ -1,6 +1,6 @@
 import {html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js'
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 
 export const navMenuStyles = html`
   <style include="iron-flex">

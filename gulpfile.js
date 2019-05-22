@@ -8,71 +8,6 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-// const gulp = require('gulp');
-// const nodemon = require('gulp-nodemon');
-// const ts = require('gulp-typescript');
-// const tsProject = ts.createProject('tsconfig.json');
-// const browserify = require('browserify');
-// var source = require('vinyl-source-stream');
-// var tsify = require('tsify');
-// var paths = {
-//   pages: ['src/*.html']
-// };
-
-// gulp.task('copy-html', () => {
-//   return gulp.src(paths.pages)
-//       .pipe(gulp.dest('dist'));
-// });
-
-// const clean = require('./gulp-tasks/clean');
-// const path = require('path');
-// const preBuild = require('./gulp-tasks/pre-build');
-// const postBuild = require('./gulp-tasks/post-build');
-// const buildElements = require('./gulp-tasks/build-elements');
-// const copyAssets = require('./gulp-tasks/copy-assets');
-// const copyImages = require('./gulp-tasks/copy-images');
-// const copyBower = require('./gulp-tasks/copy-bower');
-// const runTests = require('./gulp-tasks/test');
-// const jsLinter = require('./gulp-tasks/js-linter');
-
-// global.config = {
-//   appName: 'etoolsApd',
-//   polymerJsonPath: path.join(process.cwd(), 'polymer.json'),
-//   buildDirectory: 'build'
-// };
-
-// const build = require('./gulp-tasks/build');
-
-// gulp.task('watch', function() {
-//   gulp.watch(['./src/elements/**'], gulp.series(jsLinter, buildElements));
-//   gulp.watch(['./manifest.json', './index.html'], gulp.series(copyAssets));
-//   gulp.watch(['./images/**/*.*'], gulp.series(copyImages));
-//   gulp.watch(['./node_modules/**'], gulp.series(copyBower()));
-// });
-
-// gulp.task('lint', gulp.series(jsLinter));
-// gulp.task('test', gulp.series(clean, gulp.parallel(buildElements, copyAssets), runTests));
-
-// gulp.task('startServer', () => {nodemon({script: 'express.js'});});
-
-// gulp.task('devBuild', gulp.series(clean, jsLinter, gulp.parallel(buildElements, copyAssets, copyImages)));
-// gulp.task('prodBuild', gulp.series(clean, preBuild, build, postBuild));
-
-// gulp.task('devup', gulp.series('devBuild', gulp.parallel('startServer', 'watch')));
-
-// gulp.task('default', gulp.series(['prodBuild']));
-// gulp.task('default', gulp.series(['prodBuild']));
-// gulp.task('default', gulp.series('copy-html', () => {
-//   return browserify({
-//     basedir: '.',
-//     debug: true,
-//     entries: ['src/app-shell.ts'],
-//     cache: {},
-//     packageCache: {}
-//   }).plugin(tsify).bundle().pipe(source('bundle.js')).pipe(gulp.dest('dist'));
-//   // return tsProject.src().pipe(tsProject()).js.pipe(gulp.dest('dist'));
-// }));
-
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
@@ -81,6 +16,7 @@ const spawn = require('child_process').spawn;
 const runTests = require('./gulp-tasks/test');
 const {watch} = require('gulp');
 const ts = require('gulp-typescript');
+const lint = require('./gulp-tasks/js-linter.js');
 const tsProject = ts.createProject('tsconfig.json');
 
 /**
@@ -116,12 +52,13 @@ gulp.task('build', () => {
 gulp.task('test', gulp.series('prpl-server:clean', 'prpl-server:build', runTests));
 
 gulp.task('watch', function() {
-  watch(['./src_ts/**/*'], gulp.series('build'));
+  watch(['./src_ts/**/*'], gulp.series('build', lint));
 });
 
 gulp.task('prpl-server', gulp.series(
     'prpl-server:clean',
     'prpl-server:build',
+    lint,
     'watch'
 ));
 

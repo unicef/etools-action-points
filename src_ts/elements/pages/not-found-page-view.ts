@@ -27,14 +27,14 @@ class NotFoundPageView extends EndpointMixin(PolymerElement) {
   }
 
   getLink() {
-      return this.getAbsolutePath('action-points');
+    return this.getAbsolutePath('action-points');
   }
 
   openDrawer() {
-      this.dispatchEvent(new CustomEvent('drawer', {
-          bubbles: true,
-          composed: true
-      }));
+    this.dispatchEvent(new CustomEvent('drawer', {
+      bubbles: true,
+      composed: true
+    }));
   }
 }
 

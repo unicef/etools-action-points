@@ -78,9 +78,9 @@ class MultiNotificationList extends PolymerElement {
     notification.id = `toast___${this.count++}`;
 
     if (this.limit > this.notifications.length) {
-        this.push('notifications', notification);
+      this.push('notifications', notification);
     } else {
-        this.push('notificationsQueue', notification);
+      this.push('notificationsQueue', notification);
     }
   }
 

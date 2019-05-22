@@ -4,12 +4,14 @@ import {moduleStyles} from '../../styles-elements/module-styles';
 import 'etools-data-table';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 
-class ActionPointsHistory extends 
-  InputAttrs(
-    DateMixin(
-      PolymerElement)) {
-        
+const ActionPointsHistoryMixin = EtoolsMixinFactory.combineMixins([
+  InputAttrs,
+  DateMixin
+], PolymerElement);
+
+class ActionPointsHistory extends ActionPointsHistoryMixin {
   static get template() {
     return html`
       ${moduleStyles}

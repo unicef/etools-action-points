@@ -13,7 +13,7 @@ import '../../common-elements/support-btn';
 
 const AppMainHeaderMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin, EtoolsPageRefreshMixin
-], PolymerElement)
+], PolymerElement);
 
 /**
  * @polymer
@@ -96,7 +96,11 @@ class AppMainHeader extends AppMainHeaderMixin {
                                    sections="[[sections]]">
           </etools-profile-dropdown>
 
-          <paper-icon-button id="pageRefresh" icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]"></paper-icon-button>
+          <paper-icon-button id="pageRefresh"
+                             icon="refresh"
+                             on-tap="refresh"
+                             disabled="[[refreshInProgress]]">
+          </paper-icon-button>
         </div>
       </app-toolbar>
     `;

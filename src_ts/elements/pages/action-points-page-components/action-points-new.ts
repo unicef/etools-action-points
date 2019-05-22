@@ -10,32 +10,41 @@ import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
 
-const ActionPointsNewMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, EtoolsAjaxRequestMixin, ErrorHandlerMixin
-], PolymerElement)
+const ActionPointsNewMixin = EtoolsMixinFactory.combineMixins(
+    [EndpointMixin, EtoolsAjaxRequestMixin, ErrorHandlerMixin],
+    PolymerElement
+);
 
 /**
  * @polymer
  * @customElement
  */
 class ActionPointsNew extends ActionPointsNewMixin {
-
   static get template() {
     return html`
       ${pageLayoutStyles}
       ${sharedStyles}
       ${mainPageStyles}
-      
-      <pages-header-element page-title="Add New Action Point"></pages-header-element>
+
+      <pages-header-element
+        page-title="Add New Action Point"
+      ></pages-header-element>
 
       <div class="view-container">
         <div id="pageContent">
-          <action-point-details id="ap-details" action-point="[[actionPoint]]" permission-path="[[permissionPath]]">
+          <action-point-details
+            id="ap-details"
+            action-point="[[actionPoint]]"
+            permission-path="[[permissionPath]]"
+          >
           </action-point-details>
         </div>
 
         <div id="sidebar">
-          <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
+          <status-element
+            action-point="[[actionPoint]]"
+            permission-path="[[permissionPath]]"
+          ></status-element>
         </div>
       </div>
     `;
@@ -59,9 +68,7 @@ class ActionPointsNew extends ActionPointsNewMixin {
   }
 
   static get observers() {
-    return [
-      '_changeRoutePath(route.path)'
-    ];
+    return ['_changeRoutePath(route.path)'];
   }
 
   ready() {
@@ -84,43 +91,50 @@ class ActionPointsNew extends ActionPointsNewMixin {
     let data = JSON.parse(JSON.stringify(detailsElement.editedItem));
     let endpoint = this.getEndpoint('actionPointsList');
 
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        type: 'ap-creation',
-        active: true,
-        message: 'Creating Action Point...'
-      },
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+        new CustomEvent('global-loading', {
+          detail: {
+            type: 'ap-creation',
+            active: true,
+            message: 'Creating Action Point...'
+          },
+          bubbles: true,
+          composed: true
+        })
+    );
 
     this.sendRequest({
-        method: 'POST',
-        endpoint: {
-          url: endpoint
-        },
-        body: data
-      })
-      .then((data: any) => {
-        this.actionPoint = {};
-        this.dispatchEvent(new CustomEvent('toast', {
-          detail: {
-            text: ' Action Point successfully created.'
-          },
-          bubbles: true,
-          composed: true
-        }));
-        this.set('route.path', `detail/${data.id}`);
-        this.dispatchEvent(new CustomEvent('global-loading', {
-          detail: {
-            type: 'ap-creation'
-          },
-          bubbles: true,
-          composed: true
-        }));
-      }).catch((err: any) => {
-        this.errorHandler(err, this.permissionPath);
-      });
+      method: 'POST',
+      endpoint: {
+        url: endpoint
+      },
+      body: data
+    })
+        .then((data: any) => {
+          this.actionPoint = {};
+          this.dispatchEvent(
+              new CustomEvent('toast', {
+                detail: {
+                  text: ' Action Point successfully created.'
+                },
+                bubbles: true,
+                composed: true
+              })
+          );
+          this.set('route.path', `detail/${data.id}`);
+          this.dispatchEvent(
+              new CustomEvent('global-loading', {
+                detail: {
+                  type: 'ap-creation'
+                },
+                bubbles: true,
+                composed: true
+              })
+          );
+        })
+        .catch((err: any) => {
+          this.errorHandler(err, this.permissionPath);
+        });
   }
 }
 
