@@ -73,47 +73,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 //   // return tsProject.src().pipe(tsProject()).js.pipe(gulp.dest('dist'));
 // }));
 
-// const gulp = require('gulp');
-// const rename = require('gulp-rename');
-// const replace = require('gulp-replace');
-// const del = require('del');
-
-// /**
-//  * Cleans the prpl-server build in the server directory.
-//  */
-// gulp.task('prpl-server:clean', () => {
-//   return del('server/build');
-// });
-
-// /**
-//  * Copies the prpl-server build to the server directory while renaming the
-//  * node_modules directory so services like App Engine will upload it.
-//  */
-// gulp.task('prpl-server:build', () => {
-//   const pattern = 'node_modules';
-//   const replacement = 'node_assets';
-
-//   return gulp.src('build/**')
-//     .pipe(rename(((path) => {
-//       path.basename = path.basename.replace(pattern, replacement);
-//       path.dirname = path.dirname.replace(pattern, replacement);
-//     })))
-//     .pipe(replace(pattern, replacement))
-//     .pipe(gulp.dest('server/build'));
-// });
-
-// gulp.task('prpl-server', gulp.series(
-//   'prpl-server:clean',
-//   'prpl-server:build'
-// ));
-
-
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const del = require('del');
 const spawn = require('child_process').spawn;
 const runTests = require('./gulp-tasks/test');
+const {watch} = require('gulp');
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('tsconfig.json');
 
 /**
  * Cleans the prpl-server build in the server directory.
@@ -139,11 +107,22 @@ gulp.task('prpl-server:build', () => {
       .pipe(gulp.dest('server/build'));
 });
 
+gulp.task('build', () => {
+  return gulp.src('src_ts/**')
+      .pipe(tsProject())
+      .pipe(gulp.dest('src'));
+});
+
 gulp.task('test', gulp.series('prpl-server:clean', 'prpl-server:build', runTests));
+
+gulp.task('watch', function() {
+  watch(['./src_ts/**/*'], gulp.series('build'));
+});
 
 gulp.task('prpl-server', gulp.series(
     'prpl-server:clean',
-    'prpl-server:build'
+    'prpl-server:build',
+    'watch'
 ));
 
 /**
@@ -156,6 +135,5 @@ gulp.task('serve', () => {
     shell: true,
     stdio: 'inherit'
   };
-  spawn('tsc', ['--watch'], spawnOptions);
   spawn('polymer', ['serve -H 0.0.0.0 -p 8080'], spawnOptions);
 });
