@@ -27,7 +27,7 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
     this._removeMenuListeners();
   }
 
-  _initMenuListeners() {
+  public _initMenuListeners() {
     this._toggleSmallMenu = this._toggleSmallMenu.bind(this);
     this._resizeMainLayout = this._resizeMainLayout.bind(this);
     this._toggleDrawer = this._toggleDrawer.bind(this);
@@ -37,17 +37,17 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
     this.addEventListener('drawer', this._toggleDrawer);
   }
 
-  _removeMenuListeners() {
+  public _removeMenuListeners() {
     this.removeEventListener('toggle-small-menu', this._toggleSmallMenu);
     this.removeEventListener('resize-main-layout', this._resizeMainLayout);
     this.removeEventListener('drawer', this._toggleDrawer);
   }
 
-  _initMenuSize() {
+  public _initMenuSize() {
     this.set('smallMenu', this._isSmallMenuActive());
   }
 
-  _isSmallMenuActive() {
+  public _isSmallMenuActive() {
     /**
      * etoolsAppSmallMenu localStorage value must be 0 or 1
      */
@@ -58,24 +58,24 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
     return !!parseInt(menuTypeStoredVal, 10);
   }
 
-  _toggleSmallMenu(e: any) {
+  public _toggleSmallMenu(e: any) {
     e.stopImmediatePropagation();
     this.set('smallMenu', !this.smallMenu);
     this._smallMenuValueChanged(this.smallMenu);
   }
 
-  _resizeMainLayout(e: any) {
+  public _resizeMainLayout(e: any) {
     e.stopImmediatePropagation();
     this._updateDrawerStyles();
     this._notifyLayoutResize();
   }
 
-  _smallMenuValueChanged(newVal: boolean) {
+  public _smallMenuValueChanged(newVal: boolean) {
     let localStorageVal: string = newVal ? '1' : '0';
     localStorage.setItem('etoolsAppSmallMenuIsActive', localStorageVal);
   }
 
-  _updateDrawerStyles() {
+  public _updateDrawerStyles() {
     let drawerLayout = this.$.layout;
     if (drawerLayout) {
       drawerLayout.updateStyles();
@@ -86,7 +86,7 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
     }
   }
 
-  _notifyLayoutResize() {
+  public _notifyLayoutResize() {
     let layout = this.$.layout;
     if (layout) {
       layout.notifyResize();
@@ -97,7 +97,7 @@ const AppMenu = dedupingMixin((superClass: any) => class extends superClass {
     }
   }
 
-  _toggleDrawer() {
+  public _toggleDrawer() {
     this.$.drawer.toggle();
   }
 

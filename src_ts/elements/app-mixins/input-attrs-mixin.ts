@@ -13,7 +13,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @returns {*}
    * @private
    */
-  _setRequired(field: string, basePermissionPath: any) {
+  protected _setRequired(field: string, basePermissionPath: any) {
     if (!basePermissionPath) {
       return false;
     }
@@ -29,7 +29,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @param base
    * @returns {*}
    */
-  getLabel(path: string, base: string) {
+  public getLabel(path: string, base: string) {
     if (!base) {
       return '';
     }
@@ -43,7 +43,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @param special
    * @returns {*}
    */
-  getPlaceholderText(path: string, base: string, special: boolean) {
+  public getPlaceholderText(path: string, base: string, special: boolean) {
     if (this.isReadonly(`${base}.${path}`)) {
       return 'Empty Field';
     }
@@ -60,7 +60,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @param inProcess
    * @returns {*}
    */
-  isReadOnly(field: string, basePermissionPath: string, inProcess: boolean) {
+  public isReadOnly(field: string, basePermissionPath: string, inProcess: boolean) {
     if (!basePermissionPath || inProcess) {
       return true;
     }
@@ -79,7 +79,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @returns {boolean}
    * @private
    */
-  _resetFieldError(event: any) {
+  protected _resetFieldError(event: any) {
     if (!event || !event.target) {
       return false;
     }
@@ -93,7 +93,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
     return true;
   }
 
-  _resetInputs() {
+  public _resetInputs() {
     let elements = this.shadowRoot.querySelectorAll('.validate-input');
     for (let element of elements) {
       element.invalid = false;

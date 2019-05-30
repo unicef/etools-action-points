@@ -27,11 +27,11 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
 
   }
 
-  _checkInvalid(value: any) {
+  protected _checkInvalid(value: any) {
     return !!value;
   }
 
-  errorHandler(errorObject: any, permissionPath: string) {
+  public errorHandler(errorObject: any, permissionPath: string) {
     let errorMessages = errorObject ? this._getErrors(errorObject.response, permissionPath) : [];
     let nonFieldMessage = this._getNonFieldsMessage(errorObject);
     if (nonFieldMessage) {
@@ -56,7 +56,7 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
    * @returns {Array}
    * @private
    */
-  _getErrors(errors: any, permissionPath: string, basePath: string[] = []) {
+  private _getErrors(errors: any, permissionPath: string, basePath: string[] = []) {
     let messages: string[] = [];
     if (!errors) {
       return messages;
@@ -85,13 +85,13 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
    * @returns {string}
    * @private
    */
-  _getErrorMessage(field: string, error: string, permissionPath: string) {
+  private _getErrorMessage(field: string, error: string, permissionPath: string) {
     let fieldLabel = this.getFieldAttribute(`${permissionPath}.${field}`, 'label');
     return `${fieldLabel}: ${error}`;
   }
 
   // @ts-ignore
-  _getNonFieldsMessage(errorObj: any) {
+  protected _getNonFieldsMessage(errorObj: any) {
     if (typeof errorObj != 'object') {
       return null;
     }
@@ -115,7 +115,7 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
     return message;
   }
 
-  _responseError(message: string, type?: string, eventType: string = 'error') {
+  public _responseError(message: string, type?: string, eventType: string = 'error') {
     let console: any;
     console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
   }

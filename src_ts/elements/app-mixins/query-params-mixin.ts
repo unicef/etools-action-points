@@ -8,7 +8,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * Parse queries from location to JSON object
    * @returns {{Object}} of queries key-value
    */
-  parseQueries() {
+  private parseQueries() {
     let queriesObj: any = {};
     let queries = this.getQueriesString()
         .slice(1)
@@ -28,7 +28,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @param property
    * @returns {Window|Location|String|*|string}
    */
-  getLocationProperty(property: string) {
+  protected getLocationProperty(property: string) {
     // @ts-ignore
     return window && window.location && window.location[property] || '';
   }
@@ -37,7 +37,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * Get queries part of location
    * @returns {Window|Location|String|*|string}
    */
-  getQueriesString() {
+  protected getQueriesString() {
     return this.getLocationProperty('search');
   }
 
@@ -45,7 +45,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * Get path part of location
    * @returns {string}
    */
-  getPath() {
+  protected getPath() {
     let path = this.getLocationProperty('pathname');
     if (~path.indexOf('/apd')) {
       path = path.slice(4);
@@ -60,7 +60,7 @@ const QueryParams = (superClass: any) => class extends superClass {
    * @param noNotify
    * @returns {boolean}
    */
-  updateQueries(newQueries: any, path: string, noNotify: boolean) {
+  protected updateQueries(newQueries: any, path: string, noNotify: boolean) {
     if (typeof newQueries != 'object') {
       return false;
     }
@@ -101,7 +101,7 @@ const QueryParams = (superClass: any) => class extends superClass {
   /**
    * Clear queries in location
    */
-  clearQueries() {
+  protected clearQueries() {
     try {
       window.history.replaceState({}, '', this.getLocationProperty('pathname'));
     } catch (err) {

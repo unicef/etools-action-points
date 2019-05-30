@@ -52,7 +52,7 @@ gulp.task('build', () => {
 gulp.task('test', gulp.series('prpl-server:clean', 'prpl-server:build', runTests));
 
 gulp.task('watch', function() {
-  watch(['./src_ts/**/*'], gulp.series('build', lint));
+  watch(['./src_ts/**/*', './node_modules/**', './index.html'], gulp.series('build', lint));
 });
 
 gulp.task('prpl-server', gulp.series(

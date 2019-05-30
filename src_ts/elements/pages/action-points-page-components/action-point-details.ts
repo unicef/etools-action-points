@@ -8,9 +8,9 @@ import 'etools-content-panel';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
 import 'etools-loading';
-import 'etools-datepicker/etools-datepicker-button';
+import 'etools-date-time/datepicker-lite';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
-import TextareaMaxRowsMixin from '../../app-mixins/textarea-max-rows-mixin';
+import TextareaMaxRows from '../../app-mixins/textarea-max-rows-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
@@ -28,7 +28,7 @@ const ActionPointDetailsMixin = EtoolsMixinFactory.combineMixins([
   PermissionController,
   LocalizationMixin,
   DateMixin,
-  TextareaMaxRowsMixin,
+  TextareaMaxRows,
   EtoolsAjaxRequestMixin
 ], PolymerElement);
 
@@ -302,9 +302,9 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               required="{{_setRequired('due_date', permissionPath)}}" 
               disabled$="[[isReadOnly('due_date', permissionPath)]]"
               error-message="{{errors.due_date}}" on-tap="openDatePicker" on-focus="_resetFieldError">
-              <etools-datepicker-button id="dueDate" modal="[[datepickerModal]]" slot="prefix" format="YYYY-MM-DD"
+              <datepicker-lite id="dueDate" modal="[[datepickerModal]]" slot="prefix" format="YYYY-MM-DD"
                 pretty-date="{{editedItem.due_date}}" show-clear-btn no-init>
-              </etools-datepicker-button>
+              </datepicker-lite>
             </paper-input>
           </div>
         </div>

@@ -5,7 +5,7 @@ let _staticData: any = {};
  * @mixinFunction
  */
 const StaticDataMixin = (superClass: any) => class extends superClass {
-  _setData(key: string, data: any) {
+  protected _setData(key: string, data: any) {
     if (!key || !data || _staticData[key]) {
       return false;
     }
@@ -13,14 +13,14 @@ const StaticDataMixin = (superClass: any) => class extends superClass {
     return true;
   }
 
-  getData(key: string) {
+  protected getData(key: string) {
     if (!key || !_staticData[key]) {
       return;
     }
     return JSON.parse(JSON.stringify(_staticData[key]));
   }
 
-  _updateData(key: string, data: any) {
+  protected _updateData(key: string, data: any) {
     if (!key || !data || !_staticData[key]) {
       return false;
     }

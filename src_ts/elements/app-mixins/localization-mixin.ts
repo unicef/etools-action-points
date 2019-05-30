@@ -12,7 +12,7 @@ const LocalizationMixin = (superClass: any) => class extends PermissionControlle
    * @param item
    * @returns {*}
    */
-  getHeadingLabel(base: string, item: any) {
+  public getHeadingLabel(base: string, item: any) {
     if (!item) {
       return '';
     }
@@ -33,7 +33,7 @@ const LocalizationMixin = (superClass: any) => class extends PermissionControlle
    * @param field of option in list
    * @returns {string} value for displaying
    */
-  getStringValue(value: string, list: [], field: string) {
+  public getStringValue(value: string, list: [], field: string) {
     let stringValue = value;
     if (list && field) {
       let item: any = list.find(i => i === {value: value});

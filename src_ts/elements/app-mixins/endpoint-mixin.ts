@@ -11,7 +11,7 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
     super();
   }
 
-  getEndpoint(endpointName: string, data?: object) {
+  public getEndpoint(endpointName: string, data?: object) {
     let endpoint = config.epsData[endpointName];
     if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
       endpoint.url = typeof endpoint.template === 'function' ?
@@ -21,18 +21,18 @@ const EndpointMixin = dedupingMixin((baseClass: any) => class extends baseClass 
     return JSON.parse(JSON.stringify(endpoint));
   }
 
-  resetOldUserData() {
+  public resetOldUserData() {
     console.log('resetOldUserData()');
     localStorage.removeItem('userId');
     config.appDexieDb.listsExpireMapTable.clear();
   }
 
-  getAbsolutePath(path: string) {
+  public getAbsolutePath(path: string) {
     path = path || '';
     return config.basePath + path;
   }
 
-  _checkEnvironment() {
+  public _checkEnvironment() {
     let location = window.location.href;
     if (location.indexOf(config.stagingDomain) > -1) {
       return 'STAGING';

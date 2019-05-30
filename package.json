@@ -38,7 +38,6 @@
     "@polymer/iron-meta": "^3.0.1",
     "@polymer/iron-pages": "^3.0.1",
     "@polymer/iron-selector": "^3.0.1",
-    "@polymer/lit-element": "^0.6.5",
     "@polymer/neon-animation": "^3.0.1",
     "@polymer/paper-button": "^3.0.1",
     "@polymer/paper-card": "^3.0.1",
@@ -83,6 +82,7 @@
     "polytempl": "^1.0.3",
     "pwa-helpers": "^0.9.0",
     "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sinon": "^7.2.3",
     "stream-combiner2": "^1.1.1",
@@ -92,7 +92,6 @@
   "devDependencies": {
     "@babel/plugin-external-helpers": "^7.2.0",
     "@polymer/test-fixture": "^4.0.2",
-    "@types/query-string": "^6.2.0",
     "@typescript-eslint/parser": "^1.4.2",
     "@typescript-eslint/typescript-estree": "^1.4.2",
     "axe-core": "^3.0.0",
