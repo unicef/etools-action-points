@@ -111,7 +111,7 @@ class ActionPointsNew extends ActionPointsNewMixin {
       body: data
     })
         .then((data: any) => {
-          this.actionPoint = {};
+          this.set('actionPoint', {});
           this.dispatchEvent(
               new CustomEvent('toast', {
                 detail: {

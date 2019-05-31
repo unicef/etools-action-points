@@ -224,11 +224,11 @@ class AppShell extends AppShellMixin {
 
   _staticDataLoaded(e: CustomEvent) {
     if (e && e.type === 'static-data-loaded') {
-      this.staticDataLoaded = true; 
+      this.set('staticDataLoaded', true); 
     }
     if (this.staticDataLoaded) {
-      this.user = this.getUserData();
-      this.page = this.routeData.page ? this.routeData.page : this._initRoute();
+      this.set('user', this.getUserData());
+      this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
     }
   }
 
@@ -252,7 +252,7 @@ class AppShell extends AppShellMixin {
     if (!this.initLoadingComplete || !this.routeData.page) {
       return;
     }
-    this.page = this.routeData.page ? this.routeData.page : this._initRoute();
+    this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
     this.scroll(0, 0);
   }
 
@@ -285,7 +285,7 @@ class AppShell extends AppShellMixin {
 
   _loadPage() {
     if (!this.initLoadingComplete) {
-      this.initLoadingComplete = true;
+      this.set('initLoadingComplete', true);
     }
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
@@ -296,7 +296,7 @@ class AppShell extends AppShellMixin {
   }
 
   _pageNotFound() {
-    this.page = 'not-found';
+    this.set('page', 'not-found');
     // let message = event && event.detail && event.detail.message ?
     //   `${event.detail.message}` :
     //   'Oops you hit a 404!';

@@ -142,7 +142,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
   }
 
   _changeActionPointId(data: any) {
-    this.actionPointId = data.id;
+    this.set('actionPointId', data.id);
     if (!this.actionPointId) {
       return;
     }
@@ -182,7 +182,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
             bubbles: true,
             composed: true
           }));
-          this.permissionPath = permissionPath;
+          this.set('permissionPath', permissionPath);
         });
   }
 
@@ -238,7 +238,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
             composed: true
           }));
           this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
-          this.actionPoint = this._prepareActionPoint(data);
+          this.set('actionPoint', this._prepareActionPoint(data));
         })
         .catch((err: any) => {
           this.errorHandler(err, this.permissionPath);
@@ -298,7 +298,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
             composed: true
           }));
           this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
-          this.actionPoint = this._prepareActionPoint(data);
+          this.set('actionPoint', this._prepareActionPoint(data));
           this.dispatchEvent(new CustomEvent('global-loading', {
             detail: {
               type: 'ap-update'
@@ -313,7 +313,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
   }
 
   showHistory() {
-    this.isOpenedHistory = true;
+    this.set('isOpenedHistory', true);
   }
 
   hasHistory(history: string[]) {

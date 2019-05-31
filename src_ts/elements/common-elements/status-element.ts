@@ -328,7 +328,7 @@ class StatusElement extends StatusElementMixin {
 
   ready() {
     super.ready();
-    this.statuses = this.getData('statuses') || [];
+    this.set('statuses', this.getData('statuses') || []);
   }
 
   _isStatusFinish(actionPoint: any, status: string) {

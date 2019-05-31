@@ -247,14 +247,14 @@ class SearchAndFilter extends SearchAndFilterMixin {
   }
 
   searchKeyDown() {
-    this._debounceSearch = Debouncer.debounce(
+    this.set('_debounceSearch', Debouncer.debounce(
         this._debounceSearch, timeOut.after(300), () => {
           let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
           this.updateQueries({
             search: query,
             page: '1'
           });
-        });
+        }));
   }
 
   _reloadFilters() {
@@ -262,8 +262,8 @@ class SearchAndFilter extends SearchAndFilterMixin {
   }
 
   _restoreFilters() {
-    this.restoreInProcess = true;
-    this._debounceFilters = Debouncer.debounce(this._debounceFilters,
+    this.set('restoreInProcess', true);
+    this.set('_debounceFilters', Debouncer.debounce(this._debounceFilters,
         timeOut.after(50),
         () => {
           let queryParams = this.queryParams;
@@ -292,9 +292,9 @@ class SearchAndFilter extends SearchAndFilterMixin {
           }
           setTimeout(() => {
             this._updateValues();
-            this.restoreInProcess = false;
+            this.set('restoreInProcess', false);
           });
-        });
+        }));
   }
 
   _updateValues() {
