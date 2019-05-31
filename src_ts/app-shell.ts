@@ -32,15 +32,15 @@ import {sharedStyles} from './elements/styles-elements/shared-styles.js';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import {basePath} from './elements/core-elements/etools-app-config'
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
-// import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import './elements/styles-elements/app-theme';
 setRootPath(basePath);
 
-// const AppShellMixin = EtoolsMixinFactory.combineMixins([
-//   EndpointMixin, UserController, AppMenu, LoadingMixin
-// ], PolymerElement)
+const AppShellMixin = EtoolsMixinFactory.combineMixins([
+  EndpointMixin, UserController, AppMenu, LoadingMixin
+], PolymerElement)
 
-class AppShell extends EndpointMixin(UserController(AppMenu(LoadingMixin(PolymerElement)))) {
+class AppShell extends AppShellMixin {
   public static get template() {
     return html`
       ${pageLayoutStyles}
@@ -129,7 +129,7 @@ class AppShell extends EndpointMixin(UserController(AppMenu(LoadingMixin(Polymer
     `;
   }
 
-  public static get properties() {
+  static get properties() {
     return {
       page: {
         type: String,
