@@ -5,11 +5,11 @@ import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
-import endpointMixin from '../app-mixins/endpoint-mixin';
+import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 
-class PagesHeaderElement extends endpointMixin(PolymerElement) {
+class PagesHeaderElement extends EndpointMixin(PolymerElement) {
 
   static get template() {
     return html`

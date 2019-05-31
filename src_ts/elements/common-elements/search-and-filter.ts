@@ -6,7 +6,7 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
-import 'etools-dropdown/etools-dropdown';
+import '@unicef-polymer/etools-dropdown/etools-dropdown';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-listbox/paper-listbox';
@@ -20,6 +20,7 @@ import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import moment from 'moment';
 
 const SearchAndFilterMixin = EtoolsMixinFactory.combineMixins([
   DateMixin,
@@ -158,10 +159,13 @@ class SearchAndFilter extends SearchAndFilterMixin {
 
           <template is="dom-if" if="[[item.isDatePicker]]">
             <div class="layout horizontal">
-              <datepicker-lite id="[[item.query]]" slot="prefix" format="YYYY-MM-DD"
-                fire-date-has-changed="[[!restoreInProcess]]"
-                on-date-has-changed="_changeFilterValue"
-                clear-btn-inside-dr="true" data-is-datepicker no-init>
+              <datepicker-lite id="[[item.query]]"
+                               label="[[item.name]]"
+                               slot="prefix"
+                               selected-date-display-format="YYYY-MM-DD"
+                               fire-date-has-changed="[[!restoreInProcess]]"
+                               on-date-has-changed="_changeFilterValue"
+                               clear-btn-inside-dr>
               </datepicker-lite>
             </div>
           </template>
@@ -243,14 +247,14 @@ class SearchAndFilter extends SearchAndFilterMixin {
   }
 
   searchKeyDown() {
-    this._debounceSearch = Debouncer.debounce(
+    this.set('_debounceSearch', Debouncer.debounce(
         this._debounceSearch, timeOut.after(300), () => {
           let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
           this.updateQueries({
             search: query,
             page: '1'
           });
-        });
+        }));
   }
 
   _reloadFilters() {
@@ -258,8 +262,8 @@ class SearchAndFilter extends SearchAndFilterMixin {
   }
 
   _restoreFilters() {
-    this.restoreInProcess = true;
-    this._debounceFilters = Debouncer.debounce(this._debounceFilters,
+    this.set('restoreInProcess', true);
+    this.set('_debounceFilters', Debouncer.debounce(this._debounceFilters,
         timeOut.after(50),
         () => {
           let queryParams = this.queryParams;
@@ -270,15 +274,15 @@ class SearchAndFilter extends SearchAndFilterMixin {
 
           // let availableFilters: any[] = [];
 
-          this.selectedFilters.forEach((filter: any) => {
-            this.selectFilter(filter);
-            // if (!filter && queryParams[filter.query] !== undefined) {
-            //   this.selectFilter(filter);
-            // } else if (queryParams[filter.query] === undefined) {
-            //   this.removeFilter(filter.query);
-            //   availableFilters.push(filter);
-            // }
-          });
+          // this.selectedFilters.forEach((filter: any) => {
+          // this.selectFilter(filter);
+          // if (!filter && queryParams[filter.query] !== undefined) {
+          //   this.selectFilter(filter);
+          // } else if (queryParams[filter.query] === undefined) {
+          //   this.removeFilter(filter.query);
+          //   availableFilters.push(filter);
+          // }
+          // });
           // this.set('availableFilters', availableFilters);
 
           if (queryParams.search) {
@@ -288,9 +292,9 @@ class SearchAndFilter extends SearchAndFilterMixin {
           }
           setTimeout(() => {
             this._updateValues();
-            this.restoreInProcess = false;
+            this.set('restoreInProcess', false);
           });
-        });
+        }));
   }
 
   _updateValues() {
@@ -367,7 +371,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
     }
 
     let query = e.currentTarget.id,
-      date = e.detail.prettyDate,
+      date = moment(e.detail.date).format('YYYY-MM-DD'),
       queryObject: any;
 
     if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {

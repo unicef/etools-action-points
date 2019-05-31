@@ -56,8 +56,8 @@ class ActionPointsData extends ActionPointsDataMixin {
   }
 
   _actionPointsLoaded(detail: any) {
-    this.actionPoints = detail.results;
-    this.listLength = detail.count;
+    this.set('actionPoints', detail.results);
+    this.set('listLength', detail.count);
 
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {type: 'action-points-list'},

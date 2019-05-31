@@ -3,7 +3,7 @@ import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
-import 'etools-dropdown';
+import '@unicef-polymer/etools-dropdown/etools-dropdown';
 import 'etools-content-panel';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
@@ -294,18 +294,17 @@ class ActionPointDetails extends ActionPointDetailsMixin {
           </div>
           <div class="input-container">
             <!-- Due Date -->
-            <paper-input id="dueDateInput" 
-              class$="validate-input disabled-as-readonly {{_setRequired('due_date', permissionPath)}}"
-              field="due_date" value="[[prettyDate(editedItem.due_date)]]" 
-              label="[[getLabel('due_date', permissionPath)]]"
-              placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]" data-selector="dueDate"
-              required="{{_setRequired('due_date', permissionPath)}}" 
-              disabled$="[[isReadOnly('due_date', permissionPath)]]"
-              error-message="{{errors.due_date}}" on-tap="openDatePicker" on-focus="_resetFieldError">
-              <datepicker-lite id="dueDate" modal="[[datepickerModal]]" slot="prefix" format="YYYY-MM-DD"
-                pretty-date="{{editedItem.due_date}}" show-clear-btn no-init>
-              </datepicker-lite>
-            </paper-input>
+            <datepicker-lite id="dueDate"
+                              label="[[getLabel('due_date', permissionPath)]]"
+                              modal="[[datepickerModal]]"
+                              placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
+                              slot="prefix"
+                              selected-date-display-format="YYYY-MM-DD"
+                              clear-btn-inside-dr
+                              required="{{_setRequired('due_date', permissionPath)}}" 
+                              disabled$="[[isReadOnly('due_date', permissionPath)]]"
+                              error-message="{{errors.due_date}}">
+            </datepicker-lite>
           </div>
         </div>
         <template is="dom-if" if="[[editedItem.history.0]]">
@@ -371,7 +370,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       categories = categoriesList.filter((category: any) => category.module === module);
     }
 
-    this.categories = categories;
+    this.set('categories', categories);
   }
 
   ready() {
@@ -390,44 +389,44 @@ class ActionPointDetails extends ActionPointDetailsMixin {
   }
 
   setData() {
-    this.modules = this.getData('modules');
-    this.partners = this.getData('partnerOrganisations');
-    this.offices = this.getData('offices');
-    this.sectionsCovered = this.getData('sectionsCovered');
-    this.cpOutputs = this.getData('cpOutputsList');
-    this.unicefUsers = (this.getData('unicefUsers') || []).map((user: any) => {
+    this.set('modules', this.getData('modules'));
+    this.set('partners', this.getData('partnerOrganisations'));
+    this.set('offices', this.getData('offices'));
+    this.set('sectionsCovered', this.getData('sectionsCovered'));
+    this.set('cpOutputs', this.getData('cpOutputsList'));
+    this.set('unicefUsers', (this.getData('unicefUsers') || []).map((user: any) => {
       return {
         id: user.id,
         name: `${user.first_name} ${user.last_name}`
       };
-    });
+    }));
 
     this._updateLocations();
   }
 
   _updateEditedItem(actionPoint: any) {
-    this.editedItem = actionPoint && JSON.parse(JSON.stringify(actionPoint)) || {};
+    this.set('editedItem', actionPoint && JSON.parse(JSON.stringify(actionPoint)) || {});
   }
 
   _updateLocations(filter?: any) {
     let locations = this.getData('locations') || [];
-    this.locations = locations.filter((location: any) => {
+    this.set('locations', locations.filter((location: any) => {
       return !filter || !!~filter.indexOf(+location.id);
-    });
+    }));
   }
 
   _requestPartner(partnerId: number) {
     if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
       return;
     }
-    this.lastPartnerId = partnerId;
+    this.set('lastPartnerId', partnerId);
 
     if (!partnerId && partnerId !== 0) {
       return;
     }
 
-    this.partnerRequestInProcess = true;
-    this.partner = null;
+    this.set('partnerRequestInProcess', true);
+    this.set('partner', null);
     let originalPartner = this.originalActionPoint.partner.id;
     let originalIntervention = this.originalActionPoint.intervention ? this.originalActionPoint.intervention.id : null;
     if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
@@ -440,11 +439,11 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       endpoint
     })
         .then((data: any) => {
-          this.partner = data || null;
-          this.partnerRequestInProcess = false;
+          this.set('partner', data || null);
+          this.set('partnerRequestInProcess', false);
         }).catch(() => {
           console.error('Can not load partner data');
-          this.partnerRequestInProcess = false;
+          this.set('partnerRequestInProcess', false);
         });
   }
 
@@ -454,13 +453,13 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     }
     this._checkAndResetData(interventionId);
     if (interventionId === null) {
-      this.cpOutputs = this.getData('cpOutputsList');
+      this.set('cpOutputs', this.getData('cpOutputsList'));
       this._updateLocations();
       return;
     }
     try {
-      this.interventionRequestInProcess = true;
-      this.cpOutputs = undefined;
+      this.set('interventionRequestInProcess', true);
+      this.set('cpOutputs', undefined);
       let interventionEndpoint = this.getEndpoint('interventionDetails', interventionId);
       let intervention = await this.sendRequest({
         method: 'GET',
@@ -489,11 +488,11 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       }
 
       let endpoint = this.getEndpoint('cpOutputsV2', cpIds.join(','));
-      this.cpOutputs = await this.sendRequest({
+      this.set('cpOutputs', await this.sendRequest({
         method: 'GET',
         endpoint
-      }) || [];
-      this.interventionRequestInProcess = false;
+      }) || []);
+      this.set('interventionRequestInProcess', false);
     } catch (error) {
       console.error('Can not load cpOutputs data');
       this._finishCpoRequest();
@@ -518,8 +517,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
   }
 
   _finishCpoRequest() {
-    this.cpOutputs = [];
-    this.interventionRequestInProcess = false;
+    this.set('cpOutputs', []);
+    this.set('interventionRequestInProcess', false);
   }
 
   _updateInterventions(intervention: any, originalId: number, partner: any) {
@@ -533,7 +532,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       interventions.push(intervention);
     }
 
-    this.interventions = interventions;
+    this.set('interventions', interventions);
   }
 
   isFieldReadonly(path: string, base: string, special: any) {

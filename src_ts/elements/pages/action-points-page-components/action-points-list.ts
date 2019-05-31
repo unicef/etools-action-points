@@ -491,13 +491,13 @@ class ActionPointsList extends ActionPointsListMixin {
     super.ready();
     document.addEventListener('static-data-loaded', () => this.setData());
     this._initSort();
-    this.isShowCompleted = this.queryParams.status !== 'open';
+    this.set('isShowCompleted', this.queryParams.status !== 'open');
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
   setData() {
-    this.modules = this.getData('modules') || [];
-    this.statuses = this.getData('statuses') || [];
+    this.set('modules', this.getData('modules') || []);
+    this.set('statuses', this.getData('statuses') || []);
     this._initFilters();
   }
 
@@ -664,7 +664,7 @@ class ActionPointsList extends ActionPointsListMixin {
       this.set('queryParams.status', 'open');
     } else if (this.queryParams) {
 
-      this.queryParams = delete this.queryParams.status;
+      this.set('queryParams', delete this.queryParams.status);
     }
   }
   _setExportLinks() {

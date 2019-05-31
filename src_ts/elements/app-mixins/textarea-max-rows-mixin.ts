@@ -20,7 +20,7 @@ const TextareaMaxRows = (superClass: any) => class extends superClass {
   setMaxHeight(paperTextarea: any) {
     if (!paperTextarea) {return false;}
 
-    let paperInputContainer = paperTextarea.querySelector('paper-input');
+    let paperInputContainer = paperTextarea.shadowRoot.querySelector('paper-input-container');
     let textareaAutogrow = paperInputContainer.querySelector('.paper-input-input');
     let mirror = textareaAutogrow.querySelector('#mirror');
 

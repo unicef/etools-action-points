@@ -148,12 +148,12 @@ class ActionPointComments extends ActionPointCommentsMixin {
   }
 
   _updatePermission() {
-    this.pageNumber = 1;
-    this.pageSize = 10;
+    this.set('pageNumber', 1);
+    this.set('pageSize', 10);
   }
 
   _openAddComment() {
-    this.openedCommentDialog = true;
+    this.set('openedCommentDialog', true);
   }
 
   saveComment() {
@@ -162,7 +162,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
     let comments = [{
       comment: this.commentText
     }];
-    this.isSaveComment = true;
+    this.set('isSaveComment', true);
     this.sendRequest({
       method: 'PATCH',
       endpoint: {
@@ -175,12 +175,12 @@ class ActionPointComments extends ActionPointCommentsMixin {
         .then((response: any) => {
           this.set('actionPoint.comments', response.comments);
           this.set('actionPoint.history', response.history);
-          this.openedCommentDialog = false;
-          this.isSaveComment = false;
+          this.set('openedCommentDialog', false);
+          this.set('isSaveComment', false);
         })
         .catch((err: any) => {
           this.errorHandler(err, this.permissionPath);
-          this.isSaveComment = false;
+          this.set('isSaveComment', false);
         });
   }
 
