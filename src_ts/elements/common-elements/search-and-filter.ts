@@ -20,6 +20,7 @@ import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import moment from 'moment';
 
 const SearchAndFilterMixin = EtoolsMixinFactory.combineMixins([
   DateMixin,
@@ -158,10 +159,13 @@ class SearchAndFilter extends SearchAndFilterMixin {
 
           <template is="dom-if" if="[[item.isDatePicker]]">
             <div class="layout horizontal">
-              <datepicker-lite id="[[item.query]]" slot="prefix" format="YYYY-MM-DD"
-                fire-date-has-changed="[[!restoreInProcess]]"
-                on-date-has-changed="_changeFilterValue"
-                clear-btn-inside-dr="true" data-is-datepicker no-init>
+              <datepicker-lite id="[[item.query]]"
+                               label="[[item.name]]"
+                               slot="prefix"
+                               selected-date-display-format="YYYY-MM-DD"
+                               fire-date-has-changed="[[!restoreInProcess]]"
+                               on-date-has-changed="_changeFilterValue"
+                               clear-btn-inside-dr>
               </datepicker-lite>
             </div>
           </template>
@@ -270,15 +274,15 @@ class SearchAndFilter extends SearchAndFilterMixin {
 
           // let availableFilters: any[] = [];
 
-          this.selectedFilters.forEach((filter: any) => {
-            this.selectFilter(filter);
-            // if (!filter && queryParams[filter.query] !== undefined) {
-            //   this.selectFilter(filter);
-            // } else if (queryParams[filter.query] === undefined) {
-            //   this.removeFilter(filter.query);
-            //   availableFilters.push(filter);
-            // }
-          });
+          // this.selectedFilters.forEach((filter: any) => {
+          // this.selectFilter(filter);
+          // if (!filter && queryParams[filter.query] !== undefined) {
+          //   this.selectFilter(filter);
+          // } else if (queryParams[filter.query] === undefined) {
+          //   this.removeFilter(filter.query);
+          //   availableFilters.push(filter);
+          // }
+          // });
           // this.set('availableFilters', availableFilters);
 
           if (queryParams.search) {
@@ -367,7 +371,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
     }
 
     let query = e.currentTarget.id,
-      date = e.detail.prettyDate,
+      date = moment(e.detail.date).format('YYYY-MM-DD'),
       queryObject: any;
 
     if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {

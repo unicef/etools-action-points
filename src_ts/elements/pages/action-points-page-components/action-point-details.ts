@@ -294,18 +294,17 @@ class ActionPointDetails extends ActionPointDetailsMixin {
           </div>
           <div class="input-container">
             <!-- Due Date -->
-            <paper-input id="dueDateInput" 
-              class$="validate-input disabled-as-readonly {{_setRequired('due_date', permissionPath)}}"
-              field="due_date" value="[[prettyDate(editedItem.due_date)]]" 
-              label="[[getLabel('due_date', permissionPath)]]"
-              placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]" data-selector="dueDate"
-              required="{{_setRequired('due_date', permissionPath)}}" 
-              disabled$="[[isReadOnly('due_date', permissionPath)]]"
-              error-message="{{errors.due_date}}" on-tap="openDatePicker" on-focus="_resetFieldError">
-              <datepicker-lite id="dueDate" modal="[[datepickerModal]]" slot="prefix" format="YYYY-MM-DD"
-                pretty-date="{{editedItem.due_date}}" show-clear-btn no-init>
-              </datepicker-lite>
-            </paper-input>
+            <datepicker-lite id="dueDate"
+                              label="[[getLabel('due_date', permissionPath)]]"
+                              modal="[[datepickerModal]]"
+                              placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
+                              slot="prefix"
+                              selected-date-display-format="YYYY-MM-DD"
+                              clear-btn-inside-dr
+                              required="{{_setRequired('due_date', permissionPath)}}" 
+                              disabled$="[[isReadOnly('due_date', permissionPath)]]"
+                              error-message="{{errors.due_date}}">
+            </datepicker-lite>
           </div>
         </div>
         <template is="dom-if" if="[[editedItem.history.0]]">

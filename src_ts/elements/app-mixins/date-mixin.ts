@@ -1,4 +1,3 @@
-import {dom} from '@polymer/polymer/lib/legacy/polymer.dom';
 import moment from 'moment';
 
 /**
@@ -38,26 +37,6 @@ const DateMixin = (superClass: any) =>
       } else {
         return new Date();
       }
-    }
-
-    /**
-     * Open input field assigned(as prefix or suffix) etools-datepicker on tap.
-     * Make sure you also have the data-selector attribute set on the input field.
-     */
-    public openDatePicker(event: CustomEvent) {
-      // do not close datepicker on mouse up
-      this.datepickerModal = true;
-      // @ts-ignore
-      let id = dom(event).localTarget.getAttribute('data-selector');
-      if (id) {
-        let datepickerId = '#' + id;
-        let datePicker = this.shadowRoot.querySelector(datepickerId);
-        if (datePicker) {
-          datePicker.open = true;
-        }
-      }
-      // allow outside click closing
-      setTimeout(() => (this.datepickerModal = false), 300);
     }
 
     protected _getFormat(format: string | undefined) {
