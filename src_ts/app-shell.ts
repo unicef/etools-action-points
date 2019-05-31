@@ -178,9 +178,7 @@ class AppShell extends AppShellMixin {
   }
 
   public static get observers() {
-    return [
-      '_routePageChanged(route.path)'
-    ];
+    return ['_routePageChanged(route.path)'];
   }
 
   ready() {
