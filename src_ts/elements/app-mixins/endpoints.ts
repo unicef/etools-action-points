@@ -3,7 +3,7 @@ const apdEndpoints = {
     url: '/api/v3/users/profile/'
   },
   changeCountry: {
-    url: '/api/v3/changecountry/'
+    url: '/api/v3/users/changecountry/'
   },
   partnerOrganisations: {
     url: '/api/v2/partners/?hidden=false',

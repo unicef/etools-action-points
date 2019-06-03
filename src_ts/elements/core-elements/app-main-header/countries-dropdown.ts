@@ -218,19 +218,14 @@ class CountriesDropdown extends CountriesDropdownMixin {
       bubbles: true,
       composed: true
     }));
-    let url = this.getEndpoint('changeCountry').url;
-    let countryData = {
-      country: id
-    };
+    let endpoint = this.getEndpoint('changeCountry');
     this.sendRequest({
       method: 'POST',
-      endpoint: {
-        url: url
-      },
+      endpoint: endpoint,
       body: {
-        countryData
+        country: id
       }
-    }).then(() => this._handleResponse).catch(() => this._handleError);
+    }).then(() => this._handleResponse()).catch(() => this._handleError());
   }
 
   _handleError(this: any) {
