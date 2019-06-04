@@ -121,7 +121,7 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
                   view="action-points"
                   name="Action Points"
                   icon="av:playlist-add-check"
-                  side-bar-link="action-points/list?reload=true">
+                  side-bar-link="apd/action-points/list?reload=true">
           </side-bar-item>
         </iron-selector>
 

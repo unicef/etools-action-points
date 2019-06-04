@@ -3,7 +3,7 @@ import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
+import 'etools-dropdown/etools-dropdown';
 import 'etools-content-panel';
 import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
