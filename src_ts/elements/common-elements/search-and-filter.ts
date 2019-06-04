@@ -6,7 +6,7 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
+import 'etools-dropdown/etools-dropdown';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-listbox/paper-listbox';

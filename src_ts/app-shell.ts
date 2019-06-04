@@ -83,24 +83,23 @@ class AppShell extends AppShellMixin {
 
       <static-data></static-data>
 
-      <etools-piwik-analytics user="[[user]]"
-                              page="[[page]]"
-                              toast="[[_toast]]">
-      </etools-piwik-analytics>
-
-      <app-location route="{{route}}"></app-location>
+      <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
 
       <app-route route="{{route}}"
                  pattern="[[rootPath]]:page"
-                 data="{{routeData}}"
-                 tail="{{subroute}}">
+                 data="{{routeData}}">
       </app-route>
 
       <app-route route="{{route}}"
                  pattern="[[rootPath]]action-points"
                  tail="{{actionPointsRoute}}">
       </app-route>
-      
+
+      <etools-piwik-analytics user="[[user]]"
+                              page="[[page]]"
+                              toast="[[_toast]]">
+      </etools-piwik-analytics>
+
       <!-- Drawer content -->
       <app-drawer-layout id="layout" responsive-width="850px"
                        fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">

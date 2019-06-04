@@ -124,7 +124,7 @@ class ActionPointsList extends ActionPointsListMixin {
         }    
       </style>
 
-      <iron-location path="{{path}}" query="{{query}}"></iron-location>
+      <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
       <iron-query-params params-string="{{query}}" params-object="{{queryParams}}">
       </iron-query-params>
       <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}">

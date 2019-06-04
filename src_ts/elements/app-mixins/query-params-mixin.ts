@@ -1,3 +1,5 @@
+import { basePath } from "../core-elements/etools-app-config";
+
 /*
  * Mixin for edit query string in location.
  * @polymer
@@ -84,7 +86,7 @@ const QueryParams = (superClass: any) => class extends superClass {
     });
 
     try {
-      window.history.replaceState({}, '', `${path}?${queries.join('&')}`);
+      window.history.replaceState({}, '', `${basePath}${path}?${queries.join('&')}`);
     } catch (err) {
       console.warn(err);
     }
