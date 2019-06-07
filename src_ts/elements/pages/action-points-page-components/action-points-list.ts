@@ -129,8 +129,8 @@ class ActionPointsList extends ActionPointsListMixin {
       </iron-query-params>
       <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}">
       </app-route-converter>
-      <pages-header-element hide-print-button link="action-points/new" 
-        show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
+      <pages-header-element hide-print-button link="apd/action-points/new" 
+        show-add-button="[[buttonPermission]]"
         export-links="[[exportLinks]]" btn-text="Add Action Point" page-title="Action Points">
       </pages-header-element>
       <action-points-data action-points="{{actionPoints}}" request-queries="{{queryParams}}" 
@@ -477,6 +477,10 @@ class ActionPointsList extends ActionPointsListMixin {
       exportLinks: {
         type: Array,
         notify: true
+      },
+      buttonPermission: {
+        type: Boolean,
+        notify: true
       }
     };
   }
@@ -498,6 +502,7 @@ class ActionPointsList extends ActionPointsListMixin {
   setData() {
     this.set('modules', this.getData('modules') || []);
     this.set('statuses', this.getData('statuses') || []);
+    this.set('buttonPermission', !this.noActionsAllowed(this.basePermissionPath))
     this._initFilters();
   }
 
