@@ -32,8 +32,7 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
             openedCommentDialog: {
                 type: Boolean
             },
-            commentText: String,
-            link: String
+            commentText: String
         };
     }
 
@@ -64,8 +63,7 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
         if (!this.validate()) return;
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPoint.id});
         let comments = [{
-            comment: this.commentText,
-            link: this.link
+            comment: this.commentText
         }];
         this.isSaveComment = true;
         this.sendRequest({method: 'PATCH', endpoint, body: {comments: comments}})
