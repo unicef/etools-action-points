@@ -40,7 +40,7 @@
     "paper-toggle-button": "^2.1.1",
     "webcomponentsjs": "1.2.2",
     "babel-polyfill": "^0.0.1",
-    "etools-profile-dropdown": "^3.1.0",
+    "etools-profile-dropdown": "3.1.1",
     "querystring": "^3.46.1",
     "etools-piwik-analytics": "git://github.com/unicef-polymer/etools-piwik-analytics"
   },
