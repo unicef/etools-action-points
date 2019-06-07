@@ -52,6 +52,13 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
         this.openedCommentDialog = true;
     }
 
+    checkLinks(comment) {
+        comment = this.getStringValue(comment);
+        comment = window.linkifyStr(comment);
+        comment = comment.trim();
+        return comment;
+    }
+
     saveComment() {
         if (!this.validate()) return;
         let endpoint = this.getEndpoint('actionPoint', {id: this.actionPoint.id});
