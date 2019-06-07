@@ -27,6 +27,9 @@
                         </div>
                         <div class="comment-item__body" id="commentArea" inner-h-t-m-l="[[checkLinks(item.comment)]]">
                         </div>
+                        <template is="dom-if" if="[[item.link]]">
+                            <a href="[[item.link]]">[[item.link]]</a>
+                        </template>
                     </div>
                 </template>
             </div>
