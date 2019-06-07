@@ -21,8 +21,7 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
             },
             actionPoint: {
                 type: Object,
-                value() {return {};},
-                observer: 'thing'
+                value() {return {};}
             },
             permissionPath: String
         };
@@ -32,10 +31,6 @@ class ActionPointsItem extends EtoolsMixinFactory.combineMixins([
         return [
             '_changeRoutePath(route.path)'
         ];
-    }
-
-    thing() {
-        console.log(this.actionPoint);
     }
 
     ready() {

@@ -1,6 +1,6 @@
 <!--import [polymer/polymer-element, etools-content-panel, paper-icon-button, etools-data-table, paper-input/paper-textarea,
             etools-dialog, localization-mixin, error-handler-mixin, input-attrs-mixin, tab-inputs-styles, module-styles,
-            textarea-max-rows-mixin, paper-input/paper-input]-->
+            textarea-max-rows-mixin]-->
 
 <dom-module id="action-point-comments">
     <template>
@@ -65,18 +65,6 @@
                             on-tap="_resetFieldError"
                             no-title-attr>
                     </paper-textarea>
-                    <paper-input 
-                            class="validate-input disabled-as-readonly"
-                            value="{{link}}"
-                            placeholder="Add a URL"
-                            disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
-                            readonly$="[[isReadOnly('comments.comment', permissionPath)]]"
-                            invalid$="{{errors.comments.comment}}"
-                            error-message="{{errors.comments.comment}}"
-                            on-focus="_resetFieldError"
-                            on-tap="_resetFieldError"
-                            no-title-attr>
-                    </paper-input>
                 </div>
             </div>
         </etools-dialog>

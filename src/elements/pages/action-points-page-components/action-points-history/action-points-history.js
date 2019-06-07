@@ -8,14 +8,10 @@ class ActionPointsHistory extends EtoolsMixinFactory.combineMixins([
         return {
             history: {
                 type: Array,
-                value() {return [];},
-                observer: 'thing'
+                value() {return [];}
             },
             permissionPath: String
         };
-    }
-    thing() {
-        console.log(this.history);
     }
 }
 customElements.define(ActionPointsHistory.is, ActionPointsHistory);
