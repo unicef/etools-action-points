@@ -119,7 +119,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               </div>
             </div>
             <div class="input-container">
-              <etools-dropdown 
+              <etools-dropdown
                 class$="validate-input disabled-as-readonly [[_setRequired('assigned_by', permissionPath)]]"
                 selected="{{editedItem.assigned_by}}" label="[[getLabel('assigned_by', permissionPath)]]" 
                 placeholder="-"
@@ -303,7 +303,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
                               clear-btn-inside-dr
                               required="{{_setRequired('due_date', permissionPath)}}" 
                               disabled$="[[isReadOnly('due_date', permissionPath)]]"
-                              error-message="{{errors.due_date}}">
+                              error-message="{{errors.due_date}}"
+                              value={{editedItem.due_date}}>
             </datepicker-lite>
           </div>
         </div>
@@ -334,21 +335,44 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     return {
       partners: {
         type: Array,
-        value: () => []
+        value: () => [],
+        notify: true
       },
       permissionPath: String,
       locations: {
         type: Array,
-        value: () => []
+        value: () => [],
+        notify: true
       },
       editedItem: {
         type: Object,
-        value: () => ({})
+        value: () => ({}),
+        notify: true
       },
-      cpOutputs: Array,
+      cpOutputs: {
+        type: Array,
+        notify: true
+      },
       interventions: {
         type: Array,
-        value: () => []
+        value: () => [],
+        notify: true
+      },
+      modules: {
+        type: Array,
+        notify: true
+      },
+      unicefUsers: {
+        type: Array,
+        notify: true
+      },
+      offices: {
+        type: Array,
+        notify: true
+      },
+      sectionsCovered: {
+        type: Array,
+        notify: true
       },
       originalActionPoint: {
         type: Object,
@@ -395,10 +419,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     this.set('sectionsCovered', this.getData('sectionsCovered'));
     this.set('cpOutputs', this.getData('cpOutputsList'));
     this.set('unicefUsers', (this.getData('unicefUsers') || []).map((user: any) => {
-      return {
-        id: user.id,
-        name: `${user.first_name} ${user.last_name}`
-      };
+      return {id: user.id, name: user.name};
     }));
 
     this._updateLocations();
@@ -427,10 +448,13 @@ class ActionPointDetails extends ActionPointDetailsMixin {
 
     this.set('partnerRequestInProcess', true);
     this.set('partner', null);
-    let originalPartner = this.originalActionPoint.partner.id;
-    let originalIntervention = this.originalActionPoint.intervention ? this.originalActionPoint.intervention.id : null;
-    if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
-      this.set('editedItem.intervention', null);
+    if (this.originalActionPoint) {
+      let originalPartner = this.originalActionPoint.partner ? this.originalActionPoint.partner.id : null;
+      let originalIntervention = this.originalActionPoint.intervention ?
+        this.originalActionPoint.intervention.id : null;
+      if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
+        this.set('editedItem.intervention', null);
+      }
     }
 
     let endpoint = this.getEndpoint('partnerOrganisationDetails', partnerId);
@@ -490,7 +514,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       let endpoint = this.getEndpoint('cpOutputsV2', cpIds.join(','));
       this.set('cpOutputs', await this.sendRequest({
         method: 'GET',
-        endpoint
+        endpoint: endpoint
       }) || []);
       this.set('interventionRequestInProcess', false);
     } catch (error) {
@@ -501,6 +525,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
   /* jshint ignore:end */
 
   _checkAndResetData(intervention: any) {
+    if (!this.originalActionPoint) {return;}
     let originalIntervention = this.originalActionPoint.intervention ? this.originalActionPoint.intervention.id : null;
     let originalOutput = this.originalActionPoint.cp_output ? this.originalActionPoint.cp_output.id : null;
     let originalLocation = this.originalActionPoint.location ? this.originalActionPoint.location.id : null;

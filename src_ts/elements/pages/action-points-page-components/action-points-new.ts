@@ -26,25 +26,21 @@ class ActionPointsNew extends ActionPointsNewMixin {
       ${sharedStyles}
       ${mainPageStyles}
 
-      <pages-header-element
-        page-title="Add New Action Point"
-      ></pages-header-element>
+      <pages-header-element page-title="Add New Action Point">
+      </pages-header-element>
 
       <div class="view-container">
         <div id="pageContent">
-          <action-point-details
-            id="ap-details"
-            action-point="[[actionPoint]]"
-            permission-path="[[permissionPath]]"
-          >
+          <action-point-details id="ap-details"
+                                action-point="[[actionPoint]]"
+                                permission-path="[[permissionPath]]">
           </action-point-details>
         </div>
 
         <div id="sidebar">
-          <status-element
-            action-point="[[actionPoint]]"
-            permission-path="[[permissionPath]]"
-          ></status-element>
+          <status-element action-point="[[actionPoint]]"
+                          permission-path="[[permissionPath]]">
+          </status-element>
         </div>
       </div>
     `;
@@ -105,9 +101,7 @@ class ActionPointsNew extends ActionPointsNewMixin {
 
     this.sendRequest({
       method: 'POST',
-      endpoint: {
-        url: endpoint
-      },
+      endpoint: endpoint,
       body: data
     })
         .then((data: any) => {

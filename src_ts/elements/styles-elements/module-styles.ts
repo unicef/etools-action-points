@@ -117,8 +117,6 @@ export const moduleStyles = html`
         --etools-dialog-scrollable: {
           padding-top: 0 !important;
         }
-
-        ;
       }
 
       etools-dialog {
@@ -129,20 +127,14 @@ export const moduleStyles = html`
           padding-top: 12px !important;
         }
 
-        ;
-
         --etools-dialog-content: {
           min-height: 80px;
           padding-bottom: 8px !important;
         }
 
-        ;
-
         --etools-dialog-button-styles: {
           margin-top: 0
         }
-
-        ;
       }
 
       etools-dialog>etools-loading {
@@ -156,8 +148,6 @@ export const moduleStyles = html`
           line-height: 48px;
         }
 
-        ;
-
         --ecp-expand-btn: {
           position: absolute;
           top: 3px;
@@ -166,21 +156,15 @@ export const moduleStyles = html`
           height: 45px;
         }
 
-        ;
-
         --ecp-header-title: {
           font-weight: 500;
           line-height: 48px;
           padding: 0 30px;
         }
 
-        ;
-
         --ecp-header-btns-wrapper: {
           opacity: 1;
         }
-
-        ;
       }
 
       div[slot="panel-btns"] {

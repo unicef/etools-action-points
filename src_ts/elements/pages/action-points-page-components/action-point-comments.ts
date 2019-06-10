@@ -87,9 +87,10 @@ class ActionPointComments extends ActionPointCommentsMixin {
       </etools-content-panel>
       <etools-dialog size="md" opened="{{openedCommentDialog}}" 
                      dialog-title="Add [[getLabel('comments', permissionPath)]]"
-        keep-dialog-open ok-btn-text="SAVE" on-confirm-btn-clicked="saveComment" on-iron-overlay-closed="_resetInputs">
-        <etools-loading active="{{isSaveComment}}" loading-text="Save comment">
-        </etools-loading>
+                     keep-dialog-open ok-btn-text="SAVE"
+                     on-confirm-btn-clicked="saveComment"
+                     on-iron-overlay-closed="_resetInputs">
+        <etools-loading active="{{isSaveComment}}" loading-text="Save comment"></etools-loading>
         <div class="row-h group">
           <div class="input-container input-container-l">
             <paper-textarea 
@@ -134,7 +135,8 @@ class ActionPointComments extends ActionPointCommentsMixin {
         value: 1
       },
       openedCommentDialog: {
-        type: Boolean
+        type: Boolean,
+        notify: true
       },
       commentText: String
     };
@@ -165,9 +167,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
     this.set('isSaveComment', true);
     this.sendRequest({
       method: 'PATCH',
-      endpoint: {
-        url: endpoint
-      },
+      endpoint: endpoint,
       body: {
         comments: comments
       }

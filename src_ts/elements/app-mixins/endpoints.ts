@@ -20,7 +20,7 @@ const apdEndpoints = {
     template: '/api/v2/interventions/'
   },
   cpOutputsV2: {
-    template: (ids: string) => `/api/v2/reports/results/?values=${ids}>`
+    template: (ids: string) => `/api/v2/reports/results/?values=${ids}`
   },
   cpOutputsList: {
     template: '/api/v2/reports/results/?verbosity=minimal'
