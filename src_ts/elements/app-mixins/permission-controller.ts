@@ -1,8 +1,3 @@
-// declare global {
-//   interface Window { _permissionCollection: any; }
-// }
-
-// window._permissionCollection = window._permissionCollection || {};
 const _permissionCollection: any = {};
 /*
 * Mixin for manage permission data.
@@ -11,7 +6,6 @@ const _permissionCollection: any = {};
 */
 const PermissionController = (superClass: any) => class extends superClass {
   protected _addToCollection(collectionName: string, data: any) {
-    // debugger
     // check arguments
     if (!collectionName || !data) {
       console.warn('collectionName and data arguments must be provided!');
@@ -188,8 +182,6 @@ const PermissionController = (superClass: any) => class extends superClass {
   }
 
   protected noActionsAllowed(collection: any) {
-    // if (_permissionCollection === {}) {return false;}
-    // debugger
     if (!collection) {
       return true;
     }

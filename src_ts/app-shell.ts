@@ -248,7 +248,7 @@ class AppShell extends AppShellMixin {
   }
   
   _routePageChanged() {
-    if (!this.initLoadingComplete || !this.routeData.page) {
+    if (!this.initLoadingComplete || !this.routeData.page || !this._staticDataLoaded) {
       return;
     }
     this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
@@ -275,11 +275,6 @@ class AppShell extends AppShellMixin {
         `./elements/pages/${page}-page-components/${page}-page-main.js`;
     }
     import(resolvedPageUrl).then(() => this._loadPage(), () => this._pageNotFound());
-    if (page === "action-points") {
-      this._loadPage()
-    } else {
-      this._pageNotFound()
-    }
   }
 
   _loadPage() {

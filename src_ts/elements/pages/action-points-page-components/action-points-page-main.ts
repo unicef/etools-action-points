@@ -1,8 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-pages/iron-pages';
-import './action-points-list';
-import './action-points-item';
-import './action-points-new';
 
 class ActionPointsPageMain extends PolymerElement {
   static get template() {
@@ -34,7 +31,7 @@ class ActionPointsPageMain extends PolymerElement {
   }
 
   static get observers() {
-    return ['_setRoutePath(route.path)'];
+    return ['_setRoutePath(route.path)', '_pageChanged(routeData.view)'];
   }
 
   _setRoutePath(path: string) {
@@ -43,6 +40,20 @@ class ActionPointsPageMain extends PolymerElement {
     }
     if (!path.match(/[^\\/]/g)) {
       this.set('route.path', '/list');
+    }
+  }
+
+  _pageChanged(page: string) {
+    switch (page) {
+      case 'new':
+        import('./action-points-new');
+        break;
+      case 'detail':
+        import('./action-points-item');
+        break;
+      default:
+        import('./action-points-list');
+        break;
     }
   }
 }
