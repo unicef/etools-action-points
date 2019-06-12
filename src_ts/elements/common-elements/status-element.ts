@@ -9,7 +9,7 @@ import StaticData from '../app-mixins/static-data-mixin';
 import PermissionController from '../app-mixins/permission-controller';
 import './action-buttons';
 import {moduleStyles} from '../styles-elements/module-styles';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 
 const StatusElementMixin = EtoolsMixinFactory.combineMixins([
   PermissionController,
@@ -321,7 +321,8 @@ class StatusElement extends StatusElementMixin {
       },
       permissionPath: String,
       statuses: {
-        type: Array
+        type: Array,
+        notify: true
       }
     };
   }
@@ -334,8 +335,8 @@ class StatusElement extends StatusElementMixin {
   _isStatusFinish(actionPoint: any, status: string) {
     let currentStatus = actionPoint.status;
     if (!currentStatus) {return false;}
-    let currentStatusIndex = this.statuses.findIndex({value: currentStatus});
-    let statusIndex = this.statuses.findIndex({value: status});
+    let currentStatusIndex = this.statuses.indexOf({value: currentStatus});
+    let statusIndex = this.statuses.indexOf({value: status});
     return (currentStatusIndex >= statusIndex);
   }
 

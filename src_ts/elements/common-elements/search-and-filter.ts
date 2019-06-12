@@ -6,20 +6,20 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/paper-card/paper-card';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
-import 'etools-dropdown/etools-dropdown';
+import '@unicef-polymer/etools-dropdown';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-toggle-button/paper-toggle-button';
 import '@polymer/paper-item/paper-icon-item';
-import 'etools-date-time/datepicker-lite';
+import '@unicef-polymer/etools-date-time/datepicker-lite';
 import QueryParams from '../app-mixins/query-params-mixin';
 import DateMixin from '../app-mixins/date-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import moment from 'moment';
 
 const SearchAndFilterMixin = EtoolsMixinFactory.combineMixins([

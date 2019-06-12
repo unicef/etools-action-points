@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
@@ -101,7 +101,10 @@ class ActionPointsItem extends ActionPointsItemMixin {
           return {};
         }
       },
-      permissionPath: String
+      permissionPath: {
+        type: String,
+        notify: true
+      }
     };
   }
 
@@ -151,7 +154,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
     this._loadOptions(this.actionPointId);
     this.sendRequest({
       method: 'GET',
-      endpoint: endpoint
+      endpoint
     })
         .then((result: any) => {
           this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
@@ -201,7 +204,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
     ]);
   }
 
-  _resolveFields(actionPoint: object, fields: any) {
+  _resolveFields(actionPoint: object, fields: string[]) {
     let data: any = actionPoint || {};
     for (let field of fields) {
       let fieldValue = data[field];

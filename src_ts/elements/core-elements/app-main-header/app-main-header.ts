@@ -2,13 +2,13 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import '@polymer/paper-icon-button/paper-icon-button';
-import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
-import 'etools-profile-dropdown/etools-profile-dropdown';
+import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin';
+import '@unicef-polymer/etools-profile-dropdown';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import 'etools-app-selector/etools-app-selector';
+import '@unicef-polymer/etools-app-selector';
 import './countries-dropdown';
 import {sharedStyles} from '../../styles-elements/shared-styles';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import '../../common-elements/support-btn';
 
 const AppMainHeaderMixin = EtoolsMixinFactory.combineMixins([

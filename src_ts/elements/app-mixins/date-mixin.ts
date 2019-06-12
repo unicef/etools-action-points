@@ -44,9 +44,10 @@ const DateMixin = (superClass: any) =>
     }
 
     protected _getMomentDate(dateString: string) {
-      if (typeof dateString === 'string') {
-        return '';
-      }
+
+      // if (typeof dateString === 'string') {
+      //   return '';
+      // }
 
       let date = new Date(dateString);
       return date.toString() !== 'Invalid Date' ? moment(date) : '';

@@ -1,10 +1,10 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import 'etools-content-panel';
-import 'etools-data-table';
+import '@unicef-polymer/etools-data-table';
 import 'etools-dialog';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';

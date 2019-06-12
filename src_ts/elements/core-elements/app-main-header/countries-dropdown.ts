@@ -5,10 +5,10 @@ import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button';
 import '@polymer/iron-icon/iron-icon';
-import EtoolsPageRefreshMixin from 'etools-behaviors/etools-page-refresh-mixin';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 
 const CountriesDropdownMixin = EtoolsMixinFactory.combineMixins([
   EtoolsPageRefreshMixin, EtoolsAjaxRequestMixin, EndpointMixin

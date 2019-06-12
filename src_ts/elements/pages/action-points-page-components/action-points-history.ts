@@ -1,10 +1,10 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import {moduleStyles} from '../../styles-elements/module-styles';
-import 'etools-data-table';
+import '@unicef-polymer/etools-data-table';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 
 const ActionPointsHistoryMixin = EtoolsMixinFactory.combineMixins([
   InputAttrs,
@@ -31,9 +31,9 @@ class ActionPointsHistory extends ActionPointsHistoryMixin {
       
       <etools-data-table-header no-title>
         <etools-data-table-column class="flex">Date</etools-data-table-column>
-        <etools-data-table-column class="flex">[[getLabel('history.by_user', permissionPath)]]>
+        <etools-data-table-column class="flex">[[getLabel('history.by_user_display', permissionPath)]]
         </etools-data-table-column>
-        <etools-data-table-column class="flex">[[getLabel('history.action', permissionPath)]]>
+        <etools-data-table-column class="flex">[[getLabel('history.action', permissionPath)]]
         </etools-data-table-column>
       </etools-data-table-header>
       <template id="rows" is="dom-repeat" items="[[history]]" as="historyItem">

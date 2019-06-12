@@ -9,7 +9,7 @@ import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';
-import 'etools-data-table/etools-data-table';
+import '@unicef-polymer/etools-data-table';
 import '../../data-elements/action-points-data';
 import StaticData from '../../app-mixins/static-data-mixin';
 import Localization from '../../app-mixins/localization-mixin';
@@ -20,7 +20,7 @@ import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 
 const ActionPointsListMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin,

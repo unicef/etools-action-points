@@ -1,6 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import StaticDataMixin from '../app-mixins/static-data-mixin';
 import ErrorHandler from '../app-mixins/error-handler-mixin';
 import PermissionController from '../app-mixins/permission-controller';

@@ -1,8 +1,8 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import QueryParams from '../app-mixins/query-params-mixin';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import ErrorHandler from '../app-mixins/error-handler-mixin';
 
 const ActionPointsDataMixin = EtoolsMixinFactory.combineMixins([

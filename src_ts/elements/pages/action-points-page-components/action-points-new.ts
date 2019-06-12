@@ -1,10 +1,10 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import EtoolsAjaxRequestMixin from 'etools-ajax/etools-ajax-request-mixin';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import './action-point-details';
-import {EtoolsMixinFactory} from 'etools-behaviors/etools-mixin-factory';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
