@@ -89,7 +89,7 @@ class SideBarItem extends PolymerElement {
         .content-wrapper ::slotted a {
           display: block;
           white-space: nowrap;
-          padding: 8px 24px 8px 72px;
+          
         }
 
         paper-tooltip {

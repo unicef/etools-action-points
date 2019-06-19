@@ -7,9 +7,7 @@ export const mainPageStyles = html`
     :host {
       position: relative;
       display: block;
-      --paper-tab-content-unselected: {
-        color: var(--gray-light);
-      }
+      --paper-tab-content-unselected: {color: var(--gray-light)};
       --ecp-header-bg: var(--module-primary);
     }
     :host .view-container {
@@ -70,21 +68,13 @@ export const mainPageStyles = html`
     }
     etools-content-panel.cancellation-tab {
       margin-bottom: 20px;
-      --ecp-header-title: {
-        font-weight: 500;
-        line-height: 51px;
-      }
-      --epc-toolbar: {
-        height: 4px;
-        padding: 2px;
-        background-color: var(--module-warning);
-      }
-      --ecp-content: {
-        padding-left: 100px;
-      }
-      --ecp-header-btns-wrapper: {
-        opacity: 1;
-      }
+      --ecp-header-title: {font-weight: 500};
+      --ecp-header-title: {line-height: 51px};
+      --epc-toolbar: {height: 4px};
+      --epc-toolbar: {padding: 2px};
+      --epc-toolbar: {background-color: var(--module-warning)};
+      --ecp-content: {padding-left: 100px};
+      --ecp-header-btns-wrapper: {opacity: 1};
     }
     etools-content-panel.cancellation-tab .cancellation-title {
       font-weight: 500;
@@ -118,9 +108,7 @@ export const mainPageStyles = html`
     }
     paper-tab {
       margin-right: 10px;
-      --paper-tab-content: {
-        width: auto;
-      }
+      --paper-tab-content: {width: auto};
     }
   </style>
 `;

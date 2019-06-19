@@ -39,8 +39,8 @@ class SearchAndFilter extends SearchAndFilterMixin {
           @apply --layout-center;
           @apply --layout-flex;
         }
-      
-        :host.inputs-container {
+        
+        .inputs-container {
           flex-wrap: wrap;
         }
       

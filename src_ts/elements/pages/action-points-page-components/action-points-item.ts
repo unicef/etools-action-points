@@ -2,6 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
+import '@unicef-polymer/etools-dialog';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
@@ -35,7 +36,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
       ${mainPageStyles}
       ${moduleStyles}
       <style include="iron-flex">
-        #pageContent>* {
+        #pageContent > * {
           display: block;
           margin-bottom: 25px;
         }

@@ -4,10 +4,10 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
 import '@unicef-polymer/etools-dropdown';
-import 'etools-content-panel';
+import '@unicef-polymer/etools-content-panel';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
-import 'etools-loading';
+import '@unicef-polymer/etools-loading';
 import '@unicef-polymer/etools-date-time/datepicker-lite';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import TextareaMaxRows from '../../app-mixins/textarea-max-rows-mixin';
@@ -315,7 +315,6 @@ class ActionPointDetails extends ActionPointDetailsMixin {
             [[formatDateInLocal(editedItem.history.0.created, 'D MMM YYYY h:mm A')]]
           </div>
         </template>
-      
       </etools-content-panel>
     `;
   }
@@ -338,7 +337,10 @@ class ActionPointDetails extends ActionPointDetailsMixin {
         value: () => [],
         notify: true
       },
-      permissionPath: String,
+      permissionPath: {
+        typs: String,
+        notify: true
+      },
       locations: {
         type: Array,
         value: () => [],

@@ -13,7 +13,7 @@ const InputAttrs = (superClass: any) => class extends PermissionController(super
    * @returns {*}
    * @private
    */
-  protected _setRequired(field: string, basePermissionPath: any) {
+  public _setRequired(field: string, basePermissionPath: any) {
     if (!basePermissionPath) {
       return false;
     }

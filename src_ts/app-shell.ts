@@ -21,8 +21,8 @@ import './elements/core-elements/app-sidebar-menu.js';
 import './elements/common-elements/multi-notifications/multi-notification-list.js';
 import EndpointMixin from './elements/app-mixins/endpoint-mixin';
 import UserController from './elements/app-mixins/user-controller.js';
+import PermissionController from './elements/app-mixins/permission-controller.js';
 import AppMenu from './elements/app-mixins/app-menu-mixin'
-import './elements/core-elements/side-bar-item';
 import './elements/core-elements/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/core-elements/page-footer';
@@ -36,7 +36,7 @@ import './elements/styles-elements/app-theme';
 setRootPath(basePath);
 
 const AppShellMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, UserController, AppMenu, LoadingMixin
+  EndpointMixin, UserController, AppMenu, LoadingMixin, PermissionController
 ], PolymerElement)
 
 class AppShell extends AppShellMixin {

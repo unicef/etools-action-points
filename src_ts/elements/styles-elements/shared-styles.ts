@@ -39,7 +39,7 @@ export const sharedStyles = html`
       }
     }
 
-    paper-tabs>* {
+    paper-tabs > * {
       --paper-tab-ink: var(--accent-color);
       --paper-tab-content-unselected: {
         color: var(--light-secondary-text-color);
