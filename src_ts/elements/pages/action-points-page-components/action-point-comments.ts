@@ -75,8 +75,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
                 <span class="comment-item__user">[[item.user.name]]</span>
                 <span class="comment-item__date">[[prettyDate(item.submit_date)]]</span>
               </div>
-              <div class="comment-item__body">
-                [[getStringValue(item.comment)]]
+              <div class="comment-item__body" id="commentArea" inner-h-t-m-l="[[checkLinks(item.comment)]]">
               </div>
             </div>
           </template>
@@ -156,6 +155,14 @@ class ActionPointComments extends ActionPointCommentsMixin {
 
   _openAddComment() {
     this.set('openedCommentDialog', true);
+  }
+
+  checkLinks(comment) {
+    comment = this.getStringValue(comment);
+    // @ts-ignore
+    comment = window.linkifyStr(comment);
+    comment = comment.trim();
+    return comment;
   }
 
   saveComment() {

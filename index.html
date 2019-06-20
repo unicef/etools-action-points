@@ -121,6 +121,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
+
+    <script type="module">
+      (function() {
+          'use strict';
+          var linkify = document.createElement('script');
+          linkify.src = 'apd/node_modules/linkifyjs/dist/linkify.min.js';
+          document.head.appendChild(linkify);
+      })();
+      (function() {
+          'use strict';
+          var linkifyJquery = document.createElement('script');
+          linkifyJquery.src = 'apd/node_modules/linkifyjs/dist/linkify-string.js';
+          document.head.appendChild(linkifyJquery);
+      })();
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
     <script src="apd/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -128,9 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="apd/node_modules/moment/min/moment.min.js"></script>
     <!-- Built with love using PWA Starter Kit -->
     <script type="module">
-      // import * as module from 'apd/src/app-shell.js';
       WebComponents.waitFor(() => {
-        // return module;
         return import('./apd/src/app-shell.js');
       });
     </script>
