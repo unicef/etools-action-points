@@ -59,6 +59,21 @@
             document.head.appendChild(base);
         })();
     </script>
+    <script>
+        (function() {
+            'use strict';
+            var linkify = document.createElement('script');
+            linkify.src = window.baseUrl + 'bower_components/linkifyjs/linkify.min.js';
+            document.head.appendChild(linkify);
+        })();
+        (function() {
+            'use strict';
+            var linkifyJquery = document.createElement('script');
+            linkifyJquery.src = window.baseUrl + 'bower_components/linkifyjs/linkify-string.js';
+            document.head.appendChild(linkifyJquery);
+        })();
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!--removeIf(prod)-->
     <script>
         (function() {
