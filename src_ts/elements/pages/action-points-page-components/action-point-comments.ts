@@ -2,29 +2,23 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import '@unicef-polymer/etools-content-panel';
 import '@unicef-polymer/etools-data-table';
-import '@unicef-polymer/etools-dialog/etools-dialog';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
-import TextareaMaxRows from '../../app-mixins/textarea-max-rows-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import PermissionController from '../../app-mixins/permission-controller';
+import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
+import './open-add-comments';
 
 const ActionPointCommentsMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  InputAttrs,
   PermissionController,
   LocalizationMixin,
   DateMixin,
   ErrorHandlerMixin,
-  TextareaMaxRows,
-  EtoolsAjaxRequestMixin
+  InputAttrs
 ], PolymerElement);
 
 class ActionPointComments extends ActionPointCommentsMixin {
@@ -75,7 +69,8 @@ class ActionPointComments extends ActionPointCommentsMixin {
                 <span class="comment-item__user">[[item.user.name]]</span>
                 <span class="comment-item__date">[[prettyDate(item.submit_date)]]</span>
               </div>
-              <div class="comment-item__body" id="commentArea" inner-h-t-m-l="[[checkLinks(item.comment)]]">
+              <div class="comment-item__body" id="commentArea">
+                [[item.comment]]
               </div>
             </div>
           </template>
@@ -84,28 +79,6 @@ class ActionPointComments extends ActionPointCommentsMixin {
                                   total-results="[[actionPoint.comments.length]]">
         </etools-data-table-footer>
       </etools-content-panel>
-      <etools-dialog size="md" opened="{{openedCommentDialog}}" 
-                     dialog-title="Add [[getLabel('comments', permissionPath)]]"
-                     keep-dialog-open ok-btn-text="SAVE"
-                     on-confirm-btn-clicked="saveComment"
-                     on-iron-overlay-closed="_resetInputs">
-        <etools-loading active="{{isSaveComment}}" loading-text="Save comment"></etools-loading>
-        <div class="row-h group">
-          <div class="input-container input-container-l">
-            <paper-textarea 
-              class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
-              value="{{commentText}}" label="[[getLabel('comments.comment', permissionPath)]]" 
-              placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
-              required$="[[_setRequired('comments.comment', permissionPath)]]" 
-              disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
-              readonly$="[[isReadOnly('comments.comment', permissionPath)]]" max-rows="4" maxlength="3000" 
-              invalid$="{{errors.comments.comment}}"
-              error-message="{{errors.comments.comment}}" on-focus="_resetFieldError" on-tap="_resetFieldError"
-              no-title-attr>
-            </paper-textarea>
-          </div>
-        </div>
-      </etools-dialog>
     `;
   }
 
@@ -117,7 +90,8 @@ class ActionPointComments extends ActionPointCommentsMixin {
         value() {
           return {};
         },
-        notify: true
+        notify: true,
+        observer: '_updateCommentProp'
       },
       filteredComments: {
         type: Array,
@@ -133,11 +107,10 @@ class ActionPointComments extends ActionPointCommentsMixin {
         type: Number,
         value: 1
       },
-      openedCommentDialog: {
-        type: Boolean,
-        notify: true
-      },
-      commentText: String
+      commentText: String,
+      commentDialog: {
+        type: Object
+      }
     };
   }
 
@@ -148,62 +121,39 @@ class ActionPointComments extends ActionPointCommentsMixin {
     ];
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('new-comment-added', (e: CustomEvent) => this._newCommentAdded(e));
+  }
+
+  ready() {
+    super.ready();
+    this._createCommentDialog();
+  }
+
+  _createCommentDialog() {
+    this.set('commentDialog', document.createElement('open-add-comments'));
+    document.querySelector('body').appendChild(this.commentDialog);
+  }
+
+  _updateCommentProp() {
+    if (this.commentDialog) {
+      this.commentDialog.actionPoint = this.actionPoint;
+    }
+  }
+
+  _newCommentAdded(response) {
+    this.set('actionPoint.comments', response.detail.comments);
+    this.set('actionPoint.history', response.detail.history);
+  }
+
   _updatePermission() {
     this.set('pageNumber', 1);
     this.set('pageSize', 10);
   }
 
   _openAddComment() {
-    this.set('openedCommentDialog', true);
-  }
-
-  checkLinks(comment) {
-    comment = this.getStringValue(comment);
-    // @ts-ignore
-    comment = window.linkifyStr(comment);
-    comment = comment.trim();
-    return comment;
-  }
-
-  saveComment() {
-    if (!this.validate()) return;
-    let endpoint = this.getEndpoint('actionPoint', this.actionPoint.id);
-    let comments = [{
-      comment: this.commentText
-    }];
-    this.set('isSaveComment', true);
-    this.sendRequest({
-      method: 'PATCH',
-      endpoint: endpoint,
-      body: {
-        comments: comments
-      }
-    })
-        .then((response: any) => {
-          this.set('actionPoint.comments', response.comments);
-          this.set('actionPoint.history', response.history);
-          this.set('openedCommentDialog', false);
-          this.set('isSaveComment', false);
-        })
-        .catch((err: any) => {
-          this.errorHandler(err, this.permissionPath);
-          this.set('isSaveComment', false);
-        });
-  }
-
-  validate() {
-    let elements = this.shadowRoot.querySelectorAll('.validate-input');
-    let valid = true;
-    for (let element of elements) {
-      if (element.required && !element.disabled && !element.validate()) {
-        let label = element.label || 'Field';
-        element.errorMessage = `${label} is required`;
-        element.invalid = true;
-        valid = false;
-      }
-    }
-
-    return valid;
+    this.commentDialog.open();
   }
 
   _filterComments(comments: string[], pageNumber: number, pageSize: number) {

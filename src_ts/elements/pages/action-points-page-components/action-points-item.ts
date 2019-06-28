@@ -7,7 +7,7 @@ import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
-import './action-points-history';
+import './open-view-history';
 import '../../common-elements/status-element';
 import ErrorHandler from '../../app-mixins/error-handler-mixin';
 import PermissionController from '../../app-mixins/permission-controller';
@@ -76,12 +76,6 @@ class ActionPointsItem extends ActionPointsItemMixin {
             <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
           </div>
         </div>
-
-        <etools-dialog size="md" no-padding opened="{{isOpenedHistory}}" dialog-title="History" cancel-btn-text="Close"
-          hide-confirm-btn>
-          <action-points-history history="[[actionPoint.history]]" permission-path="[[permissionPath]]">
-          </action-points-history>
-        </etools-dialog>
       </div>
     `;
   }
@@ -100,11 +94,15 @@ class ActionPointsItem extends ActionPointsItemMixin {
         type: Object,
         value() {
           return {};
-        }
+        },
+        observer: '_updateHistoryProp'
       },
       permissionPath: {
         type: String,
         notify: true
+      },
+      historyDialog: {
+        type: Object
       }
     };
   }
@@ -117,6 +115,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
 
   ready() {
     super.ready();
+    this._createHistoryDialog();
     this.addEventListener('action-activated', ({detail}: any) => {
       if (detail.type === 'save') {
         let request = this._update();
@@ -130,6 +129,17 @@ class ActionPointsItem extends ActionPointsItemMixin {
         }).catch((err: any) => console.log(err));
       }
     });
+  }
+
+  _createHistoryDialog() {
+    this.set('historyDialog', document.createElement('open-view-history'));
+    document.querySelector('body').appendChild(this.historyDialog);
+  }
+
+  _updateHistoryProp() {
+    if (this.historyDialog) {
+      this.historyDialog.actionPoint = this.actionPoint;
+    }
   }
 
   _changeRoutePath(path: string) {
@@ -317,7 +327,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
   }
 
   showHistory() {
-    this.set('isOpenedHistory', true);
+    this.historyDialog.open();
   }
 
   hasHistory(history: string[]) {

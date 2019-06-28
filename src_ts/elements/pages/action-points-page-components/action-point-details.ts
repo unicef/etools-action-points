@@ -1,7 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input';
-import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-checkbox/paper-checkbox';
 import '@unicef-polymer/etools-dropdown';
 import '@unicef-polymer/etools-content-panel';
@@ -10,7 +9,6 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import '@unicef-polymer/etools-loading';
 import '@unicef-polymer/etools-date-time/datepicker-lite';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
-import TextareaMaxRows from '../../app-mixins/textarea-max-rows-mixin';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
@@ -28,7 +26,6 @@ const ActionPointDetailsMixin = EtoolsMixinFactory.combineMixins([
   PermissionController,
   LocalizationMixin,
   DateMixin,
-  TextareaMaxRows,
   EtoolsAjaxRequestMixin
 ], PolymerElement);
 
@@ -226,16 +223,16 @@ class ActionPointDetails extends ActionPointDetailsMixin {
         <div class="row-h group">
           <div class="input-container input-container-l">
             <!-- Description -->
-            <paper-textarea class$="validate-input disabled-as-readonly [[_setRequired('description', permissionPath)]]"
+            <paper-input class$="validate-input disabled-as-readonly [[_setRequired('description', permissionPath)]]"
               value="{{editedItem.description}}" label="[[getLabel('description', permissionPath)]]" 
               placeholder="[[getPlaceholderText('description', permissionPath)]]"
               required$="[[_setRequired('description', permissionPath)]]" 
               disabled$="[[isReadOnly('description', permissionPath)]]"
-              readonly$="[[isReadOnly('description', permissionPath)]]" max-rows="4" 
+              readonly$="[[isReadOnly('description', permissionPath)]]" max-length="800" 
               invalid$="{{errors.description}}"
               error-message="{{errors.description}}" on-focus="_resetFieldError" 
               on-tap="_resetFieldError" no-title-attr>
-            </paper-textarea>
+            </paper-input>
           </div>
         </div>
       
@@ -295,16 +292,17 @@ class ActionPointDetails extends ActionPointDetailsMixin {
           <div class="input-container">
             <!-- Due Date -->
             <datepicker-lite id="dueDate"
-                              label="[[getLabel('due_date', permissionPath)]]"
-                              modal="[[datepickerModal]]"
-                              placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
-                              slot="prefix"
-                              selected-date-display-format="YYYY-MM-DD"
-                              clear-btn-inside-dr
-                              required="{{_setRequired('due_date', permissionPath)}}" 
-                              disabled$="[[isReadOnly('due_date', permissionPath)]]"
-                              error-message="{{errors.due_date}}"
-                              value={{editedItem.due_date}}>
+                             class="[[_setRequired('due_date', permissionPath)]]"
+                             label="[[getLabel('due_date', permissionPath)]]"
+                             modal="[[datepickerModal]]"
+                             placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
+                             slot="prefix"
+                             selected-date-display-format="YYYY-MM-DD"
+                             clear-btn-inside-dr
+                             required="[[_setRequired('due_date', permissionPath)]]" 
+                             disabled$="[[isReadOnly('due_date', permissionPath)]]"
+                             error-message="{{errors.due_date}}"
+                             value={{editedItem.due_date}}>
             </datepicker-lite>
           </div>
         </div>
@@ -379,6 +377,10 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       originalActionPoint: {
         type: Object,
         readonly: true
+      },
+      dataIsSet: {
+        type: Boolean,
+        value: false
       }
     };
   }
@@ -412,6 +414,9 @@ class ActionPointDetails extends ActionPointDetailsMixin {
         }
       }
     });
+    if (!this.dataIsSet) {
+      this.setData();
+    }
   }
 
   setData() {
@@ -425,6 +430,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     }));
 
     this._updateLocations();
+    this.set('dataIsSet', true);
   }
 
   _updateEditedItem(actionPoint: any) {

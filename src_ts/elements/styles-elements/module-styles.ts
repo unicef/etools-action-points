@@ -97,10 +97,14 @@ export const moduleStyles = html`
     }
     etools-dialog {
       --etools-dialog-primary-color: var(--module-primary);
-      --etools-dialog-scrollable: {margin-top: 0;};
-      --etools-dialog-scrollable: {padding-top: 12px; !important};
-      --etools-dialog-content: {min-height: 80px;};
-      --etools-dialog-content: {padding-bottom: 8px; !important};
+      --etools-dialog-scrollable: {
+        margin-top: 0;
+        padding-top: 12px; !important;
+      }
+      --etools-dialog-content: {
+        min-height: 80px;
+        padding-bottom: 8px !important;
+      }
       --etools-dialog-button-styles: {margin-top: 0;};
     }
     etools-dialog > etools-loading {
@@ -109,14 +113,18 @@ export const moduleStyles = html`
     etools-content-panel {
       position: relative;
       --ecp-header-title: {line-height: 48px};
-      --ecp-expand-btn: {position: absolute};
-      --ecp-expand-btn: {top: 3px};
-      --ecp-expand-btn: {left: 13px};
-      --ecp-expand-btn: {width: 45px};
-      --ecp-expand-btn: {height: 45px};
-      --ecp-header-title: {font-weight: 500};
-      --ecp-header-title: {line-height: 48px};
-      --ecp-header-title: {padding: 0 30px};
+      --ecp-expand-btn: {
+        position: absolute;
+        top: 3px;
+        left: 13px;
+        width: 45px;
+        height: 45px;
+      }
+      --ecp-header-title: {
+        font-weight: 500;
+        line-height: 48px;
+        padding: 0 30px;
+      }
       --ecp-header-btns-wrapper: {opacity: 1};
     }
     div[slot="panel-btns"] {
