@@ -13,6 +13,8 @@
   "extraDependencies": [
     "manifest.json",
     "bower_components/webcomponentsjs/*.js",
-    "bower_components/babel-polyfill/browser-polyfill.js"
+    "bower_components/babel-polyfill/browser-polyfill.js",
+    "bower_components/linkifyjs/linkify.min.js",
+    "bower_components/linkifyjs/linkify-string.min.js"
   ]
 }
