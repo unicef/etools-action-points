@@ -54,7 +54,7 @@ class ActionPointComments extends EtoolsMixinFactory.combineMixins([
 
     checkLinks(comment) {
         comment = this.getStringValue(comment);
-        comment = window.linkifyStr(comment);
+        comment = linkifyStr(comment);
         comment = comment.trim();
         return comment;
     }

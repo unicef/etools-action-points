@@ -59,27 +59,19 @@
                 document.head.appendChild(base);
             })();
         </script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type="module" defer src="/apd/bower_components/linkifyjs/linkify.js"></script>
+        <script type="module" defer src="/apd/bower_components/linkifyjs/linkify-string.js"></script>
 
         <script>
-            (function() {
-                'use strict';
-                // if (window.customElements) {
-                //     var adapter = document.createElement('script');
-                //     // adapter.async = true;
-                //     adapter.src = window.baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
-                //     document.head.appendChild(adapter);
-                // }
-
-                var linkify = document.createElement('script');
-                linkify.src = window.baseUrl + 'bower_components/linkifyjs/linkify.min.js';
-                document.head.appendChild(linkify);
-
-                'use strict';
-                var linkifyString = document.createElement('script');
-                linkifyString.src = window.baseUrl + 'bower_components/linkifyjs/linkify-string.js';
-                document.head.appendChild(linkifyString);
-            })();
+            // (function() {
+            //     'use strict';
+            //     // if (window.customElements) {
+            //     //     var adapter = document.createElement('script');
+            //     //     // adapter.async = true;
+            //     //     adapter.src = window.baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
+            //     //     document.head.appendChild(adapter);
+            //     // }
+            // })();
 
             (function() {
                 'use strict';
