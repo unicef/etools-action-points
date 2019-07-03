@@ -12,13 +12,13 @@
   "extraDependencies": [
     "manifest.json",
     "node_modules/@webcomponents/webcomponentsjs/**",
-    "node_modules/web-animations-js/*.js"
+    "node_modules/web-animations-js/*.js",
+    "node_modules/linkifyjs/*.js"
   ],
   "lint": {
     "rules": ["polymer-3"]
   },
   "builds": [
-    
     {
       "name": "es6-bundled",
       "preset": "es6-bundled",

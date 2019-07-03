@@ -4,7 +4,8 @@
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module",
-    "allowImportExportEverywhere": true
+    "allowImportExportEverywhere": true,
+    "project": "./tsconfig.json"
   },
   "env": {
     "browser": true,
