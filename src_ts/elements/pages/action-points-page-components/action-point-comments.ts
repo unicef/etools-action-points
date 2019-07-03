@@ -154,7 +154,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
   checkLinks(comment) {
     comment = this.getStringValue(comment);
     // @ts-ignore
-    comment = linkifyStr(comment);
+    comment = linkifyStr(comment); // eslint-disable-line
     comment = comment.trim();
     return comment;
   }
