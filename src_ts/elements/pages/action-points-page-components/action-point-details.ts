@@ -292,17 +292,17 @@ class ActionPointDetails extends ActionPointDetailsMixin {
           <div class="input-container">
             <!-- Due Date -->
             <datepicker-lite id="dueDate"
-                             class="[[_setRequired('due_date', permissionPath)]]"
-                             label="[[getLabel('due_date', permissionPath)]]"
-                             modal="[[datepickerModal]]"
-                             placeholder="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
+                             class$="[[_setRequired('due_date', permissionPath)]]"
+                             label$="[[getLabel('due_date', permissionPath)]]"
+                             modal$="[[datepickerModal]]"
+                             placeholder$="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
                              slot="prefix"
                              selected-date-display-format="YYYY-MM-DD"
                              clear-btn-inside-dr
-                             required="[[_setRequired('due_date', permissionPath)]]" 
+                             required$="[[_setRequired('due_date', permissionPath)]]" 
                              disabled$="[[isReadOnly('due_date', permissionPath)]]"
-                             error-message="{{errors.due_date}}"
-                             value={{editedItem.due_date}}>
+                             error-message$="{{errors.due_date}}"
+                             value="{{editedItem.due_date}}">
             </datepicker-lite>
           </div>
         </div>

@@ -182,6 +182,7 @@ class AppShell extends AppShellMixin {
   ready() {
     super.ready();
     this.addEventListener('404', () => this._pageNotFound());
+    this.addEventListener('toast', (e: CustomEvent) => this.queueToast(e));
     this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this.set('environment', this._checkEnvironment());
@@ -197,27 +198,6 @@ class AppShell extends AppShellMixin {
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: eventData
     }));
-  }
-
-  toggleDrawer() {
-    let isClosed = !this.$.drawer.opened;
-    let drawerWidth;
-
-    if (isClosed) {
-      drawerWidth = '70px';
-    } else {
-      drawerWidth = '220px';
-    }
-
-    this.$.drawer.updateStyles({
-      '--app-drawer-width': drawerWidth
-    });
-    this.$.pages.style.paddingLeft = drawerWidth;
-    this.$.header.style.paddingLeft = drawerWidth;
-
-    this.$.drawer.querySelector('app-sidebar-menu').classList.toggle('opened', isClosed);
-    this.$.drawer.toggleClass('opened', isClosed);
-    this.$.drawer.toggleAttribute('opened', isClosed);
   }
 
   _staticDataLoaded(e: CustomEvent) {
@@ -255,9 +235,6 @@ class AppShell extends AppShellMixin {
   }
 
   _pageChanged(page: string) {
-    // if (this.$[`${page}`] instanceof PolymerElement) {
-    //   return;
-    // }
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
         message: 'Loading...',
@@ -290,10 +267,9 @@ class AppShell extends AppShellMixin {
 
   _pageNotFound() {
     this.set('page', 'not-found');
-    // let message = event && event.detail && event.detail.message ?
-    //   `${event.detail.message}` :
-    //   'Oops you hit a 404!';
-    let message = 'Oops you hit a 404!'
+    let message = (<CustomEvent>event) && (<CustomEvent>event).detail && (<CustomEvent>event).detail.message ?
+      `${(<CustomEvent>event).detail.message}` :
+      'Oops you hit a 404!';
 
     this.dispatchEvent(new CustomEvent('toast', {
       detail: {

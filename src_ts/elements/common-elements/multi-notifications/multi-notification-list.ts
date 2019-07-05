@@ -15,6 +15,7 @@ class MultiNotificationList extends PolymerElement {
             left: 0;
             bottom: 0;
             z-index: 105;
+            left: var(--app-drawer-width);
         }
       </style>
 

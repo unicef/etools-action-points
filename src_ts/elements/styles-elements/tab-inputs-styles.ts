@@ -191,7 +191,8 @@ export const tabInputsStyles = html`
     etools-dropdown.required:not([disabled]),
     paper-dropdown-menu.required:not([disabled]),
     paper-textarea.required:not([disabled]),
-    paper-input.required:not([disabled]) {
+    paper-input.required:not([disabled]),
+    datepicker-lite.required:not([disabled]) {
       --paper-input-container-label: {
         background: url('${baseUrl}images/required.svg') no-repeat 98% 14%/7px;
         width: auto !important;

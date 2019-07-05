@@ -240,8 +240,8 @@ class ActionPointsList extends ActionPointsListMixin {
               </div>
               <div class="col-data flex-1 truncate">
                 <div class="tooltip-container">
-                  [[getStringValue(entry.status, statuses, 'display_name')]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.status, statuses, 'display_name')]]
+                  [[getStringValue(entry.status)]]
+                  <paper-tooltip offset="0">[[getStringValue(entry.status)]]
                   </paper-tooltip>
                 </div>
               </div>
@@ -303,7 +303,8 @@ class ActionPointsList extends ActionPointsListMixin {
   static get properties() {
     return {
       actionPoints: {
-        type: Array
+        type: Array,
+        notify: true
       },
       labels: {
         type: Object,
@@ -312,6 +313,10 @@ class ActionPointsList extends ActionPointsListMixin {
       createLink: {
         type: String,
         value: '/new'
+      },
+      statuses: {
+        type: Array,
+        notify: true
       },
       filters: {
         type: Array,
@@ -526,10 +531,10 @@ class ActionPointsList extends ActionPointsListMixin {
     }
     this.updateQueries(this.queryParams, null, true);
     let x = Object.keys(queryParams).map((param) => {
-      return !oldQueryParams.hasOwnProperty(param) && queryParams[param].length === 0;
+      return !oldQueryParams.hasOwnProperty(param) && queryParams[param] && queryParams[param].length === 0;
     });
     let y = Object.keys(oldQueryParams).map((param) => {
-      return !queryParams.hasOwnProperty(param) && oldQueryParams[param].length === 0;
+      return !queryParams.hasOwnProperty(param) && oldQueryParams[param] && oldQueryParams[param].length === 0;
     });
     let hasNewEmptyFilter = oldQueryParams && x.some((value: any) => value);
     let hasOldEmptyFilter = oldQueryParams && y.some((value: any) => value);

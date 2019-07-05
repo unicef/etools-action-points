@@ -77,9 +77,9 @@ class OpenAddComments extends OpenAddCommentsMixin {
     })
         .then((response: any) => {
           this.dispatchEvent(new CustomEvent('new-comment-added', {
-            detail: response,
             bubbles: true,
-            composed: true
+            composed: true,
+            detail: response
           }));
           dialog.opened = false;
           this.set('isSaveComment', false);

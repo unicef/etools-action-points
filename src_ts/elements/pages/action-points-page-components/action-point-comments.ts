@@ -122,7 +122,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('new-comment-added', (e: CustomEvent) => this._newCommentAdded(e));
+    document.addEventListener('new-comment-added', (e: CustomEvent) => this._newCommentAdded(e));
   }
 
   ready() {
