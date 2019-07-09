@@ -13,7 +13,7 @@ const path = require('path');
 
 function buildElements(done) {
     // let testSources = [];
-    gulp.src(['./src/elements/**/*.html'])
+    gulp.src(['./src/elements/**/*.js'])
         // .pipe(gulpIf(
         //     function(file) {
         //         return ~file.basename.indexOf('.spec.html');
@@ -30,7 +30,7 @@ function buildElements(done) {
         // ))
         // combine html/js/scss
         .pipe(builder(
-            [{path: `${process.cwd()}/bower_components/`, new_base: `${process.cwd()}/src/bower_components/`}]
+            [{path: `${process.cwd()}/node_modules/`, new_base: `${process.cwd()}/src/node_modules/`}]
         ))
         // compile html/js/scss
         .pipe(gulpIf(

@@ -4,36 +4,30 @@ jobs:
     working_directory: ~/code
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
-      - image: circleci/node:8-stretch-browsers
+      - image: node:11.9.0
     steps:
       - checkout
-      - run:
-          name: Install firefox
-          command: |
-            #sudo apt-get remove firefox-mozilla-build &&
-            sudo sh -c "echo 'deb http://ftp.hr.debian.org/debian sid main' >> /etc/apt/sources.list" &&
-            sudo apt-get update &&
-            sudo apt-get remove binutils
-            sudo apt-get install -t sid firefox &&
-            firefox --version
+      # - run:
+      #     name: Install firefox
+      #     command: |
+      #       #sudo apt-get remove firefox-mozilla-build &&
+      #       sudo sh -c "echo 'deb http://ftp.hr.debian.org/debian sid main' >> /etc/apt/sources.list" &&
+      #       sudo apt-get update &&
+      #       sudo apt-get remove binutils
+      #       sudo apt-get install -t sid firefox &&
+      #       firefox --version
       - restore_cache:
-          key: cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install node modules
-          command: npm install
+          command: rm -rf node_modules/etools-* & npm install
       - save_cache:
-          key: cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - restore_cache:
-          key: cache-{{ checksum "bower.json" }}
       - run:
-          name: Install bower components
-          command: ./node_modules/.bin/bower install --allow-root --config.interactive=false
-      - save_cache:
-          key: cache-{{ checksum "bower.json" }}
-          paths:
-            - bower_components
+          name: Polymer3 Build
+          command: npm run build
       - run:
           name: Run Tests
           command: ./node_modules/.bin/gulp test --pc
@@ -41,7 +35,7 @@ jobs:
   build_and_deploy:
     working_directory: ~/code
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: node:11.9.0
     steps:
       - checkout
       - setup_remote_docker:
@@ -52,8 +46,8 @@ jobs:
           command: |
             REVNO=${CIRCLE_SHA1}
             BUILDDATE=$(date -u +%F_%T)
-            sed -i "0,/revNo/s//$REVNO/" bower.json
-            sed -i "0,/bDate/s//$BUILDDATE/" bower.json
+            sed -i "0,/revNo/s//$REVNO/" package.json
+            sed -i "0,/bDate/s//$BUILDDATE/" package.json
       - run:
           name: Building the image
           command: |

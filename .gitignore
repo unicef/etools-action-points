@@ -1,12 +1,10 @@
 node_modules/
 bower_components/
 build/
-src/bower_components/
-dist/
 .tmp
 .idea
 *.sublime-project
 *.sublime-workspace
-
+src/**/*.js
 
 /package-lock.json

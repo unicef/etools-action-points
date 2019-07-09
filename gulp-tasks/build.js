@@ -7,9 +7,11 @@ const polymerBuild = require('polymer-build');
 // Here we add tools that will be used to process our source files.
 // const imagemin = require('gulp-imagemin');
 const babel = require('gulp-babel');
-const uglify = require('gulp-uglify');
+const externalHelpers = require('@babel/plugin-external-helpers');
+const uglify = require('gulp-uglify-es').default;
 const cssSlam = require('css-slam').gulp;
 const htmlMinifier = require('gulp-html-minifier');
+require('babel-preset-env');
 
 const polymerJson = require(global.config.polymerJsonPath);
 const polymerProject = new polymerBuild.PolymerProject(polymerJson);
@@ -34,7 +36,7 @@ function build() {
                 presets: [['env', {
                     modules: false
                 }]],
-                plugins: ['external-helpers']
+                plugins: [externalHelpers]
             })))
             .pipe(gulpif(/\.js$/, uglify()))
             .pipe(gulpif(/\.css$/, cssSlam()))
@@ -51,7 +53,7 @@ function build() {
                 presets: [['env', {
                     modules: false
                 }]],
-                plugins: ['external-helpers']
+                plugins: [externalHelpers]
             })))
             .pipe(gulpif(/^((?!custom-elements-es5-adapter|webcomponents-loader).)*\.js$/, uglify()))
             .pipe(gulpif(/\.css$/, cssSlam()))
