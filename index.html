@@ -1,99 +1,127 @@
+<!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <head>
+    <meta charset="utf-8">
+    <title>UNICEF eTools - Action Points Dashboard</title>
+    <meta name="generator" content="PWA Starter Kit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="eTools Action Points Dashboard">
 
-        <title>eTools</title>
-        <meta name="description" content="Action Points Dashboard">
+      <!-- The `<base>` tag below is present to support two advanced deployment options:
+      1) Differential serving. 2) Serving from a non-root path. -->
 
-        <link rel="icon" href="images/favicon.ico">
+      <!-- Instead of manually editing the `<base>` tag yourself, you should generally either:
+      a) Add a `basePath` property to the build configuration in your `polymer.json`.
+      b) Use the `--base-path` command-line option for `polymer build`. -->
+    <base href="/">
 
-        <!-- See https://goo.gl/OOhYW5 -->
-        <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="apd/images/favicon.ico">
 
-        <!-- See https://goo.gl/qRE0vM -->
-        <meta name="theme-color" content="#2E3AA1">
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="apd/manifest.json">
 
-        <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="application-name" content="eTools - Action Points Dashboard">
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#3f51b5">
 
-        <!-- Add to homescreen for Safari on iOS -->
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="eTools - Auditor Portal">
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="My App">
 
-        <!-- Homescreen icons -->
-        <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="My App">
 
-        <!-- Tile icon for Windows 8 (144x144 + tile color) -->
-        <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
-        <meta name="msapplication-TileColor" content="#3f51b5">
-        <meta name="msapplication-tap-highlight" content="no">
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="apd/images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="apd/images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="apd/images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="apd/images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="apd/images/manifest/icon-192x192.png">
 
-        <style>
-            body {
-                overflow: auto !important;
-                overflow-x: hidden !important;
-                margin: 0;
-                font-family: 'Roboto', 'Noto', sans-serif;
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 1.5;
-                min-height: 100vh;
-                background-color: #FAFAFA;
-                color: rgba(0, 0, 0, 0.87);
-            }
-        </style>
-        <script>
-            (function() {
-                'use strict';
-                window.baseUrl = window.location.port !== '8080' ? '/apd/' : '/';
-                var base = document.createElement('base');
-                base.href = window.baseUrl;
-                document.head.appendChild(base);
-            })();
-        </script>
-        <script type="module" defer src="/apd/bower_components/linkifyjs/linkify.js"></script>
-        <script type="module" defer src="/apd/bower_components/linkifyjs/linkify-string.js"></script>
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="apd/images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+    <meta name="msapplication-tap-highlight" content="no">
 
-        <script>
-            // (function() {
-            //     'use strict';
-            //     // if (window.customElements) {
-            //     //     var adapter = document.createElement('script');
-            //     //     // adapter.async = true;
-            //     //     adapter.src = window.baseUrl + 'bower_components/webcomponentsjs/custom-elements-es5-adapter.js';
-            //     //     document.head.appendChild(adapter);
-            //     // }
-            // })();
+    <!-- Default twitter cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@username">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="my-app">
+    <meta property="og:image" content="apd/images/manifest/icon-144x144.png" />
 
-            (function() {
-                'use strict';
-                var scripts = [
-                    'bower_components/babel-polyfill/browser-polyfill.js',
-                    'bower_components/webcomponentsjs/webcomponents-loader.js'
-                ];
-                for (var i = 0; i < scripts.length; i++) {
-                    var script = document.createElement('script');
-                    script.src = window.baseUrl + scripts[i];
-                    document.head.appendChild(script);
-                }
-                var appShellImport = document.createElement('link');
-                appShellImport.rel = 'import';
-                appShellImport.href = window.baseUrl + 'elements/core-elements/app-shell-element/app-shell.html';
-                document.head.appendChild(appShellImport);
-            })();
-        </script>
+    <!-- Performance tip: hint to the browser to start the handshake for the fonts site -->
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <script>
+      (function() {
+            'use strict';
+            window.baseUrl = window.location.port !== '8080' ? '/apd/' : '/';
+            var base = document.createElement('base');
+            base.href = window.baseUrl;
+            document.head.appendChild(base);
+        })();
+    </script>
+    <script>
+      // Load and register pre-caching Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('apd/service-worker.js', {
+            scope: '/apd/',
+          });
+        });
+      }
 
-        
-    </head>
-    <body unresolved>
-        <app-shell></app-shell>
-    </body>
+      // Redux assumes `process.env.NODE_ENV` exists in the ES module build.
+      // https://github.com/reactjs/redux/issues/2907
+      window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+
+    <!-- Add any global styles for body, document, etc. -->
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #eeeeee;
+        color: rgba(0, 0, 0, 0.87);
+        -webkit-font-smoothing: antialiased;
+      }
+      * {
+        outline: none;
+      }
+    </style>
+    <script type="module" src="apd/node_modules/linkifyjs/dist/linkify.js"></script>
+    <script type="module" src="apd/node_modules/linkifyjs/dist/linkify-string.js"></script>
+  </head>
+  <body>
+    <noscript>
+      Please enable JavaScript to view this website.
+    </noscript>
+    
+    <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
+    <script src="apd/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="apd/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
+    <script src="apd/node_modules/moment/min/moment.min.js"></script>
+    <!-- Built with love using PWA Starter Kit -->
+    <script type="module">
+      WebComponents.waitFor(() => {
+        return import('./apd/src/app-shell.js');
+      });
+    </script>
+    <app-shell appTitle="APD"></app-shell>
+  </body>
 </html>
