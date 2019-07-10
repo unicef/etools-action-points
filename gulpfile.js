@@ -13,11 +13,6 @@ const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const del = require('del');
 const spawn = require('child_process').spawn;
-const runTests = require('./gulp-tasks/test');
-const {watch} = require('gulp');
-const ts = require('gulp-typescript');
-const lint = require('./gulp-tasks/js-linter.js');
-const tsProject = ts.createProject('tsconfig.json');
 
 /**
  * Cleans the prpl-server build in the server directory.
@@ -43,23 +38,11 @@ gulp.task('prpl-server:build', () => {
       .pipe(gulp.dest('server/build'));
 });
 
-gulp.task('build', () => {
-  return gulp.src('src_ts/**')
-      .pipe(tsProject())
-      .pipe(gulp.dest('src'));
-});
-
-gulp.task('test', gulp.series('prpl-server:clean', 'prpl-server:build', runTests));
-
-gulp.task('watch', function() {
-  watch(['./src_ts/**/*', './node_modules/**', './index.html'], gulp.series('build', lint));
-});
+gulp.task('test', gulp.series('prpl-server:clean', 'prpl-server:build'));
 
 gulp.task('prpl-server', gulp.series(
     'prpl-server:clean',
-    'prpl-server:build',
-    lint,
-    'watch'
+    'prpl-server:build'
 ));
 
 /**
@@ -72,5 +55,6 @@ gulp.task('serve', () => {
     shell: true,
     stdio: 'inherit'
   };
+  spawn('tsc', ['--watch'], spawnOptions);
   spawn('polymer', ['serve -H 0.0.0.0 -p 8080'], spawnOptions);
 });
