@@ -7,15 +7,6 @@ jobs:
       - image: node:11.9.0
     steps:
       - checkout
-      # - run:
-      #     name: Install firefox
-      #     command: |
-      #       #sudo apt-get remove firefox-mozilla-build &&
-      #       sudo sh -c "echo 'deb http://ftp.hr.debian.org/debian sid main' >> /etc/apt/sources.list" &&
-      #       sudo apt-get update &&
-      #       sudo apt-get remove binutils
-      #       sudo apt-get install -t sid firefox &&
-      #       firefox --version
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -48,6 +39,15 @@ jobs:
             BUILDDATE=$(date -u +%F_%T)
             sed -i "0,/revNo/s//$REVNO/" package.json
             sed -i "0,/bDate/s//$BUILDDATE/" package.json
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+           # build and push Docker image
       - run:
           name: Building the image
           command: |
