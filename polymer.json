@@ -2,7 +2,16 @@
   "entrypoint": "index.html",
   "shell": "src/app-shell.js",
   "fragments": [
-    "src/elements/pages/not-found-page-view.js"
+    "src/elements/pages/not-found-page-view.js",
+    "src/elements/pages/action-points-page-components/action-point-comments.js",
+    "src/elements/pages/action-points-page-components/action-point-details.js",
+    "src/elements/pages/action-points-page-components/action-points-history.js",
+    "src/elements/pages/action-points-page-components/action-points-item.js",
+    "src/elements/pages/action-points-page-components/action-points-list.js",
+    "src/elements/pages/action-points-page-components/action-points-new.js",
+    "src/elements/pages/action-points-page-components/action-points-new.js",
+    "src/elements/pages/action-points-page-components/open-add-comments.js",
+    "src/elements/pages/action-points-page-components/open-view-history.js"
   ],
   "sources": [
     "src/**/*",
