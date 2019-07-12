@@ -20,8 +20,7 @@ window.EtoolsApdApp.etoolsCustomDexieDb.version(1).stores({
 window.EtoolsRequestCacheDb = window.EtoolsRequestCacheDb || window.EtoolsApdApp.etoolsCustomDexieDb;
 
 export const baseSite = window.location.origin;
-export const serverBackend = (window.location.port !== '8080');
-export const basePath = serverBackend ? '/apd/' : '/';
+export const basePath = '/apd/';
 // this.epsData = this.serverBackend ? endpoints : localEndpoints;
 export const epsData: any = endpoints;
 // dexie js

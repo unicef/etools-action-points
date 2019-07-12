@@ -20,7 +20,7 @@ import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-import moment from 'moment';
+declare const moment: any;
 
 const SearchAndFilterMixin = EtoolsMixinFactory.combineMixins([
   DateMixin,

@@ -1,4 +1,4 @@
-import moment from 'moment';
+declare const moment: any;
 
 /**
  * Mixin for parsing and format date by pattern

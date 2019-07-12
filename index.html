@@ -23,12 +23,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Instead of manually editing the `<base>` tag yourself, you should generally either:
       a) Add a `basePath` property to the build configuration in your `polymer.json`.
       b) Use the `--base-path` command-line option for `polymer build`. -->
-    <base href="/">
+    <base href="/apd/">
 
-    <link rel="icon" href="apd/images/favicon.ico">
+    <link rel="icon" href="images/favicon.ico">
 
     <!-- See https://goo.gl/OOhYW5 -->
-    <link rel="manifest" href="apd/manifest.json">
+    <link rel="manifest" href="manifest.json">
 
     <!-- See https://goo.gl/qRE0vM -->
     <meta name="theme-color" content="#3f51b5">
@@ -43,14 +43,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="apple-mobile-web-app-title" content="My App">
 
     <!-- Homescreen icons -->
-    <link rel="apple-touch-icon" href="apd/images/manifest/icon-48x48.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="apd/images/manifest/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="apd/images/manifest/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="apd/images/manifest/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="apd/images/manifest/icon-192x192.png">
+    <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
 
     <!-- Tile icon for Windows 8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="apd/images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
 
@@ -59,24 +59,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="twitter:site" content="@username">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="my-app">
-    <meta property="og:image" content="apd/images/manifest/icon-144x144.png" />
+    <meta property="og:image" content="images/manifest/icon-144x144.png" />
 
     <!-- Performance tip: hint to the browser to start the handshake for the fonts site -->
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <script>
-      (function() {
-            'use strict';
-            window.baseUrl = window.location.port !== '8080' ? '/apd/' : '/';
-            var base = document.createElement('base');
-            base.href = window.baseUrl;
-            document.head.appendChild(base);
-        })();
-    </script>
+
     <script>
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('apd/service-worker.js', {
+          navigator.serviceWorker.register('service-worker.js', {
             scope: '/apd/',
           });
         });
@@ -104,24 +96,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         outline: none;
       }
     </style>
-    <script type="module" src="apd/node_modules/linkifyjs/dist/linkify.js"></script>
-    <script type="module" src="apd/node_modules/linkifyjs/dist/linkify-string.js"></script>
   </head>
   <body>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
+
+    <app-shell appTitle="APD"></app-shell>
     
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
-    <script src="apd/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="apd/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
-    <script src="apd/node_modules/moment/min/moment.min.js"></script>
-    <!-- Built with love using PWA Starter Kit -->
-    <script type="module">
-      WebComponents.waitFor(() => {
-        return import('./apd/src/app-shell.js');
-      });
-    </script>
-    <app-shell appTitle="APD"></app-shell>
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
+    <script src="node_modules/moment/min/moment.min.js"></script>
+
+    <script type="module" src="src/app-shell.js"></script>
+    
+    <script src="node_modules/linkifyjs/dist/linkify.js"></script>
+    <script src="node_modules/linkifyjs/dist/linkify-string.js"></script>
   </body>
 </html>
