@@ -18,7 +18,7 @@ function getSourcesPath(request) {
   }
 }
 
-app.use('/', (req, res, next) => {
+app.use('/apd/', (req, res, next) => {
   const sourceFolder = getSourcesPath(req);
   express.static(sourceFolder)(req, res, next);
 });
