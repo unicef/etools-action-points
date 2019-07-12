@@ -9,7 +9,6 @@
     "type": "git",
     "url": "git@github.com:unicef/etools-action-points"
   },
-  "main": "app-shell.js",
   "bugs": {
     "url": "https://github.com/unicef/etools-action-points/issues"
   },
