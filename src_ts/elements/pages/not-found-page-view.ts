@@ -1,7 +1,8 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@polymer/paper-material/paper-material';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
-import {sharedStyles} from '../styles-elements/shared-styles.js';
-import {pageLayoutStyles} from '../styles-elements/page-layout-styles.js';
+import {sharedStyles} from '../styles-elements/shared-styles';
+import {pageLayoutStyles} from '../styles-elements/page-layout-styles';
 
 class NotFoundPageView extends EndpointMixin(PolymerElement) {
   static get template() {

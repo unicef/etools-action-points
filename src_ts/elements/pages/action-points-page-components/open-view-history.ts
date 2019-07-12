@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@unicef-polymer/etools-dialog/etools-dialog';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog'; // eslint-disable-line
 import './action-points-history';

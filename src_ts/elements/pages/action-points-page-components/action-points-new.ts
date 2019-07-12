@@ -1,11 +1,11 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
-import '../../common-elements/pages-header-element';
-import '../../common-elements/status-element';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
-import './action-point-details';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import '../../common-elements/pages-header-element';
+import '../../common-elements/status-element';
+import './action-point-details';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';

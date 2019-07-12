@@ -5,6 +5,7 @@ import '@polymer/app-route/app-route';
 import '@polymer/app-layout/app-drawer/app-drawer';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout';
 import '@polymer/app-layout/app-header-layout/app-header-layout';
+import '@polymer/app-layout/app-header/app-header';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-material/paper-material';
 import '@polymer/iron-selector/iron-selector';
@@ -13,24 +14,23 @@ import '@polymer/iron-collapse/iron-collapse';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/social-icons';
 import '@polymer/iron-icons/av-icons';
-import 'etools-piwik-analytics/etools-piwik-analytics.js';
+import 'etools-piwik-analytics/etools-piwik-analytics';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin';
-import './elements/pages/action-points-page-components/action-points-page-main'
-import './elements/core-elements/app-main-header/app-main-header.js';
-import './elements/core-elements/app-sidebar-menu.js';
-import './elements/common-elements/multi-notifications/multi-notification-list.js';
 import EndpointMixin from './elements/app-mixins/endpoint-mixin';
-import UserController from './elements/app-mixins/user-controller.js';
-import PermissionController from './elements/app-mixins/permission-controller.js';
+import UserController from './elements/app-mixins/user-controller';
+import PermissionController from './elements/app-mixins/permission-controller';
 import AppMenu from './elements/app-mixins/app-menu-mixin'
+import './elements/core-elements/app-main-header/app-main-header';
+import './elements/core-elements/app-sidebar-menu';
+import './elements/common-elements/multi-notifications/multi-notification-list';
 import './elements/core-elements/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/core-elements/page-footer';
-import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles.js';
-import {sharedStyles} from './elements/styles-elements/shared-styles.js';
+import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles';
+import {sharedStyles} from './elements/styles-elements/shared-styles';
 import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
 import {basePath} from './elements/core-elements/etools-app-config'
-import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
+import {setRootPath} from '@polymer/polymer/lib/utils/settings';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import './elements/styles-elements/app-theme';
 setRootPath(basePath);
@@ -248,7 +248,7 @@ class AppShell extends AppShellMixin {
       resolvedPageUrl = 'elements/pages/not-found-page-view.js';
     } else {
       resolvedPageUrl =
-        `./elements/pages/${page}-page-components/${page}-page-main.js`;
+        `./elements/pages/action-points-page-components/action-points-page-main.js`;
     }
     import(resolvedPageUrl).then(() => this._loadPage(), () => this._pageNotFound());
   }

@@ -1,5 +1,5 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-checkbox/paper-checkbox';
 import '@unicef-polymer/etools-dropdown';

@@ -1,9 +1,9 @@
 // This file will be dedicated to theming variables used throughout the app
 
 import '@polymer/polymer/polymer-element';
-import '@polymer/paper-styles/typography.js';
+import '@polymer/paper-styles/typography';
 import '@polymer/paper-styles/color.js';
-import '@polymer/polymer/lib/elements/custom-style.js';
+import '@polymer/polymer/lib/elements/custom-style';
 
 const documentContainer = document.createElement('template');
 documentContainer.innerHTML = `

@@ -18,12 +18,17 @@ function getSourcesPath(request) {
   }
 }
 
-app.use('/apd/', (req, res, next) => {
-  express.static(getSourcesPath(req))(req, res, next);
+app.use('/', (req, res, next) => {
+  const sourceFolder = getSourcesPath(req);
+  express.static(sourceFolder)(req, res, next);
 });
 
 app.get(/.*service-worker\.js/, function(req, res) {
   res.sendFile(getSourcesPath(req) + 'service-worker.js');
+});
+
+app.get(/.*manifest\.json/, function(req, res) {
+  res.sendFile(getSourcesPath(req) + 'manifest.json');
 });
 
 app.use((req, res) => {

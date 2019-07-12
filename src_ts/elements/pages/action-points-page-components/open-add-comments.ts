@@ -1,7 +1,8 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@unicef-polymer/etools-dialog/etools-dialog';
+import '@unicef-polymer/etools-loading';
 import '@polymer/paper-input/paper-input';
-import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog'; // eslint-disable-line
+import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';

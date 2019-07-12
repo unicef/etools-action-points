@@ -1,10 +1,10 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import {moduleStyles} from '../../styles-elements/module-styles';
 import '@unicef-polymer/etools-data-table';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import {moduleStyles} from '../../styles-elements/module-styles';
 
 const ActionPointsHistoryMixin = EtoolsMixinFactory.combineMixins([
   InputAttrs,

@@ -1,9 +1,9 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-input/paper-textarea';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import '@unicef-polymer/etools-content-panel';
 import '@unicef-polymer/etools-data-table';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import LocalizationMixin from '../../app-mixins/localization-mixin';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
