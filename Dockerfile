@@ -11,7 +11,6 @@ WORKDIR /code
 RUN npm i
 RUN npm run build
 
-
 FROM node:11.9.0-alpine
 RUN apk update
 RUN apk add --update bash
