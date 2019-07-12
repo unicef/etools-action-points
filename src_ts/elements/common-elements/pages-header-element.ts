@@ -5,6 +5,7 @@ import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
+import '@polymer/iron-icon/iron-icon';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';

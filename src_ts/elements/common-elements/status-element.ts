@@ -1,16 +1,16 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icons/av-icons';
-import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button';
 import '@unicef-polymer/etools-content-panel';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import StaticData from '../app-mixins/static-data-mixin';
 import PermissionController from '../app-mixins/permission-controller';
 import './action-buttons';
 import {moduleStyles} from '../styles-elements/module-styles';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 
 const StatusElementMixin = EtoolsMixinFactory.combineMixins([
   PermissionController,

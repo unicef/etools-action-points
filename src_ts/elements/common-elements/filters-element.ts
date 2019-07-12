@@ -1,5 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@polymer/paper-card/paper-card';
+
 /**
 * @polymer
 * @extends HTMLElement

@@ -1,5 +1,6 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-pages/iron-pages';
+import '@polymer/app-route/app-route';
 
 class ActionPointsPageMain extends PolymerElement {
   static get template() {

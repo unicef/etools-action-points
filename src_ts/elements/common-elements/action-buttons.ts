@@ -1,7 +1,8 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-icon-button/paper-icon-button';
+import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/iron-icon/iron-icon';
 import {moduleStyles} from '../styles-elements/module-styles';
 

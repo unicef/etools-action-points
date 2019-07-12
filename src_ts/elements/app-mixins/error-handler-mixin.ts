@@ -14,17 +14,6 @@ const ErrorHandlerMixin = (superClass: any) => class extends PermissionControlle
     if (typeof errorData != 'object') {
       return errorData;
     }
-
-    // if (typeof errorData === 'array') {
-    //   return typeof errorData[0] === 'object' && !!errorData[0] ?
-    //     errorData.map(object => this.refactorErrorObject(object)) : errorData[0];
-    // } else {
-    //   _.forOwn(errorData, (value, key) => {
-    //     errorData[key] = this.refactorErrorObject(value);
-    //   });
-    //   return errorData;
-    // }
-
   }
 
   protected _checkInvalid(value: any) {
