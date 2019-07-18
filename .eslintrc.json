@@ -1,7 +1,11 @@
 {
   "extends": ["eslint:recommended", "google"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2017
+    "ecmaVersion": 8,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "project": "./tsconfig.json"
   },
   "env": {
     "browser": true,
@@ -13,9 +17,11 @@
   "rules": {
     "padded-blocks": "off",
     "brace-style": "off",
-    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools..|^APDMixins.." }],
-    "no-var": "off",
-    "no-debugger": "off",
+    "new-cap": ["off"],
+    "no-var": "warn",
+    "no-tabs": "warn",
+    "prefer-const": "off",
+    "no-debugger": "warn",
     "no-console": 0,
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
@@ -37,7 +43,7 @@
     "EtoolsMixins": true,
     "APDMixins": true,
     "_": true,
-    "queryString":true,
+    "queryString": true,
     "ShadyCSS": true,
     "Set": true
   }
