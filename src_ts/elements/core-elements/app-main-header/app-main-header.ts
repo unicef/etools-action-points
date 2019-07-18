@@ -75,7 +75,7 @@ class AppMainHeader extends AppMainHeaderMixin {
 
       <app-toolbar sticky class="content-align">
         <div class="titlebar content-align">
-          <etools-app-selector></etools-app-selector>
+          <etools-app-selector user="[[user]]"></etools-app-selector>
 
           <img src$="[[rootPath]]../../../../../../apd/images/etools-logo-color-white.svg">
           <template is="dom-if" if="[[environment]]">
