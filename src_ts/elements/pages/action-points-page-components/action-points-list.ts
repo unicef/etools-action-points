@@ -1,17 +1,18 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/paper-card/paper-card';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import '@polymer/iron-location/iron-location';
-import '@polymer/iron-location/iron-query-params';
-import '@polymer/paper-tooltip/paper-tooltip';
-import '@polymer/paper-toggle-button/paper-toggle-button';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/paper-card/paper-card.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@polymer/iron-location/iron-location.js';
+import '@polymer/iron-location/iron-query-params.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '@unicef-polymer/etools-data-table/etools-data-table.js';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';
-import '@unicef-polymer/etools-data-table';
 import '../../data-elements/action-points-data';
 import StaticData from '../../app-mixins/static-data-mixin';
 import Localization from '../../app-mixins/localization-mixin';
@@ -22,7 +23,6 @@ import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 
 const ActionPointsListMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin,

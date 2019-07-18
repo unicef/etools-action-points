@@ -1,11 +1,11 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@unicef-polymer/etools-dialog/etools-dialog';
-import '@unicef-polymer/etools-loading';
-import '@polymer/paper-input/paper-input';
-import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@unicef-polymer/etools-dialog/etools-dialog.js';
+import '@unicef-polymer/etools-loading/etools-loading.js';
+import '@polymer/paper-input/paper-input.js';
+import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
 import PermissionController from '../../app-mixins/permission-controller';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';

@@ -1,11 +1,11 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/iron-icon/iron-icon';
-import '@polymer/iron-icons/iron-icons';
-import '@polymer/iron-selector/iron-selector';
-import '@polymer/iron-icons/maps-icons';
-import '@polymer/app-layout/app-layout';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-selector/iron-selector.js';
+import '@polymer/iron-icons/maps-icons.js';
+import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {moduleStyles} from '../styles-elements/module-styles';

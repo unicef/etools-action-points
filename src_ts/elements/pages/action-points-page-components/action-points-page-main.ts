@@ -1,6 +1,6 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/iron-pages/iron-pages';
-import '@polymer/app-route/app-route';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/app-route/app-route.js';
 
 class ActionPointsPageMain extends PolymerElement {
   static get template() {
@@ -47,13 +47,13 @@ class ActionPointsPageMain extends PolymerElement {
   _pageChanged(page: string) {
     switch (page) {
       case 'new':
-        import('./action-points-new');
+        import('./action-points-new.js');
         break;
       case 'detail':
-        import('./action-points-item');
+        import('./action-points-item.js');
         break;
       default:
-        import('./action-points-list');
+        import('./action-points-list.js');
         break;
     }
   }

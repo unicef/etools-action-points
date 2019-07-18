@@ -1,13 +1,13 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/app-layout/app-toolbar/app-toolbar';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@unicef-polymer/etools-app-selector';
-import '@unicef-polymer/etools-profile-dropdown';
-import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
+import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
+import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../../styles-elements/shared-styles';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import './countries-dropdown';
 import '../../common-elements/support-btn';
 

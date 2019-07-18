@@ -1,5 +1,5 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import {flush} from '@polymer/polymer/lib/utils/flush';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {flush} from '@polymer/polymer/lib/utils/flush.js';
 import './multi-notification-item';
 /**
 * @polymer

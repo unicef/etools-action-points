@@ -1,8 +1,8 @@
 // This file will be dedicated to page layout and related layout elements
 
-import {html} from '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
+import {html} from '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 
 export const pageLayoutStyles = html`
   <style include="iron-flex">
