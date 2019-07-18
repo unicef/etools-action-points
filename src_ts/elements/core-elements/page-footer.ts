@@ -1,6 +1,6 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 
 /**
 * @polymer

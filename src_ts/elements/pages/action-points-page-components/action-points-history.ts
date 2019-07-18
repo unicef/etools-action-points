@@ -1,7 +1,7 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import '@unicef-polymer/etools-data-table';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@unicef-polymer/etools-data-table/etools-data-table.js';
+import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
 import DateMixin from '../../app-mixins/date-mixin';
 import {moduleStyles} from '../../styles-elements/module-styles';

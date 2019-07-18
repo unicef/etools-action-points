@@ -1,5 +1,5 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/paper-material/paper-material';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-material/paper-material.js';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {pageLayoutStyles} from '../styles-elements/page-layout-styles';

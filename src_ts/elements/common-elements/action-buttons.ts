@@ -1,9 +1,9 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/paper-button/paper-button';
-import '@polymer/paper-menu-button/paper-menu-button';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/paper-listbox/paper-listbox';
-import '@polymer/iron-icon/iron-icon';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-menu-button/paper-menu-button.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/iron-icon/iron-icon.js';
 import {moduleStyles} from '../styles-elements/module-styles';
 
 /**
