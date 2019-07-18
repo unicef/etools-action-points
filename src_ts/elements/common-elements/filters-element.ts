@@ -1,6 +1,6 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@polymer/paper-card/paper-card';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/paper-card/paper-card.js';
 
 /**
 * @polymer

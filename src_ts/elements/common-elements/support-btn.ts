@@ -1,6 +1,6 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import '@polymer/iron-icon/iron-icon';
-import '@polymer/iron-icons/communication-icons';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/communication-icons.js';
 
 /**
  * @polymer

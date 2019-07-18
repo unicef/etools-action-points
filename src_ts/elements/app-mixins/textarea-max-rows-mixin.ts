@@ -1,5 +1,5 @@
-import {flush} from '@polymer/polymer/lib/utils/flush';
-import {microTask} from '@polymer/polymer/lib/utils/async';
+import {flush} from '@polymer/polymer/lib/utils/flush.js';
+import {microTask} from '@polymer/polymer/lib/utils/async.js';
 
 /*
  * Mixin for fix max-rows in paper-textarea.

@@ -1,4 +1,4 @@
-import {html, htmlLiteral} from '@polymer/polymer/lib/utils/html-tag';
+import {html, htmlLiteral} from '@polymer/polymer/lib/utils/html-tag.js';
 import {basePath} from '../core-elements/etools-app-config';
 
 const basePathData: ReadonlyArray<string> = [basePath];
