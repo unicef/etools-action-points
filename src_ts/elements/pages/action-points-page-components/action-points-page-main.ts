@@ -12,7 +12,7 @@ class ActionPointsPageMain extends PolymerElement {
       <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
         <action-points-new name="new" route="{{route}}"></action-points-new>
         <action-points-item name="detail" route="{{detailRoute}}"></action-points-item>
-        <action-points-list name="list" route="{{listRoute}}"></action-points-list>
+        <action-points-list name="list" route="{{listRoute}}" static-data-loaded="[[staticDataLoaded]]"></action-points-list>
       </iron-pages>
     `;
   }

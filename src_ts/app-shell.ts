@@ -115,7 +115,7 @@ class AppShell extends AppShellMixin {
           
           <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
                       fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
-            <action-points-page-main name="action-points" id="action-points" route="{{actionPointsRoute}}">
+            <action-points-page-main name="action-points" id="action-points" static-data-loaded="[[staticDataLoaded]]" route="{{actionPointsRoute}}">
             </action-points-page-main>
             <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
           </iron-pages>
