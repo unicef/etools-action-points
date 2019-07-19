@@ -470,6 +470,10 @@ class ActionPointsList extends ActionPointsListMixin {
       exportLinks: {
         type: Array,
         notify: true
+      },
+      staticDataLoaded: {
+        type: Boolean,
+        observer: 'setData'
       }
     };
   }
@@ -482,7 +486,6 @@ class ActionPointsList extends ActionPointsListMixin {
 
   ready() {
     super.ready();
-    document.addEventListener('static-data-loaded', () => this.setData());
     this._initSort();
     this.set('isShowCompleted', this.queryParams.status !== 'open');
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
