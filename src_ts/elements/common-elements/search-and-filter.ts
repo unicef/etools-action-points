@@ -217,7 +217,8 @@ class SearchAndFilter extends SearchAndFilterMixin {
         type: Array,
         value: () => {
           return [];
-        }
+        },
+        notify: true
       },
       searchLabel: {
         type: String
@@ -258,7 +259,53 @@ class SearchAndFilter extends SearchAndFilterMixin {
         }));
   }
 
+  addFilter(e: CustomEvent | any) {
+    let query = (typeof e === 'string') ? e : e.model.item.query;
+    let alreadySelected = this.selectedFilters.findIndex((filter) => {
+      return filter.query === query;
+    });
+
+    if (alreadySelected === -1) {
+      let newFilter = this.filters.find((filter) => {
+        return filter.query === query;
+      });
+      this._setFilterValue(newFilter);
+      this.push('selectedFilters', newFilter);
+      let filterIndex = this.filters.findIndex(filter => filter.query === query);
+      this.set(`filters.${filterIndex}.selected`, true);
+      
+      if (this.queryParams[query] === undefined) {
+        let queryObject = {};
+        queryObject[query] = true;
+        this.updateQueries(queryObject);
+      }
+    }
+  }
+
+removeFilter(e: CustomEvent | any) {
+  let query = (typeof e === 'string') ? e : e.model.item.query;
+  let indexToRemove = this.selectedFilters.findIndex((filter) => {
+    return filter.query === query;
+  });
+  if (indexToRemove === -1) {return;}
+
+  let queryObject = {query: undefined, page: undefined};
+
+  if (this.queryParams[query]) {
+    queryObject.page = '1';
+  }
+
+  if (indexToRemove !== -1) {
+    debugger
+    let filterIndex = this.filters.findIndex(filter => filter.query === query);
+    this.set(`filters.${filterIndex}.selected`, false);
+    this.splice('selectedFilters', indexToRemove, 1);
+  }
+  this.updateQueries(queryObject);
+}
+
   _reloadFilters() {
+    this.set('selectedFilters', []);
     this._restoreFilters();
   }
 
@@ -273,18 +320,19 @@ class SearchAndFilter extends SearchAndFilterMixin {
             return;
           }
 
-          // let availableFilters: any[] = [];
+          let availableFilters = [];
 
-          // this.selectedFilters.forEach((filter: any) => {
-          // this.selectFilter(filter);
-          // if (!filter && queryParams[filter.query] !== undefined) {
-          //   this.selectFilter(filter);
-          // } else if (queryParams[filter.query] === undefined) {
-          //   this.removeFilter(filter.query);
-          //   availableFilters.push(filter);
-          // }
-          // });
-          // this.set('availableFilters', availableFilters);
+          this.filters.forEach((filter) => {
+            let usedFilter = this.selectedFilters.find(used => used.query === filter.query);
+
+            if (!usedFilter && queryParams[filter.query] !== undefined) {
+              this.addFilter(filter.query);
+            } else if (queryParams[filter.query] === undefined) {
+              this.removeFilter(filter.query);
+              availableFilters.push(filter);
+            }
+          });
+          this.set('availableFilters', availableFilters);
 
           if (queryParams.search) {
             this.set('searchString', queryParams.search);
@@ -295,7 +343,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
             this._updateValues();
             this.set('restoreInProcess', false);
           });
-        }));
+        }))
   }
 
   _updateValues() {
@@ -342,7 +390,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
     if (!this._isAlreadySelected(selectedOption)) {
       this._setFilterValue(selectedOption);
       this.push('selectedFilters', selectedOption);
-      this.set(['filters', selectedIdx, 'selected'], true);
+      this.set(`filters.${selectedIdx}.selected`, true);
       if (this.queryParams[selectedOption.query] === undefined) {
         let queryObject: any = {};
         queryObject[selectedOption.query] = true;
@@ -351,7 +399,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
     } else {
       let paredFilters = this.selectedFilters.filter(fil => fil.query != selectedOption.query);
       this.set('selectedFilters', paredFilters);
-      this.set(['filters', selectedIdx, 'selected'], false);
+      this.set(`filters.${selectedIdx}.selected`, false);
       let newQueryObj = this.queryParams;
       newQueryObj[selectedOption.query] = undefined;
       this.updateQueries(newQueryObj);
@@ -362,7 +410,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
 
   _isAlreadySelected(filter) {
     return Boolean(
-        this.selectedFilters.find(sF => sF.query === filter.query)
+      this.selectedFilters.find(sF => sF.query === filter.query)
     );
   }
 
