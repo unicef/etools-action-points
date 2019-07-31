@@ -271,7 +271,6 @@ class SearchAndFilter extends SearchAndFilterMixin {
       });
       this._setFilterValue(newFilter);
       this.push('selectedFilters', newFilter);
-      // debugger
       let filterIndex = this.filters.findIndex(filter => filter.query === query);
       this.set(`filters.${filterIndex}.selected`, true);
       
