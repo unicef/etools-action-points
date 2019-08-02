@@ -1,14 +1,39 @@
-var express = require('express');
+var express = require('express'); // eslint-disable-line
+var browserCapabilities = require('browser-capabilities'); // eslint-disable-line
 
-var app = express();
-var ROOT = __dirname + '/build/';
+const app = express();
+const basedir = __dirname + '/build/'; // eslint-disable-line
 
-app.use('/apd/', express.static(ROOT));
-app.use('/', express.static(ROOT));
+function getSourcesPath(request) {
+  let clientCapabilities = browserCapabilities.browserCapabilities(
+      request.headers['user-agent']);
 
-app.get('[^.]+', function(req, res) {
-  res.sendFile(ROOT + 'index.html');
+  clientCapabilities = new Set(clientCapabilities); // eslint-disable-line
+  if (clientCapabilities.has('modules')) {
+    return basedir + 'esm-bundled/';
+  } else if (clientCapabilities.has('es2015')) {
+    return basedir + 'es6-bundled/';
+  } else {
+    return basedir + 'es5-bundled/';
+  }
+}
+
+app.use('/apd/', (req, res, next) => {
+  const sourceFolder = getSourcesPath(req);
+  express.static(sourceFolder)(req, res, next);
+});
+
+app.get(/.*service-worker\.js/, function(req, res) {
+  res.sendFile(getSourcesPath(req) + 'service-worker.js');
+});
+
+app.get(/.*manifest\.json/, function(req, res) {
+  res.sendFile(getSourcesPath(req) + 'manifest.json');
+});
+
+app.use((req, res) => {
+  // handles app access using a different state path than index (otherwise it will not return any file)
+  res.sendFile(getSourcesPath(req) + 'index.html');
 });
 
 app.listen(8080);
-console.log('Server is listening.');
