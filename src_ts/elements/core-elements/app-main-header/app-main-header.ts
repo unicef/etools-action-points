@@ -27,7 +27,7 @@ class AppMainHeader extends AppMainHeaderMixin {
       ${sharedStyles}
       <style>
         app-toolbar {
-          background-color: var(--nonprod-header-color);
+          background-color: var(--header-bg-color);
           padding: 0 8px 0 0;
         }
 
