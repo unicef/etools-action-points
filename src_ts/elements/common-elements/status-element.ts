@@ -10,7 +10,7 @@ import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-
 import StaticData from '../app-mixins/static-data-mixin';
 import PermissionController from '../app-mixins/permission-controller';
 import './etools-action-buttons';
-import { etoolsStatusStyles } from '../styles-elements/status-styles';
+import {etoolsStatusStyles} from '../styles-elements/status-styles';
 
 const StatusElementMixin = EtoolsMixinFactory.combineMixins([
   PermissionController,

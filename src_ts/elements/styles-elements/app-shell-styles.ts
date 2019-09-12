@@ -1,6 +1,5 @@
 
 import {html} from '@polymer/polymer/polymer-element.js';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import {pageLayoutStyles} from './page-layout-styles';
 import {sharedStyles} from './shared-styles';
 import {appDrawerStyles} from './app-drawer-styles';
