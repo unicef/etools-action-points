@@ -29,7 +29,7 @@ class ActionPointsNew extends ActionPointsNewMixin {
       <pages-header-element page-title="Add New Action Point">
       </pages-header-element>
 
-      <div class="view-container">
+      <div class="view-container" id="main">
         <div id="pageContent">
           <action-point-details id="ap-details"
                                 action-point="[[actionPoint]]"

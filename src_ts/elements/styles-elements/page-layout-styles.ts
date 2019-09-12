@@ -6,42 +6,6 @@ import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 
 export const pageLayoutStyles = html`
   <style include="iron-flex">
-    app-header {
-      box-sizing: border-box;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: var(--primary-background-color);
-      z-index: 1;
-    }
-
-    app-drawer {
-      z-index: 1;
-    }
-
-    .page {
-      @apply --layout-horizontal;
-      @apply --layout-wrap;
-      padding: 25px;
-    }
-
-    #pageContent {
-      @apply --layout-vertical;
-      @apply --layout-flex;
-    }
-
-    #sidebar {
-      @apply --layout-flex-3;
-      padding-left: 25px;
-    }
-
-    <!-- what is this stuff? -->
-
-    app-header-layout {
-      min-height: calc(100% + 100px);
-    }
-
     @media only screen and (max-width: 1359px)  {
       #sidebar {
         width: 100% !important;
