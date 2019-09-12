@@ -17,11 +17,7 @@ export const appDrawerStyles = html`
       --app-drawer-width: 73px;
     }
     app-drawer {
-      max-width: 220px;
       z-index: 100;
-      --app-drawer-content-container: {
-        background-color: var(--light-theme-content-color);
-      };
     }
   </style>
 `;

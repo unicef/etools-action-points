@@ -53,6 +53,21 @@ documentContainer.innerHTML = `
             width: 100%;
             margin: 0;
         };
+        
+        /* etools-action-button styles*/
+        --etools-action-button-main-color: var(--primary-color);
+        --etools-action-button-text-color: var(--light-primary-text-color);
+        --etools-action-button-dropdown-higlight-bg: var(--list-second-bg-color);
+        --etools-action-button-divider-color: var(--light-divider-color);
+  
+        /* etools-status styles */
+        --etools-status-divider-color: var(--dark-divider-color);
+        --etools-status-icon-inactive-color: var(--medium-icon-color);
+        --etools-status-icon-pending-color: var(--primary-color);
+        --etools-status-icon-completed-color: var(--success-color);
+        --etools-status-icon-text-color: var(--light-primary-text-color);
+        --etools-status-text-color: var(--medium-primary-text-color);
+        --etools-status-inactive-text-color: var(--primary-text-color);
       }
     </style>
   </custom-style>

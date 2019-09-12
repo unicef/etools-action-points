@@ -11,7 +11,7 @@ import {moduleStyles} from '../styles-elements/module-styles';
 * @customElement
 * @extends {PolymerElement}
 */
-class ActionButtons extends PolymerElement {
+class EtoolsActionButton extends PolymerElement {
   public static get template() {
     return html`
       ${moduleStyles}
@@ -205,4 +205,4 @@ class ActionButtons extends PolymerElement {
   }
 }
 
-customElements.define('action-buttons', ActionButtons);
+customElements.define('etools-action-button', EtoolsActionButton);
