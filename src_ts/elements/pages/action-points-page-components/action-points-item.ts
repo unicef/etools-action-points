@@ -67,7 +67,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
           </template>
         </pages-header-element>
 
-        <div class="view-container">
+        <div class="view-container" id="main">
           <div id="pageContent">
             <action-point-details action-point="[[actionPoint]]" original-action-point="[[originalActionPoint]]"
               permission-path="[[permissionPath]]"></action-point-details>

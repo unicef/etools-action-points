@@ -1,5 +1,5 @@
 // shared styles for all views
-// not for styling index.html or pmp-shell
+// not for styling index.html or apd-shell
 
 import {html} from '@polymer/polymer/polymer-element.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';

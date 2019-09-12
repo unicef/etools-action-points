@@ -7,6 +7,7 @@ export const navMenuStyles = html`
     *[hidden] {
       display: none !important;
     }
+
     :host {
       @apply --layout-vertical;
       height: 100%;
@@ -23,6 +24,7 @@ export const navMenuStyles = html`
       paper-tooltip {
         display: none;
       }
+
       :host([small-menu]) {
         overflow-x: hidden;
       }
@@ -49,6 +51,7 @@ export const navMenuStyles = html`
     :host([small-menu]) .menu-header {
       padding: 0;
     }
+
     :host([small-menu]) .menu-header .ripple-wrapper.main {
       width: 60px;
       height: 60px;
@@ -70,6 +73,7 @@ export const navMenuStyles = html`
     :host([small-menu]) .menu-header .ripple-wrapper:not(.main) {
       display: none;
     }
+
     :host([small-menu]) #menu-header-top-icon,
     :host(:not([small-menu])) #minimize-menu {
       display: block;
@@ -97,12 +101,14 @@ export const navMenuStyles = html`
       margin: 8px 0;
       border-bottom: 1px solid var(--dark-divider-color);
     }
+
     .nav-menu {
       @apply --layout-vertical;
       background: var(--primary-background-color);
       min-height: 550px;
       padding: 8px 0 0;
     }
+
     .nav-menu, .nav-menu iron-selector[role="navigation"] {
       @apply --layout-flex;
     }
@@ -131,7 +137,7 @@ export const navMenuStyles = html`
     }
 
     .nav-menu-item.iron-selected {
-      background-color: var(--medium-theme-background-color);
+      background-color: var(--secondary-background-color);
     }
 
     .nav-menu-item.iron-selected:active {

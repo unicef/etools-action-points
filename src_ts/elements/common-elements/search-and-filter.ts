@@ -273,7 +273,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
       this.push('selectedFilters', newFilter);
       let filterIndex = this.filters.findIndex(filter => filter.query === query);
       this.set(`filters.${filterIndex}.selected`, true);
-      
+
       if (this.queryParams[query] === undefined) {
         let queryObject = {};
         queryObject[query] = true;
@@ -282,27 +282,27 @@ class SearchAndFilter extends SearchAndFilterMixin {
     }
   }
 
-removeFilter(e: CustomEvent | any) {
-  let query = (typeof e === 'string') ? e : e.model.item.query;
-  let indexToRemove = this.selectedFilters.findIndex((filter) => {
-    return filter.query === query;
-  });
-  if (indexToRemove === -1) {return;}
+  removeFilter(e: CustomEvent | any) {
+    let query = (typeof e === 'string') ? e : e.model.item.query;
+    let indexToRemove = this.selectedFilters.findIndex((filter) => {
+      return filter.query === query;
+    });
+    if (indexToRemove === -1) {return;}
 
-  let queryObject = {query: undefined, page: undefined};
+    let queryObject = {query: undefined, page: undefined};
 
-  if (this.queryParams[query]) {
-    queryObject.page = '1';
+    if (this.queryParams[query]) {
+      queryObject.page = '1';
+    }
+
+    if (indexToRemove !== -1) {
+      debugger;
+      let filterIndex = this.filters.findIndex(filter => filter.query === query);
+      this.set(`filters.${filterIndex}.selected`, false);
+      this.splice('selectedFilters', indexToRemove, 1);
+    }
+    this.updateQueries(queryObject);
   }
-
-  if (indexToRemove !== -1) {
-    debugger
-    let filterIndex = this.filters.findIndex(filter => filter.query === query);
-    this.set(`filters.${filterIndex}.selected`, false);
-    this.splice('selectedFilters', indexToRemove, 1);
-  }
-  this.updateQueries(queryObject);
-}
 
   _reloadFilters() {
     this.set('selectedFilters', []);
@@ -343,7 +343,7 @@ removeFilter(e: CustomEvent | any) {
             this._updateValues();
             this.set('restoreInProcess', false);
           });
-        }))
+        }));
   }
 
   _updateValues() {
@@ -410,7 +410,7 @@ removeFilter(e: CustomEvent | any) {
 
   _isAlreadySelected(filter) {
     return Boolean(
-      this.selectedFilters.find(sF => sF.query === filter.query)
+        this.selectedFilters.find(sF => sF.query === filter.query)
     );
   }
 
