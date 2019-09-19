@@ -10,6 +10,7 @@ import './side-bar-item';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {navMenuStyles} from '../styles-elements/nav-menu-styles';
+import {apdIcons} from '../styles-elements/apd-icons';
 
 /**
  * @polymer
@@ -20,6 +21,7 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
     return html`
       ${navMenuStyles}
       ${moduleStyles}
+      ${apdIcons}
       <style>
         :host {
           @apply --layout-vertical;
@@ -40,7 +42,7 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
           line-height: 18px;
           text-transform: uppercase;
         }
-      
+
         img {
           width: 55%;
           margin: auto;
@@ -80,9 +82,9 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
           display: none;
         }
 
-          app-toolbar {
-            padding: 0;
-          }
+        app-toolbar {
+          padding: 0;
+        }
         
         [small-menu][main-title] {
           display: none;
@@ -128,6 +130,10 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
         <div class="secondary-header nav-menu-item section-title" small-menu$="[[smallMenu]]">
           eTools Community Channels
         </div>
+
+        <side-bar-item class="lighter-item no-transform" name="eToolsNow" icon="apd-icons:power-bi"
+                       side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/5e60ab16-cce5-4c21-8620-de0c4c6415de/ReportSectionfe8562e6ef8c4eddcb52" external>
+        </side-bar-item>
 
         <side-bar-item class="lighter-item" name="Knowledge Base" icon="maps:local-library" 
                        side-bar-link="http://etools.zendesk.com" external>
