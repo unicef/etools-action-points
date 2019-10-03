@@ -50,7 +50,6 @@ class AppMainHeader extends AppMainHeaderMixin {
           flex: 1;
           font-size: 28px;
           font-weight: 300;
-          color: var(--light-primary-text-color);
         }
 
         .titlebar img {
