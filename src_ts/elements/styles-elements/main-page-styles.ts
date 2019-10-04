@@ -48,13 +48,6 @@ export const mainPageStyles = html`
       position: relative;
       width: 100%;
     }
-    :host #sidebar {
-      position: absolute;
-      top: 25px;
-      right: 25px;
-      width: 215px;
-      margin-bottom: 24px;
-    }
     :host .submitted-message {
       position: relative;
       width: 100%;

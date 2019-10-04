@@ -48,12 +48,10 @@ class SideBarItem extends PolymerElement {
         #main {
           @apply --layout-horizontal;
           @apply --layout-center;
-
           position: relative;
           height: 48px;
           cursor: pointer;
           text-decoration: none;
-          text-transform: capitalize;
         }
 
         #main:active {
@@ -89,7 +87,6 @@ class SideBarItem extends PolymerElement {
         .content-wrapper ::slotted a {
           display: block;
           white-space: nowrap;
-          
         }
 
         paper-tooltip {

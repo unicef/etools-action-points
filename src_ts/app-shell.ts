@@ -21,65 +21,26 @@ import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js
 import EndpointMixin from './elements/app-mixins/endpoint-mixin';
 import UserController from './elements/app-mixins/user-controller';
 import PermissionController from './elements/app-mixins/permission-controller';
-import AppMenu from './elements/app-mixins/app-menu-mixin'
+import AppMenu from './elements/app-mixins/app-menu-mixin';
 import './elements/core-elements/app-main-header/app-main-header';
 import './elements/core-elements/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list';
 import './elements/core-elements/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/core-elements/page-footer';
-import {pageLayoutStyles} from './elements/styles-elements/page-layout-styles';
-import {sharedStyles} from './elements/styles-elements/shared-styles';
-import {appDrawerStyles} from './elements/styles-elements/app-drawer-styles';
-import {basePath} from './elements/core-elements/etools-app-config'
+import {basePath} from './elements/core-elements/etools-app-config';
 import './elements/styles-elements/app-theme';
+import {appShellStyles} from './elements/styles-elements/app-shell-styles';
 setRootPath(basePath);
 
 const AppShellMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin, UserController, AppMenu, LoadingMixin, PermissionController
-], PolymerElement)
+], PolymerElement);
 
 class AppShell extends AppShellMixin {
   public static get template() {
     return html`
-      ${pageLayoutStyles}
-      ${sharedStyles}
-      ${appDrawerStyles}
-      <style>
-        :host {
-          display: block;
-        }
-              
-        app-drawer {
-          visibility: visible;
-          right: auto;
-          z-index: 65 !important;
-            
-          --app-drawer-width: 220px;
-          --app-drawer-content-container: {
-            transform: translate3d(0, 0, 0);
-            background-color: var(--light-theme-content-color);
-          };
-        }
-
-        app-header {
-          padding-left: 73px;
-        }
-
-        app-header:not([small-menu]){
-          padding-left: 220px;
-        }
-        
-        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-          app-header {
-            padding-left: 0;
-          }
-          app-header:not([small-menu]){
-            padding-left: 0;
-          }
-        }
-      </style>
-
+      ${appShellStyles}
       <static-data></static-data>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
@@ -99,9 +60,9 @@ class AppShell extends AppShellMixin {
                               toast="[[_toast]]">
       </etools-piwik-analytics>
 
-      <!-- Drawer content -->
       <app-drawer-layout id="layout" responsive-width="850px"
-                       fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
+                         fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
+        <!-- Drawer content -->
         <app-drawer slot="drawer" id="drawer" transition-duration="350" swipe-open="[[narrow]]" small-menu$="[[smallMenu]]">
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
@@ -109,18 +70,21 @@ class AppShell extends AppShellMixin {
         <!-- Main content -->
         
         <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
-          <app-header id="header" slot="header" fixed shadow small-menu$="[[smallMenu]]">
+          <app-header id="header" slot="header" fixed shadow>
             <app-main-header id="pageheader" user="[[user]]" environment="[[environment]]"></app-main-header>
           </app-header>
           
-          <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
-                      fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
-            <action-points-page-main name="action-points" id="action-points" static-data-loaded="[[staticDataLoaded]]" route="{{actionPointsRoute}}">
-            </action-points-page-main>
-            <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
-          </iron-pages>
-          
-          <multi-notification-list></multi-notification-list>
+          <main role="main" id="page-container">
+            <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
+                        fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
+              <action-points-page-main name="action-points" id="action-points" static-data-loaded="[[staticDataLoaded]]" route="{{actionPointsRoute}}">
+              </action-points-page-main>
+              <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
+            </iron-pages>
+            
+            <multi-notification-list></multi-notification-list>
+          </main>
+
           <page-footer small-menu$="[[smallMenu]]"></page-footer>
         </app-header-layout>
       </app-drawer-layout>
@@ -202,7 +166,7 @@ class AppShell extends AppShellMixin {
 
   _staticDataLoaded(e: CustomEvent) {
     if (e && e.type === 'static-data-loaded') {
-      this.set('staticDataLoaded', true); 
+      this.set('staticDataLoaded', true);
     }
     if (this.staticDataLoaded) {
       this.set('user', this.getUserData());
@@ -225,7 +189,7 @@ class AppShell extends AppShellMixin {
       }));
     }
   }
-  
+
   _routePageChanged() {
     if (!this.initLoadingComplete || !this.routeData.page || !this._staticDataLoaded) {
       return;
@@ -243,7 +207,7 @@ class AppShell extends AppShellMixin {
       }
     }));
 
-    var resolvedPageUrl;
+    let resolvedPageUrl;
     if (page === 'not-found') {
       resolvedPageUrl = 'elements/pages/not-found-page-view.js';
     } else {
@@ -262,7 +226,7 @@ class AppShell extends AppShellMixin {
         type: 'initialisation'
       }
     }));
-    if (this.route.path === '/') { this._initRoute();}
+    if (this.route.path === '/') {this._initRoute();}
   }
 
   _pageNotFound() {
