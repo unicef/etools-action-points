@@ -131,8 +131,8 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
           eTools Community Channels
         </div>
 
-        <side-bar-item class="lighter-item no-transform" name="eToolsNow" icon="apd-icons:power-bi"
-                       side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/5e60ab16-cce5-4c21-8620-de0c4c6415de/ReportSectionfe8562e6ef8c4eddcb52" external>
+        <side-bar-item class="lighter-item no-transform" name="Implementation Intelligence" icon="apd-icons:power-bi"
+                       side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/5e60ab16-cce5-4c21-8620-de0c4c6415de/ReportSectionfe8562e6ef8c4eddcb52?chromeless=1" external>
         </side-bar-item>
 
         <side-bar-item class="lighter-item" name="Knowledge Base" icon="maps:local-library" 
