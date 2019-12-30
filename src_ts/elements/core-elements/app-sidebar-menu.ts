@@ -11,12 +11,13 @@ import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {navMenuStyles} from '../styles-elements/nav-menu-styles';
 import {apdIcons} from '../styles-elements/apd-icons';
+import PiwikAnalyticsMixin from '../app-mixins/piwik-analyitics-mixin';
 
 /**
  * @polymer
  * @customElement
  */
-class AppSidebarMenu extends EndpointMixin(PolymerElement) {
+class AppSidebarMenu extends EndpointMixin(PiwikAnalyticsMixin(PolymerElement)) {
   static get template() {
     return html`
       ${navMenuStyles}
@@ -136,15 +137,17 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
         </side-bar-item>
 
         <side-bar-item class="lighter-item" name="Knowledge Base" icon="maps:local-library" 
-                       side-bar-link="http://etools.zendesk.com" external>
+                       side-bar-link="http://etools.zendesk.com" external on-tap="trackAnalytics"
+                       tracker="knowledge base">
         </side-bar-item>
 
         <side-bar-item class="lighter-item" name="Discussion" icon="icons:question-answer" external 
-                       side-bar-link="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560">
+                       side-bar-link="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"
+                       on-tap="trackAnalytics" tracker="discussion">
         </side-bar-item>
 
         <side-bar-item class="lighter-item" name="Information" icon="icons:info" external 
-                       side-bar-link="/landing/">
+                       side-bar-link="/landing/" on-tap="trackAnalytics" tracker="information">
         </side-bar-item>
       </div>
     `;

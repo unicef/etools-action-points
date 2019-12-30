@@ -31,10 +31,11 @@ import './elements/core-elements/page-footer';
 import {basePath} from './elements/core-elements/etools-app-config';
 import './elements/styles-elements/app-theme';
 import {appShellStyles} from './elements/styles-elements/app-shell-styles';
+import PiwikAnalyticsMixin from './elements/app-mixins/piwik-analyitics-mixin';
 setRootPath(basePath);
 
 const AppShellMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, UserController, AppMenu, LoadingMixin, PermissionController
+  EndpointMixin, UserController, AppMenu, LoadingMixin, PermissionController, PiwikAnalyticsMixin
 ], PolymerElement);
 
 class AppShell extends AppShellMixin {
@@ -56,14 +57,20 @@ class AppShell extends AppShellMixin {
       </app-route>
 
       <etools-piwik-analytics user="[[user]]"
-                              page="[[page]]"
-                              toast="[[_toast]]">
+                              page="[[route.path]]"
+                              toast="[[_toast]]"
+                              site-url="https://unisitetracker.unicef.io/"
+                              site-id="[[siteIdent]]">
       </etools-piwik-analytics>
 
       <app-drawer-layout id="layout" responsive-width="850px"
                          fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
         <!-- Drawer content -->
-        <app-drawer slot="drawer" id="drawer" transition-duration="350" swipe-open="[[narrow]]" small-menu$="[[smallMenu]]">
+        <app-drawer slot="drawer"
+                    id="drawer"
+                    transition-duration="350"
+                    swipe-open="[[narrow]]"
+                    small-menu$="[[smallMenu]]">
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
         
@@ -77,7 +84,10 @@ class AppShell extends AppShellMixin {
           <main role="main" id="page-container">
             <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
                         fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
-              <action-points-page-main name="action-points" id="action-points" static-data-loaded="[[staticDataLoaded]]" route="{{actionPointsRoute}}">
+              <action-points-page-main name="action-points"
+                                       id="action-points"
+                                       static-data-loaded="[[staticDataLoaded]]"
+                                       route="{{actionPointsRoute}}">
               </action-points-page-main>
               <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>

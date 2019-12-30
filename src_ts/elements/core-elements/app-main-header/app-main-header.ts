@@ -10,10 +10,12 @@ import EndpointMixin from '../../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import './countries-dropdown';
 import '../../common-elements/support-btn';
+import PiwikAnalyticsMixin from '../../app-mixins/piwik-analyitics-mixin';
 
 const AppMainHeaderMixin = EtoolsMixinFactory.combineMixins([
   EndpointMixin,
-  EtoolsPageRefreshMixin
+  EtoolsPageRefreshMixin,
+  PiwikAnalyticsMixin
 ], PolymerElement);
 
 /**
@@ -88,7 +90,7 @@ class AppMainHeader extends AppMainHeaderMixin {
                   country-id="[[user.country.id]]">
           </countries-dropdown>
 
-          <support-btn></support-btn>
+          <support-btn on-tap="trackAnalytics" tracker="support"></support-btn>
 
           <etools-profile-dropdown profile="{{user}}"
                                    users="[[allUsers]]"
@@ -98,7 +100,8 @@ class AppMainHeader extends AppMainHeaderMixin {
 
           <paper-icon-button id="pageRefresh"
                              icon="refresh"
-                             on-tap="refresh"
+                             on-tap="trackAnalytics"
+                             tracker="hard refresh"
                              disabled="[[refreshInProgress]]">
           </paper-icon-button>
         </div>
@@ -121,6 +124,7 @@ class AppMainHeader extends AppMainHeaderMixin {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('sign-out', this._logout);
+    this.shadowRoot.querySelector('#pageRefresh').addEventListener('tap', () => this.refresh());
   }
 
   ready() {

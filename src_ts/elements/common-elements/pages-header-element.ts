@@ -9,8 +9,9 @@ import '@polymer/iron-icon/iron-icon.js';
 import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
+import PiwikAnalyticsMixin from '../app-mixins/piwik-analyitics-mixin';
 
-class PagesHeaderElement extends EndpointMixin(PolymerElement) {
+class PagesHeaderElement extends EndpointMixin(PiwikAnalyticsMixin(PolymerElement)) {
 
   static get template() {
     return html`
@@ -116,13 +117,22 @@ class PagesHeaderElement extends EndpointMixin(PolymerElement) {
                 </paper-listbox>
               </paper-menu-button>
       
-              <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
+              <paper-button id="export"
+                            class="grey-buttons"
+                            hidden$="[[_isDropDown(exportLinks)]]"
+                            on-tap="trackAnalytics"
+                            tracker="action point export">
                 <iron-icon icon="file-download"></iron-icon>
                 Export
               </paper-button>
             </div>
       
-            <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
+            <paper-button id="add-btn"
+                          class="add-btn"
+                          raised
+                          hidden$="[[_hideAddButton(showAddButton)]]"
+                          on-tap="trackAnalytics"
+                          tracker="add new action point">
               <template is="dom-if" if="{{_showLink(link)}}"><a href$="{{link}}" class="btn-link"></a></template>
               <iron-icon icon="add"></iron-icon>
               <span>[[btnText]]</span>
@@ -163,6 +173,12 @@ class PagesHeaderElement extends EndpointMixin(PolymerElement) {
         value: ''
       }
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.shadowRoot.querySelector('#export').addEventListener('tap', (e: Event) => this.exportData(e));
+    this.shadowRoot.querySelector('#add-btn').addEventListener('tap', () => this.addNewTap());
   }
 
   _toggleOpened() {
