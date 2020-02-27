@@ -1,18 +1,21 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-listbox/paper-listbox.js';
+import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-icon/iron-icon.js';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
+import {EndpointMixin} from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
+import {customElement, property} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 
-class PagesHeaderElement extends EndpointMixin(PolymerElement) {
-
-  static get template() {
+@customElement('pages-header-element')
+export class PagesHeaderElement extends EndpointMixin(PolymerElement) {
+  public static get template() {
     return html`
       ${sharedStyles}
       ${moduleStyles}
@@ -134,39 +137,30 @@ class PagesHeaderElement extends EndpointMixin(PolymerElement) {
     `;
   }
 
-  static get properties() {
-    return {
-      pageTitle: String,
-      btnText: String,
-      showAddButton: {
-        type: Boolean,
-        value: false
-      },
-      link: {
-        type: String,
-        value: ''
-      },
-      pageData: {
-        type: Object,
-        value: () => {
-          return {};
-        }
-      },
-      exportLinks: {
-        type: Array,
-        value: () => {
-          return [];
-        }
-      },
-      downloadLetterUrl: {
-        type: String,
-        value: ''
-      }
-    };
-  }
+  @property({type: String})
+  pageTitle: string;
+
+  @property({type: String})
+  btnText: string;
+
+  @property({type: Boolean})
+  showAddButton = false;
+
+  @property({type: String})
+  link = '';
+
+  @property({type: Object})
+  pageData: object;
+
+  @property({type: String})
+  exportLinks: GenericObject[];
+
+  @property({type: String})
+  downloadLetterUrl = '';
 
   _toggleOpened() {
-    this.$.dropdownMenu.select(null);
+    const dropdown: PaperListboxElement = this.shadowRoot.querySelector('#dropdownMenu');
+    dropdown.select(null);
   }
 
   _hideAddButton(show: boolean) {
@@ -189,7 +183,7 @@ class PagesHeaderElement extends EndpointMixin(PolymerElement) {
   }
 
   exportData(e: any) {
-    if (this.exportLinks < 1) {
+    if (this.exportLinks.length < 1) {
       throw new Error('Can not find export link!');
     }
     let url = (e && e.model && e.model.item) ? e.model.item.url : this.exportLinks[0].url;
@@ -202,5 +196,3 @@ class PagesHeaderElement extends EndpointMixin(PolymerElement) {
   }
 
 }
-
-customElements.define('pages-header-element', PagesHeaderElement);

@@ -1,5 +1,5 @@
 
-import {html} from '@polymer/polymer/polymer-element.js';
+import {html} from '@polymer/polymer';
 import {pageLayoutStyles} from './page-layout-styles';
 import {sharedStyles} from './shared-styles';
 import {appDrawerStyles} from './app-drawer-styles';

@@ -1,12 +1,14 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-button/paper-button.js';
+import {customElement, property, observe} from '@polymer/decorators';
 /**
 * @polymer
 * @extends HTMLElement
 */
-class MultiNotificationItem extends PolymerElement {
-  static get template() {
+@customElement('multi-notification-item')
+export class MultiNotificationItem extends PolymerElement {
+  public static get template() {
     return html`
       <style>
         :host {
@@ -53,18 +55,11 @@ class MultiNotificationItem extends PolymerElement {
     `;
   }
 
-  static get properties() {
-    return {
-      opened: {
-        type: Boolean,
-        observer: '_openedChanged'
-      },
-      text: {
-        type: String,
-        value: ''
-      }
-    };
-  }
+  @property({type: Boolean})
+  opened: boolean;
+
+  @property({type: String})
+  text = '';
 
   connectedCallback() {
     super.connectedCallback();
@@ -97,6 +92,7 @@ class MultiNotificationItem extends PolymerElement {
     });
   }
 
+  @observe('opened')
   _openedChanged(opened: boolean) {
     if (opened) {
       this._renderOpened();
@@ -109,5 +105,3 @@ class MultiNotificationItem extends PolymerElement {
     this.opened = false;
   }
 }
-
-window.customElements.define('multi-notification-item', MultiNotificationItem);

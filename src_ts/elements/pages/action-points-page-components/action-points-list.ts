@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
@@ -8,33 +8,34 @@ import '@polymer/iron-location/iron-query-params.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
+import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';
 import '../../data-elements/action-points-data';
-import StaticData from '../../app-mixins/static-data-mixin';
-import Localization from '../../app-mixins/localization-mixin';
-import DateMixin from '../../app-mixins/date-mixin';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
-import QueryParams from '../../app-mixins/query-params-mixin';
+import {StaticDataMixin} from '../../app-mixins/static-data-mixin';
+import {LocalizationMixin} from '../../app-mixins/localization-mixin';
+import {DateMixin} from '../../app-mixins/date-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {QueryParams} from '../../app-mixins/query-params-mixin';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
+import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from '../../../typings/globals.types';
+import {SearchAndFilter} from '../../common-elements/search-and-filter';
 
-const ActionPointsListMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  StaticData,
-  QueryParams,
-  InputAttrs,
-  Localization,
-  DateMixin
-], PolymerElement);
+@customElement('action-points-list')
+export class ActionPointsList extends EndpointMixin(
+    StaticDataMixin(
+        QueryParams(
+            InputAttrs(
+                LocalizationMixin(
+                    DateMixin(PolymerElement)))))) {
 
-class ActionPointsList extends ActionPointsListMixin {
-  static get template() {
+  public static get template() {
     return html`
       ${moduleStyles}
       ${sharedStyles}
@@ -302,187 +303,164 @@ class ActionPointsList extends ActionPointsListMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      actionPoints: {
-        type: Array,
-        notify: true
-      },
-      labels: {
-        type: Object,
-        notify: true
-      },
-      createLink: {
-        type: String,
-        value: '/new'
-      },
-      statuses: {
-        type: Array,
-        notify: true
-      },
-      filters: {
-        type: Array,
-        value: [{
-          name: 'Assignee',
-          query: 'assigned_to',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Assigned By',
-          query: 'assigned_by',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Partner',
-          query: 'partner',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Office',
-          query: 'office',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Location',
-          query: 'location',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Section',
-          query: 'section',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Related App',
-          query: 'related_module',
-          optionValue: 'value',
-          optionLabel: 'display_name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Status',
-          query: 'status',
-          optionValue: 'value',
-          optionLabel: 'display_name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'High Priority',
-          query: 'high_priority',
-          optionValue: 'value',
-          optionLabel: 'display_name',
-          selection: [{
-            display_name: 'Yes',
-            value: 'true'
-          }, {
-            display_name: 'No',
-            value: 'false'
-          }],
-          selected: false
-        },
-        {
-          name: 'PD/SSFA',
-          query: 'intervention',
-          optionValue: 'id',
-          optionLabel: 'title',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'CP Output',
-          query: 'cp_output',
-          optionValue: 'id',
-          optionLabel: 'name',
-          selection: [],
-          selected: false
-        },
-        {
-          name: 'Due On',
-          query: 'due_date',
-          isDatePicker: true,
-          selected: false
-        },
-        {
-          name: 'Due Before',
-          query: 'due_date__lte',
-          isDatePicker: true,
-          selected: false
-        },
-        {
-          name: 'Due After',
-          query: 'due_date__gte',
-          isDatePicker: true,
-          selected: false
-        }]
-      },
-      isShowCompleted: {
-        type: Boolean,
-        value: true,
-        observer: '_setShowCompleted'
-      },
-      pageNumber: {
-        type: Number,
-        value: 1
-      },
-      pageSize: {
-        type: Number,
-        value: 10
-      },
-      queryParams: {
-        type: Object,
-        observer: '_updateQueries',
-        notify: true
-      },
-      totalResults: Number,
-      route: {
-        type: Object,
-        notify: true
-      },
-      basePermissionPath: {
-        type: String,
-        value: 'action_points'
-      },
-      exportParams: {
-        type: Object,
-        observer: '_setExportLinks',
-        notify: true
-      },
-      exportLinks: {
-        type: Array,
-        notify: true
-      },
-      staticDataLoaded: {
-        type: Boolean,
-        observer: 'setData'
-      }
-    };
-  }
+  @property({type: Array, notify: true})
+  actionPoints: object[];
 
-  static get observers() {
-    return [
-      '_setPath(path)'
-    ];
-  }
+  @property({type: Object, notify: true})
+  labels: object;
+
+  @property({type: Array, notify: true})
+  createLink: string = '/new';
+
+  @property({type: Array, notify: true})
+  statuses: object[];
+
+  @property({type: Array})
+  filters: object[] = [{
+    name: 'Assignee',
+    query: 'assigned_to',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Assigned By',
+    query: 'assigned_by',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Partner',
+    query: 'partner',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Office',
+    query: 'office',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Location',
+    query: 'location',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Section',
+    query: 'section',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Related App',
+    query: 'related_module',
+    optionValue: 'value',
+    optionLabel: 'display_name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Status',
+    query: 'status',
+    optionValue: 'value',
+    optionLabel: 'display_name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'High Priority',
+    query: 'high_priority',
+    optionValue: 'value',
+    optionLabel: 'display_name',
+    selection: [{
+      display_name: 'Yes',
+      value: 'true'
+    }, {
+      display_name: 'No',
+      value: 'false'
+    }],
+    selected: false
+  },
+  {
+    name: 'PD/SSFA',
+    query: 'intervention',
+    optionValue: 'id',
+    optionLabel: 'title',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'CP Output',
+    query: 'cp_output',
+    optionValue: 'id',
+    optionLabel: 'name',
+    selection: [],
+    selected: false
+  },
+  {
+    name: 'Due On',
+    query: 'due_date',
+    isDatePicker: true,
+    selected: false
+  },
+  {
+    name: 'Due Before',
+    query: 'due_date__lte',
+    isDatePicker: true,
+    selected: false
+  },
+  {
+    name: 'Due After',
+    query: 'due_date__gte',
+    isDatePicker: true,
+    selected: false
+  }]
+
+  @property({type: Boolean})
+  isShowCompleted: boolean = true;
+
+  @property({type: Number})
+  pageNumber: number = 1;
+
+  @property({type: Number})
+  pageSize: number = 10;
+
+  @property({type: Object, notify: true})
+  queryParams: GenericObject;
+
+  @property({type: Array})
+  totalResults: number;
+
+  @property({type: Object, notify: true})
+  route: object;
+
+  @property({type: String})
+  basePermissionPath: string = 'action_points';
+
+  @property({type: Array, notify: true})
+  exportParams: object;
+
+  @property({type: Array, notify: true})
+  exportLinks: string[];
+
+  @property({type: Boolean})
+  staticDataLoaded: boolean;
+
+  @property({type: String})
+  path: string;
 
   ready() {
     super.ready();
@@ -491,6 +469,7 @@ class ActionPointsList extends ActionPointsListMixin {
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
+  @observe('staticDataLoaded')
   setData() {
     this.set('modules', this.getData('modules') || []);
     this.set('statuses', this.getData('statuses') || []);
@@ -502,7 +481,7 @@ class ActionPointsList extends ActionPointsListMixin {
     if (!sortParams) return;
     let field = sortParams.replace(/^-/, '');
     let direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
-    let column = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
+    let column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
     if (!column) return;
     column.dispatchEvent(new CustomEvent('sort-changed', {
       detail: {
@@ -516,6 +495,7 @@ class ActionPointsList extends ActionPointsListMixin {
     column.set('direction', direction);
   }
 
+  @observe('path')
   _setPath(path: string) {
     if (~path.indexOf('/list')) {
       this.set('queryParams.page_size', this.pageSize);
@@ -523,6 +503,7 @@ class ActionPointsList extends ActionPointsListMixin {
     }
   }
 
+  @observe('queryParams')
   _updateQueries(queryParams: any, oldQueryParams: any = {}) {
     let exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
@@ -563,7 +544,7 @@ class ActionPointsList extends ActionPointsListMixin {
   }
 
   _initFilters() {
-    let filtersElement = this.$.filters;
+    let filtersElement: SearchAndFilter = this.shadowRoot.querySelector('#filters');
     this.setFiltersSelections();
     if (filtersElement) {
       filtersElement._reloadFilters();
@@ -655,6 +636,8 @@ class ActionPointsList extends ActionPointsListMixin {
   _pageSizeSelected({detail}: any) {
     this.set('queryParams.page_size', detail.value);
   }
+
+  @observe('isShowCompleted')
   _setShowCompleted(isShowCompleted: boolean) {
     if (!isShowCompleted) {
       this.set('queryParams.status', 'open');
@@ -663,6 +646,8 @@ class ActionPointsList extends ActionPointsListMixin {
       this.set('queryParams', delete this.queryParams.status);
     }
   }
+
+  @observe('exportParams')
   _setExportLinks() {
     let qs = '';
     if (this.exportParams) {
@@ -680,5 +665,3 @@ class ActionPointsList extends ActionPointsListMixin {
     return priority === true ? 'high' : '';
   }
 }
-
-customElements.define('action-points-list', ActionPointsList);

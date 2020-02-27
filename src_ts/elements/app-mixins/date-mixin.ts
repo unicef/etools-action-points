@@ -1,3 +1,6 @@
+import {Constructor} from '../../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer';
+
 declare const moment: any;
 
 /**
@@ -5,8 +8,8 @@ declare const moment: any;
  * @polymer
  * @mixinFunction
  */
-const DateMixin = (superClass: any) =>
-  class extends superClass {
+export function DateMixin<T extends Constructor<PolymerElement>>(superClass: T) {
+  class DateMixinClass extends (superClass as Constructor<PolymerElement>) {
     /**
      * Format date from string
      */
@@ -44,14 +47,9 @@ const DateMixin = (superClass: any) =>
     }
 
     protected _getMomentDate(dateString: string) {
-
-      // if (typeof dateString === 'string') {
-      //   return '';
-      // }
-
-      let date = new Date(dateString);
+      const date = new Date(dateString);
       return date.toString() !== 'Invalid Date' ? moment(date) : '';
     }
-  };
-
-export default DateMixin;
+  }
+  return DateMixinClass;
+}

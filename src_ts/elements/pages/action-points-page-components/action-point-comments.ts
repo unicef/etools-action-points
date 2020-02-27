@@ -1,27 +1,26 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import LocalizationMixin from '../../app-mixins/localization-mixin';
-import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
+import {LocalizationMixin} from '../../app-mixins/localization-mixin';
+import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
-import PermissionController from '../../app-mixins/permission-controller';
+import {PermissionController} from '../../app-mixins/permission-controller';
 import InputAttrs from '../../app-mixins/input-attrs-mixin';
-import DateMixin from '../../app-mixins/date-mixin';
+import {DateMixin} from '../../app-mixins/date-mixin';
 import './open-add-comments';
+import {OpenAddComments} from './open-add-comments';
+import {customElement, property, observe} from '@polymer/decorators';
 
-const ActionPointCommentsMixin = EtoolsMixinFactory.combineMixins([
-  PermissionController,
-  LocalizationMixin,
-  DateMixin,
-  ErrorHandlerMixin,
-  InputAttrs
-], PolymerElement);
-
-class ActionPointComments extends ActionPointCommentsMixin {
+@customElement('action-point-comments')
+export class ActionPointComments extends LocalizationMixin(
+    PermissionController(
+        DateMixin(
+            ErrorHandler(
+                InputAttrs(
+                    PolymerElement))))) {
   static get template() {
     return html`
       ${tabInputsStyles}
@@ -81,44 +80,26 @@ class ActionPointComments extends ActionPointCommentsMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      permissionPath: String,
-      actionPoint: {
-        type: Array,
-        value() {
-          return {};
-        },
-        notify: true,
-        observer: '_updateCommentProp'
-      },
-      filteredComments: {
-        type: Array,
-        value() {
-          return [];
-        }
-      },
-      pageSize: {
-        type: Number,
-        value: 10
-      },
-      pageNumber: {
-        type: Number,
-        value: 1
-      },
-      commentText: String,
-      commentDialog: {
-        type: Object
-      }
-    };
-  }
+  @property({type: String})
+  permissionPath: string;
 
-  static get observers() {
-    return [
-      '_updatePermission(permissionPath)',
-      '_filterComments(actionPoint.comments, pageNumber, pageSize)'
-    ];
-  }
+  @property({type: Array, notify: true})
+  actionPoint: object[];
+
+  @property({type: Array})
+  filteredComments: object[];
+
+  @property({type: Number})
+  pageSize: number = 10;
+
+  @property({type: String})
+  pageNumber: Number = 1;
+
+  @property({type: String})
+  commentText: string;
+
+  @property({type: Object})
+  commentDialog: OpenAddComments;
 
   connectedCallback() {
     super.connectedCallback();
@@ -135,6 +116,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
     document.querySelector('body').appendChild(this.commentDialog);
   }
 
+  @observe('actionPoint')
   _updateCommentProp() {
     if (this.commentDialog) {
       this.commentDialog.actionPoint = this.actionPoint;
@@ -146,6 +128,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
     this.set('actionPoint.history', response.detail.history);
   }
 
+  @observe('permissionPath')
   _updatePermission() {
     this.set('pageNumber', 1);
     this.set('pageSize', 10);
@@ -163,6 +146,7 @@ class ActionPointComments extends ActionPointCommentsMixin {
     this.commentDialog.open();
   }
 
+  @observe('actionPoint.comments', 'pageNumber', 'pageSize')
   _filterComments(comments: string[], pageNumber: number, pageSize: number) {
     if (!comments) {
       return;
@@ -172,5 +156,3 @@ class ActionPointComments extends ActionPointCommentsMixin {
     this.set('filteredComments', comments.slice(from, to));
   }
 }
-
-customElements.define('action-point-comments', ActionPointComments);

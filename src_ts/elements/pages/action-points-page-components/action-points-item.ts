@@ -1,38 +1,38 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import ErrorHandler from '../../app-mixins/error-handler-mixin';
-import PermissionController from '../../app-mixins/permission-controller';
-import DateMixin from '../../app-mixins/date-mixin';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
+import {PermissionController} from '../../app-mixins/permission-controller';
+import {DateMixin} from '../../app-mixins/date-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
+import {OpenViewHistory} from './open-view-history';
 import '../../common-elements/status-element';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
+import {customElement, property, observe} from '@polymer/decorators';
+import {ActionPointDetails} from './action-point-details';
+import { GenericObject } from '../../../typings/globals.types';
 
-const ActionPointsItemMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  InputAttrs,
-  DateMixin,
-  PermissionController,
-  ErrorHandler,
-  EtoolsAjaxRequestMixin
-], PolymerElement);
+@customElement('action-points-item')
+export class ActionPointsItem extends EndpointMixin(
+    InputAttrs(
+        DateMixin(
+            PermissionController(
+                ErrorHandler(
+                    EtoolsAjaxRequestMixin(PolymerElement)))))) {
 
-class ActionPointsItem extends ActionPointsItemMixin {
-
-  static get template() {
+  public static get template() {
     return html`
       ${pageLayoutStyles}
       ${sharedStyles}
@@ -83,38 +83,23 @@ class ActionPointsItem extends ActionPointsItemMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      route: {
-        type: Object,
-        notify: true
-      },
-      routeData: {
-        type: String,
-        observer: '_changeActionPointId'
-      },
-      actionPoint: {
-        type: Object,
-        value() {
-          return {};
-        },
-        observer: '_updateHistoryProp'
-      },
-      permissionPath: {
-        type: String,
-        notify: true
-      },
-      historyDialog: {
-        type: Object
-      }
-    };
-  }
+  @property({type: Object, notify: true})
+  route: object;
 
-  static get observers() {
-    return [
-      '_changeRoutePath(route.path)'
-    ];
-  }
+  @property({type: String})
+  routeData: string;
+
+  @property({type: Object})
+  actionPoint: object = {};
+
+  @property({type: Object, notify: true})
+  permissionPath: string;
+
+  @property({type: Object})
+  historyDialog: OpenViewHistory | any;
+
+  @property({type: Number})
+  actionPointId: number;
 
   ready() {
     super.ready();
@@ -139,12 +124,14 @@ class ActionPointsItem extends ActionPointsItemMixin {
     document.querySelector('body').appendChild(this.historyDialog);
   }
 
+  @observe('actionPoint')
   _updateHistoryProp() {
     if (this.historyDialog) {
       this.historyDialog.actionPoint = this.actionPoint;
     }
   }
 
+  @observe('route.path')
   _changeRoutePath(path: string) {
     if (!path) {
       return;
@@ -158,6 +145,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
     this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
   }
 
+  @observe('routeData')
   _changeActionPointId(data: any) {
     this.set('actionPointId', data.id);
     if (!this.actionPointId) {
@@ -282,7 +270,7 @@ class ActionPointsItem extends ActionPointsItemMixin {
   }
 
   _update() {
-    let detailsElement = this.shadowRoot.querySelector('action-point-details');
+    let detailsElement: ActionPointDetails = this.shadowRoot.querySelector('action-point-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
     }
@@ -349,5 +337,3 @@ class ActionPointsItem extends ActionPointsItemMixin {
   }
 
 }
-
-customElements.define('action-points-item', ActionPointsItem);

@@ -3,16 +3,13 @@ import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
+import {PaperMenuButton} from '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
-
-const CountriesDropdownMixin = EtoolsMixinFactory.combineMixins([
-  EtoolsPageRefreshMixin, EtoolsAjaxRequestMixin, EndpointMixin
-], PolymerElement);
+import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {customElement, property, observe} from '@polymer/decorators';
 
 /**
  * @polymer
@@ -22,9 +19,9 @@ const CountriesDropdownMixin = EtoolsMixinFactory.combineMixins([
  * @applies EtoolsAjaxRequestMixin
  * @extends {PolymerElement}
  */
-class CountriesDropdown extends CountriesDropdownMixin {
-
-  static get template() {
+@customElement('countries-dropdown')
+export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestMixin(EndpointMixin(PolymerElement))) {
+  public static get template() {
     return html`
       <style>
         .arrow-up {
@@ -152,37 +149,26 @@ class CountriesDropdown extends CountriesDropdownMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      opened: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: false
-      },
-      countries: {
-        type: Array,
-        value: []
-      },
-      countryId: {
-        type: Number
-      },
-      countryIndex: {
-        type: Number
-      }
-    };
-  }
+  @property({type: Boolean})
+  opened: boolean = false;
 
-  static get observers() {
-    return ['_setCountryIndex(countries, countryId)'];
-  }
+  @property({type: Array})
+  countries: object[];
 
-  connectedCallback(this: any) {
+  @property({type: Number})
+  countryId: number;
+
+  @property({type: Number})
+  countryIndex: number;
+
+  connectedCallback() {
     super.connectedCallback();
     this.addEventListener('paper-dropdown-close', this._toggleOpened);
     this.addEventListener('paper-dropdown-open', this._toggleOpened);
   }
 
-  _setCountryIndex(this: any, countries: object[], countryId: number) {
+  @observe('countries', 'countryId')
+  _setCountryIndex(countries: object[], countryId: number) {
     if (!(countries instanceof Array)) {
       return;
     }
@@ -193,15 +179,17 @@ class CountriesDropdown extends CountriesDropdownMixin {
     this.countryIndex = countries.indexOf(countryObj);
   }
 
-  _toggleOpened(this: any) {
-    this.set('opened', this.$.dropdown.opened);
+  _toggleOpened() {
+    const dropdown: PaperMenuButton = this.shadowRoot.querySelector('#dropdown');
+    this.set('opened', dropdown.opened);
   }
 
-  _countrySelected(this: any, e: CustomEvent) {
-    this.set('country', this.$.repeat.itemForElement(e.detail.item));
+  _countrySelected(e: CustomEvent) {
+    const repeat: any = this.shadowRoot.querySelector('#repeat');
+    this.set('country', repeat.itemForElement(e.detail.item));
   }
 
-  _changeCountry(this: any, event: any) {
+  _changeCountry(event: any) {
     let country = event && event.model && event.model.item;
     let id = country && country.id;
 
@@ -257,5 +245,3 @@ class CountriesDropdown extends CountriesDropdownMixin {
     window.location.href = `${window.location.origin}/apd/`;
   }
 }
-
-window.customElements.define('countries-dropdown', CountriesDropdown);

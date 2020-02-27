@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
@@ -6,19 +6,15 @@ import '@polymer/iron-icons/av-icons.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import StaticData from '../app-mixins/static-data-mixin';
-import PermissionController from '../app-mixins/permission-controller';
+import {StaticDataMixin} from '../app-mixins/static-data-mixin';
+import {PermissionController} from '../app-mixins/permission-controller';
 import './etools-action-buttons';
 import {etoolsStatusStyles} from '../styles-elements/status-styles';
+import {customElement, property} from '@polymer/decorators';
 
-const StatusElementMixin = EtoolsMixinFactory.combineMixins([
-  PermissionController,
-  StaticData
-], PolymerElement);
-
-class StatusElement extends StatusElementMixin {
-  static get template() {
+@customElement('status-element')
+class StatusElement extends StaticDataMixin(PermissionController(PolymerElement)) {
+  public static get template() {
     return html`
       ${etoolsStatusStyles}
       <etools-content-panel panel-title="Status">
@@ -56,31 +52,25 @@ class StatusElement extends StatusElementMixin {
     `;
   }
 
-  static get properties() {
+  @property({type: Object})
+  dateProperties: object = () => {
     return {
-      dateProperties: {
-        type: Object,
-        value: function() {
-          return {
-            open: 'created',
-            completed: 'date_of_completion'
-          };
-        }
-      },
-      actionPoint: {
-        type: Object
-      },
-      actions: {
-        type: Array,
-        value() {return [];}
-      },
-      permissionPath: String,
-      statuses: {
-        type: Array,
-        notify: true
-      }
+      open: 'created',
+      completed: 'date_of_completion'
     };
-  }
+  };
+
+  @property({type: Object})
+  actionPoint: object;
+
+  @property({type: Array})
+  actions: object[];
+
+  @property({type: String})
+  permissionPath: string;
+
+  @property({type: Array, notify: true})
+  statuses: string[];
 
   ready() {
     super.ready();
@@ -116,5 +106,3 @@ class StatusElement extends StatusElementMixin {
     return !!(lastStatus && lastStatus.value === status);
   }
 }
-
-customElements.define('status-element', StatusElement);

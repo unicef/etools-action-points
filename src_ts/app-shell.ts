@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
@@ -15,13 +15,12 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons.js';
 import '@polymer/iron-icons/av-icons.js';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
-import EndpointMixin from './elements/app-mixins/endpoint-mixin';
-import UserController from './elements/app-mixins/user-controller';
-import PermissionController from './elements/app-mixins/permission-controller';
-import AppMenu from './elements/app-mixins/app-menu-mixin';
+import {EndpointMixin} from './elements/app-mixins/endpoint-mixin';
+import {UserController} from './elements/app-mixins/user-controller';
+import {PermissionController} from './elements/app-mixins/permission-controller';
+import {AppMenu} from './elements/app-mixins/app-menu-mixin';
 import './elements/core-elements/app-main-header/app-main-header';
 import './elements/core-elements/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list';
@@ -31,14 +30,18 @@ import './elements/core-elements/page-footer';
 import {basePath} from './elements/core-elements/etools-app-config';
 import './elements/styles-elements/app-theme';
 import {appShellStyles} from './elements/styles-elements/app-shell-styles';
+import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from './typings/globals.types';
 setRootPath(basePath);
 
-const AppShellMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin, UserController, AppMenu, LoadingMixin, PermissionController
-], PolymerElement);
-
-class AppShell extends AppShellMixin {
-  public static get template() {
+@customElement('app-shell')
+export class AppShell extends EndpointMixin(
+    LoadingMixin(
+        UserController(
+            AppMenu(
+                PermissionController(
+                    PolymerElement))))) {
+  public static get template(): HTMLTemplateElement {
     return html`
       ${appShellStyles}
       <static-data></static-data>
@@ -63,7 +66,11 @@ class AppShell extends AppShellMixin {
       <app-drawer-layout id="layout" responsive-width="850px"
                          fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
         <!-- Drawer content -->
-        <app-drawer slot="drawer" id="drawer" transition-duration="350" swipe-open="[[narrow]]" small-menu$="[[smallMenu]]">
+        <app-drawer slot="drawer"
+                    id="drawer"
+                    transition-duration="350"
+                    swipe-open="[[narrow]]"
+                    small-menu$="[[smallMenu]]">
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
         
@@ -77,7 +84,10 @@ class AppShell extends AppShellMixin {
           <main role="main" id="page-container">
             <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
                         fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
-              <action-points-page-main name="action-points" id="action-points" static-data-loaded="[[staticDataLoaded]]" route="{{actionPointsRoute}}">
+              <action-points-page-main name="action-points"
+                                       id="action-points"
+                                       static-data-loaded="[[staticDataLoaded]]"
+                                       route="{{actionPointsRoute}}">
               </action-points-page-main>
               <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
@@ -91,59 +101,49 @@ class AppShell extends AppShellMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      page: {
-        type: String,
-        reflectToAttribute: true,
-        observer: '_pageChanged'
-      },
-      narrow: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
-      _toast: {
-        type: Object,
-        value: null
-      },
-      _toastQueue: {
-        type: Array,
-        value: () => {
-          return [];
-        }
-      },
-      globalLoadingQueue: {
-        type: Array,
-        value: () => {
-          return [];
-        }
-      },
-      user: {
-        type: Object,
-        value: () => {
-          return {};
-        }
-      },
-      route: {
-        type: Object,
-        notify: true
-      },
-      queryParams: Object,
-      environment: String,
-      staticDataLoaded: {
-        type: Boolean,
-        value: false
-      },
-      basePath: String,
-      smallMenu: Boolean
-    };
-  }
+  @property({type: String})
+  page: string;
 
-  public static get observers() {
-    return ['_routePageChanged(route.path)'];
-  }
+  @property({type: Boolean})
+  narrow: boolean;
 
-  ready() {
+  @property({type: Object})
+  _toast: Object;
+
+  @property({type: Array})
+  _toastQueue: object[];
+
+  @property({type: Array})
+  globalLoadingQueue: object[];
+
+  @property({type: Object})
+  user: object;
+
+  @property({type: Object, notify: true})
+  route: GenericObject;
+
+  @property({type: Object})
+  public routeData: GenericObject;
+
+  @property({type: Object})
+  queryParams: object;
+
+  @property({type: String})
+  environment: string;
+
+  @property({type: Boolean})
+  staticDataLoaded = false;
+
+  @property({type: String})
+  basePath: string;
+
+  @property({type: Boolean})
+  smallMenu: boolean;
+
+  @property({type: Boolean})
+  initLoadingComplete: boolean;
+
+  public ready(): void {
     super.ready();
     this.addEventListener('404', () => this._pageNotFound());
     this.addEventListener('toast', (e: CustomEvent) => this.queueToast(e));
@@ -189,7 +189,7 @@ class AppShell extends AppShellMixin {
       }));
     }
   }
-
+  @observe('route.path')
   _routePageChanged() {
     if (!this.initLoadingComplete || !this.routeData.page || !this._staticDataLoaded) {
       return;
@@ -253,5 +253,3 @@ class AppShell extends AppShellMixin {
     return 'action-points';
   }
 }
-
-window.customElements.define('app-shell', AppShell);

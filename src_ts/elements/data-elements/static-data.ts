@@ -1,42 +1,35 @@
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {html, PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import StaticDataMixin from '../app-mixins/static-data-mixin';
-import ErrorHandler from '../app-mixins/error-handler-mixin';
-import PermissionController from '../app-mixins/permission-controller';
-import UserController from '../app-mixins/user-controller';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
+import {StaticDataMixin} from '../app-mixins/static-data-mixin';
+import {ErrorHandler} from '../app-mixins/error-handler-mixin';
+import {PermissionController} from '../app-mixins/permission-controller';
+import {UserController} from '../app-mixins/user-controller';
+import {EndpointMixin} from '../app-mixins/endpoint-mixin';
 import './user-data';
-
-const StaticDataMixins = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  EtoolsAjaxRequestMixin,
-  StaticDataMixin,
-  ErrorHandler,
-  PermissionController,
-  UserController
-], PolymerElement);
+import {customElement, property} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 
 /**
  * @polymer
  * @customElement
  */
-class StaticData extends StaticDataMixins {
+@customElement('static-data')
+export class StaticData extends EndpointMixin(
+    ErrorHandler(
+        PermissionController(
+            EtoolsAjaxRequestMixin(
+                StaticDataMixin(
+                    UserController(
+                        PolymerElement)))))) {
 
-  static get template() {
+  public static get template() {
     return html`
       <user-data></user-data>
     `;
   }
 
-  static get properties() {
-    return {
-      dataLoaded: {
-        type: Object,
-        value: {}
-      }
-    };
-  }
+  @property({type: Object})
+  dataLoaded: GenericObject;
 
   connectedCallback() {
     super.connectedCallback();
@@ -126,5 +119,3 @@ class StaticData extends StaticDataMixins {
     document.dispatchEvent(event);
   }
 }
-
-customElements.define('static-data', StaticData);

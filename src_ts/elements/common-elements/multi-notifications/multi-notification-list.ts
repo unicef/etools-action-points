@@ -1,12 +1,15 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import {flush} from '@polymer/polymer/lib/utils/flush.js';
 import './multi-notification-item';
+import {customElement, property} from '@polymer/decorators';
+
 /**
 * @polymer
 * @extends HTMLElement
 */
-class MultiNotificationList extends PolymerElement {
-  static get template() {
+@customElement('multi-notification-list')
+export class MultiNotificationList extends PolymerElement {
+  public static get template() {
     return html`
       <style>
         :host {
@@ -25,31 +28,17 @@ class MultiNotificationList extends PolymerElement {
     `;
   }
 
-  static get properties() {
-    return {
-      notifications: {
-        type: Array,
-        value() {
-          return [];
-        },
-        notify: true
-      },
-      notificationsQueue: {
-        type: Array,
-        value() {
-          return [];
-        }
-      },
-      limit: {
-        type: Number,
-        value: 3
-      },
-      count: {
-        type: Number,
-        value: 1
-      }
-    };
-  }
+  @property({type: Array, notify: true})
+  notifications: object[];
+
+  @property({type: Array})
+  notificationsQueue: object[];
+
+  @property({type: Number})
+  limit = 3;
+
+  @property({type: Number})
+  count = 1;
 
   connectedCallback() {
     super.connectedCallback();
@@ -59,7 +48,7 @@ class MultiNotificationList extends PolymerElement {
   }
 
   _onNotificationShift(this: any, {detail}: any) {
-    let index = this.notifications.findIndex((notification: any) => {
+    const index = this.notifications.findIndex((notification: any) => {
       return notification.id === detail.id;
     });
 
@@ -90,5 +79,3 @@ class MultiNotificationList extends PolymerElement {
     this.set('notificationsQueue', []);
   }
 }
-
-window.customElements.define('multi-notification-list', MultiNotificationList);

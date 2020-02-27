@@ -110,7 +110,7 @@
     "prpl-server": "^1.3.0",
     "puppeteer": "^1.5.0",
     "tsify": "^4.0.1",
-    "typescript": "^3.2.4",
+    "typescript": "^3.7.5",
     "vinyl-source-stream": "^2.0.0",
     "wct-mocha": "^1.0.0"
   }
