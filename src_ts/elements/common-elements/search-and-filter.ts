@@ -330,7 +330,7 @@ export class SearchAndFilter extends QueryParams(DateMixin(PolymerElement)) {
         }));
   }
 
-  _updateValues() {
+  _updateValues(this) {
     let ids = Object.keys(this.queryParams || {});
     ids.forEach((id) => {
       let element: any = this.shadowRoot.querySelector(`#${id}`);
@@ -398,7 +398,7 @@ export class SearchAndFilter extends QueryParams(DateMixin(PolymerElement)) {
     );
   }
 
-  _changeFilterValue(e: any) {
+  _changeFilterValue(this, e: any) {
     if (!e || !e.currentTarget) {
       return;
     }

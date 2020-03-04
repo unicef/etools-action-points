@@ -8,19 +8,19 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from '../../../typings/globals.types';
 
 /**
  * @polymer
  * @customElement
  * @applies EtoolsPageRefreshMixin
- * @applies EndpointMixin
  * @applies EtoolsAjaxRequestMixin
  * @extends {PolymerElement}
  */
 @customElement('countries-dropdown')
-export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestMixin(EndpointMixin(PolymerElement))) {
+export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestMixin(PolymerElement)) {
   public static get template() {
     return html`
       <style>
@@ -161,6 +161,12 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
   @property({type: Number})
   countryIndex: number;
 
+  @property({type: Object})
+  countryData: GenericObject;
+
+  @property({type: String})
+  url: string;
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('paper-dropdown-close', this._toggleOpened);
@@ -206,7 +212,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
       bubbles: true,
       composed: true
     }));
-    let endpoint = this.getEndpoint('changeCountry');
+    let endpoint = getEndpoint('changeCountry');
     this.sendRequest({
       method: 'POST',
       endpoint: endpoint,
@@ -216,7 +222,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
     }).then(() => this._handleResponse()).catch(() => this._handleError());
   }
 
-  _handleError(this: any) {
+  _handleError() {
     this.countryData = null;
     this.url = null;
     this.dispatchEvent(new CustomEvent('global-loading', {
@@ -235,12 +241,12 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
     }));
   }
 
-  _handleResponse(this: any) {
+  _handleResponse() {
     this.refreshInProgress = true;
     this.clearDexieDbs();
   }
 
-  _refreshPage(this: any) {
+  _refreshPage() {
     this.refreshInProgress = false;
     window.location.href = `${window.location.origin}/apd/`;
   }

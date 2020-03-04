@@ -6,6 +6,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icon/iron-icon.js';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {customElement, property} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 
 /**
 * @polymer
@@ -115,7 +116,7 @@ export class EtoolsActionButton extends PolymerElement {
   }
 
   @property({type: Array})
-  actions: object[];
+  actions: GenericObject[];
 
   @property({type: Object})
   icons = () => {
@@ -129,7 +130,7 @@ export class EtoolsActionButton extends PolymerElement {
   @property({type: Boolean})
   statusBtnMenuOpened: boolean
 
-  closeMenu(this: any) {
+  closeMenu() {
     this.statusBtnMenuOpened = false;
   }
 
@@ -146,7 +147,7 @@ export class EtoolsActionButton extends PolymerElement {
     return text.toUpperCase();
   }
 
-  _btnClicked(this: any, event: any) {
+  _btnClicked(event: any) {
     if (!event || !event.target) {
       return;
     }
@@ -182,7 +183,7 @@ export class EtoolsActionButton extends PolymerElement {
     return length > 1 ? 'with-menu' : '';
   }
 
-  _filterActions(this: any, action: any) {
+  _filterActions(action: any) {
     return !(action === this.actions[0]);
   }
 

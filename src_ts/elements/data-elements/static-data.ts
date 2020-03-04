@@ -4,7 +4,7 @@ import {StaticDataMixin} from '../app-mixins/static-data-mixin';
 import {ErrorHandler} from '../app-mixins/error-handler-mixin';
 import {PermissionController} from '../app-mixins/permission-controller';
 import {UserController} from '../app-mixins/user-controller';
-import {EndpointMixin} from '../app-mixins/endpoint-mixin';
+import {getEndpoint} from '../app-mixins/endpoint-mixin';
 import './user-data';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
@@ -14,13 +14,13 @@ import {GenericObject} from '../../typings/globals.types';
  * @customElement
  */
 @customElement('static-data')
-export class StaticData extends EndpointMixin(
-    ErrorHandler(
-        PermissionController(
-            EtoolsAjaxRequestMixin(
-                StaticDataMixin(
-                    UserController(
-                        PolymerElement)))))) {
+export class StaticData extends
+  EtoolsAjaxRequestMixin(
+      ErrorHandler(
+          StaticDataMixin(
+              UserController(
+                  PermissionController(
+                      PolymerElement))))) {
 
   public static get template() {
     return html`
@@ -29,7 +29,15 @@ export class StaticData extends EndpointMixin(
   }
 
   @property({type: Object})
-  dataLoaded: GenericObject;
+  dataLoaded: GenericObject = {
+    organizations: false,
+    apOptions: false,
+    sectionsCovered: false,
+    offices: false,
+    unicefUsers: false,
+    cpOutputsList: false,
+    interventionsList: false
+  };
 
   connectedCallback() {
     super.connectedCallback();
@@ -58,8 +66,8 @@ export class StaticData extends EndpointMixin(
     }
   }
 
-  _loadAPOptions() {
-    let endpoint = this.getEndpoint('actionPointsList');
+  _loadAPOptions(this) {
+    let endpoint = getEndpoint('actionPointsList');
     this.sendRequest({method: 'OPTIONS', endpoint})
         .then((data: any) => {
           let actions = data && data.actions;
@@ -83,8 +91,8 @@ export class StaticData extends EndpointMixin(
         }).catch(() => this._responseError('Partners', 'request error'));
   }
 
-  _loadPartners(this: any) {
-    let endpoint = this.getEndpoint('partnerOrganisations');
+  _loadPartners(this) {
+    let endpoint = getEndpoint('partnerOrganisations');
     this.sendRequest({method: 'GET', endpoint})
         .then((data: any) => {
           this._setData('partnerOrganisations', data);
@@ -93,8 +101,8 @@ export class StaticData extends EndpointMixin(
         }).catch(() => this._responseError('Partners', 'request error'));
   }
 
-  _loadLocations(this: any) {
-    let endpoint = this.getEndpoint('locations');
+  _loadLocations(this) {
+    let endpoint = getEndpoint('locations');
     this.sendRequest({method: 'GET', endpoint})
         .then((data: any) => {
           this._setData('locations', data);
@@ -103,8 +111,8 @@ export class StaticData extends EndpointMixin(
         }).catch(() => this._responseError('Locations', 'request error'));
   }
 
-  _loadData(dataName: string) {
-    let endpoint = this.getEndpoint(dataName);
+  _loadData(this, dataName: string) {
+    let endpoint = getEndpoint(dataName);
     this.sendRequest({method: 'GET', endpoint})
         .then((data: any) => {
           this._setData(dataName, data);

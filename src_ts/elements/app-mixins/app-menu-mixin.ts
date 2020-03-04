@@ -11,8 +11,8 @@ import {AppHeaderLayoutElement} from '@polymer/app-layout/app-header-layout/app-
  * @polymer
  * @mixinFunction
  */
-export function AppMenu<T extends Constructor<PolymerElement>>(superClass: T) {
-  class AppMenuClass extends dedupingMixin(superClass as Constructor<PolymerElement>) {
+const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
+  class AppMenuClass extends (superClass as Constructor<PolymerElement>) {
     @property({type: Boolean})
     smallMenu = false;
 
@@ -105,3 +105,5 @@ export function AppMenu<T extends Constructor<PolymerElement>>(superClass: T) {
   }
   return AppMenuClass;
 }
+
+export const AppMenu = dedupingMixin(mixin);

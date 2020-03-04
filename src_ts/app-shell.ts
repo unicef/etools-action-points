@@ -17,7 +17,7 @@ import '@polymer/iron-icons/av-icons.js';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
-import {EndpointMixin} from './elements/app-mixins/endpoint-mixin';
+import {_checkEnvironment} from './elements/app-mixins/endpoint-mixin';
 import {UserController} from './elements/app-mixins/user-controller';
 import {PermissionController} from './elements/app-mixins/permission-controller';
 import {AppMenu} from './elements/app-mixins/app-menu-mixin';
@@ -35,12 +35,11 @@ import {GenericObject} from './typings/globals.types';
 setRootPath(basePath);
 
 @customElement('app-shell')
-export class AppShell extends EndpointMixin(
-    LoadingMixin(
-        UserController(
-            AppMenu(
-                PermissionController(
-                    PolymerElement))))) {
+export class AppShell extends
+  LoadingMixin(
+      UserController(
+          AppMenu(
+              PermissionController(PolymerElement)))) {
   public static get template(): HTMLTemplateElement {
     return html`
       ${appShellStyles}
@@ -101,7 +100,7 @@ export class AppShell extends EndpointMixin(
     `;
   }
 
-  @property({type: String})
+  @property({observer: AppShell.prototype._pageChanged, type: String, reflectToAttribute: true})
   page: string;
 
   @property({type: Boolean})
@@ -141,7 +140,7 @@ export class AppShell extends EndpointMixin(
   smallMenu: boolean;
 
   @property({type: Boolean})
-  initLoadingComplete: boolean;
+  initLoadingComplete: boolean = false;
 
   public ready(): void {
     super.ready();
@@ -149,7 +148,7 @@ export class AppShell extends EndpointMixin(
     this.addEventListener('toast', (e: CustomEvent) => this.queueToast(e));
     this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
-    this.set('environment', this._checkEnvironment());
+    this.set('environment', _checkEnvironment());
   }
 
   connectedCallback() {
@@ -189,9 +188,10 @@ export class AppShell extends EndpointMixin(
       }));
     }
   }
+
   @observe('route.path')
   _routePageChanged() {
-    if (!this.initLoadingComplete || !this.routeData.page || !this._staticDataLoaded) {
+    if (!this.initLoadingComplete || !this.routeData.page || !this.staticDataLoaded) {
       return;
     }
     this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
@@ -207,14 +207,15 @@ export class AppShell extends EndpointMixin(
       }
     }));
 
-    let resolvedPageUrl;
-    if (page === 'not-found') {
-      resolvedPageUrl = 'elements/pages/not-found-page-view.js';
-    } else {
-      resolvedPageUrl =
-        `./elements/pages/action-points-page-components/action-points-page-main.js`;
+    switch (page) {
+      case 'not-found':
+        import('./elements/pages/not-found-page-view.js');
+        break;
+      default:
+        import('./elements/pages/action-points-page-components/action-points-page-main.js');
+        this._loadPage();
+        break;
     }
-    import(resolvedPageUrl).then(() => this._loadPage(), () => this._pageNotFound());
   }
 
   _loadPage() {

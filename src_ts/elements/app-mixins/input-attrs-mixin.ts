@@ -1,5 +1,5 @@
 import {PermissionController} from './permission-controller.js';
-import {Constructor} from '../../typings/globals.types.js';
+import {Constructor, GenericObject} from '../../typings/globals.types.js';
 import {PolymerElement} from '@polymer/polymer';
 
 /*
@@ -98,10 +98,10 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
 
     public _resetInputs() {
       let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
-      for (let element of elements) {
+      elements.forEach((element: GenericObject) => {
         element.invalid = false;
         element.value = '';
-      }
+      });
     }
   }
   return InputAttrsClass;

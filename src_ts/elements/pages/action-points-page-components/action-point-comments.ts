@@ -8,7 +8,7 @@ import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {PermissionController} from '../../app-mixins/permission-controller';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';

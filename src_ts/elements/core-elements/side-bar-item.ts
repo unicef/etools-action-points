@@ -126,7 +126,7 @@ export class SideBarItem extends PolymerElement {
     this.dispatchEvent(new CustomEvent('selected'));
   }
 
-  _setTarget(this: any) {
+  _setTarget() {
     return this.external ? '_blank' : '_self';
   }
 }

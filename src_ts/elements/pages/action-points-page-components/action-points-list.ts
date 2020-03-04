@@ -9,7 +9,7 @@ import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
-import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';
@@ -28,12 +28,12 @@ import {GenericObject} from '../../../typings/globals.types';
 import {SearchAndFilter} from '../../common-elements/search-and-filter';
 
 @customElement('action-points-list')
-export class ActionPointsList extends EndpointMixin(
-    StaticDataMixin(
-        QueryParams(
-            InputAttrs(
-                LocalizationMixin(
-                    DateMixin(PolymerElement)))))) {
+export class ActionPointsList extends
+  StaticDataMixin(
+      QueryParams(
+          InputAttrs(
+              LocalizationMixin(
+                  DateMixin(PolymerElement))))) {
 
   public static get template() {
     return html`
@@ -504,7 +504,7 @@ export class ActionPointsList extends EndpointMixin(
   }
 
   @observe('queryParams')
-  _updateQueries(queryParams: any, oldQueryParams: any = {}) {
+  _updateQueries(this, queryParams: any, oldQueryParams: any = {}) {
     let exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
     delete exportParams['page'];
@@ -657,7 +657,7 @@ export class ActionPointsList extends EndpointMixin(
     }
     this.set('exportLinks', [{
       name: 'Export CSV',
-      url: this.getEndpoint('actionPointsListExport').url + qs
+      url: getEndpoint('actionPointsListExport').url + qs
     }]);
   }
 

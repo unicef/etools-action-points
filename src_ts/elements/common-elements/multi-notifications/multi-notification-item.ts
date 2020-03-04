@@ -2,6 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-button/paper-button.js';
 import {customElement, property, observe} from '@polymer/decorators';
+
 /**
 * @polymer
 * @extends HTMLElement
@@ -66,7 +67,7 @@ export class MultiNotificationItem extends PolymerElement {
     this.addEventListener('transitionend', e => this._onTransitionEnd(e));
   }
 
-  _onTransitionEnd(this: any, e: any) {
+  _onTransitionEnd(e: any) {
     if (e && e.target === this && e.propertyName === 'opacity') {
       if (!this.opened) {
         this.dispatchEvent(new CustomEvent('notification-shift', {
@@ -101,7 +102,7 @@ export class MultiNotificationItem extends PolymerElement {
     }
   }
 
-  close(this: any) {
+  close() {
     this.opened = false;
   }
 }

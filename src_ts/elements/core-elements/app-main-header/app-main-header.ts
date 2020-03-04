@@ -5,7 +5,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
-import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {resetOldUserData} from '../../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import './countries-dropdown';
 import '../../common-elements/support-btn';
@@ -17,7 +17,7 @@ import {GenericObject} from '../../../typings/globals.types';
  * @customElement
  */
 @customElement('app-main-header')
-export class AppMainHeader extends EndpointMixin(EtoolsPageRefreshMixin(PolymerElement)) {
+export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
   public static get template() {
     return html`
       ${sharedStyles}
@@ -118,7 +118,7 @@ export class AppMainHeader extends EndpointMixin(EtoolsPageRefreshMixin(PolymerE
   }
 
   _logout() {
-    this.resetOldUserData();
+    resetOldUserData();
     window.location.href = `${window.location.origin}/logout/`;
   }
 

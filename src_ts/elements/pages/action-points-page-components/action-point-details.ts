@@ -9,7 +9,7 @@ import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
 import {LocalizationMixin} from '../../app-mixins/localization-mixin';
 import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
-import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import {StaticDataMixin} from '../../app-mixins/static-data-mixin';
 import {PermissionController} from '../../app-mixins/permission-controller';
@@ -21,13 +21,13 @@ import {customElement, observe, property} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
 
 @customElement('action-point-details')
-export class ActionPointDetails extends EndpointMixin(
-    InputAttrs(
-        StaticDataMixin(
-            PermissionController(
-                LocalizationMixin(
-                    DateMixin(
-                        EtoolsAjaxRequestMixin(PolymerElement))))))) {
+export class ActionPointDetails extends
+  InputAttrs(
+      StaticDataMixin(
+          PermissionController(
+              LocalizationMixin(
+                  DateMixin(
+                      EtoolsAjaxRequestMixin(PolymerElement)))))) {
   static get template() {
     return html`
       ${pageLayoutStyles}
@@ -363,7 +363,7 @@ export class ActionPointDetails extends EndpointMixin(
   }
 
   @observe('editedItem')
-  _setDrDOptions(editedItem: any) {
+  _setDrDOptions(this, editedItem: any) {
     let module = editedItem && editedItem.related_module;
     let categories = [];
 
@@ -381,19 +381,19 @@ export class ActionPointDetails extends EndpointMixin(
     document.addEventListener('locations-loaded', () => this._updateLocations());
     this.addEventListener('reset-validation', ({detail}: any) => {
       let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
-      for (let element of elements) {
+      elements.forEach((element: GenericObject) => {
         element.invalid = false;
         if (detail && detail.resetValues) {
           element.value = '';
         }
-      }
+      });
     });
     if (!this.dataIsSet) {
       this.setData();
     }
   }
 
-  setData() {
+  setData(this) {
     this.set('modules', this.getData('modules'));
     this.set('partners', this.getData('partnerOrganisations'));
     this.set('offices', this.getData('offices'));
@@ -412,7 +412,7 @@ export class ActionPointDetails extends EndpointMixin(
     this.set('editedItem', actionPoint && JSON.parse(JSON.stringify(actionPoint)) || {});
   }
 
-  _updateLocations(filter?: any) {
+  _updateLocations(this, filter?: any) {
     let locations = this.getData('locations') || [];
     this.set('locations', locations.filter((location: any) => {
       return !filter || !!~filter.indexOf(+location.id);
@@ -420,7 +420,7 @@ export class ActionPointDetails extends EndpointMixin(
   }
 
   @observe('editedItem.partner')
-  _requestPartner(partnerId: number) {
+  _requestPartner(this, partnerId: number) {
     if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
       return;
     }
@@ -441,7 +441,7 @@ export class ActionPointDetails extends EndpointMixin(
       }
     }
 
-    let endpoint = this.getEndpoint('partnerOrganisationDetails', partnerId);
+    let endpoint = getEndpoint('partnerOrganisationDetails', partnerId);
     this.sendRequest({
       method: 'GET',
       endpoint
@@ -456,7 +456,7 @@ export class ActionPointDetails extends EndpointMixin(
   }
 
   @observe('editedItem.intervention')
-  async _updateCpOutputs(interventionId: number) {
+  async _updateCpOutputs(this, interventionId: number) {
     if (interventionId === undefined) {
       return;
     }
@@ -469,7 +469,7 @@ export class ActionPointDetails extends EndpointMixin(
     try {
       this.set('interventionRequestInProcess', true);
       this.set('cpOutputs', undefined);
-      let interventionEndpoint = this.getEndpoint('interventionDetails', interventionId);
+      let interventionEndpoint = getEndpoint('interventionDetails', interventionId);
       let intervention = await this.sendRequest({
         method: 'GET',
         endpoint: interventionEndpoint
@@ -496,7 +496,7 @@ export class ActionPointDetails extends EndpointMixin(
         return;
       }
 
-      let endpoint = this.getEndpoint('cpOutputsV2', cpIds.join(','));
+      let endpoint = getEndpoint('cpOutputsV2', cpIds.join(','));
       this.set('cpOutputs', await this.sendRequest({
         method: 'GET',
         endpoint: endpoint
@@ -553,14 +553,14 @@ export class ActionPointDetails extends EndpointMixin(
   validate() {
     let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
     let valid = true;
-    for (let element of elements) {
+    elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
         let label = element.label || 'Field';
         element.errorMessage = `${label} is required`;
         element.invalid = true;
         valid = false;
       }
-    }
+    });
 
     return valid;
   }

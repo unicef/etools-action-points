@@ -7,14 +7,13 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {EndpointMixin} from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
 
 @customElement('pages-header-element')
-export class PagesHeaderElement extends EndpointMixin(PolymerElement) {
+export class PagesHeaderElement extends PolymerElement {
   public static get template() {
     return html`
       ${sharedStyles}
@@ -194,5 +193,4 @@ export class PagesHeaderElement extends EndpointMixin(PolymerElement) {
     return exportLinks && (exportLinks.length > 1 ||
       (exportLinks[0] && exportLinks[0].useDropdown));
   }
-
 }

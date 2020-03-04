@@ -9,7 +9,7 @@ import {PolymerElement} from '@polymer/polymer';
  */
 export function ErrorHandler<T extends Constructor<PolymerElement>>(superClass: T) {
   class ErrorHandlerClass extends PermissionController(superClass as Constructor<PolymerElement>) {
-    refactorErrorObject(errorData: any) {
+    public refactorErrorObject(errorData: any) {
       if (!errorData) {
         return {};
       }
@@ -48,7 +48,7 @@ export function ErrorHandler<T extends Constructor<PolymerElement>>(superClass: 
      * @returns {Array}
      * @private
      */
-    private _getErrors(errors: any, permissionPath: string, basePath: string[] = []) {
+    public _getErrors(errors: any, permissionPath: string, basePath: string[] = []) {
       let messages: string[] = [];
       if (!errors) {
         return messages;
@@ -77,7 +77,7 @@ export function ErrorHandler<T extends Constructor<PolymerElement>>(superClass: 
      * @returns {string}
      * @private
      */
-    private _getErrorMessage(field: string, error: string, permissionPath: string) {
+    public _getErrorMessage(field: string, error: string, permissionPath: string) {
       let fieldLabel = this.getFieldAttribute(`${permissionPath}.${field}`, 'label');
       return `${fieldLabel}: ${error}`;
     }

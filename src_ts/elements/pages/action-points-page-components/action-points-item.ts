@@ -5,7 +5,7 @@ import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {EndpointMixin} from '../../app-mixins/endpoint-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
 import {PermissionController} from '../../app-mixins/permission-controller';
 import {DateMixin} from '../../app-mixins/date-mixin';
@@ -14,7 +14,6 @@ import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
-import {OpenViewHistory} from './open-view-history';
 import '../../common-elements/status-element';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
@@ -22,15 +21,14 @@ import {mainPageStyles} from '../../styles-elements/main-page-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {customElement, property, observe} from '@polymer/decorators';
 import {ActionPointDetails} from './action-point-details';
-import { GenericObject } from '../../../typings/globals.types';
 
 @customElement('action-points-item')
-export class ActionPointsItem extends EndpointMixin(
-    InputAttrs(
-        DateMixin(
-            PermissionController(
-                ErrorHandler(
-                    EtoolsAjaxRequestMixin(PolymerElement)))))) {
+export class ActionPointsItem extends
+  InputAttrs(
+      DateMixin(
+          PermissionController(
+              ErrorHandler(
+                  EtoolsAjaxRequestMixin(PolymerElement))))) {
 
   public static get template() {
     return html`
@@ -96,7 +94,7 @@ export class ActionPointsItem extends EndpointMixin(
   permissionPath: string;
 
   @property({type: Object})
-  historyDialog: OpenViewHistory | any;
+  historyDialog: any;
 
   @property({type: Number})
   actionPointId: number;
@@ -146,13 +144,13 @@ export class ActionPointsItem extends EndpointMixin(
   }
 
   @observe('routeData')
-  _changeActionPointId(data: any) {
+  _changeActionPointId(this, data: any) {
     this.set('actionPointId', data.id);
     if (!this.actionPointId) {
       return;
     }
     this.set('actionPoint', {});
-    let endpoint = this.getEndpoint('actionPoint', this.actionPointId);
+    let endpoint = getEndpoint('actionPoint', this.actionPointId);
     this._loadOptions(this.actionPointId);
     this.sendRequest({
       method: 'GET',
@@ -164,9 +162,9 @@ export class ActionPointsItem extends EndpointMixin(
         }).catch((err: any) => console.log(err));
   }
 
-  _loadOptions(id: number) {
+  _loadOptions(this, id: number) {
     let permissionPath = `action_points_${id}`;
-    let endpoint = this.getEndpoint('actionPoint', id);
+    let endpoint = getEndpoint('actionPoint', id);
     return this.sendRequest({
       method: 'OPTIONS',
       endpoint
@@ -217,8 +215,8 @@ export class ActionPointsItem extends EndpointMixin(
     return data;
   }
 
-  _complete() {
-    let endpoint = this.getEndpoint('actionPointComplete', this.actionPointId);
+  _complete(this) {
+    let endpoint = getEndpoint('actionPointComplete', this.actionPointId);
 
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
@@ -269,7 +267,7 @@ export class ActionPointsItem extends EndpointMixin(
     return obj;
   }
 
-  _update() {
+  _update(this) {
     let detailsElement: ActionPointDetails = this.shadowRoot.querySelector('action-point-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
@@ -277,7 +275,7 @@ export class ActionPointsItem extends EndpointMixin(
 
     let editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     let data = this._getChangedData(this.actionPoint, editedData);
-    let endpoint = this.getEndpoint('actionPoint', this.actionPointId);
+    let endpoint = getEndpoint('actionPoint', this.actionPointId);
 
     this.dispatchEvent(new CustomEvent('global-loading', {
       detail: {
@@ -332,7 +330,7 @@ export class ActionPointsItem extends EndpointMixin(
 
     return [{
       name: 'Export CSV',
-      url: this.getEndpoint('actionPointExport', actionPoint.id).url
+      url: getEndpoint('actionPointExport', actionPoint.id).url
     }];
   }
 

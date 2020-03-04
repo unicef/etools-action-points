@@ -7,7 +7,6 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/iron-icons/maps-icons.js';
 import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
-import {EndpointMixin} from '../app-mixins/endpoint-mixin';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {navMenuStyles} from '../styles-elements/nav-menu-styles';
 import {apdIcons} from '../styles-elements/apd-icons';
@@ -18,7 +17,7 @@ import {customElement, property, observe} from '@polymer/decorators';
  * @customElement
  */
 @customElement('app-sidebar-menu')
-export class AppSidebarMenu extends EndpointMixin(PolymerElement) {
+export class AppSidebarMenu extends PolymerElement {
   public static get template() {
     return html`
       ${navMenuStyles}

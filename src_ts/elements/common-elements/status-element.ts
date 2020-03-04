@@ -13,7 +13,7 @@ import {etoolsStatusStyles} from '../styles-elements/status-styles';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('status-element')
-class StatusElement extends StaticDataMixin(PermissionController(PolymerElement)) {
+export class StatusElement extends StaticDataMixin(PermissionController(PolymerElement)) {
   public static get template() {
     return html`
       ${etoolsStatusStyles}

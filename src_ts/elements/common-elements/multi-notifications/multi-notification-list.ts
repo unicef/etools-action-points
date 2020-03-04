@@ -47,7 +47,7 @@ export class MultiNotificationList extends PolymerElement {
     this.addEventListener('reset-notifications', () => this._resetNotifications());
   }
 
-  _onNotificationShift(this: any, {detail}: any) {
+  _onNotificationShift({detail}: any) {
     const index = this.notifications.findIndex((notification: any) => {
       return notification.id === detail.id;
     });
@@ -63,7 +63,7 @@ export class MultiNotificationList extends PolymerElement {
     }
   }
 
-  _onNotificationPush(this: any, {detail}: any) {
+  _onNotificationPush({detail}: any) {
     let notification = detail;
     notification.id = `toast___${this.count++}`;
 

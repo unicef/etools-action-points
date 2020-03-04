@@ -9,7 +9,7 @@ const _permissionCollection: any = {};
 */
 export function PermissionController<T extends Constructor<PolymerElement>>(superClass: T) {
   class PermissionControllerClass extends (superClass as Constructor<PolymerElement>) {
-    protected _addToCollection(collectionName: string, data: any) {
+    public _addToCollection(collectionName: string, data: any) {
       // check arguments
       if (!collectionName || !data) {
         console.warn('collectionName and data arguments must be provided!');
@@ -36,7 +36,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return true;
     }
 
-    protected _updateCollection(collectionName: string, data: any) {
+    public _updateCollection(collectionName: string, data: any) {
       if (!_permissionCollection[collectionName]) {
         console.warn(`Collection ${collectionName} does not exist!`);
         return false;
@@ -51,7 +51,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return true;
     }
 
-    protected _manageActions(collectionName: string) {
+    public _manageActions(collectionName: string) {
       let collection = _permissionCollection[collectionName];
       if (!collection) {
         console.warn(`Collection ${collectionName} does not exist!`);
@@ -72,7 +72,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return true;
     }
 
-    protected _createAction(action: string, existedAction: any) {
+    public _createAction(action: string, existedAction: any) {
       if (!existedAction || typeof existedAction === 'string') {
         return action;
       }
@@ -111,7 +111,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
         this.getFieldAttribute(path, 'required', 'PUT');
     }
 
-    protected collectionExists(path: string, actionType?: string) {
+    public collectionExists(path: string, actionType?: string) {
       if (!path) {
         throw new Error('path argument must be provided');
       }
@@ -122,7 +122,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return !!this._getCollection(path, actionType);
     }
 
-    protected getChoices(path: string) {
+    public getChoices(path: string) {
       return this.getFieldAttribute(path, 'choices', 'GET') ||
         this.getFieldAttribute(path, 'choices', 'POST');
     }
@@ -153,7 +153,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return value;
     }
 
-    protected isValidCollection(collection: string) {
+    public isValidCollection(collection: string) {
       if (collection && Object.keys(collection).length) {
         return collection;
       } else {
@@ -161,7 +161,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       }
     }
 
-    protected actionAllowed(collection: any, action: string) {
+    public actionAllowed(collection: any, action: string) {
       if (!action || !collection) {
         return false;
       }
@@ -185,7 +185,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return !!~actions.indexOf(action);
     }
 
-    protected noActionsAllowed(collection: any) {
+    public noActionsAllowed(collection: any) {
       if (!collection) {
         return true;
       }
@@ -197,7 +197,7 @@ export function PermissionController<T extends Constructor<PolymerElement>>(supe
       return !(collection && collection.allowed_actions && collection.allowed_actions.length);
     }
 
-    protected getActions(collection: any) {
+    public getActions(collection: any) {
       if (!collection) {
         return null;
       }
