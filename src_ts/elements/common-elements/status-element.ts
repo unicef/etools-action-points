@@ -6,14 +6,14 @@ import '@polymer/iron-icons/av-icons.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import {StaticDataMixin} from '../app-mixins/static-data-mixin';
-import {PermissionController} from '../app-mixins/permission-controller';
+import {getData} from '../app-mixins/static-data-mixin';
 import './etools-action-buttons';
 import {etoolsStatusStyles} from '../styles-elements/status-styles';
 import {customElement, property} from '@polymer/decorators';
+import {noActionsAllowed, getActions} from '../app-mixins/permission-controller';
 
 @customElement('status-element')
-export class StatusElement extends StaticDataMixin(PermissionController(PolymerElement)) {
+export class StatusElement extends PolymerElement {
   public static get template() {
     return html`
       ${etoolsStatusStyles}
@@ -45,7 +45,7 @@ export class StatusElement extends StaticDataMixin(PermissionController(PolymerE
           </template>
         </div>
         
-        <div class="bottom-container" hidden$="[[noActionsAllowed(permissionPath)]]">
+        <div class="bottom-container" hidden$="[[noActionsAllowed(permissionPath)}]]">
           <etools-action-button actions="[[getActions(permissionPath)]]"></etools-action-button>
         </div>
       </etools-content-panel>
@@ -74,7 +74,7 @@ export class StatusElement extends StaticDataMixin(PermissionController(PolymerE
 
   ready() {
     super.ready();
-    this.set('statuses', this.getData('statuses') || []);
+    this.set('statuses', getData('statuses') || []);
   }
 
   _isStatusFinish(actionPoint: any, status: string) {
@@ -83,6 +83,10 @@ export class StatusElement extends StaticDataMixin(PermissionController(PolymerE
     let currentStatusIndex = this.statuses.findIndex((x: any) => x.value === currentStatus);
     let statusIndex = this.statuses.findIndex((x: any) => x.value === status);
     return (currentStatusIndex >= statusIndex);
+  }
+
+  noActionsAllowed(path: string) {
+    return noActionsAllowed(path);
   }
 
   _getStatusClass(actionPoint: any, status: string) {
@@ -104,5 +108,9 @@ export class StatusElement extends StaticDataMixin(PermissionController(PolymerE
   hideDivider(status: string, statuses: any) {
     let lastStatus = statuses[statuses.length - 1];
     return !!(lastStatus && lastStatus.value === status);
+  }
+
+  getActions(path: string) {
+    return getActions(path);
   }
 }

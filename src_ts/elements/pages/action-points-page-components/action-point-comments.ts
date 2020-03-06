@@ -7,7 +7,7 @@ import {LocalizationMixin} from '../../app-mixins/localization-mixin';
 import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
-import {PermissionController} from '../../app-mixins/permission-controller';
+import {noActionsAllowed} from '../../app-mixins/permission-controller';
 import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import './open-add-comments';
@@ -16,11 +16,10 @@ import {customElement, property, observe} from '@polymer/decorators';
 
 @customElement('action-point-comments')
 export class ActionPointComments extends LocalizationMixin(
-    PermissionController(
-        DateMixin(
-            ErrorHandler(
-                InputAttrs(
-                    PolymerElement))))) {
+    DateMixin(
+        ErrorHandler(
+            InputAttrs(
+                PolymerElement)))) {
   static get template() {
     return html`
       ${tabInputsStyles}
@@ -109,6 +108,10 @@ export class ActionPointComments extends LocalizationMixin(
   ready() {
     super.ready();
     this._createCommentDialog();
+  }
+
+  noActionsAllowed(path: string) {
+    return noActionsAllowed(path);
   }
 
   _createCommentDialog() {

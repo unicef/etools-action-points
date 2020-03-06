@@ -1,5 +1,5 @@
 import {PolymerElement} from '@polymer/polymer';
-import {PermissionController} from './permission-controller.js';
+import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
 
 /**
@@ -8,7 +8,7 @@ import {Constructor} from '../../typings/globals.types.js';
  * @constructor
  */
 export function LocalizationMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-  class LocalizationClass extends PermissionController(superClass as Constructor<PolymerElement>) {
+  class LocalizationClass extends (superClass as Constructor<PolymerElement>) {
   /**
    * Get string label from loaded permission data
    * @param base permission path
@@ -24,7 +24,7 @@ export function LocalizationMixin<T extends Constructor<PolymerElement>>(superCl
       }
 
       let labelPath = item.labelPath || item.path;
-      let label = this.getFieldAttribute(`${base}.${labelPath}`, 'label', 'GET');
+      let label = getFieldAttribute(`${base}.${labelPath}`, 'label', 'GET');
 
       return (label && typeof label === 'string') ? label : (item.label || '');
     }

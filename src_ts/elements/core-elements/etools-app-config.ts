@@ -21,7 +21,6 @@ window.EtoolsRequestCacheDb = window.EtoolsRequestCacheDb || window.EtoolsApdApp
 
 export const baseSite = window.location.origin;
 export const basePath = '/apd/';
-// this.epsData = this.serverBackend ? endpoints : localEndpoints;
 export const epsData: any = endpoints;
 // dexie js
 export const appDexieDb = window.EtoolsApdApp.etoolsCustomDexieDb;

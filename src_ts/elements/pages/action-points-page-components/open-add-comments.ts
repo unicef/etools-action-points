@@ -6,17 +6,16 @@ import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
-import {PermissionController} from '../../app-mixins/permission-controller';
 import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
+import {isReadOnly} from '../../app-mixins/permission-controller';
 
 @customElement('open-add-comments')
 export class OpenAddComments extends
   EtoolsAjaxRequestMixin(
       ErrorHandler(
-          InputAttrs(
-              PermissionController(PolymerElement)))) {
+          InputAttrs(PolymerElement))) {
   public static get template() {
     return html`
       <etools-dialog id="commentDialog" size="md" 
@@ -100,5 +99,9 @@ export class OpenAddComments extends
     });
 
     return valid;
+  }
+
+  isReadOnly(path) {
+    return isReadOnly(path);
   }
 }

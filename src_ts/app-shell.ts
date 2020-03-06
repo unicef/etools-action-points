@@ -19,7 +19,6 @@ import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import {_checkEnvironment} from './elements/app-mixins/endpoint-mixin';
 import {UserController} from './elements/app-mixins/user-controller';
-import {PermissionController} from './elements/app-mixins/permission-controller';
 import {AppMenu} from './elements/app-mixins/app-menu-mixin';
 import './elements/core-elements/app-main-header/app-main-header';
 import './elements/core-elements/app-sidebar-menu';
@@ -35,11 +34,7 @@ import {GenericObject} from './typings/globals.types';
 setRootPath(basePath);
 
 @customElement('app-shell')
-export class AppShell extends
-  LoadingMixin(
-      UserController(
-          AppMenu(
-              PermissionController(PolymerElement)))) {
+export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement))) {
   public static get template(): HTMLTemplateElement {
     return html`
       ${appShellStyles}

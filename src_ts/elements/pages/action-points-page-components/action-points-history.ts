@@ -7,7 +7,7 @@ import {moduleStyles} from '../../styles-elements/module-styles';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('action-points-history')
-export class ActionPointsHistory extends InputAttrs(DateMixin(PolymerElement)) {
+export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
   public static get template() {
     return html`
       ${moduleStyles}

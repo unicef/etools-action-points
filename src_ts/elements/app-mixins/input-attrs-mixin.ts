@@ -1,6 +1,7 @@
-import {PermissionController} from './permission-controller.js';
+import {isRequired, getFieldAttribute, isReadOnly} from './permission-controller.js';
 import {Constructor, GenericObject} from '../../typings/globals.types.js';
 import {PolymerElement} from '@polymer/polymer';
+import {property} from '@polymer/decorators';
 
 /*
  * Mixin for input field functionality.
@@ -8,8 +9,12 @@ import {PolymerElement} from '@polymer/polymer';
  * @mixinFunction
  */
 export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T) {
-  class InputAttrsClass extends PermissionController(superClass as Constructor<PolymerElement>) {
-  /**
+  class InputAttrsClass extends (superClass as Constructor<PolymerElement>) {
+
+    @property({type: Object})
+    errors: GenericObject;
+
+    /**
    * Set required class from OPTIONS data by path
    * @param field
    * @param basePermissionPath
@@ -21,7 +26,7 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
         return false;
       }
 
-      let required = this.isRequired(`${basePermissionPath}.${field}`);
+      let required = isRequired(`${basePermissionPath}.${field}`);
 
       return required ? 'required' : false;
     }
@@ -36,7 +41,7 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
       if (!base) {
         return '';
       }
-      return this.getFieldAttribute(`${base}.${path}`, 'label', 'GET');
+      return getFieldAttribute(`${base}.${path}`, 'label', 'GET');
     }
 
     /**
@@ -47,7 +52,7 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
      * @returns {*}
      */
     public getPlaceholderText(path: string, base: string, special: boolean) {
-      if (this.isReadonly(`${base}.${path}`)) {
+      if (isReadOnly(`${base}.${path}`)) {
         return 'Empty Field';
       }
 
@@ -68,7 +73,7 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
         return true;
       }
 
-      let readOnly = this.isReadonly(`${basePermissionPath}.${field}`);
+      let readOnly = isReadOnly(`${basePermissionPath}.${field}`);
       if (readOnly === null) {
         readOnly = true;
       }

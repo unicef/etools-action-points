@@ -1,4 +1,4 @@
-import {PermissionController} from './permission-controller.js';
+import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
 import {PolymerElement} from '@polymer/polymer';
 
@@ -8,7 +8,7 @@ import {PolymerElement} from '@polymer/polymer';
  * @constructor
  */
 export function ErrorHandler<T extends Constructor<PolymerElement>>(superClass: T) {
-  class ErrorHandlerClass extends PermissionController(superClass as Constructor<PolymerElement>) {
+  class ErrorHandlerClass extends (superClass as Constructor<PolymerElement>) {
     public refactorErrorObject(errorData: any) {
       if (!errorData) {
         return {};
@@ -78,7 +78,7 @@ export function ErrorHandler<T extends Constructor<PolymerElement>>(superClass: 
      * @private
      */
     public _getErrorMessage(field: string, error: string, permissionPath: string) {
-      let fieldLabel = this.getFieldAttribute(`${permissionPath}.${field}`, 'label');
+      let fieldLabel = getFieldAttribute(`${permissionPath}.${field}`, 'label');
       return `${fieldLabel}: ${error}`;
     }
 

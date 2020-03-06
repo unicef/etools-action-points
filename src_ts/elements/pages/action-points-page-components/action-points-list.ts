@@ -14,26 +14,25 @@ import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';
 import '../../data-elements/action-points-data';
-import {StaticDataMixin} from '../../app-mixins/static-data-mixin';
+import {getData} from '../../app-mixins/static-data-mixin';
 import {LocalizationMixin} from '../../app-mixins/localization-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
-import {QueryParams} from '../../app-mixins/query-params-mixin';
+import {updateQueries, clearQueries} from '../../app-mixins/query-params-mixin';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {dataTableStyles} from '../../styles-elements/data-table-styles';
 import {customElement, property, observe} from '@polymer/decorators';
+import {noActionsAllowed} from '../../app-mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
 import {SearchAndFilter} from '../../common-elements/search-and-filter';
 
 @customElement('action-points-list')
 export class ActionPointsList extends
-  StaticDataMixin(
-      QueryParams(
-          InputAttrs(
-              LocalizationMixin(
-                  DateMixin(PolymerElement))))) {
+  InputAttrs(
+      LocalizationMixin(
+          DateMixin(PolymerElement))) {
 
   public static get template() {
     return html`
@@ -471,9 +470,13 @@ export class ActionPointsList extends
 
   @observe('staticDataLoaded')
   setData() {
-    this.set('modules', this.getData('modules') || []);
-    this.set('statuses', this.getData('statuses') || []);
+    this.set('modules', getData('modules') || []);
+    this.set('statuses', getData('statuses') || []);
     this._initFilters();
+  }
+
+  noActionsAllowed(path: string) {
+    return noActionsAllowed(path);
   }
 
   _initSort() {
@@ -504,18 +507,18 @@ export class ActionPointsList extends
   }
 
   @observe('queryParams')
-  _updateQueries(this, queryParams: any, oldQueryParams: any = {}) {
+  _updateQueries(queryParams: any, oldQueryParams: any = {}) {
     let exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
     delete exportParams['page'];
     this.set('exportParams', exportParams);
     if (!~this.path.indexOf('action-points/list')) return;
     if (this.queryParams.reload) {
-      this.clearQueries();
+      clearQueries();
       this.set('queryParams.page_size', this.pageSize);
       this.set('queryParams.page', this.pageNumber);
     }
-    this.updateQueries(this.queryParams, null, true);
+    updateQueries(this.queryParams, null, true);
     let x = Object.keys(queryParams).map((param) => {
       return !oldQueryParams.hasOwnProperty(param) && queryParams[param] && queryParams[param].length === 0;
     });
@@ -552,7 +555,7 @@ export class ActionPointsList extends
   }
 
   setFiltersSelections() {
-    let usersList = this.getData('unicefUsers').map((user: any) => {
+    let usersList = getData('unicefUsers').map((user: any) => {
       return {
         id: user.id,
         name: user.name
@@ -601,7 +604,7 @@ export class ActionPointsList extends
 
     queryDataPairs.forEach((pair) => {
       let filterIndex = this._getFilterIndex(pair.query);
-      let data = !pair.data ? this.getData(pair.dataKey) : pair.data || [];
+      let data = !pair.data ? getData(pair.dataKey) : pair.data || [];
       this.setFilterSelection(filterIndex, data);
     });
   }

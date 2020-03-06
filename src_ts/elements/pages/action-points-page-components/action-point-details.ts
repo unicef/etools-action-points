@@ -11,8 +11,8 @@ import {LocalizationMixin} from '../../app-mixins/localization-mixin';
 import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
-import {StaticDataMixin} from '../../app-mixins/static-data-mixin';
-import {PermissionController} from '../../app-mixins/permission-controller';
+import {getData} from '../../app-mixins/static-data-mixin';
+import {isReadOnly, actionAllowed} from '../../app-mixins/permission-controller';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
@@ -22,12 +22,10 @@ import {GenericObject} from '../../../typings/globals.types';
 
 @customElement('action-point-details')
 export class ActionPointDetails extends
-  InputAttrs(
-      StaticDataMixin(
-          PermissionController(
-              LocalizationMixin(
-                  DateMixin(
-                      EtoolsAjaxRequestMixin(PolymerElement)))))) {
+  EtoolsAjaxRequestMixin(
+      InputAttrs(
+          LocalizationMixin(
+              DateMixin(PolymerElement)))) {
   static get template() {
     return html`
       ${pageLayoutStyles}
@@ -97,8 +95,8 @@ export class ActionPointDetails extends
                 selected="{{editedItem.related_module}}" label="[[getLabel('related_module', permissionPath)]]"
                 placeholder="-" options="[[modules]]" option-label="display_name" option-value="value" 
                 required$="[[_setRequired('related_module', permissionPath)]]"
-                disabled$="[[isReadOnly('related_module', permissionPath)]]" 
-                readonly$="[[isReadOnly('related_module', permissionPath)]]"
+                disabled$="[[isFieldReadonly('related_module', permissionPath)]]" 
+                readonly$="[[isFieldReadonly('related_module', permissionPath)]]"
                 allow-outside-scroll dynamic-align>
               </etools-dropdown>
             </div>
@@ -120,8 +118,8 @@ export class ActionPointDetails extends
                 placeholder="-"
                 options="[[unicefUsers]]" option-label="name" option-value="id" 
                 required$="[[_setRequired('assigned_by', permissionPath)]]"
-                disabled$="[[isReadOnly('assigned_by', permissionPath)]]" 
-                readonly$="[[isReadOnly('assigned_by', permissionPath)]]"
+                disabled$="[[isFieldReadonly('assigned_by', permissionPath)]]" 
+                readonly$="[[isFieldReadonly('assigned_by', permissionPath)]]"
                 invalid="{{errors.assigned_by}}" error-message="{{errors.assigned_by}}" on-focus="_resetFieldError"
                 on-tap="_resetFieldError" allow-outside-scroll dynamic-align>
               </etools-dropdown>
@@ -138,8 +136,8 @@ export class ActionPointDetails extends
                 placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
                 options="[[categories]]" option-label="description" option-value="id" 
                 required$="[[_setRequired('category', permissionPath)]]"
-                disabled$="[[isReadOnly('category', permissionPath)]]" 
-                readonly$="[[isReadOnly('category', permissionPath)]]"
+                disabled$="[[isFieldReadonly('category', permissionPath)]]" 
+                readonly$="[[isFieldReadonly('category', permissionPath)]]"
                 invalid="{{errors.category}}" error-message="{{errors.category}}" on-focus="_resetFieldError" 
                 on-tap="_resetFieldError" allow-outside-scroll dynamic-align>
               </etools-dropdown>
@@ -156,8 +154,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
               options="[[partners]]" option-label="name" option-value="id" 
               required$="[[_setRequired('partner', permissionPath)]]"
-              disabled$="[[isReadOnly('partner', permissionPath)]]" 
-              readonly$="[[isReadOnly('partner', permissionPath)]]"
+              disabled$="[[isFieldReadonly('partner', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('partner', permissionPath)]]"
               invalid="{{errors.partner}}" error-message="{{errors.partner}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -193,8 +191,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('cp_output', permissionPath, 'true')]]"
               options="[[cpOutputs]]" option-label="name" option-value="id" 
               required$="[[_setRequired('cp_output', permissionPath)]]"
-              disabled$="[[isReadOnly('cp_output', permissionPath)]]" 
-              readonly$="[[isReadOnly('cp_output', permissionPath)]]"
+              disabled$="[[isFieldReadonly('cp_output', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('cp_output', permissionPath)]]"
               invalid="{{errors.cp_output}}" error-message="{{errors.cp_output}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -208,8 +206,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('location', permissionPath, 'true')]]"
               options="[[locations]]" option-label="name" option-value="id" 
               required$="[[_setRequired('location', permissionPath)]]"
-              disabled$="[[isReadOnly('location', permissionPath)]]" 
-              readonly$="[[isReadOnly('location', permissionPath)]]"
+              disabled$="[[isFieldReadonly('location', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('location', permissionPath)]]"
               invalid="{{errors.location}}" error-message="{{errors.location}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -225,8 +223,8 @@ export class ActionPointDetails extends
               value="{{editedItem.description}}" label="[[getLabel('description', permissionPath)]]" 
               placeholder="[[getPlaceholderText('description', permissionPath)]]"
               required$="[[_setRequired('description', permissionPath)]]" 
-              disabled$="[[isReadOnly('description', permissionPath)]]"
-              readonly$="[[isReadOnly('description', permissionPath)]]" max-length="800" 
+              disabled$="[[isFieldReadonly('description', permissionPath)]]"
+              readonly$="[[isFieldReadonly('description', permissionPath)]]" max-length="800" 
               invalid$="{{errors.description}}"
               error-message="{{errors.description}}" on-focus="_resetFieldError" 
               on-tap="_resetFieldError" no-title-attr>
@@ -244,8 +242,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('assigned_to', permissionPath, 'true')]]"
               options="[[unicefUsers]]" option-label="name" option-value="id" 
               required$="[[_setRequired('assigned_to', permissionPath)]]"
-              disabled$="[[isReadOnly('assigned_to', permissionPath)]]" 
-              readonly$="[[isReadOnly('assigned_to', permissionPath)]]"
+              disabled$="[[isFieldReadonly('assigned_to', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('assigned_to', permissionPath)]]"
               invalid="{{errors.assigned_to}}" error-message="{{errors.assigned_to}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -258,8 +256,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('section', permissionPath, 'true')]]"
               options="[[sectionsCovered]]" option-label="name" option-value="id" 
               required$="[[_setRequired('section', permissionPath)]]"
-              disabled$="[[isReadOnly('section', permissionPath)]]" 
-              readonly$="[[isReadOnly('section', permissionPath)]]"
+              disabled$="[[isFieldReadonly('section', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('section', permissionPath)]]"
               invalid="{{errors.section}}" error-message="{{errors.section}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -272,7 +270,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('office', permissionPath, 'true')]]"
               options="[[offices]]" option-label="name" option-value="id" update-selected 
               required$="[[_setRequired('office', permissionPath)]]"
-              disabled$="[[isReadOnly('office', permissionPath)]]" readonly$="[[isReadOnly('office', permissionPath)]]"
+              disabled$="[[isFieldReadonly('office', permissionPath)]]"
+              readonly$="[[isFieldReadonly('office', permissionPath)]]"
               invalid="{{errors.office}}" error-message="{{errors.office}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -284,7 +283,7 @@ export class ActionPointDetails extends
           <div class="input-container input-checkbox-container">
             <!-- Priority -->
             <paper-checkbox checked="{{editedItem.high_priority}}" 
-              disabled$="[[isReadOnly('high_priority', permissionPath)]]">
+              disabled$="[[isFieldReadonly('high_priority', permissionPath)]]">
               [[getLabel('high_priority', permissionPath)]]</paper-checkbox>
           </div>
           <div class="input-container">
@@ -298,7 +297,7 @@ export class ActionPointDetails extends
                              selected-date-display-format="YYYY-MM-DD"
                              clear-btn-inside-dr
                              required$="[[_setRequired('due_date', permissionPath)]]" 
-                             disabled$="[[isReadOnly('due_date', permissionPath)]]"
+                             disabled$="[[isFieldReadonly('due_date', permissionPath)]]"
                              error-message$="{{errors.due_date}}"
                              value="{{editedItem.due_date}}">
             </datepicker-lite>
@@ -363,12 +362,12 @@ export class ActionPointDetails extends
   }
 
   @observe('editedItem')
-  _setDrDOptions(this, editedItem: any) {
+  _setDrDOptions(editedItem: any) {
     let module = editedItem && editedItem.related_module;
     let categories = [];
 
     if (module) {
-      let categoriesList = this.getData('categoriesList');
+      let categoriesList = getData('categoriesList');
       categories = categoriesList.filter((category: any) => category.module === module);
     }
 
@@ -393,13 +392,13 @@ export class ActionPointDetails extends
     }
   }
 
-  setData(this) {
-    this.set('modules', this.getData('modules'));
-    this.set('partners', this.getData('partnerOrganisations'));
-    this.set('offices', this.getData('offices'));
-    this.set('sectionsCovered', this.getData('sectionsCovered'));
-    this.set('cpOutputs', this.getData('cpOutputsList'));
-    this.set('unicefUsers', (this.getData('unicefUsers') || []).map((user: any) => {
+  setData() {
+    this.set('modules', getData('modules'));
+    this.set('partners', getData('partnerOrganisations'));
+    this.set('offices', getData('offices'));
+    this.set('sectionsCovered', getData('sectionsCovered'));
+    this.set('cpOutputs', getData('cpOutputsList'));
+    this.set('unicefUsers', (getData('unicefUsers') || []).map((user: any) => {
       return {id: user.id, name: user.name};
     }));
 
@@ -412,15 +411,15 @@ export class ActionPointDetails extends
     this.set('editedItem', actionPoint && JSON.parse(JSON.stringify(actionPoint)) || {});
   }
 
-  _updateLocations(this, filter?: any) {
-    let locations = this.getData('locations') || [];
+  _updateLocations(filter?: any) {
+    let locations = getData('locations') || [];
     this.set('locations', locations.filter((location: any) => {
       return !filter || !!~filter.indexOf(+location.id);
     }));
   }
 
   @observe('editedItem.partner')
-  _requestPartner(this, partnerId: number) {
+  _requestPartner(partnerId: number) {
     if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
       return;
     }
@@ -456,13 +455,13 @@ export class ActionPointDetails extends
   }
 
   @observe('editedItem.intervention')
-  async _updateCpOutputs(this, interventionId: number) {
+  async _updateCpOutputs(interventionId: number) {
     if (interventionId === undefined) {
       return;
     }
     this._checkAndResetData(interventionId);
     if (interventionId === null) {
-      this.set('cpOutputs', this.getData('cpOutputsList'));
+      this.set('cpOutputs', getData('cpOutputsList'));
       this._updateLocations();
       return;
     }
@@ -546,8 +545,8 @@ export class ActionPointDetails extends
     this.set('interventions', interventions);
   }
 
-  isFieldReadonly(path: string, base: string, special: any) {
-    return this.isReadOnly(path, base) || !special;
+  isFieldReadonly(path: string, special: any) {
+    return isReadOnly(path) || !special;
   }
 
   validate() {
@@ -571,5 +570,9 @@ export class ActionPointDetails extends
 
   showCategory(categories: string[]) {
     return !!(categories && categories.length);
+  }
+
+  actionAllowed(path, action) {
+    return actionAllowed(path, action);
   }
 }

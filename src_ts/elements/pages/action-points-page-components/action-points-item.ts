@@ -7,7 +7,7 @@ import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
-import {PermissionController} from '../../app-mixins/permission-controller';
+import {_addToCollection, _updateCollection, collectionExists} from '../../app-mixins/permission-controller';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
 import '../../common-elements/pages-header-element';
@@ -24,11 +24,10 @@ import {ActionPointDetails} from './action-point-details';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends
-  InputAttrs(
-      DateMixin(
-          PermissionController(
-              ErrorHandler(
-                  EtoolsAjaxRequestMixin(PolymerElement))))) {
+  EtoolsAjaxRequestMixin(
+      ErrorHandler(
+          InputAttrs(
+              DateMixin(PolymerElement)))) {
 
   public static get template() {
     return html`
@@ -144,7 +143,7 @@ export class ActionPointsItem extends
   }
 
   @observe('routeData')
-  _changeActionPointId(this, data: any) {
+  _changeActionPointId(data: any) {
     this.set('actionPointId', data.id);
     if (!this.actionPointId) {
       return;
@@ -162,7 +161,7 @@ export class ActionPointsItem extends
         }).catch((err: any) => console.log(err));
   }
 
-  _loadOptions(this, id: number) {
+  _loadOptions(id: number) {
     let permissionPath = `action_points_${id}`;
     let endpoint = getEndpoint('actionPoint', id);
     return this.sendRequest({
@@ -171,10 +170,10 @@ export class ActionPointsItem extends
     })
         .then((data: any) => {
           let actions = data && data.actions;
-          if (!this.collectionExists(permissionPath)) {
-            this._addToCollection(permissionPath, actions);
+          if (!collectionExists(permissionPath)) {
+            _addToCollection(permissionPath, actions);
           } else {
-            this._updateCollection(permissionPath, actions);
+            _updateCollection(permissionPath, actions);
             this.set('permissionPath', '');
           }
           this.set('permissionPath', permissionPath);
@@ -215,7 +214,7 @@ export class ActionPointsItem extends
     return data;
   }
 
-  _complete(this) {
+  _complete() {
     let endpoint = getEndpoint('actionPointComplete', this.actionPointId);
 
     this.dispatchEvent(new CustomEvent('global-loading', {
@@ -267,7 +266,7 @@ export class ActionPointsItem extends
     return obj;
   }
 
-  _update(this) {
+  _update() {
     let detailsElement: ActionPointDetails = this.shadowRoot.querySelector('action-point-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
@@ -333,5 +332,4 @@ export class ActionPointsItem extends
       url: getEndpoint('actionPointExport', actionPoint.id).url
     }];
   }
-
 }
