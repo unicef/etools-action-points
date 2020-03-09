@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icon/iron-icon.js';
@@ -7,17 +7,18 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/iron-icons/maps-icons.js';
 import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {navMenuStyles} from '../styles-elements/nav-menu-styles';
 import {apdIcons} from '../styles-elements/apd-icons';
+import {customElement, property, observe} from '@polymer/decorators';
 
 /**
  * @polymer
  * @customElement
  */
-class AppSidebarMenu extends EndpointMixin(PolymerElement) {
-  static get template() {
+@customElement('app-sidebar-menu')
+export class AppSidebarMenu extends PolymerElement {
+  public static get template() {
     return html`
       ${navMenuStyles}
       ${moduleStyles}
@@ -132,7 +133,8 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
         </div>
 
         <side-bar-item class="lighter-item no-transform" name="Implementation Intelligence" icon="apd-icons:power-bi"
-                       side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/5e60ab16-cce5-4c21-8620-de0c4c6415de/ReportSectionfe8562e6ef8c4eddcb52?chromeless=1" external>
+                       side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/5e60ab16-cce5-4c21-8620-de0c4c6415de/ReportSectionfe8562e6ef8c4eddcb52?chromeless=1"
+                       external>
         </side-bar-item>
 
         <side-bar-item class="lighter-item" name="Knowledge Base" icon="maps:local-library" 
@@ -150,18 +152,13 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
     `;
   }
 
-  static get properties() {
-    return {
-      page: String,
-      smallMenu: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-        observer: '_menuSizeChange'
-      }
-    };
-  }
+  @property({type: String})
+  page: string;
 
+  @property({type: Boolean})
+  smallMenu: boolean = false;
+
+  @observe('smallMenu')
   _menuSizeChange() {
     this.dispatchEvent(new CustomEvent('resize-main-layout', {
       bubbles: true,
@@ -177,5 +174,3 @@ class AppSidebarMenu extends EndpointMixin(PolymerElement) {
     }));
   }
 }
-
-window.customElements.define('app-sidebar-menu', AppSidebarMenu);

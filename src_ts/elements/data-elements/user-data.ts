@@ -1,23 +1,15 @@
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import PermissionController from '../app-mixins/permission-controller';
-import UserController from '../app-mixins/user-controller';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
+import {UserController} from '../app-mixins/user-controller';
+import {getEndpoint, resetOldUserData} from '../app-mixins/endpoint-mixin';
+import {customElement} from '@polymer/decorators';
 
-const UserDataMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  PermissionController,
-  UserController,
-  EtoolsAjaxRequestMixin
-], PolymerElement);
-
-class UserData extends UserDataMixin {
-  static get properties() {return {};}
+@customElement('user-data')
+export class UserData extends EtoolsAjaxRequestMixin(UserController(PolymerElement)) {
 
   ready() {
     super.ready();
-    let endpoint = this.getEndpoint('userProfile');
+    let endpoint = getEndpoint('userProfile');
     this.sendRequest({
       method: 'GET',
       endpoint: {
@@ -30,14 +22,14 @@ class UserData extends UserDataMixin {
         () => this._handleError());
   }
 
-  _handleResponse(this: any, data: any) {
+  _handleResponse(data: any) {
     let user = data;
     let lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
     let countriesAvailable = user.countries_available || [];
     this.set('user.countries_available', countriesAvailable);
 
-    if (!lastUserId || lastUserId !== user.user) {
-      this.resetOldUserData();
+    if (!lastUserId || lastUserId != user.user) {
+      resetOldUserData();
     }
 
     localStorage.setItem('userId', user.user);
@@ -54,5 +46,3 @@ class UserData extends UserDataMixin {
     window.location.href = window.location.origin + '/';
   }
 }
-
-window.customElements.define('user-data', UserData);

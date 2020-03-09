@@ -1,14 +1,15 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/communication-icons.js';
+import {customElement, property} from '@polymer/decorators';
 
 /**
  * @polymer
  * @customElement
 */
-
-class SupportBtn extends PolymerElement {
-  static get template() {
+@customElement('support-btn')
+export class SupportBtn extends PolymerElement {
+  public static get template() {
     return html`
       <style>
         :host(:hover) {
@@ -32,15 +33,8 @@ class SupportBtn extends PolymerElement {
     `;
   }
 
-  static get properties() {
-    return {
-      url: {
-        type: String,
-        value: 'https://unicef.service-now.com/' +
-               'cc/?id=sc_cat_item&sys_id=35b00b1bdb255f00085184735b9619e6' +
-               '&sysparm_category=c6ab1444db5b5700085184735b961920'
-      }
-    };
-  }
+  @property({type: String})
+  url: string = 'https://unicef.service-now.com/' +
+    'cc/?id=sc_cat_item&sys_id=35b00b1bdb255f00085184735b9619e6' +
+    '&sysparm_category=c6ab1444db5b5700085184735b961920';
 }
-customElements.define('support-btn', SupportBtn);

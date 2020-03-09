@@ -1,25 +1,22 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@polymer/paper-input/paper-input.js';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
-import PermissionController from '../../app-mixins/permission-controller';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
+import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {customElement, property} from '@polymer/decorators';
+import {GenericObject} from '../../../typings/globals.types';
+import {isReadOnly} from '../../app-mixins/permission-controller';
 
-const OpenAddCommentsMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  InputAttrs,
-  PermissionController,
-  ErrorHandlerMixin,
-  EtoolsAjaxRequestMixin
-], PolymerElement);
-
-class OpenAddComments extends OpenAddCommentsMixin {
-  static get template() {
+@customElement('open-add-comments')
+export class OpenAddComments extends
+  EtoolsAjaxRequestMixin(
+      ErrorHandler(
+          InputAttrs(PolymerElement))) {
+  public static get template() {
     return html`
       <etools-dialog id="commentDialog" size="md" 
                       dialog-title="Add [[getLabel('comments', permissionPath)]]"
@@ -46,16 +43,14 @@ class OpenAddComments extends OpenAddCommentsMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      commentText: {
-        type: String
-      },
-      actionPoint: {
-        type: Array
-      }
-    };
-  }
+  @property({type: String})
+  commentText: string;
+
+  @property({type: Array})
+  actionPoint: any;
+
+  @property({type: String})
+  permissionPath: string;
 
   open() {
     (this.$.commentDialog as EtoolsDialog).opened = true;
@@ -64,7 +59,7 @@ class OpenAddComments extends OpenAddCommentsMixin {
   saveComment() {
     if (!this.validate()) return;
     const dialog: EtoolsDialog = this.$.commentDialog as EtoolsDialog;
-    let endpoint = this.getEndpoint('actionPoint', this.actionPoint.id);
+    let endpoint = getEndpoint('actionPoint', this.actionPoint.id);
     let comments = [{
       comment: this.commentText
     }];
@@ -92,19 +87,21 @@ class OpenAddComments extends OpenAddCommentsMixin {
   }
 
   validate() {
-    let elements = this.shadowRoot.querySelectorAll('.validate-input');
+    let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
     let valid = true;
-    for (let element of elements) {
+    elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
         let label = element.label || 'Field';
         element.errorMessage = `${label} is required`;
         element.invalid = true;
         valid = false;
       }
-    }
+    });
 
     return valid;
   }
-}
 
-customElements.define('open-add-comments', OpenAddComments);
+  isReadOnly(path) {
+    return isReadOnly(path);
+  }
+}

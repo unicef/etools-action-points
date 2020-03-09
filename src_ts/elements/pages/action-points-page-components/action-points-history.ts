@@ -1,18 +1,14 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
-import DateMixin from '../../app-mixins/date-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {DateMixin} from '../../app-mixins/date-mixin';
 import {moduleStyles} from '../../styles-elements/module-styles';
+import {customElement, property} from '@polymer/decorators';
 
-const ActionPointsHistoryMixin = EtoolsMixinFactory.combineMixins([
-  InputAttrs,
-  DateMixin
-], PolymerElement);
-
-class ActionPointsHistory extends ActionPointsHistoryMixin {
-  static get template() {
+@customElement('action-points-history')
+export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
+  public static get template() {
     return html`
       ${moduleStyles}
       <style include="iron-flex">
@@ -48,16 +44,9 @@ class ActionPointsHistory extends ActionPointsHistoryMixin {
     `;
   }
 
-  static properties() {
-    return {
-      history: {
-        type: Array,
-        value() {
-          return [];
-        }
-      },
-      permissionPath: String
-    };
-  }
+  @property({type: Array})
+  history: object[] = [];
+
+  @property({type: String})
+  permissionPath: string;
 }
-customElements.define('action-points-history', ActionPointsHistory);

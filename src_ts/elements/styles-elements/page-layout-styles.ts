@@ -1,6 +1,6 @@
 // This file will be dedicated to page layout and related layout elements
 
-import {html} from '@polymer/polymer/polymer-element.js';
+import {html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 

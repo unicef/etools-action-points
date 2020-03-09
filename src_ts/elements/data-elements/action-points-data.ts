@@ -1,33 +1,24 @@
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
-import QueryParams from '../app-mixins/query-params-mixin';
-import ErrorHandler from '../app-mixins/error-handler-mixin';
+import {getEndpoint} from '../app-mixins/endpoint-mixin';
+import {getQueriesString} from '../app-mixins/query-params-mixin';
+import {ErrorHandler} from '../app-mixins/error-handler-mixin';
+import {customElement, property} from '@polymer/decorators';
 
-const ActionPointsDataMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  EtoolsAjaxRequestMixin,
-  ErrorHandler,
-  QueryParams
-], PolymerElement);
+@customElement('action-points-data')
+export class ActionPointsData extends
+  EtoolsAjaxRequestMixin(
+      ErrorHandler(
+          PolymerElement)) {
 
-class ActionPointsData extends ActionPointsDataMixin {
-  static get properties() {
-    return {
-      actionPoints: {
-        type: Array,
-        notify: true
-      },
-      requestQueries: {
-        type: Object
-      },
-      listLength: {
-        type: Number,
-        notify: true
-      }
-    };
-  }
+  @property({type: Array, notify: true})
+  public actionPoints: object[]
+
+  @property({type: Object})
+  public requestQueries: object
+
+  @property({type: Number, notify: true})
+  public listLength: number
 
   connectedCallback() {
     super.connectedCallback();
@@ -44,8 +35,8 @@ class ActionPointsData extends ActionPointsDataMixin {
       bubbles: true,
       composed: true
     }));
-    let endpoint = this.getEndpoint('actionPointsList');
-    endpoint.url += this.getQueriesString();
+    let endpoint = getEndpoint('actionPointsList');
+    endpoint.url += getQueriesString();
 
     this.sendRequest({
       method: 'GET',
@@ -66,5 +57,3 @@ class ActionPointsData extends ActionPointsDataMixin {
     }));
   }
 }
-
-customElements.define('action-points-data', ActionPointsData);

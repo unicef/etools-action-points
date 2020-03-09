@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
@@ -15,21 +15,18 @@ import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import QueryParams from '../app-mixins/query-params-mixin';
-import DateMixin from '../app-mixins/date-mixin';
+import {updateQueries} from '../app-mixins/query-params-mixin';
+import {DateMixin} from '../app-mixins/date-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
+import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 declare const moment: any;
 
-const SearchAndFilterMixin = EtoolsMixinFactory.combineMixins([
-  DateMixin,
-  QueryParams
-], PolymerElement);
-
-class SearchAndFilter extends SearchAndFilterMixin {
-  static get template() {
+@customElement('search-and-filter')
+export class SearchAndFilter extends DateMixin(PolymerElement) {
+  public static get template() {
     return html`
       ${sharedStyles}
       ${moduleStyles}
@@ -54,7 +51,6 @@ class SearchAndFilter extends SearchAndFilterMixin {
       
           iron-icon { color: var(--gray-mid); }
         }
-        
         
         .toggle-hidden-div {
           margin-right: 26px;
@@ -211,48 +207,36 @@ class SearchAndFilter extends SearchAndFilterMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      filters: {
-        type: Array,
-        value: () => {
-          return [];
-        },
-        notify: true
-      },
-      searchLabel: {
-        type: String
-      },
-      searchString: {
-        type: String,
-        observer: 'searchKeyDown'
-      },
-      selectedFilters: {
-        type: Array,
-        value: []
-      },
-      queryParams: {
-        type: Object,
-        notify: true
-      },
-      dates: {
-        type: Object,
-        value: () => ({})
-      }
-    };
-  }
+  @property({type: Array, notify: true})
+  filters: GenericObject[];
 
-  static get observers() {
-    return [
-      '_restoreFilters(queryParams.*)'
-    ];
-  }
+  @property({type: String})
+  searchLabel: string;
 
+  @property({type: String})
+  searchString: string;
+
+  @property({type: Array})
+  selectedFilters: GenericObject[];
+
+  @property({type: Object, notify: true})
+  queryParams: GenericObject;
+
+  @property({type: Object})
+  dates: GenericObject
+
+  @property({type: Object})
+  _debounceSearch: Debouncer;
+
+  @property({type: Object})
+  _debounceFilters: Debouncer;
+
+  @observe('searchString')
   searchKeyDown() {
     this.set('_debounceSearch', Debouncer.debounce(
         this._debounceSearch, timeOut.after(300), () => {
           let query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
-          this.updateQueries({
+          updateQueries({
             search: query,
             page: '1'
           });
@@ -277,7 +261,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
       if (this.queryParams[query] === undefined) {
         let queryObject = {};
         queryObject[query] = true;
-        this.updateQueries(queryObject);
+        updateQueries(queryObject);
       }
     }
   }
@@ -296,12 +280,11 @@ class SearchAndFilter extends SearchAndFilterMixin {
     }
 
     if (indexToRemove !== -1) {
-      debugger;
       let filterIndex = this.filters.findIndex(filter => filter.query === query);
       this.set(`filters.${filterIndex}.selected`, false);
       this.splice('selectedFilters', indexToRemove, 1);
     }
-    this.updateQueries(queryObject);
+    updateQueries(queryObject);
   }
 
   _reloadFilters() {
@@ -309,6 +292,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
     this._restoreFilters();
   }
 
+  @observe('queryParams.*')
   _restoreFilters() {
     this.set('restoreInProcess', true);
     this.set('_debounceFilters', Debouncer.debounce(this._debounceFilters,
@@ -349,7 +333,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
   _updateValues() {
     let ids = Object.keys(this.queryParams || {});
     ids.forEach((id) => {
-      let element = this.shadowRoot.querySelector(`#${id}`);
+      let element: any = this.shadowRoot.querySelector(`#${id}`);
       if (!element) {
         return;
       }
@@ -394,7 +378,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
       if (this.queryParams[selectedOption.query] === undefined) {
         let queryObject: any = {};
         queryObject[selectedOption.query] = true;
-        this.updateQueries(queryObject);
+        updateQueries(queryObject);
       }
     } else {
       let paredFilters = this.selectedFilters.filter(fil => fil.query != selectedOption.query);
@@ -402,7 +386,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
       this.set(`filters.${selectedIdx}.selected`, false);
       let newQueryObj = this.queryParams;
       newQueryObj[selectedOption.query] = undefined;
-      this.updateQueries(newQueryObj);
+      updateQueries(newQueryObj);
       delete newQueryObj[selectedOption.query];
       this.set('queryParams', newQueryObj);
     }
@@ -438,9 +422,7 @@ class SearchAndFilter extends SearchAndFilterMixin {
     }
 
     if (queryObject) {
-      this.updateQueries(queryObject);
+      updateQueries(queryObject);
     }
   }
 }
-
-customElements.define('search-and-filter', SearchAndFilter);
