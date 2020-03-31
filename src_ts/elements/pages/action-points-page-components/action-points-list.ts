@@ -50,7 +50,7 @@ export class ActionPointsList extends
           font-weight: 500;
           cursor: pointer;
         }
-      
+
         .row-details-content {
           position: relative;
           min-width: 0;
@@ -58,14 +58,14 @@ export class ActionPointsList extends
             max-width: 100%;
           }
         }
-      
+
         .row-details-content .truncate {
           display: inline-block;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
-      
+
         paper-card {
           display: block;
           margin-top: 25px;
@@ -73,11 +73,11 @@ export class ActionPointsList extends
           margin: 24px 24px 0 24px;
           width: calc(100% - 48px);
         }
-      
+
         .no-content {
           padding: 16px 24px;
         }
-      
+
         .show-completed-toggle {
           @apply --layout-horizontal;
           @apply --layout-center;
@@ -91,20 +91,20 @@ export class ActionPointsList extends
           padding: 0 12px;
           font-size: 16px;
         }
-      
+
         .ellipse {
           max-height: 4.4em;
           overflow: hidden;
         }
-      
+
         .tooltip-container {
           display: inline-block;
           max-width: 100%;
           overflow: hidden;
         }
-        
-        pages-header-element { 
-          box-shadow: 1px -3px 9px 0 #000000; 
+
+        pages-header-element {
+          box-shadow: 1px -3px 9px 0 #000000;
         }
 
         etools-data-table-row {
@@ -123,7 +123,7 @@ export class ActionPointsList extends
           --header-columns: {
             margin-left: 47px;
           }
-        }    
+        }
       </style>
 
       <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
@@ -131,15 +131,16 @@ export class ActionPointsList extends
       </iron-query-params>
       <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}">
       </app-route-converter>
-      <pages-header-element hide-print-button link="action-points/new" 
+      <pages-header-element hide-print-button link="action-points/new"
         show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
+        show-export-button="true"
         export-links="[[exportLinks]]" btn-text="Add Action Point" page-title="Action Points">
       </pages-header-element>
-      <action-points-data action-points="{{actionPoints}}" request-queries="{{queryParams}}" 
+      <action-points-data action-points="{{actionPoints}}" request-queries="{{queryParams}}"
         list-length="{{totalResults}}">
       </action-points-data>
       <filters-element>
-        <search-and-filter id="filters" filters="[[filters]]" query-params="{{queryParams}}" 
+        <search-and-filter id="filters" filters="[[filters]]" query-params="{{queryParams}}"
           search-params="[[searchParams]]">
         </search-and-filter>
         <div class="show-completed-toggle">
@@ -148,7 +149,7 @@ export class ActionPointsList extends
         </div>
       </filters-element>
       <paper-card>
-        <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]" 
+        <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]"
           label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
           <etools-data-table-column class="flex-1" field="reference_number" sortable>
           [[getLabel('reference_number', basePermissionPath)]]
@@ -178,7 +179,7 @@ export class ActionPointsList extends
             Priority
           </etools-data-table-column>
         </etools-data-table-header>
-  
+
         <template is="dom-if" if="[[!actionPoints.length]]">
           <etools-data-table-row no-collapse>
             <div slot="row-data" class="layout horizontal">
@@ -194,7 +195,7 @@ export class ActionPointsList extends
             </div>
           </etools-data-table-row>
         </template>
-  
+
         <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
           <etools-data-table-row>
             <div slot="row-data" class="layout horizontal">
@@ -292,10 +293,10 @@ export class ActionPointsList extends
             </div>
           </etools-data-table-row>
         </template>
-  
-        <etools-data-table-footer page-size="{{pageSize}}" page-number="{{pageNumber}}" 
+
+        <etools-data-table-footer page-size="{{pageSize}}" page-number="{{pageNumber}}"
           total-results="[[totalResults]]"
-          visible-range="{{visibleRange}}" on-page-size-changed="_pageSizeSelected" 
+          visible-range="{{visibleRange}}" on-page-size-changed="_pageSizeSelected"
           on-page-number-changed="_pageNumberChanged">
         </etools-data-table-footer>
       </paper-card>

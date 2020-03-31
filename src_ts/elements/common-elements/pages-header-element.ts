@@ -117,13 +117,12 @@ export class PagesHeaderElement extends PolymerElement {
                   </template>
                 </paper-listbox>
               </paper-menu-button>
-
-              <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
-                <template is="dom-if" if="{{_showLink(link)}}">
-                  <iron-icon icon="file-download"></iron-icon>
-                  Export
-                </template>
-              </paper-button>
+              <template is="dom-if" if="[[_hideExportButton(showExportButton)]]">
+                <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
+                    <iron-icon icon="file-download"></iron-icon>
+                    Export
+                </paper-button>
+              </template>
             </div>
 
             <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
@@ -146,6 +145,9 @@ export class PagesHeaderElement extends PolymerElement {
 
   @property({type: Boolean})
   showAddButton = false;
+
+  @property({type: Boolean})
+  showExportButton = false;
 
   @property({type: String})
   link = '';
@@ -194,5 +196,9 @@ export class PagesHeaderElement extends PolymerElement {
   _isDropDown(exportLinks: any[]) {
     return exportLinks && (exportLinks.length > 1 ||
       (exportLinks[0] && exportLinks[0].useDropdown));
+  }
+
+  _hideExportButton(show) {
+    return show;
   }
 }
