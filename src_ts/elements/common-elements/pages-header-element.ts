@@ -28,30 +28,30 @@ export class PagesHeaderElement extends PolymerElement {
           min-width: 150px;
           white-space: nowrap;
         }
-      
+
         paper-item {
           cursor: pointer;
         }
-      
+
         .export-buttons:not([hidden]) {
           display: inline-block;
         }
-      
+
         .visit-letter {
           margin: 8px;
         }
-      
+
         .header-wrapper {
           background-color: white;
         }
-        
+
         .side-heading {
           margin: 0;
           height: 80px;
           padding: 0 48px;
           box-sizing: border-box;
         }
-        
+
         .side-heading span.title {
           font-size: 24px;
           width: 100%;
@@ -59,17 +59,17 @@ export class PagesHeaderElement extends PolymerElement {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        
+
         .side-heading .grey-buttons {
           color: var(--gray-mid);
           font-weight: 500;
           font-size: 14px;
         }
-        
+
         .side-heading .grey-buttons iron-icon {
           margin-right: 8px;
         }
-        
+
         .side-heading paper-button.add-btn {
           background-color: var(--module-primary);
           color: white;
@@ -78,16 +78,16 @@ export class PagesHeaderElement extends PolymerElement {
           padding-left: 10px;
           padding-right: 15px;
         }
-        
+
         .side-heading paper-button.add-btn span {
           margin-left: 4px;
         }
-        
+
         .side-heading .add-btn {
           margin: 11px 4px 12px 18px;
           background-color: var(--module-primary);
         }
-        
+
         .btn-link {
           position: absolute;
           top: 0;
@@ -97,11 +97,11 @@ export class PagesHeaderElement extends PolymerElement {
           z-index: 10;
         }
       </style>
-      
+
       <div class="header-wrapper">
         <div class="side-heading horizontal layout center around-justified">
           <span class="flex title">[[_setTitle(pageData, pageTitle)]]</span>
-      
+
           <div class="horizontal layout center">
             <div class="export-buttons" hidden$="[[!exportLinks.length]]">
               <paper-menu-button id="dropdown" hidden$="[[!_isDropDown(exportLinks)]]" on-tap="_toggleOpened"
@@ -110,20 +110,21 @@ export class PagesHeaderElement extends PolymerElement {
                   <iron-icon icon="file-download"></iron-icon>
                   Export
                 </paper-button>
-      
+
                 <paper-listbox id="dropdownMenu" slot="dropdown-content">
                   <template is="dom-repeat" items="[[exportLinks]]">
                     <paper-item on-tap="exportData">[[item.name]]</paper-item>
                   </template>
                 </paper-listbox>
               </paper-menu-button>
-      
-              <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
-                <iron-icon icon="file-download"></iron-icon>
-                Export
-              </paper-button>
+              <template is="dom-if" if="[[showExportButton]]">
+                <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
+                    <iron-icon icon="file-download"></iron-icon>
+                    Export
+                </paper-button>
+              </template>
             </div>
-      
+
             <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
               <template is="dom-if" if="{{_showLink(link)}}"><a href$="{{link}}" class="btn-link"></a></template>
               <iron-icon icon="add"></iron-icon>
@@ -144,6 +145,9 @@ export class PagesHeaderElement extends PolymerElement {
 
   @property({type: Boolean})
   showAddButton = false;
+
+  @property({type: Boolean, reflectToAttribute: true})
+  showExportButton = false;
 
   @property({type: String})
   link = '';
@@ -193,4 +197,5 @@ export class PagesHeaderElement extends PolymerElement {
     return exportLinks && (exportLinks.length > 1 ||
       (exportLinks[0] && exportLinks[0].useDropdown));
   }
+
 }
