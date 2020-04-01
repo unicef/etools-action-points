@@ -117,7 +117,7 @@ export class PagesHeaderElement extends PolymerElement {
                   </template>
                 </paper-listbox>
               </paper-menu-button>
-              <template is="dom-if" if="[[!hideExportButton]]">
+              <template is="dom-if" if="[[showExportButton]]">
                 <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
                     <iron-icon icon="file-download"></iron-icon>
                     Export
@@ -147,7 +147,7 @@ export class PagesHeaderElement extends PolymerElement {
   showAddButton = false;
 
   @property({type: Boolean, reflectToAttribute: true})
-  hideExportButton = false;
+  showExportButton = false;
 
   @property({type: String})
   link = '';
