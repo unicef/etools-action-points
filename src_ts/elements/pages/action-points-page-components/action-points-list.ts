@@ -31,8 +31,8 @@ import {SearchAndFilter} from '../../common-elements/search-and-filter';
 @customElement('action-points-list')
 export class ActionPointsList extends
   InputAttrs(
-      LocalizationMixin(
-          DateMixin(PolymerElement))) {
+    LocalizationMixin(
+      DateMixin(PolymerElement))) {
 
   public static get template() {
     return html`
@@ -133,7 +133,7 @@ export class ActionPointsList extends
       </app-route-converter>
       <pages-header-element hide-print-button link="action-points/new"
         show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
-        show-export-button="true"
+        hide-export-button
         export-links="[[exportLinks]]" btn-text="Add Action Point" page-title="Action Points">
       </pages-header-element>
       <action-points-data action-points="{{actionPoints}}" request-queries="{{queryParams}}"
