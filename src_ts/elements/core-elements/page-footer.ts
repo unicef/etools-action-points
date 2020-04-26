@@ -1,13 +1,15 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import {customElement} from '@polymer/decorators';
 
 /**
 * @polymer
 * @extends HTMLElement
 */
-class PageFooter extends PolymerElement {
-  static get template() {
+@customElement('page-footer')
+export class PageFooter extends PolymerElement {
+  public static get template() {
     return html`
       <style include="iron-flex">
         :host {
@@ -61,5 +63,3 @@ class PageFooter extends PolymerElement {
     `;
   }
 }
-
-window.customElements.define('page-footer', PageFooter);

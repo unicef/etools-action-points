@@ -1,9 +1,11 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
-import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js'; // eslint-disable-line
+import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import './action-points-history';
+import {customElement, property} from '@polymer/decorators';
 
-class OpenViewHistory extends PolymerElement {
+@customElement('open-view-history')
+export class OpenViewHistory extends PolymerElement {
   static get template() {
     return html`
     <etools-dialog id="historyDialog"
@@ -20,17 +22,10 @@ class OpenViewHistory extends PolymerElement {
     `;
   }
 
-  static get properties() {
-    return {
-      actionPoint: {
-        type: Array
-      }
-    };
-  }
+  @property({type: Array})
+  actionPoint: object[];
 
   open() {
     (this.$.historyDialog as EtoolsDialog).opened = true;
   }
 }
-
-customElements.define('open-view-history', OpenViewHistory);

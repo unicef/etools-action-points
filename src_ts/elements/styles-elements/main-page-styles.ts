@@ -1,4 +1,4 @@
-import {html} from '@polymer/polymer/polymer-element.js';
+import {html} from '@polymer/polymer';
 import {moduleStyles} from './module-styles';
 
 export const mainPageStyles = html`

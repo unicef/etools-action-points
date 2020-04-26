@@ -1,35 +1,31 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import LocalizationMixin from '../../app-mixins/localization-mixin';
-import InputAttrs from '../../app-mixins/input-attrs-mixin';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
-import DateMixin from '../../app-mixins/date-mixin';
-import StaticData from '../../app-mixins/static-data-mixin';
-import PermissionController from '../../app-mixins/permission-controller';
+import {LocalizationMixin} from '../../app-mixins/localization-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
+import {DateMixin} from '../../app-mixins/date-mixin';
+import {getData} from '../../app-mixins/static-data-mixin';
+import {isReadOnly, actionAllowed} from '../../app-mixins/permission-controller';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
+import {customElement, observe, property} from '@polymer/decorators';
+import {GenericObject} from '../../../typings/globals.types';
 
-const ActionPointDetailsMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  InputAttrs,
-  StaticData,
-  PermissionController,
-  LocalizationMixin,
-  DateMixin,
-  EtoolsAjaxRequestMixin
-], PolymerElement);
-
-class ActionPointDetails extends ActionPointDetailsMixin {
+@customElement('action-point-details')
+export class ActionPointDetails extends
+  EtoolsAjaxRequestMixin(
+      InputAttrs(
+          LocalizationMixin(
+              DateMixin(PolymerElement)))) {
   static get template() {
     return html`
       ${pageLayoutStyles}
@@ -99,8 +95,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
                 selected="{{editedItem.related_module}}" label="[[getLabel('related_module', permissionPath)]]"
                 placeholder="-" options="[[modules]]" option-label="display_name" option-value="value" 
                 required$="[[_setRequired('related_module', permissionPath)]]"
-                disabled$="[[isReadOnly('related_module', permissionPath)]]" 
-                readonly$="[[isReadOnly('related_module', permissionPath)]]"
+                disabled$="[[isFieldReadonly('related_module', permissionPath)]]" 
+                readonly$="[[isFieldReadonly('related_module', permissionPath)]]"
                 allow-outside-scroll dynamic-align>
               </etools-dropdown>
             </div>
@@ -122,8 +118,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
                 placeholder="-"
                 options="[[unicefUsers]]" option-label="name" option-value="id" 
                 required$="[[_setRequired('assigned_by', permissionPath)]]"
-                disabled$="[[isReadOnly('assigned_by', permissionPath)]]" 
-                readonly$="[[isReadOnly('assigned_by', permissionPath)]]"
+                disabled$="[[isFieldReadonly('assigned_by', permissionPath)]]" 
+                readonly$="[[isFieldReadonly('assigned_by', permissionPath)]]"
                 invalid="{{errors.assigned_by}}" error-message="{{errors.assigned_by}}" on-focus="_resetFieldError"
                 on-tap="_resetFieldError" allow-outside-scroll dynamic-align>
               </etools-dropdown>
@@ -140,8 +136,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
                 placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
                 options="[[categories]]" option-label="description" option-value="id" 
                 required$="[[_setRequired('category', permissionPath)]]"
-                disabled$="[[isReadOnly('category', permissionPath)]]" 
-                readonly$="[[isReadOnly('category', permissionPath)]]"
+                disabled$="[[isFieldReadonly('category', permissionPath)]]" 
+                readonly$="[[isFieldReadonly('category', permissionPath)]]"
                 invalid="{{errors.category}}" error-message="{{errors.category}}" on-focus="_resetFieldError" 
                 on-tap="_resetFieldError" allow-outside-scroll dynamic-align>
               </etools-dropdown>
@@ -158,8 +154,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
               options="[[partners]]" option-label="name" option-value="id" 
               required$="[[_setRequired('partner', permissionPath)]]"
-              disabled$="[[isReadOnly('partner', permissionPath)]]" 
-              readonly$="[[isReadOnly('partner', permissionPath)]]"
+              disabled$="[[isFieldReadonly('partner', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('partner', permissionPath)]]"
               invalid="{{errors.partner}}" error-message="{{errors.partner}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -195,8 +191,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               placeholder="[[getPlaceholderText('cp_output', permissionPath, 'true')]]"
               options="[[cpOutputs]]" option-label="name" option-value="id" 
               required$="[[_setRequired('cp_output', permissionPath)]]"
-              disabled$="[[isReadOnly('cp_output', permissionPath)]]" 
-              readonly$="[[isReadOnly('cp_output', permissionPath)]]"
+              disabled$="[[isFieldReadonly('cp_output', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('cp_output', permissionPath)]]"
               invalid="{{errors.cp_output}}" error-message="{{errors.cp_output}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -210,8 +206,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               placeholder="[[getPlaceholderText('location', permissionPath, 'true')]]"
               options="[[locations]]" option-label="name" option-value="id" 
               required$="[[_setRequired('location', permissionPath)]]"
-              disabled$="[[isReadOnly('location', permissionPath)]]" 
-              readonly$="[[isReadOnly('location', permissionPath)]]"
+              disabled$="[[isFieldReadonly('location', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('location', permissionPath)]]"
               invalid="{{errors.location}}" error-message="{{errors.location}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -227,8 +223,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               value="{{editedItem.description}}" label="[[getLabel('description', permissionPath)]]" 
               placeholder="[[getPlaceholderText('description', permissionPath)]]"
               required$="[[_setRequired('description', permissionPath)]]" 
-              disabled$="[[isReadOnly('description', permissionPath)]]"
-              readonly$="[[isReadOnly('description', permissionPath)]]" max-length="800" 
+              disabled$="[[isFieldReadonly('description', permissionPath)]]"
+              readonly$="[[isFieldReadonly('description', permissionPath)]]" max-length="800" 
               invalid$="{{errors.description}}"
               error-message="{{errors.description}}" on-focus="_resetFieldError" 
               on-tap="_resetFieldError" no-title-attr>
@@ -246,8 +242,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               placeholder="[[getPlaceholderText('assigned_to', permissionPath, 'true')]]"
               options="[[unicefUsers]]" option-label="name" option-value="id" 
               required$="[[_setRequired('assigned_to', permissionPath)]]"
-              disabled$="[[isReadOnly('assigned_to', permissionPath)]]" 
-              readonly$="[[isReadOnly('assigned_to', permissionPath)]]"
+              disabled$="[[isFieldReadonly('assigned_to', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('assigned_to', permissionPath)]]"
               invalid="{{errors.assigned_to}}" error-message="{{errors.assigned_to}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -260,8 +256,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               placeholder="[[getPlaceholderText('section', permissionPath, 'true')]]"
               options="[[sectionsCovered]]" option-label="name" option-value="id" 
               required$="[[_setRequired('section', permissionPath)]]"
-              disabled$="[[isReadOnly('section', permissionPath)]]" 
-              readonly$="[[isReadOnly('section', permissionPath)]]"
+              disabled$="[[isFieldReadonly('section', permissionPath)]]" 
+              readonly$="[[isFieldReadonly('section', permissionPath)]]"
               invalid="{{errors.section}}" error-message="{{errors.section}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -274,7 +270,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
               placeholder="[[getPlaceholderText('office', permissionPath, 'true')]]"
               options="[[offices]]" option-label="name" option-value="id" update-selected 
               required$="[[_setRequired('office', permissionPath)]]"
-              disabled$="[[isReadOnly('office', permissionPath)]]" readonly$="[[isReadOnly('office', permissionPath)]]"
+              disabled$="[[isFieldReadonly('office', permissionPath)]]"
+              readonly$="[[isFieldReadonly('office', permissionPath)]]"
               invalid="{{errors.office}}" error-message="{{errors.office}}" 
               on-focus="_resetFieldError" on-tap="_resetFieldError"
               allow-outside-scroll dynamic-align>
@@ -286,7 +283,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
           <div class="input-container input-checkbox-container">
             <!-- Priority -->
             <paper-checkbox checked="{{editedItem.high_priority}}" 
-              disabled$="[[isReadOnly('high_priority', permissionPath)]]">
+              disabled$="[[isFieldReadonly('high_priority', permissionPath)]]">
               [[getLabel('high_priority', permissionPath)]]</paper-checkbox>
           </div>
           <div class="input-container">
@@ -300,7 +297,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
                              selected-date-display-format="YYYY-MM-DD"
                              clear-btn-inside-dr
                              required$="[[_setRequired('due_date', permissionPath)]]" 
-                             disabled$="[[isReadOnly('due_date', permissionPath)]]"
+                             disabled$="[[isFieldReadonly('due_date', permissionPath)]]"
                              error-message$="{{errors.due_date}}"
                              value="{{editedItem.due_date}}">
             </datepicker-lite>
@@ -317,84 +314,60 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     `;
   }
 
-  static get observers() {
-    return [
-      '_updateStyles(permissionPath)',
-      '_setDrDOptions(editedItem)',
-      '_requestPartner(editedItem.partner)',
-      '_updateCpOutputs(editedItem.intervention)',
-      '_updateEditedItem(actionPoint)',
-      '_updateInterventions(originalActionPoint.intervention, originalActionPoint.partner.id, partner)'
-    ];
-  }
+  @property({type: Array, notify: true})
+  partners: object[] = [];
 
-  static get properties() {
-    return {
-      partners: {
-        type: Array,
-        value: () => [],
-        notify: true
-      },
-      permissionPath: {
-        typs: String,
-        notify: true
-      },
-      locations: {
-        type: Array,
-        value: () => [],
-        notify: true
-      },
-      editedItem: {
-        type: Object,
-        value: () => ({}),
-        notify: true
-      },
-      cpOutputs: {
-        type: Array,
-        notify: true
-      },
-      interventions: {
-        type: Array,
-        value: () => [],
-        notify: true
-      },
-      modules: {
-        type: Array,
-        notify: true
-      },
-      unicefUsers: {
-        type: Array,
-        notify: true
-      },
-      offices: {
-        type: Array,
-        notify: true
-      },
-      sectionsCovered: {
-        type: Array,
-        notify: true
-      },
-      originalActionPoint: {
-        type: Object,
-        readonly: true
-      },
-      dataIsSet: {
-        type: Boolean,
-        value: false
-      }
-    };
-  }
+  @property({type: String, notify: true})
+  permissionPath: string;
 
+  @property({type: Array})
+  locations: object[] = [];
+
+  @property({type: Object, notify: true})
+  editedItem: GenericObject = {};
+
+  @property({type: Array, notify: true})
+  cpOutputs: object[];
+
+  @property({type: Array, notify: true})
+  interventions: object[] = [];
+
+  @property({type: Array, notify: true})
+  modules: object[]
+
+  @property({type: Array, notify: true})
+  unicefUsers: object[];
+
+  @property({type: Array, notify: true})
+  offices: object[];
+
+  @property({type: Array, notify: true})
+  sectionsCovered: object[];
+
+  @property({type: Object, notify: true})
+  originalActionPoint: GenericObject;
+
+  @property({type: Boolean})
+  dataIsSet: boolean = false;
+
+  @property({type: Boolean})
+  partnerRequestInProcess: boolean;
+
+  @property({type: Number})
+  lastPartnerId: number;
+
+  @observe('permissionPath')
   _updateStyles() {
     this.updateStyles();
   }
 
+  @observe('editedItem')
   _setDrDOptions(editedItem: any) {
     let module = editedItem && editedItem.related_module;
     let categories = [];
 
     if (module) {
-      let categoriesList = this.getData('categoriesList');
+      let categoriesList = getData('categoriesList');
       categories = categoriesList.filter((category: any) => category.module === module);
     }
 
@@ -406,13 +379,13 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     document.addEventListener('static-data-loaded', () => this.setData());
     document.addEventListener('locations-loaded', () => this._updateLocations());
     this.addEventListener('reset-validation', ({detail}: any) => {
-      let elements = this.shadowRoot.querySelectorAll('.validate-input');
-      for (let element of elements) {
+      let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+      elements.forEach((element: GenericObject) => {
         element.invalid = false;
         if (detail && detail.resetValues) {
           element.value = '';
         }
-      }
+      });
     });
     if (!this.dataIsSet) {
       this.setData();
@@ -420,12 +393,12 @@ class ActionPointDetails extends ActionPointDetailsMixin {
   }
 
   setData() {
-    this.set('modules', this.getData('modules'));
-    this.set('partners', this.getData('partnerOrganisations'));
-    this.set('offices', this.getData('offices'));
-    this.set('sectionsCovered', this.getData('sectionsCovered'));
-    this.set('cpOutputs', this.getData('cpOutputsList'));
-    this.set('unicefUsers', (this.getData('unicefUsers') || []).map((user: any) => {
+    this.set('modules', getData('modules'));
+    this.set('partners', getData('partnerOrganisations'));
+    this.set('offices', getData('offices'));
+    this.set('sectionsCovered', getData('sectionsCovered'));
+    this.set('cpOutputs', getData('cpOutputsList'));
+    this.set('unicefUsers', (getData('unicefUsers') || []).map((user: any) => {
       return {id: user.id, name: user.name};
     }));
 
@@ -433,17 +406,19 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     this.set('dataIsSet', true);
   }
 
+  @observe('actionPoint')
   _updateEditedItem(actionPoint: any) {
     this.set('editedItem', actionPoint && JSON.parse(JSON.stringify(actionPoint)) || {});
   }
 
   _updateLocations(filter?: any) {
-    let locations = this.getData('locations') || [];
+    let locations = getData('locations') || [];
     this.set('locations', locations.filter((location: any) => {
       return !filter || !!~filter.indexOf(+location.id);
     }));
   }
 
+  @observe('editedItem.partner')
   _requestPartner(partnerId: number) {
     if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
       return;
@@ -465,7 +440,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
       }
     }
 
-    let endpoint = this.getEndpoint('partnerOrganisationDetails', partnerId);
+    let endpoint = getEndpoint('partnerOrganisationDetails', partnerId);
     this.sendRequest({
       method: 'GET',
       endpoint
@@ -479,20 +454,21 @@ class ActionPointDetails extends ActionPointDetailsMixin {
         });
   }
 
+  @observe('editedItem.intervention')
   async _updateCpOutputs(interventionId: number) {
     if (interventionId === undefined) {
       return;
     }
     this._checkAndResetData(interventionId);
     if (interventionId === null) {
-      this.set('cpOutputs', this.getData('cpOutputsList'));
+      this.set('cpOutputs', getData('cpOutputsList'));
       this._updateLocations();
       return;
     }
     try {
       this.set('interventionRequestInProcess', true);
       this.set('cpOutputs', undefined);
-      let interventionEndpoint = this.getEndpoint('interventionDetails', interventionId);
+      let interventionEndpoint = getEndpoint('interventionDetails', interventionId);
       let intervention = await this.sendRequest({
         method: 'GET',
         endpoint: interventionEndpoint
@@ -507,7 +483,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
         return;
       }
 
-      let cpIds: any[] = [];
+      let cpIds: string[] = [];
       resultLinks.forEach((link) => {
         if (link && (link.cp_output || link.cp_output === 0)) {
           cpIds.push(link.cp_output);
@@ -519,7 +495,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
         return;
       }
 
-      let endpoint = this.getEndpoint('cpOutputsV2', cpIds.join(','));
+      let endpoint = getEndpoint('cpOutputsV2', cpIds.join(','));
       this.set('cpOutputs', await this.sendRequest({
         method: 'GET',
         endpoint: endpoint
@@ -554,6 +530,7 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     this.set('interventionRequestInProcess', false);
   }
 
+  @observe('originalActionPoint.intervention, originalActionPoint.partner.id, partner')
   _updateInterventions(intervention: any, originalId: number, partner: any) {
     let interventions = partner && partner.interventions || [];
     let id = partner && partner.id;
@@ -568,21 +545,21 @@ class ActionPointDetails extends ActionPointDetailsMixin {
     this.set('interventions', interventions);
   }
 
-  isFieldReadonly(path: string, base: string, special: any) {
-    return this.isReadOnly(path, base) || !special;
+  isFieldReadonly(path: string, special: any) {
+    return isReadOnly(path) || !special;
   }
 
   validate() {
-    let elements = this.shadowRoot.querySelectorAll('.validate-input');
+    let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
     let valid = true;
-    for (let element of elements) {
+    elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
         let label = element.label || 'Field';
         element.errorMessage = `${label} is required`;
         element.invalid = true;
         valid = false;
       }
-    }
+    });
 
     return valid;
   }
@@ -594,6 +571,8 @@ class ActionPointDetails extends ActionPointDetailsMixin {
   showCategory(categories: string[]) {
     return !!(categories && categories.length);
   }
-}
 
-customElements.define('action-point-details', ActionPointDetails);
+  actionAllowed(path, action) {
+    return actionAllowed(path, action);
+  }
+}

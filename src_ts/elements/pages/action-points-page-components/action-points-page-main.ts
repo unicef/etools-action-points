@@ -1,9 +1,11 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/app-route/app-route.js';
+import {customElement, property, observe} from '@polymer/decorators';
 
-class ActionPointsPageMain extends PolymerElement {
-  static get template() {
+@customElement('action-points-page-main')
+export class ActionPointsPageMain extends PolymerElement {
+  public static get template() {
     return html`
       <app-route route="{{route}}" pattern="/:view" data="{{routeData}}"></app-route>
       <app-route route="{{route}}" pattern="/list" tail="{{listRoute}}"></app-route>
@@ -12,29 +14,21 @@ class ActionPointsPageMain extends PolymerElement {
       <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
         <action-points-new name="new" route="{{route}}"></action-points-new>
         <action-points-item name="detail" route="{{detailRoute}}"></action-points-item>
-        <action-points-list name="list" route="{{listRoute}}" static-data-loaded="[[staticDataLoaded]]"></action-points-list>
+        <action-points-list name="list"
+                            route="{{listRoute}}"
+                            static-data-loaded="[[staticDataLoaded]]">
+        </action-points-list>
       </iron-pages>
     `;
   }
 
-  static get properties() {
-    return {
-      route: {
-        type: Object,
-        notify: true,
-        value: () => {}
-      },
-      routeData: {
-        type: Object,
-        value: () => {}
-      }
-    };
-  }
+  @property({type: Object, notify: true})
+  route: object = {};
 
-  static get observers() {
-    return ['_setRoutePath(route.path)', '_pageChanged(routeData.view)'];
-  }
+  @property({type: Object})
+  routeData: object = {};
 
+  @observe('route.path')
   _setRoutePath(path: string) {
     if (path === null || path === undefined) {
       return;
@@ -44,6 +38,7 @@ class ActionPointsPageMain extends PolymerElement {
     }
   }
 
+  @observe('routeData.view')
   _pageChanged(page: string) {
     switch (page) {
       case 'new':
@@ -58,5 +53,3 @@ class ActionPointsPageMain extends PolymerElement {
     }
   }
 }
-
-customElements.define('action-points-page-main', ActionPointsPageMain);

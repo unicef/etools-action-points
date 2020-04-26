@@ -1,9 +1,12 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
+import {customElement, property} from '@polymer/decorators';
+
 /**
 * @polymer
 * @extends HTMLElement
 */
-class TextContent extends PolymerElement {
+@customElement('text-content')
+export class TextContent extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -16,11 +19,6 @@ class TextContent extends PolymerElement {
     `;
   }
 
-  static get properties() {
-    return {
-      text: String
-    };
-  }
+  @property({type: String})
+  text: string;
 }
-
-customElements.define('text-content', TextContent);

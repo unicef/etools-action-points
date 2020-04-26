@@ -1,42 +1,41 @@
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {html, PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import StaticDataMixin from '../app-mixins/static-data-mixin';
-import ErrorHandler from '../app-mixins/error-handler-mixin';
-import PermissionController from '../app-mixins/permission-controller';
-import UserController from '../app-mixins/user-controller';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
+import {_setData} from '../app-mixins/static-data-mixin';
+import {ErrorHandler} from '../app-mixins/error-handler-mixin';
+import {_addToCollection, getChoices, isValidCollection} from '../app-mixins/permission-controller';
+import {UserController} from '../app-mixins/user-controller';
+import {getEndpoint} from '../app-mixins/endpoint-mixin';
 import './user-data';
-
-const StaticDataMixins = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  EtoolsAjaxRequestMixin,
-  StaticDataMixin,
-  ErrorHandler,
-  PermissionController,
-  UserController
-], PolymerElement);
+import {customElement, property} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 
 /**
  * @polymer
  * @customElement
  */
-class StaticData extends StaticDataMixins {
+@customElement('static-data')
+export class StaticData extends
+  EtoolsAjaxRequestMixin(
+      ErrorHandler(
+          UserController(
+              PolymerElement))) {
 
-  static get template() {
+  public static get template() {
     return html`
       <user-data></user-data>
     `;
   }
 
-  static get properties() {
-    return {
-      dataLoaded: {
-        type: Object,
-        value: {}
-      }
-    };
-  }
+  @property({type: Object})
+  dataLoaded: GenericObject = {
+    organizations: false,
+    apOptions: false,
+    sectionsCovered: false,
+    offices: false,
+    unicefUsers: false,
+    cpOutputsList: false,
+    interventionsList: false
+  };
 
   connectedCallback() {
     super.connectedCallback();
@@ -66,55 +65,55 @@ class StaticData extends StaticDataMixins {
   }
 
   _loadAPOptions() {
-    let endpoint = this.getEndpoint('actionPointsList');
+    let endpoint = getEndpoint('actionPointsList');
     this.sendRequest({method: 'OPTIONS', endpoint})
         .then((data: any) => {
           let actions = data && data.actions;
-          if (!this.isValidCollection(actions)) {
+          if (!isValidCollection(actions)) {
             this._responseError('partners options');
             return;
           }
 
-          this._addToCollection('action_points', actions);
+          _addToCollection('action_points', actions);
 
-          let statusesData = this.getChoices('action_points.status');
+          let statusesData = getChoices('action_points.status');
           if (!statusesData) {console.error('Can not load action points statuses data');}
-          this._setData('statuses', statusesData);
+          _setData('statuses', statusesData);
 
-          let modulesData = this.getChoices('action_points.related_module');
+          let modulesData = getChoices('action_points.related_module');
           if (!modulesData) {console.error('Can not load action points modules data');}
-          this._setData('modules', modulesData);
+          _setData('modules', modulesData);
 
           this.dataLoaded.apOptions = true;
           this._allDataLoaded();
         }).catch(() => this._responseError('Partners', 'request error'));
   }
 
-  _loadPartners(this: any) {
-    let endpoint = this.getEndpoint('partnerOrganisations');
+  _loadPartners() {
+    let endpoint = getEndpoint('partnerOrganisations');
     this.sendRequest({method: 'GET', endpoint})
         .then((data: any) => {
-          this._setData('partnerOrganisations', data);
+          _setData('partnerOrganisations', data);
           this.dataLoaded.organizations = true;
           this._allDataLoaded();
         }).catch(() => this._responseError('Partners', 'request error'));
   }
 
-  _loadLocations(this: any) {
-    let endpoint = this.getEndpoint('locations');
+  _loadLocations() {
+    let endpoint = getEndpoint('locations');
     this.sendRequest({method: 'GET', endpoint})
         .then((data: any) => {
-          this._setData('locations', data);
+          _setData('locations', data);
           let locationsLoaded = new CustomEvent('locations-loaded');
           document.dispatchEvent(locationsLoaded);
         }).catch(() => this._responseError('Locations', 'request error'));
   }
 
   _loadData(dataName: string) {
-    let endpoint = this.getEndpoint(dataName);
+    let endpoint = getEndpoint(dataName);
     this.sendRequest({method: 'GET', endpoint})
         .then((data: any) => {
-          this._setData(dataName, data);
+          _setData(dataName, data);
           this.dataLoaded[dataName] = true;
           this._allDataLoaded();
         }).catch(() => this._responseError(dataName, 'request error'));
@@ -126,5 +125,3 @@ class StaticData extends StaticDataMixins {
     document.dispatchEvent(event);
   }
 }
-
-customElements.define('static-data', StaticData);
