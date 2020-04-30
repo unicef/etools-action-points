@@ -223,7 +223,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   queryParams: GenericObject;
 
   @property({type: Object})
-  dates: GenericObject
+  dates: GenericObject = {};
 
   @property({type: Object})
   _debounceSearch: Debouncer;
