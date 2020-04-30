@@ -171,8 +171,8 @@ export class ActionPointDetails extends
               placeholder="[[getPlaceholderText('intervention', permissionPath, 'true')]]"
               options="[[interventions]]" option-label="title" option-value="id" 
               required$="[[_setRequired('intervention', permissionPath)]]"
-              disabled$="[[isFieldReadonly('intervention', permissionPath, partner)]]" 
-              readonly$="[[isFieldReadonly('intervention', permissionPath, partner)]]"
+              disabled$="[[isReadOnly('intervention', permissionPath)]]"
+              readonly$="[[isReadOnly('intervention', permissionPath)]]"
               invalid="{{errors.intervention}}" error-message="{{errors.intervention}}" 
               on-focus="_resetFieldError"
               on-tap="_resetFieldError" allow-outside-scroll dynamic-align>
@@ -543,10 +543,6 @@ export class ActionPointDetails extends
     }
 
     this.set('interventions', interventions);
-  }
-
-  isFieldReadonly(path: string, special: any) {
-    return isReadOnly(path) || !special;
   }
 
   validate() {
