@@ -31,8 +31,8 @@ import {SearchAndFilter} from '../../common-elements/search-and-filter';
 @customElement('action-points-list')
 export class ActionPointsList extends
   InputAttrs(
-    LocalizationMixin(
-      DateMixin(PolymerElement))) {
+      LocalizationMixin(
+          DateMixin(PolymerElement))) {
 
   public static get template() {
     return html`
