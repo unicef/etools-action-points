@@ -8,7 +8,7 @@ RUN npm install -g typescript
 
 ADD . /code/
 WORKDIR /code
-RUN npm i
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm i
 RUN npm run build
 
 FROM node:11.9.0-alpine
