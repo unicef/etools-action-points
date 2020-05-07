@@ -1,12 +1,14 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-card/paper-card.js';
+import {customElement} from '@polymer/decorators';
 
 /**
 * @polymer
 * @extends HTMLElement
 */
-class FiltersElement extends PolymerElement {
+@customElement('filters-element')
+export class FiltersElement extends PolymerElement {
   static get template() {
     return html`
       <style include="iron-flex">
@@ -34,5 +36,3 @@ class FiltersElement extends PolymerElement {
     `;
   }
 }
-
-customElements.define('filters-element', FiltersElement);

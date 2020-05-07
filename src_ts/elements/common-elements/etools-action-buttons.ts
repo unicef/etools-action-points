@@ -1,17 +1,20 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icon/iron-icon.js';
 import {moduleStyles} from '../styles-elements/module-styles';
+import {customElement, property} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 
 /**
 * @polymer
 * @customElement
 * @extends {PolymerElement}
 */
-class EtoolsActionButton extends PolymerElement {
+@customElement('etools-action-button')
+export class EtoolsActionButton extends PolymerElement {
   public static get template() {
     return html`
       ${moduleStyles}
@@ -112,31 +115,22 @@ class EtoolsActionButton extends PolymerElement {
     `;
   }
 
-  static get properties() {
+  @property({type: Array})
+  actions: GenericObject[];
+
+  @property({type: Object})
+  icons = () => {
     return {
-      actions: {
-        type: Array,
-        value: () => {
-          return [];
-        }
-      },
-      icons: {
-        type: Object,
-        value: () => {
-          return {
-            'cancel': 'cancel',
-            'save': 'save',
-            'complete': 'assignment-turned-in'
-          };
-        }
-      },
-      statusBtnMenuOpened: {
-        type: Boolean
-      }
+      'cancel': 'cancel',
+      'save': 'save',
+      'complete': 'assignment-turned-in'
     };
   }
 
-  closeMenu(this: any) {
+  @property({type: Boolean})
+  statusBtnMenuOpened: boolean
+
+  closeMenu() {
     this.statusBtnMenuOpened = false;
   }
 
@@ -153,7 +147,7 @@ class EtoolsActionButton extends PolymerElement {
     return text.toUpperCase();
   }
 
-  _btnClicked(this: any, event: any) {
+  _btnClicked(event: any) {
     if (!event || !event.target) {
       return;
     }
@@ -189,7 +183,7 @@ class EtoolsActionButton extends PolymerElement {
     return length > 1 ? 'with-menu' : '';
   }
 
-  _filterActions(this: any, action: any) {
+  _filterActions(action: any) {
     return !(action === this.actions[0]);
   }
 
@@ -204,5 +198,3 @@ class EtoolsActionButton extends PolymerElement {
     return item && (item.code || item);
   }
 }
-
-customElements.define('etools-action-button', EtoolsActionButton);

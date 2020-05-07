@@ -1,28 +1,24 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import {resetOldUserData} from '../../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import './countries-dropdown';
 import '../../common-elements/support-btn';
-
-const AppMainHeaderMixin = EtoolsMixinFactory.combineMixins([
-  EndpointMixin,
-  EtoolsPageRefreshMixin
-], PolymerElement);
+import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from '../../../typings/globals.types';
 
 /**
  * @polymer
  * @customElement
  */
-class AppMainHeader extends AppMainHeaderMixin {
-
-  static get template() {
+@customElement('app-main-header')
+export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
+  public static get template() {
     return html`
       ${sharedStyles}
       <style>
@@ -106,25 +102,15 @@ class AppMainHeader extends AppMainHeaderMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      user: {
-        type: Object
-      },
-      environment: {
-        type: String,
-        observer: '_setBgColor'
-      }
-    };
-  }
+  @property({type: Object})
+  user: GenericObject;
+
+  @property({type: String})
+  environment: string;
 
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('sign-out', this._logout);
-  }
-
-  ready() {
-    super.ready();
   }
 
   openDrawer() {
@@ -132,10 +118,11 @@ class AppMainHeader extends AppMainHeaderMixin {
   }
 
   _logout() {
-    this.resetOldUserData();
+    resetOldUserData();
     window.location.href = `${window.location.origin}/logout/`;
   }
 
+  @observe('environment')
   _setBgColor() {
     // If not production environment, changing header color to red
     if (this.environment) {
@@ -145,5 +132,3 @@ class AppMainHeader extends AppMainHeaderMixin {
     }
   }
 }
-
-customElements.define('app-main-header', AppMainHeader);

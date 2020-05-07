@@ -1,17 +1,19 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import {moduleStyles} from '../styles-elements/module-styles';
+import {customElement, property} from '@polymer/decorators';
 
 /**
 * @polymer
 * @extends {PolymerElement}
 */
-class SideBarItem extends PolymerElement {
-  static get template() {
+@customElement('side-bar-item')
+export class SideBarItem extends PolymerElement {
+  public static get template() {
     return html`
       ${moduleStyles}
       <style>
@@ -108,25 +110,23 @@ class SideBarItem extends PolymerElement {
     `;
   }
 
-  static get properties() {
-    return {
-      name: String,
-      icon: String,
-      sideBarLink: String,
-      external: {
-        type: Boolean,
-        value: false
-      }
-    };
-  }
+  @property({type: String})
+  name: string;
+
+  @property({type: String})
+  icon: string;
+
+  @property({type: String})
+  sideBarLink: string;
+
+  @property({type: Boolean})
+  external: boolean = false;
 
   _handleMainTap() {
     this.dispatchEvent(new CustomEvent('selected'));
   }
 
-  _setTarget(this: any) {
+  _setTarget() {
     return this.external ? '_blank' : '_self';
   }
 }
-
-customElements.define('side-bar-item', SideBarItem);

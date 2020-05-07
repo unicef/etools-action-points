@@ -1,26 +1,23 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import ErrorHandlerMixin from '../../app-mixins/error-handler-mixin';
-import EndpointMixin from '../../app-mixins/endpoint-mixin';
+import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import './action-point-details';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {mainPageStyles} from '../../styles-elements/main-page-styles';
-
-const ActionPointsNewMixin = EtoolsMixinFactory.combineMixins(
-    [EndpointMixin, EtoolsAjaxRequestMixin, ErrorHandlerMixin],
-    PolymerElement
-);
+import {customElement, property} from '@polymer/decorators';
+import {ActionPointDetails} from './action-point-details';
 
 /**
  * @polymer
  * @customElement
  */
-class ActionPointsNew extends ActionPointsNewMixin {
-  static get template() {
+@customElement('action-points-new')
+export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(PolymerElement)) {
+  public static get template() {
     return html`
       ${pageLayoutStyles}
       ${sharedStyles}
@@ -46,22 +43,14 @@ class ActionPointsNew extends ActionPointsNewMixin {
     `;
   }
 
-  static get properties() {
-    return {
-      route: {
-        type: Object,
-        notify: true
-      },
-      actionPoint: {
-        type: Object,
-        value: () => ({})
-      },
-      permissionPath: {
-        type: String,
-        value: 'action_points'
-      }
-    };
-  }
+  @property({type: Object, notify: true})
+  route: object;
+
+  @property({type: Object})
+  actionPoint: object = {};
+
+  @property({type: String})
+  permissionPath: string = 'action_points';
 
   static get observers() {
     return ['_changeRoutePath(route.path)'];
@@ -79,13 +68,13 @@ class ActionPointsNew extends ActionPointsNewMixin {
   }
 
   _createAP() {
-    let detailsElement = this.shadowRoot.querySelector('#ap-details');
+    let detailsElement: ActionPointDetails = this.shadowRoot.querySelector('#ap-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
     }
 
     let data = JSON.parse(JSON.stringify(detailsElement.editedItem));
-    let endpoint = this.getEndpoint('actionPointsList');
+    let endpoint = getEndpoint('actionPointsList');
 
     this.dispatchEvent(
         new CustomEvent('global-loading', {
@@ -131,5 +120,3 @@ class ActionPointsNew extends ActionPointsNewMixin {
         });
   }
 }
-
-customElements.define('action-points-new', ActionPointsNew);

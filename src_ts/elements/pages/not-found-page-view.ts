@@ -1,11 +1,13 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-material/paper-material.js';
-import EndpointMixin from '../app-mixins/endpoint-mixin';
+import {getAbsolutePath} from '../app-mixins/endpoint-mixin';
 import {sharedStyles} from '../styles-elements/shared-styles';
 import {pageLayoutStyles} from '../styles-elements/page-layout-styles';
+import {customElement} from '@polymer/decorators';
 
-class NotFoundPageView extends EndpointMixin(PolymerElement) {
-  static get template() {
+@customElement('not-fount-page-view')
+export class NotFoundPageView extends PolymerElement {
+  public static get template() {
     return html`
       ${sharedStyles}
       ${pageLayoutStyles}
@@ -28,7 +30,7 @@ class NotFoundPageView extends EndpointMixin(PolymerElement) {
   }
 
   getLink() {
-    return this.getAbsolutePath('action-points');
+    return getAbsolutePath('action-points');
   }
 
   openDrawer() {
@@ -38,5 +40,3 @@ class NotFoundPageView extends EndpointMixin(PolymerElement) {
     }));
   }
 }
-
-customElements.define('not-found-page-view', NotFoundPageView);
