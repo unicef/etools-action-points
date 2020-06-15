@@ -18,7 +18,7 @@ export class StatusElement extends PolymerElement {
     return html`
       ${etoolsStatusStyles}
       <etools-content-panel panel-title="Status">
-      
+
         <div class="top-container" id="statusList">
           <template is="dom-repeat" items="{{statuses}}" as="status">
             <div class="divider-line"></div>
@@ -30,7 +30,7 @@ export class StatusElement extends PolymerElement {
                   <iron-icon icon="cancel"></iron-icon>
                 </span>
               </div>
-      
+
               <div class="status">
                 <span class="status-header">[[status.display_name]]</span>
                 <span class="status-date">
@@ -38,14 +38,14 @@ export class StatusElement extends PolymerElement {
                 </span>
               </div>
             </div>
-      
+
             <div class="divider" hidden$="[[hideDivider(status.value, statuses)]]">
               <div class="status-divider"></div>
             </div>
           </template>
         </div>
-        
-        <div class="bottom-container" hidden$="[[noActionsAllowed(permissionPath)}]]">
+
+        <div class="bottom-container" hidden$="[[noActionsAllowed(permissionPath)]]">
           <etools-action-button actions="[[getActions(permissionPath)]]"></etools-action-button>
         </div>
       </etools-content-panel>
