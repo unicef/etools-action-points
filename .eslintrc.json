@@ -32,7 +32,7 @@
     "one-var": ["off"]
   },
   "globals": {
-    "moment": true,
+    "dayjs": true,
     "Promise": true,
     "Polymer": true,
     "Dexie": true,

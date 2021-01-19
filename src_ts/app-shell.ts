@@ -32,6 +32,9 @@ import {appShellStyles} from './elements/styles-elements/app-shell-styles';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from './typings/globals.types';
 setRootPath(basePath);
+declare const dayjs: any;
+declare const dayjs_plugin_utc: any;
+dayjs.extend(dayjs_plugin_utc);
 
 @customElement('app-shell')
 export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement))) {
@@ -67,14 +70,14 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
                     small-menu$="[[smallMenu]]">
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
-        
+
         <!-- Main content -->
-        
+
         <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
           <app-header id="header" slot="header" fixed shadow>
             <app-main-header id="pageheader" user="[[user]]" environment="[[environment]]"></app-main-header>
           </app-header>
-          
+
           <main role="main" id="page-container">
             <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
                         fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
@@ -85,7 +88,7 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
               </action-points-page-main>
               <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
-            
+
             <multi-notification-list></multi-notification-list>
           </main>
 
