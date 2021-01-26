@@ -1,7 +1,7 @@
 import {Constructor} from '../../typings/globals.types';
 import {PolymerElement} from '@polymer/polymer';
 
-declare const moment: any;
+declare const dayjs: any;
 
 /**
  * Mixin for parsing and format date by pattern
@@ -15,14 +15,14 @@ export function DateMixin<T extends Constructor<PolymerElement>>(superClass: T) 
      */
     public prettyDate(dateString: string, format?: string | undefined, placeholder?: string) {
       format = this._getFormat(format);
-      let date: any = this._getMomentDate(dateString);
+      let date: any = this._getDayjsDate(dateString);
       let ph = placeholder ? placeholder : '';
       return date ? date.utc().format(format) : ph;
     }
 
     public formatDateInLocal(dateString: string, format: string) {
       format = this._getFormat(format);
-      let date: any = this._getMomentDate(dateString);
+      let date: any = this._getDayjsDate(dateString);
 
       return date ? date.format(format) : '';
     }
@@ -46,9 +46,9 @@ export function DateMixin<T extends Constructor<PolymerElement>>(superClass: T) 
       return !format || typeof format != 'string' ? 'D MMM YYYY' : format;
     }
 
-    protected _getMomentDate(dateString: string) {
+    protected _getDayjsDate(dateString: string) {
       const date = new Date(dateString);
-      return date.toString() !== 'Invalid Date' ? moment(date) : '';
+      return date.toString() !== 'Invalid Date' ? dayjs(date) : '';
     }
   }
   return DateMixinClass;
