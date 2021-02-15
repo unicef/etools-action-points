@@ -22,7 +22,7 @@ import {moduleStyles} from '../styles-elements/module-styles';
 import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
-declare const moment: any;
+declare const dayjs: any;
 
 @customElement('search-and-filter')
 export class SearchAndFilter extends DateMixin(PolymerElement) {
@@ -37,56 +37,56 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           @apply --layout-center;
           @apply --layout-flex;
         }
-        
+
         .inputs-container {
           flex-wrap: wrap;
         }
-      
+
         paper-input {
           --paper-input-container: {
             width: 240px;
             margin-left: 26px;
           };
           --paper-input-container-color: var(--gray-light);
-      
+
           iron-icon { color: var(--gray-mid); }
         }
-        
+
         .toggle-hidden-div {
           margin-right: 26px;
         }
-        
+
         span.toggle-hidden-div {
           color: var(--gray-dark);
           font-size: 16px;
           margin-right: 8px;
         }
-        
+
         #add-filter-container {
           border-left: 2px solid var(--gray-lighter);
           margin-left: 16px;
           margin-right: 16px;
           padding-left: 10px;
         }
-      
+
         #add-filter-container.add-filter-text {
           margin-top: 4px;
         }
-      
+
         #add-filter-container paper-button {
           color: var(--module-primary);
           font-weight: bold;
         }
-      
+
         #add-filter-container paper-menu-button {
           padding: 0;
           margin: 8px;
         }
-      
+
         #add-filter-container paper-menu-button paper-button {
           margin: 0;
         }
-        
+
         paper-listbox {
           background-color: #ffffff;
 
@@ -112,11 +112,11 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           white-space: nowrap;
           text-transform: capitalize;
         }
-        
+
         .filter-dropdown {
           margin-left: 20px;
           width: 200px;
-      
+
           --esmm-list-wrapper: {
             margin-top: 0;
             padding-top: 12px;
@@ -404,7 +404,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     }
 
     let query = e.currentTarget.id,
-      date = moment(e.detail.date).format('YYYY-MM-DD'),
+      date = dayjs(e.detail.date).format('YYYY-MM-DD'),
       queryObject: any;
 
     if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
