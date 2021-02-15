@@ -1,4 +1,4 @@
-FROM node:11.9.0-alpine as builder
+FROM node:14.15.1-alpine3.12 as builder
 RUN apk update
 RUN apk add --update bash
 
@@ -11,7 +11,7 @@ WORKDIR /code
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm i
 RUN npm run build
 
-FROM node:11.9.0-alpine
+FROM node:14.15.1-alpine3.12
 RUN apk update
 RUN apk add --update bash
 
