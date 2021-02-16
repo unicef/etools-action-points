@@ -19,6 +19,7 @@ export class PageFooter extends PolymerElement {
           height: 60px;
           align-items: flex-end;
           padding-top: 50px;
+          box-sizing: border-box;
         }
 
         #footer-content {
