@@ -4,7 +4,7 @@ export const etoolsStatusStyles = html`
     <style>
     :host {
       width: 100%;
-      --ecp-content: {
+      etools-content-panel::part(ecp-content) {
         padding: 0;
       };
       display: block;

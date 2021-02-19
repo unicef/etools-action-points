@@ -59,19 +59,27 @@ export const mainPageStyles = html`
       font-size: 14px;
       font-weight: 600;
     }
+    etools-content-panel.cancellation-tab::part(ecp-header-title) {
+      font-weight: 500;
+      line-height: 51px;
+    }
+    etools-content-panel.cancellation-tab::part(ecp-content) {
+      padding-left: 100px
+    }
+    etools-content-panel.cancellation-tab::part(ecp-header-title) {
+      font-weight: 500;
+      line-height: 51px;
+    }
+    etools-content-panel.cancellation-tab::part(ecp-header-btns-wrapper) {
+      opacity: 1;
+    }
     etools-content-panel.cancellation-tab {
       margin-bottom: 20px;
-      --ecp-header-title: {
-        font-weight: 500;
-        line-height: 51px;
-      }
       --epc-toolbar: {
         height: 4px;
         padding: 2px;
         background-color: var(--module-warning);
       }
-      --ecp-content: {padding-left: 100px};
-      --ecp-header-btns-wrapper: {opacity: 1};
     }
     etools-content-panel.cancellation-tab .cancellation-title {
       font-weight: 500;

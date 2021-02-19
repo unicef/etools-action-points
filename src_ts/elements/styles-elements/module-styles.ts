@@ -110,22 +110,21 @@ export const moduleStyles = html`
     etools-dialog > etools-loading {
       margin-bottom: -56px;
     }
+
+    etools-content-panel::part(ecp-header-title) {
+      font-weight: 500;
+      line-height: 48px;
+      padding: 0 30px;
+    }
+    etools-content-panel::part(ecp-toggle-btn) {
+      position: absolute;
+      top: 3px;
+      left: 13px;
+      width: 45px;
+      height: 45px;
+    }
     etools-content-panel {
       position: relative;
-      --ecp-header-title: {line-height: 48px};
-      --ecp-expand-btn: {
-        position: absolute;
-        top: 3px;
-        left: 13px;
-        width: 45px;
-        height: 45px;
-      }
-      --ecp-header-title: {
-        font-weight: 500;
-        line-height: 48px;
-        padding: 0 30px;
-      }
-      --ecp-header-btns-wrapper: {opacity: 1};
     }
     div[slot="panel-btns"] {
       position: absolute;
