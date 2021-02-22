@@ -131,8 +131,6 @@ export const moduleStyles = html`
       position: absolute;
       top: 4px;
       right: 16px;
-    }
-    div[slot="panel-btns"] {
       opacity: 1;
     }
     div[slot="panel-btns"] .panel-button {
