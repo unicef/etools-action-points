@@ -138,9 +138,6 @@ export const moduleStyles = html`
     div[slot="panel-btns"]:hover {
       opacity: 0.87;
     }
-    div[slot="panel-btns"] .panel-button:hover {
-      opacity: 1;
-    }
     .pr-25 {
       padding-right: 25px !important;
     }
