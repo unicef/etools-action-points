@@ -133,9 +133,12 @@ export const moduleStyles = html`
       right: 16px;
     }
     div[slot="panel-btns"] {
+      opacity: 1;
+    }
+    div[slot="panel-btns"] .panel-button {
       opacity: 0.7;
     }
-    div[slot="panel-btns"]:hover {
+    div[slot="panel-btns"] .panel-button:hover {
       opacity: 0.87;
     }
     .pr-25 {
