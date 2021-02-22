@@ -92,25 +92,26 @@ export const moduleStyles = html`
     etools-data-table-row {
       --list-divider-color: #e0e0e0;
     }
-    etools-dialog[no-padding] {
-      --etools-dialog-scrollable: {padding-top: 0 !important};
+    etools-dialog[no-padding]::part(ed-scrollable) {
+      padding-top: 0 !important;
+    }
+    etools-dialog::part(ed-scrollable) {
+      margin-top: 0;
+      padding-top: 12px; !important;
+    }
+    etools-dialog::part(ed-button-styles) {
+      margin-top: 0;
     }
     etools-dialog {
       --etools-dialog-primary-color: var(--module-primary);
-      --etools-dialog-scrollable: {
-        margin-top: 0;
-        padding-top: 12px; !important;
-      }
       --etools-dialog-content: {
         min-height: 80px;
         padding-bottom: 8px !important;
       }
-      --etools-dialog-button-styles: {margin-top: 0;};
     }
     etools-dialog > etools-loading {
       margin-bottom: -56px;
     }
-
     etools-content-panel::part(ecp-header-title) {
       font-weight: 500;
       line-height: 48px;
@@ -131,11 +132,14 @@ export const moduleStyles = html`
       top: 4px;
       right: 16px;
     }
-    div[slot="panel-btns"] .panel-button {
+    div[slot="panel-btns"] {
       opacity: 0.7;
     }
-    div[slot="panel-btns"] .panel-button:hover {
+    div[slot="panel-btns"]:hover {
       opacity: 0.87;
+    }
+    div[slot="panel-btns"] .panel-button:hover {
+      opacity: 1;
     }
     .pr-25 {
       padding-right: 25px !important;
