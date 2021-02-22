@@ -64,7 +64,7 @@ export const mainPageStyles = html`
       line-height: 51px;
     }
     etools-content-panel.cancellation-tab::part(ecp-content) {
-      padding-left: 100px
+      padding-left: 100px;
     }
     etools-content-panel.cancellation-tab::part(ecp-header-title) {
       font-weight: 500;
