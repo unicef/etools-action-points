@@ -40,12 +40,12 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
 
         .inputs-container {
           flex-wrap: wrap;
+          padding-left: 12px;
         }
 
         paper-input {
           --paper-input-container: {
             width: 240px;
-            margin-left: 26px;
           };
           --paper-input-container-color: var(--gray-light);
 
@@ -63,9 +63,13 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         }
 
         #add-filter-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-self: stretch;
+
           border-left: 2px solid var(--gray-lighter);
-          margin-left: 16px;
-          margin-right: 16px;
+          margin: 8px 16px 8px 16px;
           padding-left: 10px;
         }
 
@@ -94,7 +98,8 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           --paper-menu-focused-item-after: {
             background: var(--primary-background-color);
             opacity: 0;
-        };
+          };
+        }
 
         paper-listbox paper-item {
           font-weight: normal;
@@ -113,8 +118,18 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           text-transform: capitalize;
         }
 
+        #filterMenu paper-icon-item[selected] {
+          font-weight: normal;
+          background: var(--etools-filters-menu-selected-bg, #dcdcdc);
+        }
+
+        datepicker-lite {
+          width: 176px;
+          margin-left: 12px;
+          margin-right: 12px;
+        }
+
         .filter-dropdown {
-          margin-left: 20px;
           width: 200px;
 
           --esmm-list-wrapper: {
@@ -142,10 +157,10 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       <div class="layout horizontal flex inputs-container">
         <div class="layout horizontal">
           <paper-input type="search"
-                       value="{{searchString}}"
-                       label="[[searchLabel]]"
-                       placeholder="Search"
-                       always-float-label inline>
+              value="{{searchString}}"
+              label="[[searchLabel]]"
+              placeholder="Search"
+              always-float-label inline>
 
             <iron-icon icon="search" slot="prefix"></iron-icon>
           </paper-input>
@@ -157,12 +172,12 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           <template is="dom-if" if="[[item.isDatePicker]]">
             <div class="layout horizontal">
               <datepicker-lite id="[[item.query]]"
-                               label="[[item.name]]"
-                               slot="prefix"
-                               selected-date-display-format="YYYY-MM-DD"
-                               fire-date-has-changed="[[!restoreInProcess]]"
-                               on-date-has-changed="_changeFilterValue"
-                               clear-btn-inside-dr>
+                  label="[[item.name]]"
+                  slot="prefix"
+                  selected-date-display-format="YYYY-MM-DD"
+                  fire-date-has-changed="[[!restoreInProcess]]"
+                  on-date-has-changed="_changeFilterValue"
+                  clear-btn-inside-dr>
               </datepicker-lite>
             </div>
           </template>
@@ -170,8 +185,10 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           <template is="dom-if" if="[[!item.isDatePicker]]">
             <div class="layout horizontal">
               <etools-dropdown id="[[item.query]]" class="filter-dropdown"
-                selected="[[item.value]]" label="[[item.label]]"
-                placeholder$="Select [[item.name]]" options="[[item.selection]]"
+                selected="[[item.value]]"
+                label="[[item.name]]"
+                options="[[item.selection]]"
+                placeholder$="&#8212;"
                 option-label="[[item.optionLabel]]"
                 option-value="[[item.optionValue]]" on-iron-select="_changeFilterValue"
                 hide-search="[[item.hideSearch]]"
@@ -186,7 +203,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       <!-- ADD FILTERS -->
       <template is="dom-if" if="[[filters.length]]">
         <div id="add-filter-container">
-          <paper-menu-button horizontal-align="right" vertical-align="top" no-overlap>
+          <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
             <paper-button slot="dropdown-trigger">
               <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
 
@@ -195,7 +212,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
 
             <paper-listbox slot="dropdown-content">
               <template is="dom-repeat" items="[[filters]]">
-                <paper-icon-item on-tap="selectFilter">
+                <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
                   <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
                   <paper-item><span class="add-filter--item-name">[[item.name]]</span></paper-item>
                 </paper-icon-item>
