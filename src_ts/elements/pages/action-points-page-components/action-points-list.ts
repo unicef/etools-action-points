@@ -79,12 +79,13 @@ export class ActionPointsList extends
         }
 
         .show-completed-toggle {
-          @apply --layout-horizontal;
-          @apply --layout-center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-self: stretch;
+
           border-left: 2px solid var(--gray-lighter);
-          margin-left: 16px;
-          margin-right: 16px;
-          align-self: center;
+          margin: 8px 16px 8px 16px;
           padding: 18px 0 18px 10px;
         }
         .show-completed-toggle span {
