@@ -151,6 +151,9 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
 
   connectedCallback() {
     super.connectedCallback();
+
+    window.EtoolsEsmmFitIntoEl = this.$.appHeadLayout!.shadowRoot!.querySelector('#contentContainer');
+
     let eventData = {
       message: 'Loading...',
       active: true,
