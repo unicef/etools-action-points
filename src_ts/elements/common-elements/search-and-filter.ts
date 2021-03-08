@@ -152,6 +152,15 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           text-align: center;
           cursor: pointer;
         }
+        .clear-all-filters {
+          min-height: 48px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          color: var(--primary-color);
+          padding: 0px 16px;
+          border-bottom: 1px solid var(--dark-divider-color, #9d9d9d);
+        }
       </style>
 
       <div class="layout horizontal flex inputs-container">
@@ -209,7 +218,10 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
 
               <span class="add-filter-text">ADD FILTER</span>
             </paper-button>
-
+            <div slot="dropdown-content" class="clear-all-filters">
+              <paper-button on-tap="clearAllFilters" class="secondary-btn">Clear All
+              </paper-button>
+            </div>
             <paper-listbox slot="dropdown-content">
               <template is="dom-repeat" items="[[filters]]">
                 <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
@@ -302,6 +314,13 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       this.splice('selectedFilters', indexToRemove, 1);
     }
     updateQueries(queryObject);
+  }
+
+  clearAllFilters() {
+    this.set('selectedFilters', []);
+    const queryParams = this.queryParams;
+    Object.keys(queryParams).forEach(key => queryParams[key] = undefined)
+    updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
   }
 
   _reloadFilters() {
