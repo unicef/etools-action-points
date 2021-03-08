@@ -517,6 +517,8 @@ export class ActionPointsList extends
       clearQueries();
       this.set('queryParams.page_size', this.pageSize);
       this.set('queryParams.page', this.pageNumber);
+    } else if (queryParams.page) {
+      this.set('pageNumber', Number(queryParams.page));
     }
     updateQueries(this.queryParams, null, true);
     let x = Object.keys(queryParams).map((param) => {
