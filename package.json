@@ -1,6 +1,8 @@
 {
   "name": "apd",
   "version": "3.0.0",
+  "revision": "revNo",
+  "buildDate": "bDate",
   "contributors": [
     "The eTools Team"
   ],
