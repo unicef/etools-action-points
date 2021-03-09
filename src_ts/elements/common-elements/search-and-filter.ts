@@ -302,7 +302,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     });
     if (indexToRemove === -1) {return;}
 
-    let queryObject = {query: undefined, page: undefined};
+    let queryObject = {query: undefined, page: this.queryParams.page, page_size: this.queryParams.page_size};
 
     if (this.queryParams[query]) {
       queryObject.page = '1';
@@ -317,6 +317,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   clearAllFilters() {
+    this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
     this.set('selectedFilters', []);
     const queryParams = this.queryParams;
     Object.keys(queryParams).forEach(key => queryParams[key] = undefined)
