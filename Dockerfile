@@ -4,6 +4,7 @@ RUN apk add --update bash
 
 RUN apk add git
 RUN npm config set unsafe-perm true
+
 RUN npm install -g --unsafe-perm polymer-cli
 RUN npm install -g typescript
 
@@ -12,13 +13,12 @@ WORKDIR /tmp
 ADD package.json /tmp/
 ADD package-lock.json /tmp/
 
-RUN npm install
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm install
 
 ADD . /code/
 WORKDIR /code
 RUN rm -rf node_modules
 RUN cp -a /tmp/node_modules /code/node_modules
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm i
 RUN npm run build
 
 FROM node:14.15.1-alpine3.12
