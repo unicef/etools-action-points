@@ -3,13 +3,12 @@ import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
-import {PaperMenuButton} from '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
-import {customElement, property, observe} from '@polymer/decorators';
+import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
 
 /**
