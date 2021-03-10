@@ -199,9 +199,13 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
                 options="[[item.selection]]"
                 placeholder$="&#8212;"
                 option-label="[[item.optionLabel]]"
-                option-value="[[item.optionValue]]" on-iron-select="_changeFilterValue"
+                option-value="[[item.optionValue]]"
+                trigger-value-change-event
+                on-etools-selected-item-changed="_changeFilterValue"
                 hide-search="[[item.hideSearch]]"
-                allow-outside-scroll shown-items-limit="5">
+                allow-outside-scroll
+                shown-items-limit="5"
+                enable-none-option>
               </etools-dropdown>
             </div>
           </template>
@@ -450,11 +454,12 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         page: '1',
         [query]: date || true
       };
-
-    } else if (e.detail.item && query) {
-      queryObject = {page: '1'};
-      // e.detail.item.item doesn't from etools-dropdown
-      queryObject[query] = e.detail.item.getAttribute('internal-id');
+    } else if (e.detail && query) {
+      // if  `detail.selectedItem` is filter selection, else if `queryParams[query]`, filter is set to `None`
+      if (e.detail.selectedItem || this.queryParams[query]) {
+        queryObject = {page: '1'};
+        queryObject[query] = e.detail.selectedItem ? e.detail.selectedItem[e.currentTarget.optionValue] : undefined;
+      }
     }
 
     if (queryObject) {
