@@ -455,7 +455,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         [query]: date || true
       };
     } else if (e.detail && query) {
-      // if  `detail.selectedItem` is filter selection, else if `queryParams[query]`, filter is set to `None`
+      // if  `detail.selectedItem` is filter selection, else if `queryParams[query]` filter is set to `None`
       if (e.detail.selectedItem || this.queryParams[query]) {
         queryObject = {page: '1'};
         queryObject[query] = e.detail.selectedItem ? e.detail.selectedItem[e.currentTarget.optionValue] : undefined;
