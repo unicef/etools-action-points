@@ -80,7 +80,7 @@ export class ActionPointsList extends
 
         .show-completed-toggle {
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           justify-content: center;
           align-self: stretch;
 
