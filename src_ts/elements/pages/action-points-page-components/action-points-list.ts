@@ -81,9 +81,7 @@ export class ActionPointsList extends
         .show-completed-toggle {
           display: flex;
           flex-direction: row;
-          justify-content: center;
-          align-self: stretch;
-
+          align-items: center;
           border-left: 2px solid var(--gray-lighter);
           margin: 8px 16px 8px 16px;
           padding: 18px 0 18px 10px;
