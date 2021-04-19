@@ -92,45 +92,46 @@ export const moduleStyles = html`
     etools-data-table-row {
       --list-divider-color: #e0e0e0;
     }
-    etools-dialog[no-padding] {
-      --etools-dialog-scrollable: {padding-top: 0 !important};
+    etools-dialog[no-padding]::part(ed-scrollable) {
+      padding-top: 0 !important;
+    }
+    etools-dialog::part(ed-scrollable) {
+      margin-top: 0;
+      padding-top: 12px; !important;
+    }
+    etools-dialog::part(ed-button-styles) {
+      margin-top: 0;
     }
     etools-dialog {
       --etools-dialog-primary-color: var(--module-primary);
-      --etools-dialog-scrollable: {
-        margin-top: 0;
-        padding-top: 12px; !important;
-      }
       --etools-dialog-content: {
         min-height: 80px;
         padding-bottom: 8px !important;
       }
-      --etools-dialog-button-styles: {margin-top: 0;};
     }
     etools-dialog > etools-loading {
       margin-bottom: -56px;
     }
+    etools-content-panel::part(ecp-header-title) {
+      font-weight: 500;
+      line-height: 48px;
+      padding: 0 30px;
+    }
+    etools-content-panel::part(ecp-toggle-btn) {
+      position: absolute;
+      top: 3px;
+      left: 13px;
+      width: 45px;
+      height: 45px;
+    }
     etools-content-panel {
       position: relative;
-      --ecp-header-title: {line-height: 48px};
-      --ecp-expand-btn: {
-        position: absolute;
-        top: 3px;
-        left: 13px;
-        width: 45px;
-        height: 45px;
-      }
-      --ecp-header-title: {
-        font-weight: 500;
-        line-height: 48px;
-        padding: 0 30px;
-      }
-      --ecp-header-btns-wrapper: {opacity: 1};
     }
     div[slot="panel-btns"] {
       position: absolute;
       top: 4px;
       right: 16px;
+      opacity: 1;
     }
     div[slot="panel-btns"] .panel-button {
       opacity: 0.7;

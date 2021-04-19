@@ -19,7 +19,7 @@ export class UserData extends EtoolsAjaxRequestMixin(UserController(PolymerEleme
     }).then(
         (resp: any) => this._handleResponse(resp)
     ).catch(
-        () => this._handleError());
+        (err: any) => this._handleError(err));
   }
 
   _handleResponse(data: any) {
@@ -38,8 +38,11 @@ export class UserData extends EtoolsAjaxRequestMixin(UserController(PolymerEleme
     this.dispatchEvent(new CustomEvent('user-profile-loaded', {bubbles: true}));
   }
 
-  _handleError() {
+  _handleError(error) {
     console.error('Can\'t load user data');
+    if ([403, 401].includes(error.status)) {
+      window.location.href = window.location.origin + '/login';
+    }
   }
 
   _forbidden() {

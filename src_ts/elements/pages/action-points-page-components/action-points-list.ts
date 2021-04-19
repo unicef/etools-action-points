@@ -79,12 +79,11 @@ export class ActionPointsList extends
         }
 
         .show-completed-toggle {
-          @apply --layout-horizontal;
-          @apply --layout-center;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
           border-left: 2px solid var(--gray-lighter);
-          margin-left: 16px;
-          margin-right: 16px;
-          align-self: center;
+          margin: 8px 16px 8px 16px;
           padding: 18px 0 18px 10px;
         }
         .show-completed-toggle span {
@@ -107,22 +106,20 @@ export class ActionPointsList extends
           box-shadow: 1px -3px 9px 0 #000000;
         }
 
+        etools-data-table-row::part(edt-icon-wrapper) {
+          padding: 0 24px;
+        }
         etools-data-table-row {
-          --icon-wrapper: {
-            padding: 0 24px;
-          }
           --list-icon-color: {
             rgba(0, 0, 0, 0.54);
           }
         }
-        etools-data-table-header {
-          --header-title: {
-            padding-left: 47px;
-            font-weight: 500;
-          }
-          --header-columns: {
-            margin-left: 47px;
-          }
+        etools-data-table-header::part(edt-header-title){
+          padding-left: 47px;
+          font-weight: 500;
+        }
+        etools-data-table-header::part(edt-header-columns){
+          margin-left: 47px;
         }
       </style>
 
@@ -441,6 +438,9 @@ export class ActionPointsList extends
   @property({type: Object, notify: true})
   queryParams: GenericObject;
 
+  @property({type: Object})
+  oldQueryParams: GenericObject
+
   @property({type: Array})
   totalResults: number;
 
@@ -502,37 +502,40 @@ export class ActionPointsList extends
   @observe('path')
   _setPath(path: string) {
     if (~path.indexOf('/list')) {
-      this.set('queryParams.page_size', this.pageSize);
-      this.set('queryParams.page', this.pageNumber);
+      this.set('queryParams', Object.assign({}, this.queryParams, {page_size: this.pageSize, page: this.pageNumber}) );
     }
   }
 
   @observe('queryParams')
-  _updateQueries(queryParams: any, oldQueryParams: any = {}) {
+  _updateQueries(queryParams: GenericObject) {
+    if (!~this.path.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
+      return;
+    }
     let exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
     delete exportParams['page'];
     this.set('exportParams', exportParams);
-    if (!~this.path.indexOf('action-points/list')) return;
-    if (this.queryParams.reload) {
+
+    if (queryParams.reload) {
       clearQueries();
-      this.set('queryParams.page_size', this.pageSize);
-      this.set('queryParams.page', this.pageNumber);
+      this.oldQueryParams = {};
+      this.set('queryParams', Object.assign({}, {page_size: this.pageSize, page: this.pageNumber}) );
+      return;
+    } else if (queryParams.page) {
+      this.set('pageNumber', Number(queryParams.page));
     }
-    updateQueries(this.queryParams, null, true);
-    let x = Object.keys(queryParams).map((param) => {
-      return !oldQueryParams.hasOwnProperty(param) && queryParams[param] && queryParams[param].length === 0;
-    });
-    let y = Object.keys(oldQueryParams).map((param) => {
-      return !queryParams.hasOwnProperty(param) && oldQueryParams[param] && oldQueryParams[param].length === 0;
-    });
-    let hasNewEmptyFilter = oldQueryParams && x.some((value: any) => value);
-    let hasOldEmptyFilter = oldQueryParams && y.some((value: any) => value);
-    if (!hasNewEmptyFilter && !hasOldEmptyFilter) {
-      let listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
-      listElements.forEach((element: any) => element.detailsOpened = false);
-      this._requestData();
+
+    if (!this.oldQueryParams || (JSON.stringify(queryParams) !== JSON.stringify(this.oldQueryParams))) {
+      this.oldQueryParams = Object.assign({}, queryParams);
+    } else {
+      return;
     }
+
+    updateQueries(queryParams, null, true);
+
+    let listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
+    listElements.forEach((element: any) => element.detailsOpened = false);
+    this._requestData();
   }
 
   _sort({detail}: any) {

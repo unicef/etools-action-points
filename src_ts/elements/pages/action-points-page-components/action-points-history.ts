@@ -12,19 +12,15 @@ export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
     return html`
       ${moduleStyles}
       <style include="iron-flex">
-        etools-data-table-header {
-          --header-columns: {
-            margin-left: 0;
-          }
+        etools-data-table-header::part(edt-data-table-header) {
+          margin-left: 0;
         }
-      
-        etools-data-table-row {
-          --list-row-wrapper: {
-            height: 48px;
-          }
+
+        etools-data-table-row::part(edt-list-row-wrapper) {
+          height: 48px;
         }
       </style>
-      
+
       <etools-data-table-header no-title>
         <etools-data-table-column class="flex">Date</etools-data-table-column>
         <etools-data-table-column class="flex">[[getLabel('history.by_user_display', permissionPath)]]
