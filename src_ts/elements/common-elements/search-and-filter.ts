@@ -445,16 +445,18 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     }
 
     let query = e.currentTarget.id,
-      date = dayjs(e.detail.date).format('YYYY-MM-DD'),
+      date = e.detail.date ? dayjs(e.detail.date).format('YYYY-MM-DD') : '',
       queryObject: any;
 
-    if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
-      e.currentTarget.parentElement.value = this.prettyDate(date);
-      this.dates[query] = date;
-      queryObject = {
-        page: '1',
-        [query]: date || true
-      };
+    if (e.type === 'date-has-changed') {
+      if (query && (this.dates[query] || date)) {
+        e.currentTarget.parentElement.value = this.prettyDate(date);
+        this.dates[query] = date;
+        queryObject = {
+          page: '1',
+          [query]: date || true
+        };
+      }
     } else if (e.detail && query) {
       // if  `detail.selectedItem` is filter selection, else if `queryParams[query]` filter is set to `None`
       if (e.detail.selectedItem || this.queryParams[query]) {
