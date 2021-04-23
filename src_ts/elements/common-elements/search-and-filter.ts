@@ -13,6 +13,7 @@ import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-item/paper-item-body';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
 import {updateQueries} from '../app-mixins/query-params-mixin';
@@ -101,27 +102,44 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           };
         }
 
-        paper-listbox paper-item {
-          font-weight: normal;
-          height: 48px;
-          min-height: initial;
-          cursor: pointer;
 
-          --paper-item-focused-before: {
-            background: var(--primary-background-color);
-            opacity: 0;
-          };
+        #filterMenu {
+          max-width: 126px;
+          padding: 0;
+          --paper-menu-button-content: {
+            overflow-y: auto;
+            overflow-x: hidden;
+          }
         }
 
-        paper-listbox span.add-filter--item-name {
-          white-space: nowrap;
-          text-transform: capitalize;
+        #filterMenu .button {
+          color: var(--primary-color, rgba(0, 0, 0, 0.87));
+          font-weight: 500;
+          margin: 0;
+        }
+
+        #filterMenu .button iron-icon {
+          margin-right: 5px;
+        }
+
+        #filterMenu paper-listbox {
+          min-width: 250px;
+        }
+
+        #filterMenu paper-icon-item {
+          --paper-item-icon-width: auto;
+          font-weight: normal;
+        }
+
+        #filterMenu paper-icon-item iron-icon {
+          margin-right: 8px;
         }
 
         #filterMenu paper-icon-item[selected] {
           font-weight: normal;
           background: var(--etools-filters-menu-selected-bg, #dcdcdc);
         }
+
 
         datepicker-lite {
           width: 176px;
@@ -158,7 +176,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           flex-direction: row;
           align-items: center;
           color: var(--primary-color);
-          padding: 0px 16px;
+          padding: 0px 8px;
           border-bottom: 1px solid var(--dark-divider-color, #9d9d9d);
         }
       </style>
@@ -230,7 +248,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
               <template is="dom-repeat" items="[[filters]]">
                 <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
                   <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
-                  <paper-item><span class="add-filter--item-name">[[item.name]]</span></paper-item>
+                  <paper-item-body>[[item.name]]</span></paper-item-body>
                 </paper-icon-item>
               </template>
             </paper-listbox>

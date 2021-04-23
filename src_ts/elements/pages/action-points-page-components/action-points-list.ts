@@ -27,6 +27,8 @@ import {customElement, property, observe} from '@polymer/decorators';
 import {noActionsAllowed} from '../../app-mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
 import {SearchAndFilter} from '../../common-elements/search-and-filter';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 
 @customElement('action-points-list')
 export class ActionPointsList extends
@@ -462,6 +464,9 @@ export class ActionPointsList extends
   @property({type: String})
   path: string;
 
+  @property({type: Object})
+  _debounceLoadData: Debouncer;
+
   ready() {
     super.ready();
     this._initSort();
@@ -535,7 +540,11 @@ export class ActionPointsList extends
 
     let listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
     listElements.forEach((element: any) => element.detailsOpened = false);
-    this._requestData();
+
+    this._debounceLoadData = Debouncer.debounce(
+        this._debounceLoadData, timeOut.after(100), () => {
+          this._requestData();
+        });
   }
 
   _sort({detail}: any) {
@@ -649,8 +658,8 @@ export class ActionPointsList extends
     if (!isShowCompleted) {
       this.set('queryParams.status', 'open');
     } else if (this.queryParams) {
-
-      this.set('queryParams', delete this.queryParams.status);
+      this.queryParams.status = undefined;
+      updateQueries(this.queryParams);
     }
   }
 
