@@ -649,9 +649,8 @@ export class ActionPointsList extends
     if (!isShowCompleted) {
       this.set('queryParams.status', 'open');
     } else if (this.queryParams) {
-      let newQueryObj = this.queryParams;
-      newQueryObj.status = undefined;
-      updateQueries(newQueryObj);
+      this.queryParams.status = undefined;
+      updateQueries(this.queryParams);
     }
   }
 
