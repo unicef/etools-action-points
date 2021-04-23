@@ -39,11 +39,11 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         }
         .inputs-container {
           flex-wrap: wrap;
+          padding-left: 12px;
         }
         paper-input {
           --paper-input-container: {
             width: 240px;
-            margin-left: 26px;
           };
           --paper-input-container-color: var(--gray-light);
           iron-icon { color: var(--gray-mid); }
@@ -57,9 +57,12 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           margin-right: 8px;
         }
         #add-filter-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-self: stretch;
           border-left: 2px solid var(--gray-lighter);
-          margin-left: 16px;
-          margin-right: 16px;
+          margin: 8px 16px 8px 16px;
           padding-left: 10px;
         }
         #add-filter-container.add-filter-text {
@@ -82,7 +85,8 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           --paper-menu-focused-item-after: {
             background: var(--primary-background-color);
             opacity: 0;
-        };
+          };
+        }
         paper-listbox paper-item {
           font-weight: normal;
           height: 48px;
@@ -97,8 +101,16 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           white-space: nowrap;
           text-transform: capitalize;
         }
+        #filterMenu paper-icon-item[selected] {
+          font-weight: normal;
+          background: var(--etools-filters-menu-selected-bg, #dcdcdc);
+        }
+        datepicker-lite {
+          width: 176px;
+          margin-left: 12px;
+          margin-right: 12px;
+        }
         .filter-dropdown {
-          margin-left: 20px;
           width: 200px;
           --esmm-list-wrapper: {
             margin-top: 0;
@@ -120,14 +132,23 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           text-align: center;
           cursor: pointer;
         }
+        .clear-all-filters {
+          min-height: 48px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          color: var(--primary-color);
+          padding: 0px 16px;
+          border-bottom: 1px solid var(--dark-divider-color, #9d9d9d);
+        }
       </style>
       <div class="layout horizontal flex inputs-container">
         <div class="layout horizontal">
           <paper-input type="search"
-                       value="{{searchString}}"
-                       label="[[searchLabel]]"
-                       placeholder="Search"
-                       always-float-label inline>
+              value="{{searchString}}"
+              label="[[searchLabel]]"
+              placeholder="Search"
+              always-float-label inline>
             <iron-icon icon="search" slot="prefix"></iron-icon>
           </paper-input>
         </div>
@@ -136,24 +157,30 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           <template is="dom-if" if="[[item.isDatePicker]]">
             <div class="layout horizontal">
               <datepicker-lite id="[[item.query]]"
-                               label="[[item.name]]"
-                               slot="prefix"
-                               selected-date-display-format="YYYY-MM-DD"
-                               fire-date-has-changed="[[!restoreInProcess]]"
-                               on-date-has-changed="_changeFilterValue"
-                               clear-btn-inside-dr>
+                  label="[[item.name]]"
+                  slot="prefix"
+                  selected-date-display-format="YYYY-MM-DD"
+                  fire-date-has-changed="[[!restoreInProcess]]"
+                  on-date-has-changed="_changeFilterValue"
+                  clear-btn-inside-dr>
               </datepicker-lite>
             </div>
           </template>
           <template is="dom-if" if="[[!item.isDatePicker]]">
             <div class="layout horizontal">
               <etools-dropdown id="[[item.query]]" class="filter-dropdown"
-                selected="[[item.value]]" label="[[item.label]]"
-                placeholder$="Select [[item.name]]" options="[[item.selection]]"
+                selected="[[item.value]]"
+                label="[[item.name]]"
+                options="[[item.selection]]"
+                placeholder$="&#8212;"
                 option-label="[[item.optionLabel]]"
-                option-value="[[item.optionValue]]" on-iron-select="_changeFilterValue"
+                option-value="[[item.optionValue]]"
+                trigger-value-change-event
+                on-etools-selected-item-changed="_changeFilterValue"
                 hide-search="[[item.hideSearch]]"
-                allow-outside-scroll shown-items-limit="5">
+                allow-outside-scroll
+                shown-items-limit="5"
+                enable-none-option>
               </etools-dropdown>
             </div>
           </template>
@@ -162,14 +189,18 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       <!-- ADD FILTERS -->
       <template is="dom-if" if="[[filters.length]]">
         <div id="add-filter-container">
-          <paper-menu-button horizontal-align="right" vertical-align="top" no-overlap>
+          <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
             <paper-button slot="dropdown-trigger">
               <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
               <span class="add-filter-text">ADD FILTER</span>
             </paper-button>
+            <div slot="dropdown-content" class="clear-all-filters">
+              <paper-button on-tap="clearAllFilters" class="secondary-btn">Clear All
+              </paper-button>
+            </div>
             <paper-listbox slot="dropdown-content">
               <template is="dom-repeat" items="[[filters]]">
-                <paper-icon-item on-tap="selectFilter">
+                <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
                   <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
                   <paper-item><span class="add-filter--item-name">[[item.name]]</span></paper-item>
                 </paper-icon-item>
@@ -247,7 +278,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     });
     if (indexToRemove === -1) {return;}
 
-    let queryObject = {query: undefined, page: undefined};
+    let queryObject = {query: undefined, page: this.queryParams.page, page_size: this.queryParams.page_size};
 
     if (this.queryParams[query]) {
       queryObject.page = '1';
@@ -259,6 +290,14 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       this.splice('selectedFilters', indexToRemove, 1);
     }
     updateQueries(queryObject);
+  }
+
+  clearAllFilters() {
+    this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
+    this.set('selectedFilters', []);
+    const queryParams = this.queryParams;
+    Object.keys(queryParams).forEach(key => queryParams[key] = undefined)
+    updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
   }
 
   _reloadFilters() {
@@ -378,21 +417,24 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     }
 
     let query = e.currentTarget.id,
-      date = dayjs(e.detail.date).format('YYYY-MM-DD'),
+      date = e.detail.date ? dayjs(e.detail.date).format('YYYY-MM-DD') : '',
       queryObject: any;
 
-    if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
-      e.currentTarget.parentElement.value = this.prettyDate(date);
-      this.dates[query] = date;
-      queryObject = {
-        page: '1',
-        [query]: date || true
-      };
-
-    } else if (e.detail.item && query) {
-      queryObject = {page: '1'};
-      // e.detail.item.item doesn't from etools-dropdown
-      queryObject[query] = e.detail.item.getAttribute('internal-id');
+    if (e.type === 'date-has-changed') {
+      if (query && (this.dates[query] || date)) {
+        e.currentTarget.parentElement.value = this.prettyDate(date);
+        this.dates[query] = date;
+        queryObject = {
+          page: '1',
+          [query]: date || true
+        };
+      }
+    } else if (e.detail && query) {
+      // if  `detail.selectedItem` is filter selection, else if `queryParams[query]` filter is set to `None`
+      if (e.detail.selectedItem || this.queryParams[query]) {
+        queryObject = {page: '1'};
+        queryObject[query] = e.detail.selectedItem ? e.detail.selectedItem[e.currentTarget.optionValue] : true;
+      }
     }
 
     if (queryObject) {
