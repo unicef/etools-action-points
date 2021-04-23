@@ -658,8 +658,8 @@ export class ActionPointsList extends
     if (!isShowCompleted) {
       this.set('queryParams.status', 'open');
     } else if (this.queryParams) {
-
-      this.set('queryParams', delete this.queryParams.status);
+      this.queryParams.status = undefined;
+      updateQueries(this.queryParams);
     }
   }
 
