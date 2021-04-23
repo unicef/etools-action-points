@@ -652,8 +652,6 @@ export class ActionPointsList extends
       let newQueryObj = this.queryParams;
       newQueryObj.status = undefined;
       updateQueries(newQueryObj);
-      delete newQueryObj.status;
-      this.set('queryParams', newQueryObj);
     }
   }
 
