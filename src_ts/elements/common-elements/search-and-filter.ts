@@ -140,18 +140,6 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           background: var(--etools-filters-menu-selected-bg, #dcdcdc);
         }
 
-        paper-icon-item {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          flex-wrap: wrap;
-
-          min-height: 48px;
-          box-sizing: border-box;
-          width: 100%;
-          cursor: pointer;
-        }
-
         datepicker-lite {
           width: 176px;
           margin-left: 12px;
