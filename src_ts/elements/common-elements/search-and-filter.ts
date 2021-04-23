@@ -13,7 +13,6 @@ import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item.js';
-import '@polymer/paper-item/paper-item-body';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
 import {updateQueries} from '../app-mixins/query-params-mixin';
@@ -38,129 +37,69 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           @apply --layout-center;
           @apply --layout-flex;
         }
-
         .inputs-container {
           flex-wrap: wrap;
-          padding-left: 12px;
         }
-
         paper-input {
           --paper-input-container: {
             width: 240px;
+            margin-left: 26px;
           };
           --paper-input-container-color: var(--gray-light);
-
           iron-icon { color: var(--gray-mid); }
         }
-
         .toggle-hidden-div {
           margin-right: 26px;
         }
-
         span.toggle-hidden-div {
           color: var(--gray-dark);
           font-size: 16px;
           margin-right: 8px;
         }
-
         #add-filter-container {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-self: stretch;
-
           border-left: 2px solid var(--gray-lighter);
-          margin: 8px 16px 8px 16px;
+          margin-left: 16px;
+          margin-right: 16px;
           padding-left: 10px;
         }
-
         #add-filter-container.add-filter-text {
           margin-top: 4px;
         }
-
         #add-filter-container paper-button {
           color: var(--module-primary);
           font-weight: bold;
         }
-
         #add-filter-container paper-menu-button {
           padding: 0;
           margin: 8px;
         }
-
         #add-filter-container paper-menu-button paper-button {
           margin: 0;
         }
-
         paper-listbox {
           background-color: #ffffff;
-
           --paper-menu-background-color: #ffffff;
           --paper-menu-focused-item-after: {
             background: var(--primary-background-color);
             opacity: 0;
+        };
+        paper-listbox paper-item {
+          font-weight: normal;
+          height: 48px;
+          min-height: initial;
+          cursor: pointer;
+          --paper-item-focused-before: {
+            background: var(--primary-background-color);
+            opacity: 0;
           };
         }
-
-
-        #filterMenu {
-          max-width: 126px;
-          padding: 0;
-          --paper-menu-button-content: {
-            overflow-y: auto;
-            overflow-x: hidden;
-          }
+        paper-listbox span.add-filter--item-name {
+          white-space: nowrap;
+          text-transform: capitalize;
         }
-
-        #filterMenu .button {
-          color: var(--primary-color, rgba(0, 0, 0, 0.87));
-          font-weight: 500;
-          margin: 0;
-        }
-
-        #filterMenu .button iron-icon {
-          margin-right: 5px;
-        }
-
-        #filterMenu paper-listbox {
-          min-width: 250px;
-        }
-
-        #filterMenu paper-icon-item {
-          --paper-item-icon-width: auto;
-          font-weight: normal;
-        }
-
-        #filterMenu paper-icon-item iron-icon {
-          margin-right: 8px;
-        }
-
-        #filterMenu paper-icon-item[selected] {
-          font-weight: normal;
-          background: var(--etools-filters-menu-selected-bg, #dcdcdc);
-        }
-
-        paper-icon-item {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          flex-wrap: wrap;
-
-          min-height: 48px;
-          box-sizing: border-box;
-          width: 100%;
-          cursor: pointer;
-        }
-
-        datepicker-lite {
-          width: 176px;
-          margin-left: 12px;
-          margin-right: 12px;
-        }
-
         .filter-dropdown {
+          margin-left: 20px;
           width: 200px;
-
           --esmm-list-wrapper: {
             margin-top: 0;
             padding-top: 12px;
@@ -181,85 +120,58 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           text-align: center;
           cursor: pointer;
         }
-        .clear-all-filters {
-          min-height: 48px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          color: var(--primary-color);
-          padding: 0px 8px;
-          border-bottom: 1px solid var(--dark-divider-color, #9d9d9d);
-        }
       </style>
-
       <div class="layout horizontal flex inputs-container">
         <div class="layout horizontal">
           <paper-input type="search"
-              value="{{searchString}}"
-              label="[[searchLabel]]"
-              placeholder="Search"
-              always-float-label inline>
-
+                       value="{{searchString}}"
+                       label="[[searchLabel]]"
+                       placeholder="Search"
+                       always-float-label inline>
             <iron-icon icon="search" slot="prefix"></iron-icon>
           </paper-input>
         </div>
-
         <!-- FILTERS -->
         <template is="dom-repeat" items="[[selectedFilters]]">
-
           <template is="dom-if" if="[[item.isDatePicker]]">
             <div class="layout horizontal">
               <datepicker-lite id="[[item.query]]"
-                  label="[[item.name]]"
-                  slot="prefix"
-                  selected-date-display-format="YYYY-MM-DD"
-                  fire-date-has-changed="[[!restoreInProcess]]"
-                  on-date-has-changed="_changeFilterValue"
-                  clear-btn-inside-dr>
+                               label="[[item.name]]"
+                               slot="prefix"
+                               selected-date-display-format="YYYY-MM-DD"
+                               fire-date-has-changed="[[!restoreInProcess]]"
+                               on-date-has-changed="_changeFilterValue"
+                               clear-btn-inside-dr>
               </datepicker-lite>
             </div>
           </template>
-
           <template is="dom-if" if="[[!item.isDatePicker]]">
             <div class="layout horizontal">
               <etools-dropdown id="[[item.query]]" class="filter-dropdown"
-                selected="[[item.value]]"
-                label="[[item.name]]"
-                options="[[item.selection]]"
-                placeholder$="&#8212;"
+                selected="[[item.value]]" label="[[item.label]]"
+                placeholder$="Select [[item.name]]" options="[[item.selection]]"
                 option-label="[[item.optionLabel]]"
-                option-value="[[item.optionValue]]"
-                trigger-value-change-event
-                on-etools-selected-item-changed="_changeFilterValue"
+                option-value="[[item.optionValue]]" on-iron-select="_changeFilterValue"
                 hide-search="[[item.hideSearch]]"
-                allow-outside-scroll
-                shown-items-limit="5"
-                enable-none-option>
+                allow-outside-scroll shown-items-limit="5">
               </etools-dropdown>
             </div>
           </template>
-
         </template>
       </div>
-
       <!-- ADD FILTERS -->
       <template is="dom-if" if="[[filters.length]]">
         <div id="add-filter-container">
-          <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
+          <paper-menu-button horizontal-align="right" vertical-align="top" no-overlap>
             <paper-button slot="dropdown-trigger">
               <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
-
               <span class="add-filter-text">ADD FILTER</span>
             </paper-button>
-            <div slot="dropdown-content" class="clear-all-filters">
-              <paper-button on-tap="clearAllFilters" class="secondary-btn">Clear All
-              </paper-button>
-            </div>
             <paper-listbox slot="dropdown-content">
               <template is="dom-repeat" items="[[filters]]">
-                <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
+                <paper-icon-item on-tap="selectFilter">
                   <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
-                  <paper-item-body>[[item.name]]</span></paper-item-body>
+                  <paper-item><span class="add-filter--item-name">[[item.name]]</span></paper-item>
                 </paper-icon-item>
               </template>
             </paper-listbox>
@@ -335,7 +247,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     });
     if (indexToRemove === -1) {return;}
 
-    let queryObject = {query: undefined, page: this.queryParams.page, page_size: this.queryParams.page_size};
+    let queryObject = {query: undefined, page: undefined};
 
     if (this.queryParams[query]) {
       queryObject.page = '1';
@@ -347,14 +259,6 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       this.splice('selectedFilters', indexToRemove, 1);
     }
     updateQueries(queryObject);
-  }
-
-  clearAllFilters() {
-    this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
-    this.set('selectedFilters', []);
-    const queryParams = this.queryParams;
-    Object.keys(queryParams).forEach(key => queryParams[key] = undefined)
-    updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
   }
 
   _reloadFilters() {
@@ -474,24 +378,21 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     }
 
     let query = e.currentTarget.id,
-      date = e.detail.date ? dayjs(e.detail.date).format('YYYY-MM-DD') : '',
+      date = dayjs(e.detail.date).format('YYYY-MM-DD'),
       queryObject: any;
 
-    if (e.type === 'date-has-changed') {
-      if (query && (this.dates[query] || date)) {
-        e.currentTarget.parentElement.value = this.prettyDate(date);
-        this.dates[query] = date;
-        queryObject = {
-          page: '1',
-          [query]: date || true
-        };
-      }
-    } else if (e.detail && query) {
-      // if  `detail.selectedItem` is filter selection, else if `queryParams[query]` filter is set to `None`
-      if (e.detail.selectedItem || this.queryParams[query]) {
-        queryObject = {page: '1'};
-        queryObject[query] = e.detail.selectedItem ? e.detail.selectedItem[e.currentTarget.optionValue] : true;
-      }
+    if (e.type === 'date-has-changed' && query && (this.dates[query] || date)) {
+      e.currentTarget.parentElement.value = this.prettyDate(date);
+      this.dates[query] = date;
+      queryObject = {
+        page: '1',
+        [query]: date || true
+      };
+
+    } else if (e.detail.item && query) {
+      queryObject = {page: '1'};
+      // e.detail.item.item doesn't from etools-dropdown
+      queryObject[query] = e.detail.item.getAttribute('internal-id');
     }
 
     if (queryObject) {
