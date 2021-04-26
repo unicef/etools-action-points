@@ -343,8 +343,9 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
     this.set('selectedFilters', []);
     const queryParams = this.queryParams;
-    Object.keys(queryParams).forEach(key => queryParams[key] = undefined)
+    Object.keys(queryParams).forEach(key => queryParams[key] = undefined);
     updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
+    this._updateFilterListboxPosition();
   }
 
   _reloadFilters() {
@@ -450,6 +451,10 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       delete newQueryObj[selectedOption.query];
       this.set('queryParams', newQueryObj);
     }
+    this._updateFilterListboxPosition();
+  }
+
+  _updateFilterListboxPosition() {
     if (!this.filterMenuEl) {
       this.filterMenuEl = this.shadowRoot.querySelector('#filterMenu');
     }
