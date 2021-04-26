@@ -237,7 +237,6 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
             <paper-button slot="dropdown-trigger">
               <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
-
               <span class="add-filter-text">ADD FILTER</span>
             </paper-button>
             <div slot="dropdown-content" class="clear-all-filters">
@@ -281,6 +280,8 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
 
   @property({type: Object})
   _debounceFilters: Debouncer;
+
+  filterMenuEl: GenericObject;
 
   @observe('searchString')
   searchKeyDown() {
@@ -448,6 +449,12 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       updateQueries(newQueryObj);
       delete newQueryObj[selectedOption.query];
       this.set('queryParams', newQueryObj);
+    }
+    if (!this.filterMenuEl) {
+      this.filterMenuEl = this.shadowRoot.querySelector('#filterMenu');
+    }
+    if (this.filterMenuEl) {
+      this.filterMenuEl.$.dropdown.notifyResize();
     }
   }
 
