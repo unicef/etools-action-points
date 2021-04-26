@@ -101,13 +101,10 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
             opacity: 0;
           };
         }
-
-
         #filterMenu {
           max-width: 126px;
           padding: 0;
           --paper-menu-button-content: {
-            overflow-y: auto;
             overflow-x: hidden;
           }
         }
@@ -139,7 +136,6 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           font-weight: normal;
           background: var(--etools-filters-menu-selected-bg, #dcdcdc);
         }
-
 
         datepicker-lite {
           width: 176px;
