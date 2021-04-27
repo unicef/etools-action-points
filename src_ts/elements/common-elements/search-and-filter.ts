@@ -101,13 +101,10 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
             opacity: 0;
           };
         }
-
-
         #filterMenu {
           max-width: 126px;
           padding: 0;
           --paper-menu-button-content: {
-            overflow-y: auto;
             overflow-x: hidden;
           }
         }
@@ -139,7 +136,6 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           font-weight: normal;
           background: var(--etools-filters-menu-selected-bg, #dcdcdc);
         }
-
 
         datepicker-lite {
           width: 176px;
@@ -237,7 +233,6 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
             <paper-button slot="dropdown-trigger">
               <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
-
               <span class="add-filter-text">ADD FILTER</span>
             </paper-button>
             <div slot="dropdown-content" class="clear-all-filters">
@@ -281,6 +276,8 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
 
   @property({type: Object})
   _debounceFilters: Debouncer;
+
+  filterMenuEl: GenericObject;
 
   @observe('searchString')
   searchKeyDown() {
@@ -342,8 +339,9 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
     this.set('selectedFilters', []);
     const queryParams = this.queryParams;
-    Object.keys(queryParams).forEach(key => queryParams[key] = undefined)
+    Object.keys(queryParams).forEach(key => queryParams[key] = undefined);
     updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
+    this._updateFilterListboxPosition();
   }
 
   _reloadFilters() {
@@ -448,6 +446,16 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       updateQueries(newQueryObj);
       delete newQueryObj[selectedOption.query];
       this.set('queryParams', newQueryObj);
+    }
+    this._updateFilterListboxPosition();
+  }
+
+  _updateFilterListboxPosition() {
+    if (!this.filterMenuEl) {
+      this.filterMenuEl = this.shadowRoot.querySelector('#filterMenu');
+    }
+    if (this.filterMenuEl) {
+      this.filterMenuEl.$.dropdown.notifyResize();
     }
   }
 
