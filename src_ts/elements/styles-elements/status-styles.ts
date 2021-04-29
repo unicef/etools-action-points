@@ -4,9 +4,6 @@ export const etoolsStatusStyles = html`
     <style>
     :host {
       width: 100%;
-      --ecp-content: {
-        padding: 0;
-      };
       display: block;
       position: relative;
       -webkit-box-sizing: border-box;
@@ -19,6 +16,10 @@ export const etoolsStatusStyles = html`
       top: 84px;
       width: 200px;
     }
+
+    etools-content-panel::part(ecp-content) {
+      padding: 0;
+    };
 
     [hidden] {
       display: none !important;

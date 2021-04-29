@@ -2,7 +2,11 @@ import Dexie from 'dexie';
 import endpoints from '../app-mixins/endpoints';
 
 declare global {
-  interface Window {EtoolsApdApp: any; EtoolsRequestCacheDb: any;}
+  interface Window {
+    EtoolsApdApp: any;
+    EtoolsRequestCacheDb: any;
+    EtoolsEsmmFitIntoEl: any;
+  }
 }
 
 window.EtoolsApdApp = window.EtoolsApdApp || {};
