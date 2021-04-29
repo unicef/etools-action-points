@@ -39,7 +39,7 @@ export function LocalizationMixin<T extends Constructor<PolymerElement>>(superCl
     public getStringValue(value: string, list?: [], field?: string) {
       let stringValue = value;
       if (list && field) {
-        let item: any = list.find(i => i === {value: value});
+        let item: any = list.find(i => i['value'] === value);
         stringValue = item && item[field] ? item[field] : '';
       }
       return !stringValue || !stringValue.length ? '-' : stringValue;

@@ -56,9 +56,6 @@ export class ActionPointsList extends
         .row-details-content {
           position: relative;
           min-width: 0;
-          paper-tooltip {
-            max-width: 100%;
-          }
         }
 
         .row-details-content .truncate {
