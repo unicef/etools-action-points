@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2018",
     "module": "ESNext",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
@@ -13,8 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "src"
   },
-  "include": [
-    "src_ts/**/*.ts"
-  ],
+  "include": ["src_ts/**/*.ts"],
   "exclude": []
 }
