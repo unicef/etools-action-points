@@ -29,6 +29,7 @@ import {GenericObject} from '../../../typings/globals.types';
 import {SearchAndFilter} from '../../common-elements/search-and-filter';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import '@polymer/iron-media-query/iron-media-query.js';
 
 @customElement('action-points-list')
 export class ActionPointsList extends
@@ -63,6 +64,14 @@ export class ActionPointsList extends
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+
+        etools-data-table-row[low-resolution-layout] *[slot="row-data-details"] {
+          margin-left: 32px;
+        }
+
+        etools-data-table-row *[slot="row-data-details"] {
+          margin-left: 14px;
         }
 
         paper-card {
@@ -121,7 +130,7 @@ export class ActionPointsList extends
           margin-left: 47px;
         }
       </style>
-
+      <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
       <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
       <iron-query-params params-string="{{query}}" params-object="{{queryParams}}">
       </iron-query-params>
@@ -146,7 +155,9 @@ export class ActionPointsList extends
       </filters-element>
       <paper-card>
         <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]"
+          low-resolution-layout="[[lowResolutionLayout]]"
           label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
+
           <etools-data-table-column class="flex-1" field="reference_number" sortable>
           [[getLabel('reference_number', basePermissionPath)]]
           </etools-data-table-column>
@@ -174,6 +185,7 @@ export class ActionPointsList extends
           <etools-data-table-column class="flex-1" field="high_priority" sortable>
             Priority
           </etools-data-table-column>
+
         </etools-data-table-header>
 
         <template is="dom-if" if="[[!actionPoints.length]]">
@@ -193,58 +205,58 @@ export class ActionPointsList extends
         </template>
 
         <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
-          <etools-data-table-row>
+          <etools-data-table-row low-resolution-layout="[[lowResolutionLayout]]">
             <div slot="row-data" class="layout horizontal">
-              <div class="col-data flex-1 truncate">
+              <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('reference_number', basePermissionPath)]]">
                 <div class="tooltip-container">
                   <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
                   <paper-tooltip offset="0">[[getStringValue(entry.reference_number)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate">
+              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('cp_output', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[getStringValue(entry.cp_output.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.cp_output.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate">
+              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('partner', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[getStringValue(entry.partner.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.partner.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate">
+              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('office', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[getStringValue(entry.office.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.office.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate">
+              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('section', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[getStringValue(entry.section.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.section.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate">
+              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('assigned_to', basePermissionPath)]]">
                 <div class="tooltip-container">
                   <span>[[getStringValue(entry.assigned_to.name)]]</span>
                   <paper-tooltip offset="0">[[getStringValue(entry.assigned_to.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-1 truncate">
+              <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('due_date', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[prettyDate(entry.due_date, null, '-')]]
                   <paper-tooltip offset="0">[[prettyDate(entry.due_date, null, '-')]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-1 truncate">
+              <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('status', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[getStringValue(entry.status)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.status)]]
                   </paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-1 truncate">
+              <div class="col-data flex-1 truncate" data-col-header-label="Priority">
                 <div class="tooltip-container">
                   [[_getPriorityValue(entry.high_priority)]]
                   <paper-tooltip offset="0">[[_getPriorityValue(entry.high_priority)]]
@@ -291,6 +303,7 @@ export class ActionPointsList extends
         </template>
 
         <etools-data-table-footer page-size="{{pageSize}}" page-number="{{pageNumber}}"
+          low-resolution-layout="[[lowResolutionLayout]]"
           total-results="[[totalResults]]"
           visible-range="{{visibleRange}}" on-page-size-changed="_pageSizeSelected"
           on-page-number-changed="_pageNumberChanged">
@@ -310,6 +323,9 @@ export class ActionPointsList extends
 
   @property({type: Array, notify: true})
   statuses: object[];
+
+  @property({type: Boolean})
+  lowResolutionLayout = false;
 
   @property({type: Array})
   filters: object[] = [{
