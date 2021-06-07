@@ -1,4 +1,4 @@
-import {html} from '@polymer/polymer';
+import { html } from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 
@@ -20,14 +20,8 @@ export const navMenuStyles = html`
       overflow-x: visible;
     }
 
-    @media (max-height: 600px) {
-      paper-tooltip {
-        display: none;
-      }
-
-      :host([small-menu]) {
-        overflow-x: hidden;
-      }
+    .chev-right {
+      position: relative;
     }
 
     .menu-header,
@@ -68,6 +62,7 @@ export const navMenuStyles = html`
     :host #menu-header-top-icon,
     :host([small-menu]) .nav-menu-item .name,
     :host(:not([small-menu])) paper-tooltip,
+    :host(:not([small-menu])) #expand-menu,
     :host([small-menu]) .section-title span,
     :host([small-menu]) #minimize-menu,
     :host([small-menu]) .menu-header .ripple-wrapper:not(.main) {
@@ -88,7 +83,8 @@ export const navMenuStyles = html`
     }
 
     #menu-header-top-icon,
-    #minimize-menu {
+    #minimize-menu,
+    #expand-menu {
       cursor: pointer;
     }
 
@@ -109,7 +105,8 @@ export const navMenuStyles = html`
       padding: 8px 0 0;
     }
 
-    .nav-menu, .nav-menu iron-selector[role="navigation"] {
+    .nav-menu,
+    .nav-menu iron-selector[role='navigation'] {
       @apply --layout-flex;
     }
 
@@ -174,6 +171,16 @@ export const navMenuStyles = html`
 
     .ripple-wrapper {
       position: relative;
+    }
+
+    @media (max-height: 600px) {
+      paper-tooltip {
+        display: none;
+      }
+
+      :host([small-menu]) {
+        overflow-x: hidden;
+      }
     }
   </style>
 `;
