@@ -1,6 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
-import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@polymer/paper-input/paper-input.js';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
@@ -18,21 +17,22 @@ export class OpenAddComments extends
           InputAttrs(PolymerElement))) {
   public static get template() {
     return html`
-      <etools-dialog id="commentDialog" size="md" 
+      <etools-dialog id="commentDialog" size="md"
                       dialog-title="Add [[getLabel('comments', permissionPath)]]"
                       keep-dialog-open ok-btn-text="SAVE"
                       on-confirm-btn-clicked="saveComment"
-                      on-iron-overlay-closed="_resetInputs">
-        <etools-loading active="{{isSaveComment}}" loading-text="Save comment"></etools-loading>
+                      on-iron-overlay-closed="_resetInputs"
+                      show-spinner="[[isSaveComment]]"
+                      spinner-text="Save comment">
         <div class="row-h group">
           <div class="input-container input-container-l">
-            <paper-input 
+            <paper-input
                   class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
-                  value="{{commentText}}" label="[[getLabel('comments.comment', permissionPath)]]" 
+                  value="{{commentText}}" label="[[getLabel('comments.comment', permissionPath)]]"
                   placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
-                  required$="[[_setRequired('comments.comment', permissionPath)]]" 
+                  required$="[[_setRequired('comments.comment', permissionPath)]]"
                   disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
-                  maxlength="3000" 
+                  maxlength="3000"
                   invalid$="{{errors.comments.comment}}"
                   error-message="{{errors.comments.comment}}" on-focus="_resetFieldError" on-tap="_resetFieldError"
                   no-title-attr>
@@ -51,6 +51,9 @@ export class OpenAddComments extends
 
   @property({type: String})
   permissionPath: string;
+
+  @property({type: Boolean})
+  isSaveComment = false;
 
   open() {
     (this.$.commentDialog as EtoolsDialog).opened = true;
