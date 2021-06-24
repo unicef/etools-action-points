@@ -54,7 +54,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
           display: none;
         }
 
-        --paper-input-container-input: {
+        --paper-input-container-shared-input-style: {
           color: var(--light-secondary-text-color);
           cursor: pointer;
           min-height: 24px;
