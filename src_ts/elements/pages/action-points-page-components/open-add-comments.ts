@@ -22,7 +22,7 @@ export class OpenAddComments extends
                       keep-dialog-open ok-btn-text="SAVE"
                       on-confirm-btn-clicked="saveComment"
                       on-iron-overlay-closed="_resetInputs"
-                      show-spinner="[[isSaveComment]]"
+                      show-spinner="[[requestInProcess]]"
                       spinner-text="Save comment">
         <div class="row-h group">
           <div class="input-container input-container-l">
@@ -53,7 +53,7 @@ export class OpenAddComments extends
   permissionPath: string;
 
   @property({type: Boolean})
-  isSaveComment = false;
+  requestInProcess = false;
 
   open() {
     (this.$.commentDialog as EtoolsDialog).opened = true;
@@ -66,7 +66,7 @@ export class OpenAddComments extends
     let comments = [{
       comment: this.commentText
     }];
-    this.set('isSaveComment', true);
+    this.set('requestInProcess', true);
     this.sendRequest({
       method: 'PATCH',
       endpoint: endpoint,
@@ -81,11 +81,11 @@ export class OpenAddComments extends
             detail: response
           }));
           dialog.opened = false;
-          this.set('isSaveComment', false);
+          this.set('requestInProcess', false);
         })
         .catch((err: any) => {
           this.errorHandler(err, this.permissionPath);
-          this.set('isSaveComment', false);
+          this.set('requestInProcess', false);
         });
   }
 
