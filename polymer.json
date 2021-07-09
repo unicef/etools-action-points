@@ -16,10 +16,11 @@
   "sources": [
     "src/**/*",
     "images/**/*",
-    "package.json",
-    "manifest.json"
+    "package.json"
   ],
   "extraDependencies": [
+    "manifest.json",
+    "version.json",
     "node_modules/@webcomponents/webcomponentsjs/**",
     "node_modules/web-animations-js/web-animations-next-lite.min.js",
     "node_modules/dayjs/dayjs.min.js",
@@ -27,8 +28,12 @@
     "node_modules/linkifyjs/**"
   ],
   "lint": {
-    "rules": ["polymer-3"],
-    "ignoreWarnings": ["could-not-resolve-reference"]
+    "rules": [
+      "polymer-3"
+    ],
+    "ignoreWarnings": [
+      "could-not-resolve-reference"
+    ]
   },
   "builds": [
     {
