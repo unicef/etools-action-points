@@ -162,7 +162,7 @@ export class ActionPointDetails extends
                 <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading">
                 </etools-loading>
               </template>
-              <template is="dom-if" if="[[isReadOnly('cp_output', permissionPath)]]">
+              <template is="dom-if" if="[[isReadOnly('partner', permissionPath)]]">
                 <paper-input
                   label="[[getLabel('partner', permissionPath)]]"
                   placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
