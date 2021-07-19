@@ -17,7 +17,7 @@ const apdEndpoints = {
     template: (id: string) => `/api/v2/interventions/${id}/`
   },
   interventionsList: {
-    template: '/api/v2/interventions/'
+    template: '/api/v2/interventions/?verbosity=minimal'
   },
   cpOutputsV2: {
     template: (ids: string) => `/api/v2/reports/results/?values=${ids}`
