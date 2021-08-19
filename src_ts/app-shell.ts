@@ -14,6 +14,7 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons.js';
 import '@polymer/iron-icons/av-icons.js';
+import {createDynamicDialog} from '@unicef-polymer/etools-dialog/dynamic-dialog';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
@@ -152,6 +153,7 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   connectedCallback() {
     super.connectedCallback();
 
+    this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.$.appHeadLayout!.shadowRoot!.querySelector('#contentContainer');
 
     let eventData = {
@@ -253,5 +255,43 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
     let path = `${this.rootPath}action-points`;
     this.set('route.path', path);
     return 'action-points';
+  }
+
+  checkAppVersion() {
+    fetch('version.json')
+        .then((res) => res.json())
+        .then((version) => {
+          if (version.revision != document.getElementById('buildRevNo')!.innerText) {
+            console.log('version.json', version.revision);
+            console.log('buildRevNo ', document.getElementById('buildRevNo')!.innerText);
+            this._showConfirmNewVersionDialog();
+          }
+        });
+  }
+
+  _showConfirmNewVersionDialog() {
+    const msg = document.createElement('span');
+    msg.innerText = 'A new version of the app is available. Refresh page?';
+    const conf: any = {
+      size: 'md',
+      closeCallback: this._onConfirmNewVersion.bind(this),
+      content: msg
+    };
+    const confirmNewVersionDialog = createDynamicDialog(conf);
+    confirmNewVersionDialog.$.dialog.style.zIndex = 9999999;
+    confirmNewVersionDialog.opened = true;
+  }
+
+  _onConfirmNewVersion(e: CustomEvent) {
+    if (e.detail.confirmed) {
+      if (navigator.serviceWorker) {
+        caches.keys().then((cacheNames) => {
+          cacheNames.forEach((cacheName) => {
+            caches.delete(cacheName);
+          });
+          location.reload();
+        });
+      }
+    }
   }
 }
