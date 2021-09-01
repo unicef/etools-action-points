@@ -44,6 +44,10 @@ export function LocalizationMixin<T extends Constructor<PolymerElement>>(superCl
       }
       return !stringValue || !stringValue.length ? '-' : stringValue;
     }
+
+    public getStringValueOrEmpty(value: string) {
+      return value || '';
+    }
   }
   return LocalizationClass;
 }
