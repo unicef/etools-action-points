@@ -2,11 +2,11 @@ import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../app-mixins/endpoint-mixin';
 import {getQueriesString} from '../app-mixins/query-params-mixin';
-import {ErrorHandler} from '../app-mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../app-mixins/error-handler-mixin';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('action-points-data')
-export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandler(PolymerElement)) {
+export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(PolymerElement)) {
   @property({type: Array, notify: true})
   public actionPoints: any[];
 

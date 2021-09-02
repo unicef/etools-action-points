@@ -8,7 +8,7 @@ import {property} from '@polymer/decorators';
  * @polymer
  * @mixinFunction
  */
-export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T) {
+export function InputAttrsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class InputAttrsClass extends (superClass as Constructor<PolymerElement>) {
     @property({type: Object})
     errors: GenericObject;

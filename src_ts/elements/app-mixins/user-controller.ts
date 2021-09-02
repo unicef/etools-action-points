@@ -9,7 +9,7 @@ let _groups: any;
  * @polymer
  * @mixinFunction
  */
-export function UserController<T extends Constructor<PolymerElement>>(superClass: T) {
+export function UserControllerMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class UserControllerClass extends (superClass as Constructor<PolymerElement>) {
     _setUserData(user: any) {
       if (_user) {

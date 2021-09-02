@@ -1,11 +1,11 @@
 import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {UserController} from '../app-mixins/user-controller';
+import {UserControllerMixin} from '../app-mixins/user-controller';
 import {getEndpoint, resetOldUserData} from '../app-mixins/endpoint-mixin';
 import {customElement} from '@polymer/decorators';
 
 @customElement('user-data')
-export class UserData extends EtoolsAjaxRequestMixin(UserController(PolymerElement)) {
+export class UserData extends EtoolsAjaxRequestMixin(UserControllerMixin(PolymerElement)) {
   ready() {
     super.ready();
     const endpoint = getEndpoint('userProfile');

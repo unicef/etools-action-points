@@ -6,10 +6,10 @@ import '@polymer/paper-button/paper-button.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
-import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../../app-mixins/error-handler-mixin';
 import {_addToCollection, _updateCollection, collectionExists} from '../../app-mixins/permission-controller';
 import {DateMixin} from '../../app-mixins/date-mixin';
-import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import '../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
@@ -23,7 +23,9 @@ import {customElement, property, observe} from '@polymer/decorators';
 import {ActionPointDetails} from './action-point-details';
 
 @customElement('action-points-item')
-export class ActionPointsItem extends EtoolsAjaxRequestMixin(ErrorHandler(InputAttrs(DateMixin(PolymerElement)))) {
+export class ActionPointsItem extends EtoolsAjaxRequestMixin(
+  ErrorHandlerMixin(InputAttrsMixin(DateMixin(PolymerElement)))
+) {
   public static get template() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${mainPageStyles} ${moduleStyles}

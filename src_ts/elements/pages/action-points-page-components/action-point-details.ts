@@ -8,7 +8,7 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
 import {LocalizationMixin} from '../../app-mixins/localization-mixin';
-import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import {getData} from '../../app-mixins/static-data-mixin';
@@ -22,7 +22,7 @@ import {GenericObject} from '../../../typings/globals.types';
 
 @customElement('action-point-details')
 export class ActionPointDetails extends EtoolsAjaxRequestMixin(
-  InputAttrs(LocalizationMixin(DateMixin(PolymerElement)))
+  InputAttrsMixin(LocalizationMixin(DateMixin(PolymerElement)))
 ) {
   static get template() {
     return html`

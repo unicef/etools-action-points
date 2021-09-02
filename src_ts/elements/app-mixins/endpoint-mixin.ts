@@ -12,6 +12,7 @@ import * as config from '../core-elements/etools-app-config';
 // class EndpointMixinClass extends (superClass as Constructor<PolymerElement>) {
 export const getEndpoint = (endpointName: string, data?: any) => {
   const endpoint = config.epsData[endpointName];
+  // eslint-disable-next-line no-prototype-builtins
   if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
     endpoint.url =
       typeof endpoint.template === 'function'

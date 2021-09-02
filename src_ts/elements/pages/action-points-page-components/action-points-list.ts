@@ -17,7 +17,7 @@ import '../../data-elements/action-points-data';
 import {getData} from '../../app-mixins/static-data-mixin';
 import {LocalizationMixin} from '../../app-mixins/localization-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
-import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import {updateQueries, clearQueries} from '../../app-mixins/query-params-mixin';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
@@ -32,7 +32,7 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 
 @customElement('action-points-list')
-export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(PolymerElement))) {
+export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixin(PolymerElement))) {
   public static get template() {
     return html`
       ${moduleStyles} ${sharedStyles} ${dataTableStyles}
