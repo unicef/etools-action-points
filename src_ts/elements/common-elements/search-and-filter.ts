@@ -404,6 +404,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         return;
       }
       const value = this.queryParams[id];
+      // eslint-disable-next-line no-prototype-builtins
       const isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
       if (isDatepicker) {
         element.set('value', value);

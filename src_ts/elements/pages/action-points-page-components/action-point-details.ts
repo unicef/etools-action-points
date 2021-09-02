@@ -12,7 +12,7 @@ import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import {getData} from '../../app-mixins/static-data-mixin';
-import {isReadOnly, actionAllowed} from '../../app-mixins/permission-controller';
+import {actionAllowed} from '../../app-mixins/permission-controller';
 import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
 import {sharedStyles} from '../../styles-elements/shared-styles';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
