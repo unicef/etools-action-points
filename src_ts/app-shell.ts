@@ -106,16 +106,16 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   narrow: boolean;
 
   @property({type: Object})
-  _toast: Object;
+  _toast: any;
 
   @property({type: Array})
-  _toastQueue: object[];
+  _toastQueue: any[];
 
   @property({type: Array})
-  globalLoadingQueue: object[];
+  globalLoadingQueue: any[];
 
   @property({type: Object})
-  user: object;
+  user: any;
 
   @property({type: Object, notify: true})
   route: GenericObject;
@@ -124,7 +124,7 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   public routeData: GenericObject;
 
   @property({type: Object})
-  queryParams: object;
+  queryParams: any;
 
   @property({type: String})
   environment: string;

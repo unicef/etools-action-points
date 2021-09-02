@@ -37,10 +37,10 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(Polymer
   }
 
   @property({type: Object, notify: true})
-  route: object;
+  route: any;
 
   @property({type: Object})
-  actionPoint: object = {};
+  actionPoint: any = {};
 
   @property({type: String})
   permissionPath = 'action_points';

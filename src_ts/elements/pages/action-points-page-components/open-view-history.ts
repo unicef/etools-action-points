@@ -24,7 +24,7 @@ export class OpenViewHistory extends PolymerElement {
   }
 
   @property({type: Array})
-  actionPoint: object[];
+  actionPoint: any[];
 
   open() {
     (this.$.historyDialog as EtoolsDialog).opened = true;

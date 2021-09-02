@@ -43,7 +43,7 @@ export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
   }
 
   @property({type: Array})
-  history: object[] = [];
+  history: any[] = [];
 
   @property({type: String})
   permissionPath: string;

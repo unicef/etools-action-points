@@ -84,10 +84,10 @@ export class ActionPointComments extends LocalizationMixin(DateMixin(ErrorHandle
   permissionPath: string;
 
   @property({type: Array, notify: true})
-  actionPoint: object[];
+  actionPoint: any[];
 
   @property({type: Array})
-  filteredComments: object[];
+  filteredComments: any[];
 
   @property({type: Number})
   pageSize = 10;

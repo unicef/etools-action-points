@@ -78,13 +78,13 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(ErrorHandler(InputA
   }
 
   @property({type: Object, notify: true})
-  route: object;
+  route: any;
 
   @property({type: String})
   routeData: string;
 
   @property({type: Object})
-  actionPoint: object = {};
+  actionPoint: any = {};
 
   @property({type: Object, notify: true})
   permissionPath: string;
@@ -196,7 +196,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(ErrorHandler(InputA
       });
   }
 
-  _prepareActionPoint(actionPoint: object) {
+  _prepareActionPoint(actionPoint: any) {
     return this._resolveFields(actionPoint, [
       'category',
       'partner',
@@ -211,7 +211,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(ErrorHandler(InputA
     ]);
   }
 
-  _resolveFields(actionPoint: object, fields: string[]) {
+  _resolveFields(actionPoint: any, fields: string[]) {
     const data: any = actionPoint || {};
     for (const field of fields) {
       const fieldValue = data[field];

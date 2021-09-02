@@ -156,7 +156,7 @@ export class PagesHeaderElement extends PolymerElement {
   link = '';
 
   @property({type: Object})
-  pageData: object;
+  pageData: any;
 
   @property({type: String})
   exportLinks: GenericObject[];

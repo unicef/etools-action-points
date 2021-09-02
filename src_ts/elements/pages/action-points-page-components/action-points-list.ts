@@ -126,7 +126,7 @@ export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(Pol
       </style>
       <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
       <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
-      <iron-query-params params-string="{{query}}" params-object="{{queryParams}}"> </iron-query-params>
+      <iron-query-params params-string="{{query}}" params-any="{{queryParams}}"> </iron-query-params>
       <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}"> </app-route-converter>
       <pages-header-element
         hide-print-button
@@ -337,22 +337,22 @@ export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(Pol
   }
 
   @property({type: Array, notify: true})
-  actionPoints: object[];
+  actionPoints: any[];
 
   @property({type: Object, notify: true})
-  labels: object;
+  labels: any;
 
   @property({type: Array, notify: true})
   createLink = '/new';
 
   @property({type: Array, notify: true})
-  statuses: object[];
+  statuses: any[];
 
   @property({type: Boolean})
   lowResolutionLayout = false;
 
   @property({type: Array})
-  filters: object[] = [
+  filters: any[] = [
     {
       name: 'Assignee',
       query: 'assigned_to',
@@ -489,13 +489,13 @@ export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(Pol
   totalResults: number;
 
   @property({type: Object, notify: true})
-  route: object;
+  route: any;
 
   @property({type: String})
   basePermissionPath = 'action_points';
 
   @property({type: Array, notify: true})
-  exportParams: object;
+  exportParams: any;
 
   @property({type: Array, notify: true})
   exportLinks: string[];

@@ -8,10 +8,10 @@ import {customElement, property} from '@polymer/decorators';
 @customElement('action-points-data')
 export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandler(PolymerElement)) {
   @property({type: Array, notify: true})
-  public actionPoints: object[];
+  public actionPoints: any[];
 
   @property({type: Object})
-  public requestQueries: object;
+  public requestQueries: any;
 
   @property({type: Number, notify: true})
   public listLength: number;

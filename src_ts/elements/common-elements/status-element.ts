@@ -52,7 +52,7 @@ export class StatusElement extends PolymerElement {
   }
 
   @property({type: Object})
-  dateProperties: object = () => {
+  dateProperties: any = () => {
     return {
       open: 'created',
       completed: 'date_of_completion'
@@ -60,10 +60,10 @@ export class StatusElement extends PolymerElement {
   };
 
   @property({type: Object})
-  actionPoint: object;
+  actionPoint: any;
 
   @property({type: Array})
-  actions: object[];
+  actions: any[];
 
   @property({type: String})
   permissionPath: string;

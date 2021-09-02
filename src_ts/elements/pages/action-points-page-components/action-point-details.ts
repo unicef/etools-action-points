@@ -424,34 +424,34 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
   }
 
   @property({type: Array, notify: true})
-  partners: object[] = [];
+  partners: any[] = [];
 
   @property({type: String, notify: true})
   permissionPath: string;
 
   @property({type: Array})
-  locations: object[] = [];
+  locations: any[] = [];
 
   @property({type: Object, notify: true})
   editedItem: GenericObject = {};
 
   @property({type: Array, notify: true})
-  cpOutputs: object[];
+  cpOutputs: any[];
 
   @property({type: Array, notify: true})
-  interventions: object[] = [];
+  interventions: any[] = [];
 
   @property({type: Array, notify: true})
-  modules: object[];
+  modules: any[];
 
   @property({type: Array, notify: true})
-  unicefUsers: object[];
+  unicefUsers: any[];
 
   @property({type: Array, notify: true})
-  offices: object[];
+  offices: any[];
 
   @property({type: Array, notify: true})
-  sectionsCovered: object[];
+  sectionsCovered: any[];
 
   @property({type: Object, notify: true})
   originalActionPoint: GenericObject;
