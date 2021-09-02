@@ -1,13 +1,10 @@
-
 import {html} from '@polymer/polymer';
 import {pageLayoutStyles} from './page-layout-styles';
 import {sharedStyles} from './shared-styles';
 import {appDrawerStyles} from './app-drawer-styles';
 
 export const appShellStyles = html`
-  ${pageLayoutStyles}
-  ${sharedStyles}
-  ${appDrawerStyles}
+  ${pageLayoutStyles} ${sharedStyles} ${appDrawerStyles}
   <style>
     :host {
       display: block;
@@ -16,7 +13,7 @@ export const appShellStyles = html`
     app-header-layout {
       position: relative;
     }
-   /*       
+    /*       
     app-drawer {
       visibility: visible;
       right: auto;

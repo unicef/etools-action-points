@@ -8,17 +8,18 @@ import {customElement, property} from '@polymer/decorators';
 export class OpenViewHistory extends PolymerElement {
   static get template() {
     return html`
-    <etools-dialog id="historyDialog"
-                   size="md"
-                   no-padding
-                   opened="{{isOpenedHistory}}"
-                   dialog-title="History"
-                   cancel-btn-text="Close"
-                   hide-confirm-btn>
-      <action-points-history history="[[actionPoint.history]]"
-                             permission-path="[[permissionPath]]">
-      </action-points-history>
-    </etools-dialog>
+      <etools-dialog
+        id="historyDialog"
+        size="md"
+        no-padding
+        opened="{{isOpenedHistory}}"
+        dialog-title="History"
+        cancel-btn-text="Close"
+        hide-confirm-btn
+      >
+        <action-points-history history="[[actionPoint.history]]" permission-path="[[permissionPath]]">
+        </action-points-history>
+      </etools-dialog>
     `;
   }
 

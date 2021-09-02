@@ -1,6 +1,6 @@
-import { PolymerElement, html } from '@polymer/polymer';
-import { timeOut } from '@polymer/polymer/lib/utils/async.js';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import {PolymerElement, html} from '@polymer/polymer';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-card/paper-card.js';
@@ -16,13 +16,13 @@ import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-item-body';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import { updateQueries } from '../app-mixins/query-params-mixin';
-import { DateMixin } from '../app-mixins/date-mixin';
-import { sharedStyles } from '../styles-elements/shared-styles';
-import { moduleStyles } from '../styles-elements/module-styles';
-import { tabInputsStyles } from '../styles-elements/tab-inputs-styles';
-import { customElement, property, observe } from '@polymer/decorators';
-import { GenericObject } from '../../typings/globals.types';
+import {updateQueries} from '../app-mixins/query-params-mixin';
+import {DateMixin} from '../app-mixins/date-mixin';
+import {sharedStyles} from '../styles-elements/shared-styles';
+import {moduleStyles} from '../styles-elements/module-styles';
+import {tabInputsStyles} from '../styles-elements/tab-inputs-styles';
+import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 declare const dayjs: any;
 
 @customElement('search-and-filter')
@@ -253,28 +253,28 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     `;
   }
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   filters: GenericObject[];
 
-  @property({ type: String })
+  @property({type: String})
   searchLabel: string;
 
-  @property({ type: String })
+  @property({type: String})
   searchString: string;
 
-  @property({ type: Array })
+  @property({type: Array})
   selectedFilters: GenericObject[];
 
-  @property({ type: Object, notify: true })
+  @property({type: Object, notify: true})
   queryParams: GenericObject;
 
-  @property({ type: Object })
+  @property({type: Object})
   dates: GenericObject = {};
 
-  @property({ type: Object })
+  @property({type: Object})
   _debounceSearch: Debouncer;
 
-  @property({ type: Object })
+  @property({type: Object})
   _debounceFilters: Debouncer;
 
   filterMenuEl: GenericObject;
@@ -284,36 +284,32 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     this.set(
       '_debounceSearch',
       Debouncer.debounce(this._debounceSearch, timeOut.after(300), () => {
-        let query = this.searchString
-          ? encodeURIComponent(this.searchString)
-          : undefined;
+        const query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
         updateQueries({
           search: query,
-          page: '1',
+          page: '1'
         });
       })
     );
   }
 
   addFilter(e: CustomEvent | any) {
-    let query = typeof e === 'string' ? e : e.model.item.query;
-    let alreadySelected = this.selectedFilters.findIndex((filter) => {
+    const query = typeof e === 'string' ? e : e.model.item.query;
+    const alreadySelected = this.selectedFilters.findIndex((filter) => {
       return filter.query === query;
     });
 
     if (alreadySelected === -1) {
-      let newFilter = this.filters.find((filter) => {
+      const newFilter = this.filters.find((filter) => {
         return filter.query === query;
       });
       this._setFilterValue(newFilter);
       this.push('selectedFilters', newFilter);
-      let filterIndex = this.filters.findIndex(
-        (filter) => filter.query === query
-      );
+      const filterIndex = this.filters.findIndex((filter) => filter.query === query);
       this.set(`filters.${filterIndex}.selected`, true);
 
       if (this.queryParams[query] === undefined) {
-        let queryObject = {};
+        const queryObject = {};
         queryObject[query] = true;
         updateQueries(queryObject);
       }
@@ -321,18 +317,18 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   removeFilter(e: CustomEvent | any) {
-    let query = typeof e === 'string' ? e : e.model.item.query;
-    let indexToRemove = this.selectedFilters.findIndex((filter) => {
+    const query = typeof e === 'string' ? e : e.model.item.query;
+    const indexToRemove = this.selectedFilters.findIndex((filter) => {
       return filter.query === query;
     });
     if (indexToRemove === -1) {
       return;
     }
 
-    let queryObject = {
+    const queryObject = {
       query: undefined,
       page: this.queryParams.page,
-      page_size: this.queryParams.page_size,
+      page_size: this.queryParams.page_size
     };
 
     if (this.queryParams[query]) {
@@ -340,9 +336,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     }
 
     if (indexToRemove !== -1) {
-      let filterIndex = this.filters.findIndex(
-        (filter) => filter.query === query
-      );
+      const filterIndex = this.filters.findIndex((filter) => filter.query === query);
       this.set(`filters.${filterIndex}.selected`, false);
       this.splice('selectedFilters', indexToRemove, 1);
     }
@@ -350,17 +344,11 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   clearAllFilters() {
-    this.filters.forEach((_f, index) =>
-      this.set(`filters.${index}.selected`, false)
-    );
+    this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
     this.set('selectedFilters', []);
     const queryParams = this.queryParams;
     Object.keys(queryParams).forEach((key) => (queryParams[key] = undefined));
-    updateQueries(
-      Object.assign(queryParams, { page_size: 10, page: 1 }),
-      null,
-      false
-    );
+    updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
     this._updateFilterListboxPosition();
   }
 
@@ -375,18 +363,16 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     this.set(
       '_debounceFilters',
       Debouncer.debounce(this._debounceFilters, timeOut.after(50), () => {
-        let queryParams = this.queryParams;
+        const queryParams = this.queryParams;
 
         if (!queryParams) {
           return;
         }
 
-        let availableFilters = [];
+        const availableFilters = [];
 
         this.filters.forEach((filter) => {
-          let usedFilter = this.selectedFilters.find(
-            (used) => used.query === filter.query
-          );
+          const usedFilter = this.selectedFilters.find((used) => used.query === filter.query);
 
           if (!usedFilter && queryParams[filter.query] !== undefined) {
             this.addFilter(filter.query);
@@ -411,14 +397,14 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   _updateValues() {
-    let ids = Object.keys(this.queryParams || {});
+    const ids = Object.keys(this.queryParams || {});
     ids.forEach((id) => {
-      let element: any = this.shadowRoot.querySelector(`#${id}`);
+      const element: any = this.shadowRoot.querySelector(`#${id}`);
       if (!element) {
         return;
       }
-      let value = this.queryParams[id];
-      let isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
+      const value = this.queryParams[id];
+      const isDatepicker = element.dataset.hasOwnProperty('isDatepicker');
       if (isDatepicker) {
         element.set('value', value);
         this.dates[element.id] = value;
@@ -438,7 +424,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   _getFilter(query: string) {
-    let filterIndex = this.filters.findIndex((filter: any) => {
+    const filterIndex = this.filters.findIndex((filter: any) => {
       return filter.query === query;
     });
 
@@ -450,23 +436,21 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   // select a filter from ADD FILTER menu
-  selectFilter({ model: { item: selectedOption, index: selectedIdx } }) {
+  selectFilter({model: {item: selectedOption, index: selectedIdx}}) {
     if (!this._isAlreadySelected(selectedOption)) {
       this._setFilterValue(selectedOption);
       this.push('selectedFilters', selectedOption);
       this.set(`filters.${selectedIdx}.selected`, true);
       if (this.queryParams[selectedOption.query] === undefined) {
-        let queryObject: any = {};
+        const queryObject: any = {};
         queryObject[selectedOption.query] = true;
         updateQueries(queryObject);
       }
     } else {
-      let paredFilters = this.selectedFilters.filter(
-        (fil) => fil.query != selectedOption.query
-      );
+      const paredFilters = this.selectedFilters.filter((fil) => fil.query != selectedOption.query);
       this.set('selectedFilters', paredFilters);
       this.set(`filters.${selectedIdx}.selected`, false);
-      let newQueryObj = this.queryParams;
+      const newQueryObj = this.queryParams;
       newQueryObj[selectedOption.query] = undefined;
       updateQueries(newQueryObj);
       delete newQueryObj[selectedOption.query];
@@ -485,9 +469,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   _isAlreadySelected(filter) {
-    return Boolean(
-      this.selectedFilters.find((sF) => sF.query === filter.query)
-    );
+    return Boolean(this.selectedFilters.find((sF) => sF.query === filter.query));
   }
 
   _changeFilterValue(e: any) {
@@ -495,9 +477,9 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       return;
     }
 
-    let query = e.currentTarget.id,
-      date = e.detail.date ? dayjs(e.detail.date).format('YYYY-MM-DD') : '',
-      queryObject: any;
+    const query = e.currentTarget.id;
+    const date = e.detail.date ? dayjs(e.detail.date).format('YYYY-MM-DD') : '';
+    let queryObject: any;
 
     if (e.type === 'date-has-changed') {
       if (query && (this.dates[query] || date)) {
@@ -505,16 +487,14 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         this.dates[query] = date;
         queryObject = {
           page: '1',
-          [query]: date || true,
+          [query]: date || true
         };
       }
     } else if (e.detail && query) {
       // if  `detail.selectedItem` is filter selection, else if `queryParams[query]` filter is set to `None`
       if (e.detail.selectedItem || this.queryParams[query]) {
-        queryObject = { page: '1' };
-        queryObject[query] = e.detail.selectedItem
-          ? e.detail.selectedItem[e.currentTarget.optionValue]
-          : true;
+        queryObject = {page: '1'};
+        queryObject[query] = e.detail.selectedItem ? e.detail.selectedItem[e.currentTarget.optionValue] : true;
       }
     }
 

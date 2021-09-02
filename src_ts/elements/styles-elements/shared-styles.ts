@@ -33,9 +33,9 @@ export const sharedStyles = html`
       color: var(--light-primary-text-color);
       --paper-tabs-selection-bar-color: var(--accent-color);
       --paper-tabs: {
-      font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
       }
     }
 

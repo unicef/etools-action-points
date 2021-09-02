@@ -45,15 +45,15 @@ export const _updateCollection = (collectionName: string, data: any) => {
 };
 
 export const _manageActions = (collectionName: string) => {
-  let collection = _permissionCollection[collectionName];
+  const collection = _permissionCollection[collectionName];
   if (!collection) {
     console.warn(`Collection ${collectionName} does not exist!`);
     return false;
   }
 
-  let allowedActions = collection.allowed_FSM_transitions || [];
+  const allowedActions = collection.allowed_FSM_transitions || [];
 
-  let actions = [];
+  const actions = [];
   if (isValidCollection(collection.PUT)) {
     actions.push(_createAction('save', allowedActions[0]));
   }
@@ -99,8 +99,7 @@ export const isReadOnly = (path: string) => {
 };
 
 export const isRequired = (path: string) => {
-  return getFieldAttribute(path, 'required', 'POST') ||
-    getFieldAttribute(path, 'required', 'PUT');
+  return getFieldAttribute(path, 'required', 'POST') || getFieldAttribute(path, 'required', 'PUT');
 };
 
 export const collectionExists = (path: string, actionType?: string) => {
@@ -115,8 +114,7 @@ export const collectionExists = (path: string, actionType?: string) => {
 };
 
 export const getChoices = (path: string) => {
-  return getFieldAttribute(path, 'choices', 'GET') ||
-    getFieldAttribute(path, 'choices', 'POST');
+  return getFieldAttribute(path, 'choices', 'GET') || getFieldAttribute(path, 'choices', 'POST');
 };
 
 export const _getCollection = (path: any, actionType: string | undefined) => {
@@ -125,13 +123,13 @@ export const _getCollection = (path: any, actionType: string | undefined) => {
   let value: any = _permissionCollection;
 
   while (path.length) {
-    let key = path.shift();
+    const key = path.shift();
     if (value[key]) {
       value = value[key];
     } else {
-      let action = actionType ? value[actionType] : isValidCollection(value.POST) ||
-        isValidCollection(value.PUT) ||
-        isValidCollection(value.GET);
+      const action = actionType
+        ? value[actionType]
+        : isValidCollection(value.POST) || isValidCollection(value.PUT) || isValidCollection(value.GET);
 
       value = action || value.child || value.children;
       path.unshift(key);
@@ -184,7 +182,7 @@ export const noActionsAllowed = (coll: string) => {
   if (typeof coll !== 'string') {
     throw new Error('Collection argument must be a string');
   }
-  let collection = _permissionCollection[coll];
+  const collection = _permissionCollection[coll];
 
   return !(collection && collection.allowed_actions && collection.allowed_actions.length);
 };
@@ -196,7 +194,7 @@ export const getActions = (coll: string) => {
   if (typeof coll !== 'string') {
     throw new Error('Collection argument must be a string');
   }
-  let collection = _permissionCollection[coll];
+  const collection = _permissionCollection[coll];
 
-  return collection && collection.allowed_actions || null;
+  return (collection && collection.allowed_actions) || null;
 };

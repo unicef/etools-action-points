@@ -6,19 +6,15 @@ import {ErrorHandler} from '../app-mixins/error-handler-mixin';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('action-points-data')
-export class ActionPointsData extends
-  EtoolsAjaxRequestMixin(
-      ErrorHandler(
-          PolymerElement)) {
-
+export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandler(PolymerElement)) {
   @property({type: Array, notify: true})
-  public actionPoints: object[]
+  public actionPoints: object[];
 
   @property({type: Object})
-  public requestQueries: object
+  public requestQueries: object;
 
   @property({type: Number, notify: true})
-  public listLength: number
+  public listLength: number;
 
   connectedCallback() {
     super.connectedCallback();
@@ -26,16 +22,18 @@ export class ActionPointsData extends
   }
 
   _loadList() {
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        type: 'action-points-list',
-        active: true,
-        message: 'Loading of action points list...'
-      },
-      bubbles: true,
-      composed: true
-    }));
-    let endpoint = getEndpoint('actionPointsList');
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {
+          type: 'action-points-list',
+          active: true,
+          message: 'Loading of action points list...'
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
+    const endpoint = getEndpoint('actionPointsList');
     endpoint.url += getQueriesString();
 
     this.sendRequest({
@@ -43,17 +41,21 @@ export class ActionPointsData extends
       endpoint: {
         url: endpoint.url
       }
-    }).then((resp: any) => this._actionPointsLoaded(resp)).catch((err: any) => this._responseError(err));
+    })
+      .then((resp: any) => this._actionPointsLoaded(resp))
+      .catch((err: any) => this._responseError(err));
   }
 
   _actionPointsLoaded(detail: any) {
     this.set('actionPoints', detail.results);
     this.set('listLength', detail.count);
 
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {type: 'action-points-list'},
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {type: 'action-points-list'},
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 }

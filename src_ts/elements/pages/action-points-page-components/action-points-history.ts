@@ -23,9 +23,11 @@ export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
 
       <etools-data-table-header no-title>
         <etools-data-table-column class="flex">Date</etools-data-table-column>
-        <etools-data-table-column class="flex">[[getLabel('history.by_user_display', permissionPath)]]
+        <etools-data-table-column class="flex"
+          >[[getLabel('history.by_user_display', permissionPath)]]
         </etools-data-table-column>
-        <etools-data-table-column class="flex">[[getLabel('history.action', permissionPath)]]
+        <etools-data-table-column class="flex"
+          >[[getLabel('history.action', permissionPath)]]
         </etools-data-table-column>
       </etools-data-table-header>
       <template id="rows" is="dom-repeat" items="[[history]]" as="historyItem">

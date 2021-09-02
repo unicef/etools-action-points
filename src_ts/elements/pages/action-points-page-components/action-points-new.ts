@@ -19,25 +19,18 @@ import {ActionPointDetails} from './action-point-details';
 export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(PolymerElement)) {
   public static get template() {
     return html`
-      ${pageLayoutStyles}
-      ${sharedStyles}
-      ${mainPageStyles}
+      ${pageLayoutStyles} ${sharedStyles} ${mainPageStyles}
 
-      <pages-header-element page-title="Add New Action Point">
-      </pages-header-element>
+      <pages-header-element page-title="Add New Action Point"> </pages-header-element>
 
       <div class="view-container" id="main">
         <div id="pageContent">
-          <action-point-details id="ap-details"
-                                action-point="[[actionPoint]]"
-                                permission-path="[[permissionPath]]">
+          <action-point-details id="ap-details" action-point="[[actionPoint]]" permission-path="[[permissionPath]]">
           </action-point-details>
         </div>
 
         <div id="sidebar">
-          <status-element action-point="[[actionPoint]]"
-                          permission-path="[[permissionPath]]">
-          </status-element>
+          <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"> </status-element>
         </div>
       </div>
     `;
@@ -50,7 +43,7 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(Polymer
   actionPoint: object = {};
 
   @property({type: String})
-  permissionPath: string = 'action_points';
+  permissionPath = 'action_points';
 
   static get observers() {
     return ['_changeRoutePath(route.path)'];
@@ -62,30 +55,30 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(Polymer
   }
 
   _changeRoutePath() {
-    let details: any = this.shadowRoot.querySelector('action-point-details');
+    const details: any = this.shadowRoot.querySelector('action-point-details');
     this.set('actionPoint', {});
     details.dispatchEvent(new CustomEvent('reset-validation'));
   }
 
   _createAP() {
-    let detailsElement: ActionPointDetails = this.shadowRoot.querySelector('#ap-details');
+    const detailsElement: ActionPointDetails = this.shadowRoot.querySelector('#ap-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
     }
 
-    let data = JSON.parse(JSON.stringify(detailsElement.editedItem));
-    let endpoint = getEndpoint('actionPointsList');
+    const data = JSON.parse(JSON.stringify(detailsElement.editedItem));
+    const endpoint = getEndpoint('actionPointsList');
 
     this.dispatchEvent(
-        new CustomEvent('global-loading', {
-          detail: {
-            type: 'ap-creation',
-            active: true,
-            message: 'Creating Action Point...'
-          },
-          bubbles: true,
-          composed: true
-        })
+      new CustomEvent('global-loading', {
+        detail: {
+          type: 'ap-creation',
+          active: true,
+          message: 'Creating Action Point...'
+        },
+        bubbles: true,
+        composed: true
+      })
     );
 
     this.sendRequest({
@@ -93,30 +86,30 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(Polymer
       endpoint: endpoint,
       body: data
     })
-        .then((data: any) => {
-          this.set('actionPoint', {});
-          this.dispatchEvent(
-              new CustomEvent('toast', {
-                detail: {
-                  text: ' Action Point successfully created.'
-                },
-                bubbles: true,
-                composed: true
-              })
-          );
-          this.set('route.path', `detail/${data.id}`);
-          this.dispatchEvent(
-              new CustomEvent('global-loading', {
-                detail: {
-                  type: 'ap-creation'
-                },
-                bubbles: true,
-                composed: true
-              })
-          );
-        })
-        .catch((err: any) => {
-          this.errorHandler(err, this.permissionPath);
-        });
+      .then((data: any) => {
+        this.set('actionPoint', {});
+        this.dispatchEvent(
+          new CustomEvent('toast', {
+            detail: {
+              text: ' Action Point successfully created.'
+            },
+            bubbles: true,
+            composed: true
+          })
+        );
+        this.set('route.path', `detail/${data.id}`);
+        this.dispatchEvent(
+          new CustomEvent('global-loading', {
+            detail: {
+              type: 'ap-creation'
+            },
+            bubbles: true,
+            composed: true
+          })
+        );
+      })
+      .catch((err: any) => {
+        this.errorHandler(err, this.permissionPath);
+      });
   }
 }

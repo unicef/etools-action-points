@@ -11,31 +11,36 @@ import {GenericObject} from '../../../typings/globals.types';
 import {isReadOnly} from '../../app-mixins/permission-controller';
 
 @customElement('open-add-comments')
-export class OpenAddComments extends
-  EtoolsAjaxRequestMixin(
-      ErrorHandler(
-          InputAttrs(PolymerElement))) {
+export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandler(InputAttrs(PolymerElement))) {
   public static get template() {
     return html`
-      <etools-dialog id="commentDialog" size="md"
-                      dialog-title="Add [[getLabel('comments', permissionPath)]]"
-                      keep-dialog-open ok-btn-text="SAVE"
-                      on-confirm-btn-clicked="saveComment"
-                      on-iron-overlay-closed="_resetInputs"
-                      show-spinner="[[requestInProcess]]"
-                      spinner-text="Save comment">
+      <etools-dialog
+        id="commentDialog"
+        size="md"
+        dialog-title="Add [[getLabel('comments', permissionPath)]]"
+        keep-dialog-open
+        ok-btn-text="SAVE"
+        on-confirm-btn-clicked="saveComment"
+        on-iron-overlay-closed="_resetInputs"
+        show-spinner="[[requestInProcess]]"
+        spinner-text="Save comment"
+      >
         <div class="row-h group">
           <div class="input-container input-container-l">
             <paper-input
-                  class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
-                  value="{{commentText}}" label="[[getLabel('comments.comment', permissionPath)]]"
-                  placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
-                  required$="[[_setRequired('comments.comment', permissionPath)]]"
-                  disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
-                  maxlength="3000"
-                  invalid$="{{errors.comments.comment}}"
-                  error-message="{{errors.comments.comment}}" on-focus="_resetFieldError" on-tap="_resetFieldError"
-                  no-title-attr>
+              class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
+              value="{{commentText}}"
+              label="[[getLabel('comments.comment', permissionPath)]]"
+              placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
+              required$="[[_setRequired('comments.comment', permissionPath)]]"
+              disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
+              maxlength="3000"
+              invalid$="{{errors.comments.comment}}"
+              error-message="{{errors.comments.comment}}"
+              on-focus="_resetFieldError"
+              on-tap="_resetFieldError"
+              no-title-attr
+            >
             </paper-input>
           </div>
         </div>
@@ -62,10 +67,12 @@ export class OpenAddComments extends
   saveComment() {
     if (!this.validate()) return;
     const dialog: EtoolsDialog = this.$.commentDialog as EtoolsDialog;
-    let endpoint = getEndpoint('actionPoint', this.actionPoint.id);
-    let comments = [{
-      comment: this.commentText
-    }];
+    const endpoint = getEndpoint('actionPoint', this.actionPoint.id);
+    const comments = [
+      {
+        comment: this.commentText
+      }
+    ];
     this.set('requestInProcess', true);
     this.sendRequest({
       method: 'PATCH',
@@ -74,27 +81,29 @@ export class OpenAddComments extends
         comments: comments
       }
     })
-        .then((response: any) => {
-          this.dispatchEvent(new CustomEvent('new-comment-added', {
+      .then((response: any) => {
+        this.dispatchEvent(
+          new CustomEvent('new-comment-added', {
             bubbles: true,
             composed: true,
             detail: response
-          }));
-          dialog.opened = false;
-          this.set('requestInProcess', false);
-        })
-        .catch((err: any) => {
-          this.errorHandler(err, this.permissionPath);
-          this.set('requestInProcess', false);
-        });
+          })
+        );
+        dialog.opened = false;
+        this.set('requestInProcess', false);
+      })
+      .catch((err: any) => {
+        this.errorHandler(err, this.permissionPath);
+        this.set('requestInProcess', false);
+      });
   }
 
   validate() {
-    let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+    const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
     let valid = true;
     elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
-        let label = element.label || 'Field';
+        const label = element.label || 'Field';
         element.errorMessage = `${label} is required`;
         element.invalid = true;
         valid = false;

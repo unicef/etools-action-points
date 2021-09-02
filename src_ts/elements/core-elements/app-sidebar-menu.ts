@@ -1,4 +1,4 @@
-import { PolymerElement, html } from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icon/iron-icon.js';
@@ -7,10 +7,10 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/iron-icons/maps-icons.js';
 import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
-import { moduleStyles } from '../styles-elements/module-styles';
-import { navMenuStyles } from '../styles-elements/nav-menu-styles';
-import { apdIcons } from '../styles-elements/apd-icons';
-import { customElement, property, observe } from '@polymer/decorators';
+import {moduleStyles} from '../styles-elements/module-styles';
+import {navMenuStyles} from '../styles-elements/nav-menu-styles';
+import {apdIcons} from '../styles-elements/apd-icons';
+import {customElement, property, observe} from '@polymer/decorators';
 
 /**
  * @polymer
@@ -91,49 +91,28 @@ export class AppSidebarMenu extends PolymerElement {
       </style>
 
       <div class="menu-header">
-        <span id="app-name" small-menu="[[smallMenu]]" main-title
-          >Action Points</span
-        >
+        <span id="app-name" small-menu="[[smallMenu]]" main-title>Action Points</span>
 
         <span class="ripple-wrapper main menu-header">
-          <iron-icon
-            id="menu-header-top-icon"
-            icon="flag"
-            on-tap="_toggleSmallMenu"
-          ></iron-icon>
+          <iron-icon id="menu-header-top-icon" icon="flag" on-tap="_toggleSmallMenu"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
 
-        <paper-tooltip for="menu-header-top-icon" position="right">
-          Action Points
-        </paper-tooltip>
+        <paper-tooltip for="menu-header-top-icon" position="right"> Action Points </paper-tooltip>
 
         <span class="chev-right">
-          <iron-icon
-            id="expand-menu"
-            icon="chevron-right"
-            on-tap="_toggleSmallMenu"
-          ></iron-icon>
+          <iron-icon id="expand-menu" icon="chevron-right" on-tap="_toggleSmallMenu"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
 
         <span class="ripple-wrapper">
-          <iron-icon
-            id="minimize-menu"
-            icon="chevron-left"
-            on-tap="_toggleSmallMenu"
-          ></iron-icon>
+          <iron-icon id="minimize-menu" icon="chevron-left" on-tap="_toggleSmallMenu"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
       </div>
 
       <div class="nav-menu" small-menu$="[[smallMenu]]">
-        <iron-selector
-          selected="action-points"
-          attr-for-selected="view"
-          selectable="side-bar-item"
-          role="navigation"
-        >
+        <iron-selector selected="action-points" attr-for-selected="view" selectable="side-bar-item" role="navigation">
           <side-bar-item
             view="action-points"
             name="Action Points"
@@ -143,10 +122,7 @@ export class AppSidebarMenu extends PolymerElement {
           </side-bar-item>
         </iron-selector>
 
-        <div
-          class="secondary-header nav-menu-item section-title"
-          small-menu$="[[smallMenu]]"
-        >
+        <div class="secondary-header nav-menu-item section-title" small-menu$="[[smallMenu]]">
           eTools Community Channels
         </div>
 
@@ -177,30 +153,24 @@ export class AppSidebarMenu extends PolymerElement {
         >
         </side-bar-item>
 
-        <side-bar-item
-          class="lighter-item"
-          name="Information"
-          icon="icons:info"
-          external
-          side-bar-link="/landing/"
-        >
+        <side-bar-item class="lighter-item" name="Information" icon="icons:info" external side-bar-link="/landing/">
         </side-bar-item>
       </div>
     `;
   }
 
-  @property({ type: String })
+  @property({type: String})
   page: string;
 
-  @property({ type: Boolean })
-  smallMenu: boolean = false;
+  @property({type: Boolean})
+  smallMenu = false;
 
   @observe('smallMenu')
   _menuSizeChange() {
     this.dispatchEvent(
       new CustomEvent('resize-main-layout', {
         bubbles: true,
-        composed: true,
+        composed: true
       })
     );
   }
@@ -210,7 +180,7 @@ export class AppSidebarMenu extends PolymerElement {
     this.dispatchEvent(
       new CustomEvent('toggle-small-menu', {
         bubbles: true,
-        composed: true,
+        composed: true
       })
     );
   }

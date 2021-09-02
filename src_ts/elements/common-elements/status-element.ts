@@ -18,7 +18,6 @@ export class StatusElement extends PolymerElement {
     return html`
       ${etoolsStatusStyles}
       <etools-content-panel panel-title="Status">
-
         <div class="top-container" id="statusList">
           <template is="dom-repeat" items="{{statuses}}" as="status">
             <div class="divider-line"></div>
@@ -78,11 +77,13 @@ export class StatusElement extends PolymerElement {
   }
 
   _isStatusFinish(actionPoint: any, status: string) {
-    let currentStatus = actionPoint.status;
-    if (!currentStatus) {return false;}
-    let currentStatusIndex = this.statuses.findIndex((x: any) => x.value === currentStatus);
-    let statusIndex = this.statuses.findIndex((x: any) => x.value === status);
-    return (currentStatusIndex >= statusIndex);
+    const currentStatus = actionPoint.status;
+    if (!currentStatus) {
+      return false;
+    }
+    const currentStatusIndex = this.statuses.findIndex((x: any) => x.value === currentStatus);
+    const statusIndex = this.statuses.findIndex((x: any) => x.value === status);
+    return currentStatusIndex >= statusIndex;
   }
 
   noActionsAllowed(path: string) {
@@ -90,7 +91,7 @@ export class StatusElement extends PolymerElement {
   }
 
   _getStatusClass(actionPoint: any, status: string) {
-    let currentStatus = actionPoint.status;
+    const currentStatus = actionPoint.status;
 
     if (!currentStatus && status === 'open') {
       return 'active';
@@ -106,7 +107,7 @@ export class StatusElement extends PolymerElement {
   }
 
   hideDivider(status: string, statuses: any) {
-    let lastStatus = statuses[statuses.length - 1];
+    const lastStatus = statuses[statuses.length - 1];
     return !!(lastStatus && lastStatus.value === status);
   }
 

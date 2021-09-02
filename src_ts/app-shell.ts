@@ -46,29 +46,21 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
 
-      <app-route route="{{route}}"
-                 pattern="[[rootPath]]:page"
-                 data="{{routeData}}">
-      </app-route>
+      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}"> </app-route>
 
-      <app-route route="{{route}}"
-                 pattern="[[rootPath]]action-points"
-                 tail="{{actionPointsRoute}}">
-      </app-route>
+      <app-route route="{{route}}" pattern="[[rootPath]]action-points" tail="{{actionPointsRoute}}"> </app-route>
 
-      <etools-piwik-analytics user="[[user]]"
-                              page="[[page]]"
-                              toast="[[_toast]]">
-      </etools-piwik-analytics>
+      <etools-piwik-analytics user="[[user]]" page="[[page]]" toast="[[_toast]]"> </etools-piwik-analytics>
 
-      <app-drawer-layout id="layout" responsive-width="850px"
-                         fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
+      <app-drawer-layout id="layout" responsive-width="850px" fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
         <!-- Drawer content -->
-        <app-drawer slot="drawer"
-                    id="drawer"
-                    transition-duration="350"
-                    swipe-open="[[narrow]]"
-                    small-menu$="[[smallMenu]]">
+        <app-drawer
+          slot="drawer"
+          id="drawer"
+          transition-duration="350"
+          swipe-open="[[narrow]]"
+          small-menu$="[[smallMenu]]"
+        >
           <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
         </app-drawer>
 
@@ -80,12 +72,20 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
           </app-header>
 
           <main role="main" id="page-container">
-            <iron-pages id="pages" selected="[[page]]" attr-for-selected="name"
-                        fallback-selection="not-found" role="main" small-menu$="[[smallMenu]]">
-              <action-points-page-main name="action-points"
-                                       id="action-points"
-                                       static-data-loaded="[[staticDataLoaded]]"
-                                       route="{{actionPointsRoute}}">
+            <iron-pages
+              id="pages"
+              selected="[[page]]"
+              attr-for-selected="name"
+              fallback-selection="not-found"
+              role="main"
+              small-menu$="[[smallMenu]]"
+            >
+              <action-points-page-main
+                name="action-points"
+                id="action-points"
+                static-data-loaded="[[staticDataLoaded]]"
+                route="{{actionPointsRoute}}"
+              >
               </action-points-page-main>
               <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
             </iron-pages>
@@ -139,7 +139,7 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   smallMenu: boolean;
 
   @property({type: Boolean})
-  initLoadingComplete: boolean = false;
+  initLoadingComplete = false;
 
   public ready(): void {
     super.ready();
@@ -156,14 +156,16 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
     this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.$.appHeadLayout!.shadowRoot!.querySelector('#contentContainer');
 
-    let eventData = {
+    const eventData = {
       message: 'Loading...',
       active: true,
       type: 'initialisation'
     };
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: eventData
-    }));
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: eventData
+      })
+    );
   }
 
   _staticDataLoaded(e: CustomEvent) {
@@ -177,8 +179,8 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   }
 
   queueToast(e: CustomEvent) {
-    let detail = e.detail;
-    let notificationList = this.shadowRoot.querySelector('multi-notification-list');
+    const detail = e.detail;
+    const notificationList = this.shadowRoot.querySelector('multi-notification-list');
     if (!notificationList) {
       return;
     }
@@ -186,9 +188,11 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
     if (detail && detail.reset) {
       notificationList.dispatchEvent(new CustomEvent('reset-notifications'));
     } else {
-      notificationList.dispatchEvent(new CustomEvent('notification-push', {
-        detail: detail
-      }));
+      notificationList.dispatchEvent(
+        new CustomEvent('notification-push', {
+          detail: detail
+        })
+      );
     }
   }
 
@@ -202,13 +206,15 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   }
 
   _pageChanged(page: string) {
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        message: 'Loading...',
-        active: true,
-        type: 'initialisation'
-      }
-    }));
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {
+          message: 'Loading...',
+          active: true,
+          type: 'initialisation'
+        }
+      })
+    );
 
     switch (page) {
       case 'not-found':
@@ -225,48 +231,57 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
     if (!this.initLoadingComplete) {
       this.set('initLoadingComplete', true);
     }
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        type: 'initialisation'
-      }
-    }));
-    if (this.route.path === '/') {this._initRoute();}
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {
+          type: 'initialisation'
+        }
+      })
+    );
+    if (this.route.path === '/') {
+      this._initRoute();
+    }
   }
 
   _pageNotFound() {
     this.set('page', 'not-found');
-    let message = (<CustomEvent>event) && (<CustomEvent>event).detail && (<CustomEvent>event).detail.message ?
-      `${(<CustomEvent>event).detail.message}` :
-      'Oops you hit a 404!';
+    const message =
+      <CustomEvent>event && (<CustomEvent>event).detail && (<CustomEvent>event).detail.message
+        ? `${(<CustomEvent>event).detail.message}`
+        : 'Oops you hit a 404!';
 
-    this.dispatchEvent(new CustomEvent('toast', {
-      detail: {
-        text: message
-      }
-    }));
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        type: 'initialisation'
-      }
-    }));
+    this.dispatchEvent(
+      new CustomEvent('toast', {
+        detail: {
+          text: message
+        }
+      })
+    );
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {
+          type: 'initialisation'
+        }
+      })
+    );
   }
 
   _initRoute() {
-    let path = `${this.rootPath}action-points`;
+    const path = `${this.rootPath}action-points`;
     this.set('route.path', path);
     return 'action-points';
   }
 
   checkAppVersion() {
     fetch('version.json')
-        .then((res) => res.json())
-        .then((version) => {
-          if (version.revision != document.getElementById('buildRevNo')!.innerText) {
-            console.log('version.json', version.revision);
-            console.log('buildRevNo ', document.getElementById('buildRevNo')!.innerText);
-            this._showConfirmNewVersionDialog();
-          }
-        });
+      .then((res) => res.json())
+      .then((version) => {
+        if (version.revision != document.getElementById('buildRevNo')!.innerText) {
+          console.log('version.json', version.revision);
+          console.log('buildRevNo ', document.getElementById('buildRevNo')!.innerText);
+          this._showConfirmNewVersionDialog();
+        }
+      });
   }
 
   _showConfirmNewVersionDialog() {

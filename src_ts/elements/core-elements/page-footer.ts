@@ -4,9 +4,9 @@ import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import {customElement} from '@polymer/decorators';
 
 /**
-* @polymer
-* @extends HTMLElement
-*/
+ * @polymer
+ * @extends HTMLElement
+ */
 @customElement('page-footer')
 export class PageFooter extends PolymerElement {
   public static get template() {
@@ -39,7 +39,7 @@ export class PageFooter extends PolymerElement {
 
         .footer-link {
           margin: auto 15px;
-          color: #6D6D6D;
+          color: #6d6d6d;
           text-decoration: none;
         }
 
@@ -57,7 +57,7 @@ export class PageFooter extends PolymerElement {
       <footer>
         <div id="footer-content">
           <span id="unicef-logo">
-            <img src$="[[rootPath]]../../../../../../apd/images/UNICEF_logo.png" alt="UNICEF logo">
+            <img src$="[[rootPath]]../../../../../../apd/images/UNICEF_logo.png" alt="UNICEF logo" />
           </span>
         </div>
       </footer>

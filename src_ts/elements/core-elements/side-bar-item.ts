@@ -8,9 +8,9 @@ import {moduleStyles} from '../styles-elements/module-styles';
 import {customElement, property} from '@polymer/decorators';
 
 /**
-* @polymer
-* @extends {PolymerElement}
-*/
+ * @polymer
+ * @extends {PolymerElement}
+ */
 @customElement('side-bar-item')
 export class SideBarItem extends PolymerElement {
   public static get template() {
@@ -39,11 +39,11 @@ export class SideBarItem extends PolymerElement {
           background-color: #eeeeee;
         }
 
-        :host(.iron-selected:not([nested-nav])) #main>* {
+        :host(.iron-selected:not([nested-nav])) #main > * {
           color: #0b67e9;
         }
 
-        :host(.lighter-item:not([nested-nav])) #main>* {
+        :host(.lighter-item:not([nested-nav])) #main > * {
           color: var(--dark-secondary-text-color);
         }
 
@@ -120,7 +120,7 @@ export class SideBarItem extends PolymerElement {
   sideBarLink: string;
 
   @property({type: Boolean})
-  external: boolean = false;
+  external = false;
 
   _handleMainTap() {
     this.dispatchEvent(new CustomEvent('selected'));

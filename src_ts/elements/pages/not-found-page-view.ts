@@ -9,22 +9,19 @@ import {customElement} from '@polymer/decorators';
 export class NotFoundPageView extends PolymerElement {
   public static get template() {
     return html`
-      ${sharedStyles}
-      ${pageLayoutStyles}
+      ${sharedStyles} ${pageLayoutStyles}
       <style>
         :host {
           display: block;
         }
-      
+
         a.link {
           color: #40c4ff;
         }
       </style>
-      
+
       <div id="pageContent">
-        <paper-material elevation="1">
-          404 <a href$="[[getLink()]]" class="link">Head back home.</a>
-        </paper-material>
+        <paper-material elevation="1"> 404 <a href$="[[getLink()]]" class="link">Head back home.</a> </paper-material>
       </div>
     `;
   }
@@ -34,9 +31,11 @@ export class NotFoundPageView extends PolymerElement {
   }
 
   openDrawer() {
-    this.dispatchEvent(new CustomEvent('drawer', {
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('drawer', {
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 }

@@ -51,7 +51,7 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
       /**
        * etoolsAppSmallMenu localStorage value must be 0 or 1
        */
-      let menuTypeStoredVal = localStorage.getItem('etoolsAppSmallMenuIsActive');
+      const menuTypeStoredVal = localStorage.getItem('etoolsAppSmallMenuIsActive');
       if (!menuTypeStoredVal) {
         return false;
       }
@@ -71,7 +71,7 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
     }
 
     public _smallMenuValueChanged(newVal: boolean) {
-      let localStorageVal: string = newVal ? '1' : '0';
+      const localStorageVal: string = newVal ? '1' : '0';
       localStorage.setItem('etoolsAppSmallMenuIsActive', localStorageVal);
     }
 
@@ -101,9 +101,8 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
       const drawer: AppDrawerElement = this.shadowRoot.querySelector('#drawer');
       drawer.toggle();
     }
-
   }
   return AppMenuClass;
-}
+};
 
 export const AppMenu = dedupingMixin(mixin);
