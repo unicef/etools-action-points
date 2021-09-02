@@ -2,10 +2,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-    "plugin:lit/recommended",
     "google",
-    "plugin:you-dont-need-lodash-underscore/compatible",
-    "plugin:lit-a11y/recommended",
     "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules
     // from @typescript-eslint/eslint-plugin that would conflict with prettier
     "plugin:prettier/recommended" // Enables eslint-plugin-prettier and eslint-config-prettier.
@@ -21,11 +18,9 @@
     "node": true,
     "es6": true
   },
-  "plugins": ["@typescript-eslint", "lit", "prettier", "lit-a11y"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "lit/attribute-value-entities": "off",
-    "lit/no-legacy-template-syntax": "off",
     "linebreak-style": "off",
     "no-irregular-whitespace": [
       "error",
