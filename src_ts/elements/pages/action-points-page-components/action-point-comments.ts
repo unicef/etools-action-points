@@ -4,18 +4,20 @@ import '@polymer/paper-input/paper-textarea.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {LocalizationMixin} from '../../app-mixins/localization-mixin';
-import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../../app-mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {noActionsAllowed} from '../../app-mixins/permission-controller';
-import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
 import {customElement, property, observe} from '@polymer/decorators';
 
 @customElement('action-point-comments')
-export class ActionPointComments extends LocalizationMixin(DateMixin(ErrorHandler(InputAttrs(PolymerElement)))) {
+export class ActionPointComments extends LocalizationMixin(
+  DateMixin(ErrorHandlerMixin(InputAttrsMixin(PolymerElement)))
+) {
   static get template() {
     return html`
       ${tabInputsStyles} ${moduleStyles}
@@ -84,10 +86,10 @@ export class ActionPointComments extends LocalizationMixin(DateMixin(ErrorHandle
   permissionPath: string;
 
   @property({type: Array, notify: true})
-  actionPoint: object[];
+  actionPoint: any[];
 
   @property({type: Array})
-  filteredComments: object[];
+  filteredComments: any[];
 
   @property({type: Number})
   pageSize = 10;

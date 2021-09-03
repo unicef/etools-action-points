@@ -1,9 +1,9 @@
 import {html, PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {_setData} from '../app-mixins/static-data-mixin';
-import {ErrorHandler} from '../app-mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../app-mixins/error-handler-mixin';
 import {_addToCollection, getChoices, isValidCollection} from '../app-mixins/permission-controller';
-import {UserController} from '../app-mixins/user-controller';
+import {UserControllerMixin} from '../app-mixins/user-controller';
 import {getEndpoint} from '../app-mixins/endpoint-mixin';
 import './user-data';
 import {customElement, property} from '@polymer/decorators';
@@ -14,7 +14,7 @@ import {GenericObject} from '../../typings/globals.types';
  * @customElement
  */
 @customElement('static-data')
-export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandler(UserController(PolymerElement))) {
+export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserControllerMixin(PolymerElement))) {
   public static get template() {
     return html` <user-data></user-data> `;
   }

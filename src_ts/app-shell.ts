@@ -19,8 +19,8 @@ import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import {_checkEnvironment} from './elements/app-mixins/endpoint-mixin';
-import {UserController} from './elements/app-mixins/user-controller';
-import {AppMenu} from './elements/app-mixins/app-menu-mixin';
+import {UserControllerMixin} from './elements/app-mixins/user-controller';
+import {AppMenuMixin} from './elements/app-mixins/app-menu-mixin';
 import './elements/core-elements/app-main-header/app-main-header';
 import './elements/core-elements/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list';
@@ -38,7 +38,7 @@ declare const dayjs_plugin_utc: any;
 dayjs.extend(dayjs_plugin_utc);
 
 @customElement('app-shell')
-export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement))) {
+export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(PolymerElement))) {
   public static get template(): HTMLTemplateElement {
     return html`
       ${appShellStyles}
@@ -106,16 +106,16 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   narrow: boolean;
 
   @property({type: Object})
-  _toast: Object;
+  _toast: any;
 
   @property({type: Array})
-  _toastQueue: object[];
+  _toastQueue: any[];
 
   @property({type: Array})
-  globalLoadingQueue: object[];
+  globalLoadingQueue: any[];
 
   @property({type: Object})
-  user: object;
+  user: any;
 
   @property({type: Object, notify: true})
   route: GenericObject;
@@ -124,7 +124,7 @@ export class AppShell extends LoadingMixin(UserController(AppMenu(PolymerElement
   public routeData: GenericObject;
 
   @property({type: Object})
-  queryParams: object;
+  queryParams: any;
 
   @property({type: String})
   environment: string;

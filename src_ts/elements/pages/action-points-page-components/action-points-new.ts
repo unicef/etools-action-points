@@ -1,6 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {ErrorHandler} from '../../app-mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../../app-mixins/error-handler-mixin';
 import {getEndpoint} from '../../app-mixins/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
@@ -16,7 +16,7 @@ import {ActionPointDetails} from './action-point-details';
  * @customElement
  */
 @customElement('action-points-new')
-export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(PolymerElement)) {
+export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(PolymerElement)) {
   public static get template() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${mainPageStyles}
@@ -37,10 +37,10 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandler(Polymer
   }
 
   @property({type: Object, notify: true})
-  route: object;
+  route: any;
 
   @property({type: Object})
-  actionPoint: object = {};
+  actionPoint: any = {};
 
   @property({type: String})
   permissionPath = 'action_points';

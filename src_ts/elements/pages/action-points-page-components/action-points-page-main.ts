@@ -21,10 +21,10 @@ export class ActionPointsPageMain extends PolymerElement {
   }
 
   @property({type: Object, notify: true})
-  route: object = {};
+  route: any = {};
 
   @property({type: Object})
-  routeData: object = {};
+  routeData: any = {};
 
   @observe('route.path')
   _setRoutePath(path: string) {

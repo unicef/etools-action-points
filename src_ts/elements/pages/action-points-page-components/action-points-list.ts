@@ -17,7 +17,7 @@ import '../../data-elements/action-points-data';
 import {getData} from '../../app-mixins/static-data-mixin';
 import {LocalizationMixin} from '../../app-mixins/localization-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
-import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import {updateQueries, clearQueries} from '../../app-mixins/query-params-mixin';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles-elements/module-styles';
@@ -32,7 +32,7 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 
 @customElement('action-points-list')
-export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(PolymerElement))) {
+export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixin(PolymerElement))) {
   public static get template() {
     return html`
       ${moduleStyles} ${sharedStyles} ${dataTableStyles}
@@ -126,7 +126,7 @@ export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(Pol
       </style>
       <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
       <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
-      <iron-query-params params-string="{{query}}" params-object="{{queryParams}}"> </iron-query-params>
+      <iron-query-params params-string="{{query}}" params-any="{{queryParams}}"> </iron-query-params>
       <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}"> </app-route-converter>
       <pages-header-element
         hide-print-button
@@ -337,22 +337,22 @@ export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(Pol
   }
 
   @property({type: Array, notify: true})
-  actionPoints: object[];
+  actionPoints: any[];
 
   @property({type: Object, notify: true})
-  labels: object;
+  labels: any;
 
   @property({type: Array, notify: true})
   createLink = '/new';
 
   @property({type: Array, notify: true})
-  statuses: object[];
+  statuses: any[];
 
   @property({type: Boolean})
   lowResolutionLayout = false;
 
   @property({type: Array})
-  filters: object[] = [
+  filters: any[] = [
     {
       name: 'Assignee',
       query: 'assigned_to',
@@ -489,13 +489,13 @@ export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(Pol
   totalResults: number;
 
   @property({type: Object, notify: true})
-  route: object;
+  route: any;
 
   @property({type: String})
   basePermissionPath = 'action_points';
 
   @property({type: Array, notify: true})
-  exportParams: object;
+  exportParams: any;
 
   @property({type: Array, notify: true})
   exportLinks: string[];

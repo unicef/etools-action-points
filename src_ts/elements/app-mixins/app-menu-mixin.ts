@@ -105,4 +105,4 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
   return AppMenuClass;
 };
 
-export const AppMenu = dedupingMixin(mixin);
+export const AppMenuMixin = dedupingMixin(mixin);

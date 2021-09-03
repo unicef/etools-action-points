@@ -7,7 +7,7 @@ import {PolymerElement} from '@polymer/polymer';
  * @param superClass
  * @constructor
  */
-export function ErrorHandler<T extends Constructor<PolymerElement>>(superClass: T) {
+export function ErrorHandlerMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class ErrorHandlerClass extends (superClass as Constructor<PolymerElement>) {
     public refactorErrorObject(errorData: any) {
       if (!errorData) {

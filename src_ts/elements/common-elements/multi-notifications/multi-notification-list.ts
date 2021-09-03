@@ -29,10 +29,10 @@ export class MultiNotificationList extends PolymerElement {
   }
 
   @property({type: Array, notify: true})
-  notifications: object[] = [];
+  notifications: any[] = [];
 
   @property({type: Array})
-  notificationsQueue: object[] = [];
+  notificationsQueue: any[] = [];
 
   @property({type: Number})
   limit = 3;

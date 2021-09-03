@@ -1,13 +1,13 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {InputAttrsMixin} from '../../app-mixins/input-attrs-mixin';
 import {DateMixin} from '../../app-mixins/date-mixin';
 import {moduleStyles} from '../../styles-elements/module-styles';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('action-points-history')
-export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
+export class ActionPointsHistory extends DateMixin(InputAttrsMixin(PolymerElement)) {
   public static get template() {
     return html`
       ${moduleStyles}
@@ -43,7 +43,7 @@ export class ActionPointsHistory extends DateMixin(InputAttrs(PolymerElement)) {
   }
 
   @property({type: Array})
-  history: object[] = [];
+  history: any[] = [];
 
   @property({type: String})
   permissionPath: string;
