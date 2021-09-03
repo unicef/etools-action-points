@@ -1,4 +1,4 @@
-let _staticData: any = {};
+const _staticData: any = {};
 
 export const _setData = (key: string, data: any) => {
   if (!key || !data || _staticData[key]) {

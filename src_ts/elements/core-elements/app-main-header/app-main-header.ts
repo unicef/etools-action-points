@@ -28,7 +28,7 @@ export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
         }
 
         #pageRefresh {
-          color: #BCC1C6;
+          color: #bcc1c6;
           margin-left: 8px;
         }
 
@@ -72,30 +72,27 @@ export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
         <div class="titlebar content-align">
           <etools-app-selector user="[[user]]"></etools-app-selector>
 
-          <img src$="[[rootPath]]../../../../../../apd/images/etools-logo-color-white.svg">
+          <img src$="[[rootPath]]../../../../../../apd/images/etools-logo-color-white.svg" />
           <template is="dom-if" if="[[environment]]">
             <div class="envWarning">- [[environment]] TESTING ENVIRONMENT</div>
           </template>
         </div>
 
         <div class="content-align">
-          <countries-dropdown
-                  countries="[[user.countries_available]]"
-                  country-id="[[user.country.id]]">
+          <countries-dropdown countries="[[user.countries_available]]" country-id="[[user.country.id]]">
           </countries-dropdown>
 
           <support-btn></support-btn>
 
-          <etools-profile-dropdown profile="{{user}}"
-                                   users="[[allUsers]]"
-                                   offices="[[offices]]"
-                                   sections="[[sections]]">
+          <etools-profile-dropdown
+            profile="{{user}}"
+            users="[[allUsers]]"
+            offices="[[offices]]"
+            sections="[[sections]]"
+          >
           </etools-profile-dropdown>
 
-          <paper-icon-button id="pageRefresh"
-                             icon="refresh"
-                             on-tap="refresh"
-                             disabled="[[refreshInProgress]]">
+          <paper-icon-button id="pageRefresh" icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]">
           </paper-icon-button>
         </div>
       </app-toolbar>

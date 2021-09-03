@@ -1,4 +1,4 @@
-import { PolymerElement, html } from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
@@ -7,21 +7,18 @@ import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import { LocalizationMixin } from '../../app-mixins/localization-mixin';
-import { InputAttrs } from '../../app-mixins/input-attrs-mixin';
-import { getEndpoint } from '../../app-mixins/endpoint-mixin';
-import { DateMixin } from '../../app-mixins/date-mixin';
-import { getData } from '../../app-mixins/static-data-mixin';
-import {
-  isReadOnly,
-  actionAllowed,
-} from '../../app-mixins/permission-controller';
-import { pageLayoutStyles } from '../../styles-elements/page-layout-styles';
-import { sharedStyles } from '../../styles-elements/shared-styles';
-import { tabInputsStyles } from '../../styles-elements/tab-inputs-styles';
-import { moduleStyles } from '../../styles-elements/module-styles';
-import { customElement, observe, property } from '@polymer/decorators';
-import { GenericObject } from '../../../typings/globals.types';
+import {LocalizationMixin} from '../../app-mixins/localization-mixin';
+import {InputAttrs} from '../../app-mixins/input-attrs-mixin';
+import {getEndpoint} from '../../app-mixins/endpoint-mixin';
+import {DateMixin} from '../../app-mixins/date-mixin';
+import {getData} from '../../app-mixins/static-data-mixin';
+import {isReadOnly, actionAllowed} from '../../app-mixins/permission-controller';
+import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
+import {sharedStyles} from '../../styles-elements/shared-styles';
+import {tabInputsStyles} from '../../styles-elements/tab-inputs-styles';
+import {moduleStyles} from '../../styles-elements/module-styles';
+import {customElement, observe, property} from '@polymer/decorators';
+import {GenericObject} from '../../../typings/globals.types';
 
 @customElement('action-point-details')
 export class ActionPointDetails extends EtoolsAjaxRequestMixin(
@@ -66,10 +63,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           width: 133%;
           transform: scale(0.75);
           transform-origin: left top;
-          color: var(
-            --paper-input-container-color,
-            var(--secondary-text-color)
-          );
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
 
         .reference-link > a {
@@ -87,10 +81,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         }
       </style>
 
-      <etools-content-panel
-        class="content-section clearfix"
-        panel-title="Action Points Details"
-      >
+      <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
         <template is="dom-if" if="[[!actionAllowed(permissionPath, 'create')]]">
           <div class="row-h group">
             <div class="input-container">
@@ -113,9 +104,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             </div>
             <div class="input-container">
               <div class="reference-link">
-                <label
-                  >[[getLabel('related_object_str', permissionPath)]]</label
-                >
+                <label>[[getLabel('related_object_str', permissionPath)]]</label>
                 <a
                   hidden$="[[!editedItem.related_object_url]]"
                   target="_blank"
@@ -124,8 +113,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                   [[editedItem.related_object_str]]
                 </a>
                 <span hidden$="[[editedItem.related_object_url]]"
-                  >[[getPlaceholderText('related_object_str', permissionPath,
-                  'true')]]</span
+                  >[[getPlaceholderText('related_object_str', permissionPath, 'true')]]</span
                 >
               </div>
             </div>
@@ -183,10 +171,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         <div class="row-h group">
           <div class="input-container input-container-ms">
             <!-- Implementing Partner -->
-            <template
-              is="dom-if"
-              if="[[!isReadOnly('partner', permissionPath)]]"
-            >
+            <template is="dom-if" if="[[!isReadOnly('partner', permissionPath)]]">
               <etools-dropdown
                 class$="validate-input disabled-as-readonly [[_setRequired('partner', permissionPath)]]"
                 selected="{{editedItem.partner}}"
@@ -204,18 +189,10 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 dynamic-align
               >
               </etools-dropdown>
-              <etools-loading
-                active="{{partnerRequestInProcess}}"
-                no-overlay
-                loading-text=""
-                class="loading"
-              >
+              <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading">
               </etools-loading>
             </template>
-            <template
-              is="dom-if"
-              if="[[isReadOnly('partner', permissionPath)]]"
-            >
+            <template is="dom-if" if="[[isReadOnly('partner', permissionPath)]]">
               <paper-input
                 label="[[getLabel('partner', permissionPath)]]"
                 placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
@@ -226,10 +203,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           </div>
           <div class="input-container input-container-ms">
             <!-- PD/SSFA -->
-            <template
-              is="dom-if"
-              if="[[!isReadOnly('intervention', permissionPath)]]"
-            >
+            <template is="dom-if" if="[[!isReadOnly('intervention', permissionPath)]]">
               <etools-dropdown
                 class$="validate-input disabled-as-readonly [[_setRequired('intervention', permissionPath)]]"
                 selected="{{editedItem.intervention}}"
@@ -247,18 +221,10 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 dynamic-align
               >
               </etools-dropdown>
-              <etools-loading
-                active="{{interventionRequestInProcess}}"
-                no-overlay
-                loading-text=""
-                class="loading"
-              >
+              <etools-loading active="{{interventionRequestInProcess}}" no-overlay loading-text="" class="loading">
               </etools-loading>
             </template>
-            <template
-              is="dom-if"
-              if="[[isReadOnly('intervention', permissionPath)]]"
-            >
+            <template is="dom-if" if="[[isReadOnly('intervention', permissionPath)]]">
               <paper-input
                 label="[[getLabel('intervention', permissionPath)]]"
                 placeholder="[[getPlaceholderText('intervention', permissionPath, 'true')]]"
@@ -272,10 +238,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         <div class="row-h group">
           <div class="input-container input-container-ms">
             <!-- CP Output -->
-            <template
-              is="dom-if"
-              if="[[!isReadOnly('cp_output', permissionPath)]]"
-            >
+            <template is="dom-if" if="[[!isReadOnly('cp_output', permissionPath)]]">
               <etools-dropdown
                 class$="validate-input disabled-as-readonly [[_setRequired('cp_output', permissionPath)]]"
                 selected="{{editedItem.cp_output}}"
@@ -294,10 +257,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               >
               </etools-dropdown>
             </template>
-            <template
-              is="dom-if"
-              if="[[isReadOnly('cp_output', permissionPath)]]"
-            >
+            <template is="dom-if" if="[[isReadOnly('cp_output', permissionPath)]]">
               <paper-input
                 label="[[getLabel('cp_output', permissionPath)]]"
                 placeholder="[[getPlaceholderText('cp_output', permissionPath, 'true')]]"
@@ -455,57 +415,54 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         <template is="dom-if" if="[[editedItem.history.0]]">
           <div class="last-modify">
             Last modify by
-            <span class="last-modify__author"
-              >[[editedItem.history.0.by_user_display]]</span
-            >
-            [[formatDateInLocal(editedItem.history.0.created, 'D MMM YYYY h:mm
-            A')]]
+            <span class="last-modify__author">[[editedItem.history.0.by_user_display]]</span>
+            [[formatDateInLocal(editedItem.history.0.created, 'D MMM YYYY h:mm A')]]
           </div>
         </template>
       </etools-content-panel>
     `;
   }
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   partners: object[] = [];
 
-  @property({ type: String, notify: true })
+  @property({type: String, notify: true})
   permissionPath: string;
 
-  @property({ type: Array })
+  @property({type: Array})
   locations: object[] = [];
 
-  @property({ type: Object, notify: true })
+  @property({type: Object, notify: true})
   editedItem: GenericObject = {};
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   cpOutputs: object[];
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   interventions: object[] = [];
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   modules: object[];
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   unicefUsers: object[];
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   offices: object[];
 
-  @property({ type: Array, notify: true })
+  @property({type: Array, notify: true})
   sectionsCovered: object[];
 
-  @property({ type: Object, notify: true })
+  @property({type: Object, notify: true})
   originalActionPoint: GenericObject;
 
-  @property({ type: Boolean })
-  dataIsSet: boolean = false;
+  @property({type: Boolean})
+  dataIsSet = false;
 
-  @property({ type: Boolean })
+  @property({type: Boolean})
   partnerRequestInProcess: boolean;
 
-  @property({ type: Number })
+  @property({type: Number})
   lastPartnerId: number;
 
   @observe('permissionPath')
@@ -515,14 +472,12 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
 
   @observe('editedItem')
   _setDrDOptions(editedItem: any) {
-    let module = editedItem && editedItem.related_module;
+    const module = editedItem && editedItem.related_module;
     let categories = [];
 
     if (module) {
-      let categoriesList = getData('categoriesList');
-      categories = categoriesList.filter(
-        (category: any) => category.module === module
-      );
+      const categoriesList = getData('categoriesList');
+      categories = categoriesList.filter((category: any) => category.module === module);
     }
 
     this.set('categories', categories);
@@ -531,12 +486,9 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
   ready() {
     super.ready();
     document.addEventListener('static-data-loaded', () => this.setData());
-    document.addEventListener('locations-loaded', () =>
-      this._updateLocations()
-    );
-    this.addEventListener('reset-validation', ({ detail }: any) => {
-      let elements: NodeList =
-        this.shadowRoot.querySelectorAll('.validate-input');
+    document.addEventListener('locations-loaded', () => this._updateLocations());
+    this.addEventListener('reset-validation', ({detail}: any) => {
+      const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
       elements.forEach((element: GenericObject) => {
         element.invalid = false;
         if (detail && detail.resetValues) {
@@ -558,7 +510,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     this.set(
       'unicefUsers',
       (getData('unicefUsers') || []).map((user: any) => {
-        return { id: user.id, name: user.name };
+        return {id: user.id, name: user.name};
       })
     );
 
@@ -568,14 +520,11 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
 
   @observe('actionPoint')
   _updateEditedItem(actionPoint: any) {
-    this.set(
-      'editedItem',
-      (actionPoint && JSON.parse(JSON.stringify(actionPoint))) || {}
-    );
+    this.set('editedItem', (actionPoint && JSON.parse(JSON.stringify(actionPoint))) || {});
   }
 
   _updateLocations(filter?: any) {
-    let locations = getData('locations') || [];
+    const locations = getData('locations') || [];
     this.set(
       'locations',
       locations.filter((location: any) => {
@@ -598,24 +547,19 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     this.set('partnerRequestInProcess', true);
     this.set('partner', null);
     if (this.originalActionPoint) {
-      let originalPartner = this.originalActionPoint.partner
-        ? this.originalActionPoint.partner.id
-        : null;
-      let originalIntervention = this.originalActionPoint.intervention
+      const originalPartner = this.originalActionPoint.partner ? this.originalActionPoint.partner.id : null;
+      const originalIntervention = this.originalActionPoint.intervention
         ? this.originalActionPoint.intervention.id
         : null;
-      if (
-        partnerId !== originalPartner ||
-        this.editedItem.intervention !== originalIntervention
-      ) {
+      if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
         this.set('editedItem.intervention', null);
       }
     }
 
-    let endpoint = getEndpoint('partnerOrganisationDetails', partnerId);
+    const endpoint = getEndpoint('partnerOrganisationDetails', partnerId);
     this.sendRequest({
       method: 'GET',
-      endpoint,
+      endpoint
     })
       .then((data: any) => {
         this.set('partner', data || null);
@@ -641,25 +585,22 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     try {
       this.set('interventionRequestInProcess', true);
       this.set('cpOutputs', undefined);
-      let interventionEndpoint = getEndpoint(
-        'interventionDetails',
-        interventionId
-      );
-      let intervention = await this.sendRequest({
+      const interventionEndpoint = getEndpoint('interventionDetails', interventionId);
+      const intervention = await this.sendRequest({
         method: 'GET',
-        endpoint: interventionEndpoint,
+        endpoint: interventionEndpoint
       });
 
-      let locations = (intervention && intervention.flat_locations) || [];
+      const locations = (intervention && intervention.flat_locations) || [];
       this._updateLocations(locations);
 
-      let resultLinks = intervention && intervention.result_links;
+      const resultLinks = intervention && intervention.result_links;
       if (!Array.isArray(resultLinks)) {
         this._finishCpoRequest();
         return;
       }
 
-      let cpIds: string[] = [];
+      const cpIds: string[] = [];
       resultLinks.forEach((link) => {
         if (link && (link.cp_output || link.cp_output === 0)) {
           cpIds.push(link.cp_output);
@@ -671,12 +612,12 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         return;
       }
 
-      let endpoint = getEndpoint('cpOutputsV2', cpIds.join(','));
+      const endpoint = getEndpoint('cpOutputsV2', cpIds.join(','));
       this.set(
         'cpOutputs',
         (await this.sendRequest({
           method: 'GET',
-          endpoint: endpoint,
+          endpoint: endpoint
         })) || []
       );
       this.set('interventionRequestInProcess', false);
@@ -691,19 +632,15 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     if (!this.originalActionPoint) {
       return;
     }
-    let originalIntervention = this.originalActionPoint.intervention
+    const originalIntervention = this.originalActionPoint.intervention
       ? this.originalActionPoint.intervention.id
       : null;
-    let originalOutput = this.originalActionPoint.cp_output
-      ? this.originalActionPoint.cp_output.id
-      : null;
-    let originalLocation = this.originalActionPoint.location
-      ? this.originalActionPoint.location.id
-      : null;
-    let currentOutput = this.editedItem.cp_output;
-    let currentLocation = this.editedItem.location;
+    const originalOutput = this.originalActionPoint.cp_output ? this.originalActionPoint.cp_output.id : null;
+    const originalLocation = this.originalActionPoint.location ? this.originalActionPoint.location.id : null;
+    const currentOutput = this.editedItem.cp_output;
+    const currentLocation = this.editedItem.location;
 
-    let interventionChanged = originalIntervention !== intervention;
+    const interventionChanged = originalIntervention !== intervention;
     if (interventionChanged || originalOutput !== currentOutput) {
       this.set('editedItem.cp_output', null);
     }
@@ -717,13 +654,11 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     this.set('interventionRequestInProcess', false);
   }
 
-  @observe(
-    'originalActionPoint.intervention, originalActionPoint.partner.id, partner'
-  )
+  @observe('originalActionPoint.intervention, originalActionPoint.partner.id, partner')
   _updateInterventions(intervention: any, originalId: number, partner: any) {
-    let interventions = (partner && partner.interventions) || [];
-    let id = partner && partner.id;
-    let exists =
+    const interventions = (partner && partner.interventions) || [];
+    const id = partner && partner.id;
+    const exists =
       intervention &&
       interventions.find((item: any) => {
         return item.id === intervention.id;
@@ -737,12 +672,11 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
   }
 
   validate() {
-    let elements: NodeList =
-      this.shadowRoot.querySelectorAll('.validate-input');
+    const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
     let valid = true;
     elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
-        let label = element.label || 'Field';
+        const label = element.label || 'Field';
         element.errorMessage = `${label} is required`;
         element.invalid = true;
         valid = false;

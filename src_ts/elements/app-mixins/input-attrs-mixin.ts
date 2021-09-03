@@ -10,23 +10,22 @@ import {property} from '@polymer/decorators';
  */
 export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T) {
   class InputAttrsClass extends (superClass as Constructor<PolymerElement>) {
-
     @property({type: Object})
     errors: GenericObject;
 
     /**
-   * Set required class from OPTIONS data by path
-   * @param field
-   * @param basePermissionPath
-   * @returns {*}
-   * @private
-   */
+     * Set required class from OPTIONS data by path
+     * @param field
+     * @param basePermissionPath
+     * @returns {*}
+     * @private
+     */
     public _setRequired(field: string, basePermissionPath: any) {
       if (!basePermissionPath) {
         return false;
       }
 
-      let required = isRequired(`${basePermissionPath}.${field}`);
+      const required = isRequired(`${basePermissionPath}.${field}`);
 
       return required ? 'required' : false;
     }
@@ -56,8 +55,8 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
         return 'Empty Field';
       }
 
-      let label = this.getLabel(path, base);
-      let prefix = special ? 'Select' : 'Enter';
+      const label = this.getLabel(path, base);
+      const prefix = special ? 'Select' : 'Enter';
       return `${prefix} ${label}`;
     }
 
@@ -92,7 +91,7 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
         return false;
       }
 
-      let field = event.target.getAttribute('field');
+      const field = event.target.getAttribute('field');
       if (field) {
         this.set(`errors.${field}`, false);
       }
@@ -102,7 +101,7 @@ export function InputAttrs<T extends Constructor<PolymerElement>>(superClass: T)
     }
 
     public _resetInputs() {
-      let elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+      const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
       elements.forEach((element: GenericObject) => {
         element.invalid = false;
         element.value = '';

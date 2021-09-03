@@ -13,7 +13,7 @@ export function TextAreaMaxRows<T extends Constructor<PolymerElement>>(superClas
     connectedCallback() {
       super.connectedCallback();
       flush();
-      let paperTextareas = this.shadowRoot.querySelectorAll('paper-textarea') || [];
+      const paperTextareas = this.shadowRoot.querySelectorAll('paper-textarea') || [];
 
       paperTextareas.forEach((paperTextarea: any) => {
         this.setMaxHeight(paperTextarea);
@@ -21,18 +21,24 @@ export function TextAreaMaxRows<T extends Constructor<PolymerElement>>(superClas
     }
 
     setMaxHeight(paperTextarea: any) {
-      if (!paperTextarea) {return false;}
+      if (!paperTextarea) {
+        return false;
+      }
 
-      let paperInputContainer = paperTextarea.shadowRoot.querySelector('paper-input-container');
-      let textareaAutogrow = paperInputContainer.querySelector('.paper-input-input');
-      let mirror = textareaAutogrow.shadowRoot.querySelector('#mirror');
+      const paperInputContainer = paperTextarea.shadowRoot.querySelector('paper-input-container');
+      const textareaAutogrow = paperInputContainer.querySelector('.paper-input-input');
+      const mirror = textareaAutogrow.shadowRoot.querySelector('#mirror');
 
-      if (!textareaAutogrow) {return false;}
+      if (!textareaAutogrow) {
+        return false;
+      }
 
-      let textareaAutogrowStyles = window.getComputedStyle(textareaAutogrow, null) || {};
-      let maxRows = +paperTextarea.getAttribute('max-rows');
+      const textareaAutogrowStyles = window.getComputedStyle(textareaAutogrow, null) || {};
+      const maxRows = +paperTextarea.getAttribute('max-rows');
 
-      if (!maxRows || maxRows <= 1) {return false;}
+      if (!maxRows || maxRows <= 1) {
+        return false;
+      }
 
       microTask.run(() => {
         // @ts-ignore
@@ -40,7 +46,7 @@ export function TextAreaMaxRows<T extends Constructor<PolymerElement>>(superClas
         const lineHeightPx = parseInt(lineHeight, 10);
 
         if (lineHeightPx) {
-          let maxHeight = maxRows * lineHeightPx + 1;
+          const maxHeight = maxRows * lineHeightPx + 1;
           textareaAutogrow.style.maxHeight = `${maxHeight}px`;
           mirror.style.maxHeight = `${maxHeight}px`;
         }

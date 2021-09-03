@@ -4,9 +4,9 @@ import '@polymer/paper-card/paper-card.js';
 import {customElement} from '@polymer/decorators';
 
 /**
-* @polymer
-* @extends HTMLElement
-*/
+ * @polymer
+ * @extends HTMLElement
+ */
 @customElement('filters-element')
 export class FiltersElement extends PolymerElement {
   static get template() {
@@ -26,7 +26,7 @@ export class FiltersElement extends PolymerElement {
             background-color: white;
             margin: 0 24px;
             width: calc(100% - 48px);
-          };
+          }
         }
       </style>
 

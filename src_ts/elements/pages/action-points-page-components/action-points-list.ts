@@ -32,16 +32,10 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 
 @customElement('action-points-list')
-export class ActionPointsList extends
-  InputAttrs(
-      LocalizationMixin(
-          DateMixin(PolymerElement))) {
-
+export class ActionPointsList extends InputAttrs(LocalizationMixin(DateMixin(PolymerElement))) {
   public static get template() {
     return html`
-      ${moduleStyles}
-      ${sharedStyles}
-      ${dataTableStyles}
+      ${moduleStyles} ${sharedStyles} ${dataTableStyles}
       <style include="iron-flex-factors iron-flex">
         :host {
           position: relative;
@@ -132,21 +126,31 @@ export class ActionPointsList extends
       </style>
       <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
       <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
-      <iron-query-params params-string="{{query}}" params-object="{{queryParams}}">
-      </iron-query-params>
-      <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}">
-      </app-route-converter>
-      <pages-header-element hide-print-button link="action-points/new"
+      <iron-query-params params-string="{{query}}" params-object="{{queryParams}}"> </iron-query-params>
+      <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}"> </app-route-converter>
+      <pages-header-element
+        hide-print-button
+        link="action-points/new"
         show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
         show-export-button
-        export-links="[[exportLinks]]" btn-text="Add Action Point" page-title="Action Points">
+        export-links="[[exportLinks]]"
+        btn-text="Add Action Point"
+        page-title="Action Points"
+      >
       </pages-header-element>
-      <action-points-data action-points="{{actionPoints}}" request-queries="{{queryParams}}"
-        list-length="{{totalResults}}">
+      <action-points-data
+        action-points="{{actionPoints}}"
+        request-queries="{{queryParams}}"
+        list-length="{{totalResults}}"
+      >
       </action-points-data>
       <filters-element>
-        <search-and-filter id="filters" filters="[[filters]]" query-params="{{queryParams}}"
-          search-params="[[searchParams]]">
+        <search-and-filter
+          id="filters"
+          filters="[[filters]]"
+          query-params="{{queryParams}}"
+          search-params="[[searchParams]]"
+        >
         </search-and-filter>
         <div class="show-completed-toggle">
           <span>Show Completed</span>
@@ -154,38 +158,37 @@ export class ActionPointsList extends
         </div>
       </filters-element>
       <paper-card>
-        <etools-data-table-header id="listHeader" no-collapse="[[!actionPoints.length]]"
+        <etools-data-table-header
+          id="listHeader"
+          no-collapse="[[!actionPoints.length]]"
           low-resolution-layout="[[lowResolutionLayout]]"
-          label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show">
-
+          label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show"
+        >
           <etools-data-table-column class="flex-1" field="reference_number" sortable>
-          [[getLabel('reference_number', basePermissionPath)]]
+            [[getLabel('reference_number', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
-          [[getLabel('cp_output', basePermissionPath)]]
+            [[getLabel('cp_output', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="partner__name" sortable>
-          [[getLabel('partner', basePermissionPath)]]
+            [[getLabel('partner', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="office__name" sortable>
-          [[getLabel('office', basePermissionPath)]]
+            [[getLabel('office', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="section__name" sortable>
-          [[getLabel('section', basePermissionPath)]]
+            [[getLabel('section', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
-          [[getLabel('assigned_to', basePermissionPath)]]
+            [[getLabel('assigned_to', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="due_date" sortable>
-          [[getLabel('due_date', basePermissionPath)]]
+            [[getLabel('due_date', basePermissionPath)]]
           </etools-data-table-column>
           <etools-data-table-column class="flex-1" field="status" sortable>
-          [[getLabel('status', basePermissionPath)]]
+            [[getLabel('status', basePermissionPath)]]
           </etools-data-table-column>
-          <etools-data-table-column class="flex-1" field="high_priority" sortable>
-            Priority
-          </etools-data-table-column>
-
+          <etools-data-table-column class="flex-1" field="high_priority" sortable> Priority </etools-data-table-column>
         </etools-data-table-header>
 
         <template is="dom-if" if="[[!actionPoints.length]]">
@@ -207,19 +210,28 @@ export class ActionPointsList extends
         <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
           <etools-data-table-row low-resolution-layout="[[lowResolutionLayout]]">
             <div slot="row-data" class="layout horizontal">
-              <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('reference_number', basePermissionPath)]]">
+              <div
+                class="col-data flex-1 truncate"
+                data-col-header-label$="[[getLabel('reference_number', basePermissionPath)]]"
+              >
                 <div class="tooltip-container">
                   <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
                   <paper-tooltip offset="0">[[getStringValue(entry.reference_number)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('cp_output', basePermissionPath)]]">
+              <div
+                class="col-data flex-2 truncate"
+                data-col-header-label$="[[getLabel('cp_output', basePermissionPath)]]"
+              >
                 <div class="tooltip-container">
                   [[getStringValue(entry.cp_output.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.cp_output.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('partner', basePermissionPath)]]">
+              <div
+                class="col-data flex-2 truncate"
+                data-col-header-label$="[[getLabel('partner', basePermissionPath)]]"
+              >
                 <div class="tooltip-container">
                   [[getStringValue(entry.partner.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.partner.name)]]</paper-tooltip>
@@ -231,19 +243,28 @@ export class ActionPointsList extends
                   <paper-tooltip offset="0">[[getStringValue(entry.office.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('section', basePermissionPath)]]">
+              <div
+                class="col-data flex-2 truncate"
+                data-col-header-label$="[[getLabel('section', basePermissionPath)]]"
+              >
                 <div class="tooltip-container">
                   [[getStringValue(entry.section.name)]]
                   <paper-tooltip offset="0">[[getStringValue(entry.section.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('assigned_to', basePermissionPath)]]">
+              <div
+                class="col-data flex-2 truncate"
+                data-col-header-label$="[[getLabel('assigned_to', basePermissionPath)]]"
+              >
                 <div class="tooltip-container">
                   <span>[[getStringValue(entry.assigned_to.name)]]</span>
                   <paper-tooltip offset="0">[[getStringValue(entry.assigned_to.name)]]</paper-tooltip>
                 </div>
               </div>
-              <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('due_date', basePermissionPath)]]">
+              <div
+                class="col-data flex-1 truncate"
+                data-col-header-label$="[[getLabel('due_date', basePermissionPath)]]"
+              >
                 <div class="tooltip-container">
                   [[prettyDate(entry.due_date, null, '-')]]
                   <paper-tooltip offset="0">[[prettyDate(entry.due_date, null, '-')]]</paper-tooltip>
@@ -252,15 +273,13 @@ export class ActionPointsList extends
               <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('status', basePermissionPath)]]">
                 <div class="tooltip-container">
                   [[getStringValue(entry.status)]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.status)]]
-                  </paper-tooltip>
+                  <paper-tooltip offset="0">[[getStringValue(entry.status)]] </paper-tooltip>
                 </div>
               </div>
               <div class="col-data flex-1 truncate" data-col-header-label="Priority">
                 <div class="tooltip-container">
                   [[_getPriorityValue(entry.high_priority)]]
-                  <paper-tooltip offset="0">[[_getPriorityValue(entry.high_priority)]]
-                  </paper-tooltip>
+                  <paper-tooltip offset="0">[[_getPriorityValue(entry.high_priority)]] </paper-tooltip>
                 </div>
               </div>
             </div>
@@ -283,7 +302,8 @@ export class ActionPointsList extends
               <div class="row-details-content layout vertical flex">
                 <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div>
                 <div class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</div>
-                <paper-tooltip offset="0">[[getStringValue(entry.related_module, modules, 'display_name')]]
+                <paper-tooltip offset="0"
+                  >[[getStringValue(entry.related_module, modules, 'display_name')]]
                 </paper-tooltip>
               </div>
               <div class="row-details-content layout vertical flex">
@@ -302,11 +322,15 @@ export class ActionPointsList extends
           </etools-data-table-row>
         </template>
 
-        <etools-data-table-footer page-size="{{pageSize}}" page-number="{{pageNumber}}"
+        <etools-data-table-footer
+          page-size="{{pageSize}}"
+          page-number="{{pageNumber}}"
           low-resolution-layout="[[lowResolutionLayout]]"
           total-results="[[totalResults]]"
-          visible-range="{{visibleRange}}" on-page-size-changed="_pageSizeSelected"
-          on-page-number-changed="_pageNumberChanged">
+          visible-range="{{visibleRange}}"
+          on-page-size-changed="_pageSizeSelected"
+          on-page-number-changed="_pageNumberChanged"
+        >
         </etools-data-table-footer>
       </paper-card>
     `;
@@ -319,7 +343,7 @@ export class ActionPointsList extends
   labels: object;
 
   @property({type: Array, notify: true})
-  createLink: string = '/new';
+  createLink = '/new';
 
   @property({type: Array, notify: true})
   statuses: object[];
@@ -328,133 +352,138 @@ export class ActionPointsList extends
   lowResolutionLayout = false;
 
   @property({type: Array})
-  filters: object[] = [{
-    name: 'Assignee',
-    query: 'assigned_to',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Assigned By',
-    query: 'assigned_by',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Partner',
-    query: 'partner',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Office',
-    query: 'office',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Location',
-    query: 'location',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Section',
-    query: 'section',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Related App',
-    query: 'related_module',
-    optionValue: 'value',
-    optionLabel: 'display_name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Status',
-    query: 'status',
-    optionValue: 'value',
-    optionLabel: 'display_name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'High Priority',
-    query: 'high_priority',
-    optionValue: 'value',
-    optionLabel: 'display_name',
-    selection: [{
-      display_name: 'Yes',
-      value: 'true'
-    }, {
-      display_name: 'No',
-      value: 'false'
-    }],
-    selected: false
-  },
-  {
-    name: 'PD/SSFA',
-    query: 'intervention',
-    optionValue: 'id',
-    optionLabel: 'title',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'CP Output',
-    query: 'cp_output',
-    optionValue: 'id',
-    optionLabel: 'name',
-    selection: [],
-    selected: false
-  },
-  {
-    name: 'Due On',
-    query: 'due_date',
-    isDatePicker: true,
-    selected: false
-  },
-  {
-    name: 'Due Before',
-    query: 'due_date__lte',
-    isDatePicker: true,
-    selected: false
-  },
-  {
-    name: 'Due After',
-    query: 'due_date__gte',
-    isDatePicker: true,
-    selected: false
-  }]
+  filters: object[] = [
+    {
+      name: 'Assignee',
+      query: 'assigned_to',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Assigned By',
+      query: 'assigned_by',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Partner',
+      query: 'partner',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Office',
+      query: 'office',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Location',
+      query: 'location',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Section',
+      query: 'section',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Related App',
+      query: 'related_module',
+      optionValue: 'value',
+      optionLabel: 'display_name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Status',
+      query: 'status',
+      optionValue: 'value',
+      optionLabel: 'display_name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'High Priority',
+      query: 'high_priority',
+      optionValue: 'value',
+      optionLabel: 'display_name',
+      selection: [
+        {
+          display_name: 'Yes',
+          value: 'true'
+        },
+        {
+          display_name: 'No',
+          value: 'false'
+        }
+      ],
+      selected: false
+    },
+    {
+      name: 'PD/SSFA',
+      query: 'intervention',
+      optionValue: 'id',
+      optionLabel: 'title',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'CP Output',
+      query: 'cp_output',
+      optionValue: 'id',
+      optionLabel: 'name',
+      selection: [],
+      selected: false
+    },
+    {
+      name: 'Due On',
+      query: 'due_date',
+      isDatePicker: true,
+      selected: false
+    },
+    {
+      name: 'Due Before',
+      query: 'due_date__lte',
+      isDatePicker: true,
+      selected: false
+    },
+    {
+      name: 'Due After',
+      query: 'due_date__gte',
+      isDatePicker: true,
+      selected: false
+    }
+  ];
 
   @property({type: Boolean})
-  isShowCompleted: boolean = true;
+  isShowCompleted = true;
 
   @property({type: Number})
-  pageNumber: number = 1;
+  pageNumber = 1;
 
   @property({type: Number})
-  pageSize: number = 10;
+  pageSize = 10;
 
   @property({type: Object, notify: true})
   queryParams: GenericObject;
 
   @property({type: Object})
-  oldQueryParams: GenericObject
+  oldQueryParams: GenericObject;
 
   @property({type: Array})
   totalResults: number;
@@ -463,7 +492,7 @@ export class ActionPointsList extends
   route: object;
 
   @property({type: String})
-  basePermissionPath: string = 'action_points';
+  basePermissionPath = 'action_points';
 
   @property({type: Array, notify: true})
   exportParams: object;
@@ -499,20 +528,22 @@ export class ActionPointsList extends
   }
 
   _initSort() {
-    let sortParams = this.queryParams && this.queryParams.ordering;
+    const sortParams = this.queryParams && this.queryParams.ordering;
     if (!sortParams) return;
-    let field = sortParams.replace(/^-/, '');
-    let direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
-    let column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
+    const field = sortParams.replace(/^-/, '');
+    const direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
+    const column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
     if (!column) return;
-    column.dispatchEvent(new CustomEvent('sort-changed', {
-      detail: {
-        field: field,
-        direction: direction
-      },
-      bubbles: true,
-      composed: true
-    }));
+    column.dispatchEvent(
+      new CustomEvent('sort-changed', {
+        detail: {
+          field: field,
+          direction: direction
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
     column.set('selected', true);
     column.set('direction', direction);
   }
@@ -520,7 +551,7 @@ export class ActionPointsList extends
   @observe('path')
   _setPath(path: string) {
     if (~path.indexOf('/list')) {
-      this.set('queryParams', Object.assign({}, this.queryParams, {page_size: this.pageSize, page: this.pageNumber}) );
+      this.set('queryParams', Object.assign({}, this.queryParams, {page_size: this.pageSize, page: this.pageNumber}));
     }
   }
 
@@ -529,7 +560,7 @@ export class ActionPointsList extends
     if (!~this.path.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
       return;
     }
-    let exportParams = JSON.parse(JSON.stringify(queryParams));
+    const exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
     delete exportParams['page'];
     this.set('exportParams', exportParams);
@@ -537,13 +568,13 @@ export class ActionPointsList extends
     if (queryParams.reload) {
       clearQueries();
       this.oldQueryParams = {};
-      this.set('queryParams', Object.assign({}, {page_size: this.pageSize, page: this.pageNumber}) );
+      this.set('queryParams', Object.assign({}, {page_size: this.pageSize, page: this.pageNumber}));
       return;
     } else if (queryParams.page) {
       this.set('pageNumber', Number(queryParams.page));
     }
 
-    if (!this.oldQueryParams || (JSON.stringify(queryParams) !== JSON.stringify(this.oldQueryParams))) {
+    if (!this.oldQueryParams || JSON.stringify(queryParams) !== JSON.stringify(this.oldQueryParams)) {
       this.oldQueryParams = Object.assign({}, queryParams);
     } else {
       return;
@@ -551,13 +582,12 @@ export class ActionPointsList extends
 
     updateQueries(queryParams, null, true);
 
-    let listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
-    listElements.forEach((element: any) => element.detailsOpened = false);
+    const listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
+    listElements.forEach((element: any) => (element.detailsOpened = false));
 
-    this._debounceLoadData = Debouncer.debounce(
-        this._debounceLoadData, timeOut.after(100), () => {
-          this._requestData();
-        });
+    this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(100), () => {
+      this._requestData();
+    });
   }
 
   _sort({detail}: any) {
@@ -573,7 +603,7 @@ export class ActionPointsList extends
   }
 
   _initFilters() {
-    let filtersElement: SearchAndFilter = this.shadowRoot.querySelector('#filters');
+    const filtersElement: SearchAndFilter = this.shadowRoot.querySelector('#filters');
     this.setFiltersSelections();
     if (filtersElement) {
       filtersElement._reloadFilters();
@@ -581,56 +611,58 @@ export class ActionPointsList extends
   }
 
   setFiltersSelections() {
-    let usersList = getData('unicefUsers').map((user: any) => {
+    const usersList = getData('unicefUsers').map((user: any) => {
       return {
         id: user.id,
         name: user.name
       };
     });
-    let queryDataPairs = [{
-      query: 'assigned_to',
-      data: usersList
-    },
-    {
-      query: 'assigned_by',
-      data: usersList
-    },
-    {
-      query: 'partner',
-      dataKey: 'partnerOrganisations'
-    },
-    {
-      query: 'office',
-      dataKey: 'offices'
-    },
-    {
-      query: 'location',
-      dataKey: 'locations'
-    },
-    {
-      query: 'cp_output',
-      dataKey: 'cpOutputsList'
-    },
-    {
-      query: 'intervention',
-      dataKey: 'interventionsList'
-    },
-    {
-      query: 'status',
-      dataKey: 'statuses'
-    },
-    {
-      query: 'section',
-      dataKey: 'sectionsCovered'
-    },
-    {
-      query: 'related_module',
-      dataKey: 'modules'
-    }];
+    const queryDataPairs = [
+      {
+        query: 'assigned_to',
+        data: usersList
+      },
+      {
+        query: 'assigned_by',
+        data: usersList
+      },
+      {
+        query: 'partner',
+        dataKey: 'partnerOrganisations'
+      },
+      {
+        query: 'office',
+        dataKey: 'offices'
+      },
+      {
+        query: 'location',
+        dataKey: 'locations'
+      },
+      {
+        query: 'cp_output',
+        dataKey: 'cpOutputsList'
+      },
+      {
+        query: 'intervention',
+        dataKey: 'interventionsList'
+      },
+      {
+        query: 'status',
+        dataKey: 'statuses'
+      },
+      {
+        query: 'section',
+        dataKey: 'sectionsCovered'
+      },
+      {
+        query: 'related_module',
+        dataKey: 'modules'
+      }
+    ];
 
     queryDataPairs.forEach((pair) => {
-      let filterIndex = this._getFilterIndex(pair.query);
-      let data = !pair.data ? getData(pair.dataKey) : pair.data || [];
+      const filterIndex = this._getFilterIndex(pair.query);
+      const data = !pair.data ? getData(pair.dataKey) : pair.data || [];
       this.setFilterSelection(filterIndex, data);
     });
   }
@@ -654,7 +686,7 @@ export class ActionPointsList extends
   }
 
   _requestData() {
-    let actionPointData = this.shadowRoot.querySelector('action-points-data');
+    const actionPointData = this.shadowRoot.querySelector('action-points-data');
     actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
   }
 
@@ -680,14 +712,16 @@ export class ActionPointsList extends
   _setExportLinks() {
     let qs = '';
     if (this.exportParams) {
-      let keys = Object.keys(this.exportParams);
-      let queryArray = keys.map(k => k + '=' + this.exportParams[k]);
+      const keys = Object.keys(this.exportParams);
+      const queryArray = keys.map((k) => k + '=' + this.exportParams[k]);
       qs = '?' + queryArray.join('&');
     }
-    this.set('exportLinks', [{
-      name: 'Export CSV',
-      url: getEndpoint('actionPointsListExport').url + qs
-    }]);
+    this.set('exportLinks', [
+      {
+        name: 'Export CSV',
+        url: getEndpoint('actionPointsListExport').url + qs
+      }
+    ]);
   }
 
   _getPriorityValue(priority: boolean) {

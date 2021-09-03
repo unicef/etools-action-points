@@ -23,55 +23,55 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
   public static get template() {
     return html`
       <style>
-      *[hidden] {
-        display: none !important;
-      }
-      :host {
-        display: block;
-      }
-      :host(:hover) {
-        cursor: pointer;
-      }
-      etools-dropdown {
-        --paper-listbox: {
-          max-height: 600px;
+        *[hidden] {
+          display: none !important;
         }
-
-        --esmm-icons: {
-          color: var(--light-secondary-text-color);
+        :host {
+          display: block;
+        }
+        :host(:hover) {
           cursor: pointer;
         }
-
-        --paper-input-container-underline: {
-          display: none;
-        }
-
-        --paper-input-container-underline-focus: {
-          display: none;
-        }
-
-        --paper-input-container-underline-disabled: {
-          display: none;
-        }
-
-        --paper-input-container-shared-input-style: {
-          color: var(--light-secondary-text-color);
-          cursor: pointer;
-          font-size: 16px;
-          text-align: right;
-          width: 100px;
-        }
-
-        --paper-menu-button-dropdown: {
-          max-height: 380px;
-        }
-      }
-
-      @media (max-width: 768px) {
         etools-dropdown {
-          width: 130px;
+          --paper-listbox: {
+            max-height: 600px;
+          }
+
+          --esmm-icons: {
+            color: var(--light-secondary-text-color);
+            cursor: pointer;
+          }
+
+          --paper-input-container-underline: {
+            display: none;
+          }
+
+          --paper-input-container-underline-focus: {
+            display: none;
+          }
+
+          --paper-input-container-underline-disabled: {
+            display: none;
+          }
+
+          --paper-input-container-shared-input-style: {
+            color: var(--light-secondary-text-color);
+            cursor: pointer;
+            font-size: 16px;
+            text-align: right;
+            width: 100px;
+          }
+
+          --paper-menu-button-dropdown: {
+            max-height: 380px;
+          }
         }
-      }
+
+        @media (max-width: 768px) {
+          etools-dropdown {
+            width: 130px;
+          }
+        }
       </style>
 
       <etools-dropdown
@@ -122,40 +122,48 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
   }
 
   _changeCountry(countryId: any) {
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        type: 'change-country',
-        active: true,
-        message: 'Please wait while country is changing...'
-      },
-      bubbles: true,
-      composed: true
-    }));
-    let endpoint = getEndpoint('changeCountry');
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {
+          type: 'change-country',
+          active: true,
+          message: 'Please wait while country is changing...'
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
+    const endpoint = getEndpoint('changeCountry');
     this.sendRequest({
       method: 'POST',
       endpoint: endpoint,
       body: {
         country: countryId
       }
-    }).then(() => this._handleResponse()).catch(() => this._handleError());
+    })
+      .then(() => this._handleResponse())
+      .catch(() => this._handleError());
   }
 
   _handleError() {
-    this.dispatchEvent(new CustomEvent('global-loading', {
-      detail: {
-        type: 'change-country'
-      },
-      bubbles: true,
-      composed: true
-    }));
-    this.dispatchEvent(new CustomEvent('toast', {
-      detail: {
-        text: 'Can not change country. Please, try again later'
-      },
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('global-loading', {
+        detail: {
+          type: 'change-country'
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
+    this.dispatchEvent(
+      new CustomEvent('toast', {
+        detail: {
+          text: 'Can not change country. Please, try again later'
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   _handleResponse() {

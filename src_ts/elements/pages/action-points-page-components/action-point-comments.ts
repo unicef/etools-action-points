@@ -15,28 +15,23 @@ import {OpenAddComments} from './open-add-comments';
 import {customElement, property, observe} from '@polymer/decorators';
 
 @customElement('action-point-comments')
-export class ActionPointComments extends LocalizationMixin(
-    DateMixin(
-        ErrorHandler(
-            InputAttrs(
-                PolymerElement)))) {
+export class ActionPointComments extends LocalizationMixin(DateMixin(ErrorHandler(InputAttrs(PolymerElement)))) {
   static get template() {
     return html`
-      ${tabInputsStyles}
-      ${moduleStyles}
+      ${tabInputsStyles} ${moduleStyles}
       <style>
         .comments-list {
           padding: 8px 12px;
         }
-        
+
         .comment-item {
           margin-bottom: 12px;
         }
-        
+
         .comment-item:last-of-type {
           margin-bottom: 0;
         }
-        
+
         .comment-item__user {
           font-size: 13px;
           margin-right: 5px;
@@ -46,16 +41,20 @@ export class ActionPointComments extends LocalizationMixin(
           font-size: 11px;
           color: var(--list-secondary-text-color, #757575);
         }
-        
+
         etools-dialog {
           --etools-dialog-default-btn-bg: var(--module-primary);
         }
       </style>
-      
+
       <etools-content-panel panel-title="[[getLabel('comments', permissionPath)]]">
         <div slot="panel-btns">
-          <paper-icon-button class="panel-button" hidden$="[[noActionsAllowed(permissionPath)]]" 
-                             icon="add-box" on-tap="_openAddComment"></paper-icon-button>
+          <paper-icon-button
+            class="panel-button"
+            hidden$="[[noActionsAllowed(permissionPath)]]"
+            icon="add-box"
+            on-tap="_openAddComment"
+          ></paper-icon-button>
         </div>
         <div class="comments-list">
           <template is="dom-if" if="[[!filteredComments.length]]">
@@ -67,13 +66,15 @@ export class ActionPointComments extends LocalizationMixin(
                 <span class="comment-item__user">[[item.user.name]]</span>
                 <span class="comment-item__date">[[prettyDate(item.submit_date)]]</span>
               </div>
-              <div class="comment-item__body" id="commentArea" inner-h-t-m-l="[[checkLinks(item.comment)]]">
-              </div>
+              <div class="comment-item__body" id="commentArea" inner-h-t-m-l="[[checkLinks(item.comment)]]"></div>
             </div>
           </template>
         </div>
-        <etools-data-table-footer page-size="{{pageSize}}" page-number="{{pageNumber}}" 
-                                  total-results="[[actionPoint.comments.length]]">
+        <etools-data-table-footer
+          page-size="{{pageSize}}"
+          page-number="{{pageNumber}}"
+          total-results="[[actionPoint.comments.length]]"
+        >
         </etools-data-table-footer>
       </etools-content-panel>
     `;
@@ -89,10 +90,10 @@ export class ActionPointComments extends LocalizationMixin(
   filteredComments: object[];
 
   @property({type: Number})
-  pageSize: number = 10;
+  pageSize = 10;
 
   @property({type: String})
-  pageNumber: Number = 1;
+  pageNumber = 1;
 
   @property({type: String})
   commentText: string;
@@ -154,8 +155,8 @@ export class ActionPointComments extends LocalizationMixin(
     if (!comments) {
       return;
     }
-    let from = (pageNumber - 1) * pageSize;
-    let to = pageNumber * pageSize;
+    const from = (pageNumber - 1) * pageSize;
+    const to = pageNumber * pageSize;
     this.set('filteredComments', comments.slice(from, to));
   }
 }

@@ -16,8 +16,7 @@ import {GenericObject} from '../../typings/globals.types';
 export class PagesHeaderElement extends PolymerElement {
   public static get template() {
     return html`
-      ${sharedStyles}
-      ${moduleStyles}
+      ${sharedStyles} ${moduleStyles}
       <style include="iron-flex">
         :host {
           position: relative;
@@ -104,8 +103,12 @@ export class PagesHeaderElement extends PolymerElement {
 
           <div class="horizontal layout center">
             <div class="export-buttons" hidden$="[[!exportLinks.length]]">
-              <paper-menu-button id="dropdown" hidden$="[[!_isDropDown(exportLinks)]]" on-tap="_toggleOpened"
-                horizontal-align="right">
+              <paper-menu-button
+                id="dropdown"
+                hidden$="[[!_isDropDown(exportLinks)]]"
+                on-tap="_toggleOpened"
+                horizontal-align="right"
+              >
                 <paper-button slot="dropdown-trigger" class="grey-buttons">
                   <iron-icon icon="file-download"></iron-icon>
                   Export
@@ -119,8 +122,8 @@ export class PagesHeaderElement extends PolymerElement {
               </paper-menu-button>
               <template is="dom-if" if="[[showExportButton]]">
                 <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
-                    <iron-icon icon="file-download"></iron-icon>
-                    Export
+                  <iron-icon icon="file-download"></iron-icon>
+                  Export
                 </paper-button>
               </template>
             </div>
@@ -189,13 +192,11 @@ export class PagesHeaderElement extends PolymerElement {
     if (this.exportLinks.length < 1) {
       throw new Error('Can not find export link!');
     }
-    let url = (e && e.model && e.model.item) ? e.model.item.url : this.exportLinks[0].url;
+    const url = e && e.model && e.model.item ? e.model.item.url : this.exportLinks[0].url;
     window.open(url, '_blank');
   }
 
   _isDropDown(exportLinks: any[]) {
-    return exportLinks && (exportLinks.length > 1 ||
-      (exportLinks[0] && exportLinks[0].useDropdown));
+    return exportLinks && (exportLinks.length > 1 || (exportLinks[0] && exportLinks[0].useDropdown));
   }
-
 }

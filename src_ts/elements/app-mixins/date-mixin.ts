@@ -15,14 +15,14 @@ export function DateMixin<T extends Constructor<PolymerElement>>(superClass: T) 
      */
     public prettyDate(dateString: string, format?: string | undefined, placeholder?: string) {
       format = this._getFormat(format);
-      let date: any = this._getDayjsDate(dateString);
-      let ph = placeholder ? placeholder : '';
+      const date: any = this._getDayjsDate(dateString);
+      const ph = placeholder ? placeholder : '';
       return date ? date.utc().format(format) : ph;
     }
 
     public formatDateInLocal(dateString: string, format: string) {
       format = this._getFormat(format);
-      let date: any = this._getDayjsDate(dateString);
+      const date: any = this._getDayjsDate(dateString);
 
       return date ? date.format(format) : '';
     }

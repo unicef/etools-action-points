@@ -6,7 +6,7 @@ import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 
 export const pageLayoutStyles = html`
   <style include="iron-flex">
-    @media only screen and (max-width: 1359px)  {
+    @media only screen and (max-width: 1359px) {
       #sidebar {
         width: 100% !important;
         padding-left: 0 !important;
@@ -17,12 +17,12 @@ export const pageLayoutStyles = html`
       }
     }
 
-    @media only screen and (min-width: 1360px)  {
+    @media only screen and (min-width: 1360px) {
       #pageContent {
         @apply --layout-flex;
       }
     }
-   /* -------------------*/
+    /* -------------------*/
 
     [hidden] {
       display: none;

@@ -11,11 +11,12 @@ import * as config from '../core-elements/etools-app-config';
 // export function EndpointMixin<T extends Constructor<PolymerElement>>(superClass: T) {
 // class EndpointMixinClass extends (superClass as Constructor<PolymerElement>) {
 export const getEndpoint = (endpointName: string, data?: any) => {
-  let endpoint = config.epsData[endpointName];
+  const endpoint = config.epsData[endpointName];
   if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
-    endpoint.url = typeof endpoint.template === 'function' ?
-                    config.baseSite + endpoint.template(data) :
-                    config.baseSite + endpoint.template;
+    endpoint.url =
+      typeof endpoint.template === 'function'
+        ? config.baseSite + endpoint.template(data)
+        : config.baseSite + endpoint.template;
   }
   return JSON.parse(JSON.stringify(endpoint));
 };
@@ -32,7 +33,7 @@ export const getAbsolutePath = (path: string) => {
 };
 
 export const _checkEnvironment = () => {
-  let location = window.location.href;
+  const location = window.location.href;
   if (location.indexOf(config.stagingDomain) > -1) {
     return 'STAGING';
   }

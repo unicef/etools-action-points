@@ -9,12 +9,12 @@ import {Constructor} from '../../typings/globals.types.js';
  */
 export function LocalizationMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class LocalizationClass extends (superClass as Constructor<PolymerElement>) {
-  /**
-   * Get string label from loaded permission data
-   * @param base permission path
-   * @param item
-   * @returns {*}
-   */
+    /**
+     * Get string label from loaded permission data
+     * @param base permission path
+     * @param item
+     * @returns {*}
+     */
     public getHeadingLabel(base: string, item: any) {
       if (!item) {
         return '';
@@ -23,10 +23,10 @@ export function LocalizationMixin<T extends Constructor<PolymerElement>>(superCl
         return item.label || '';
       }
 
-      let labelPath = item.labelPath || item.path;
-      let label = getFieldAttribute(`${base}.${labelPath}`, 'label', 'GET');
+      const labelPath = item.labelPath || item.path;
+      const label = getFieldAttribute(`${base}.${labelPath}`, 'label', 'GET');
 
-      return (label && typeof label === 'string') ? label : (item.label || '');
+      return label && typeof label === 'string' ? label : item.label || '';
     }
 
     /**
@@ -39,7 +39,7 @@ export function LocalizationMixin<T extends Constructor<PolymerElement>>(superCl
     public getStringValue(value: string, list?: [], field?: string) {
       let stringValue = value;
       if (list && field) {
-        let item: any = list.find(i => i['value'] === value);
+        const item: any = list.find((i) => i['value'] === value);
         stringValue = item && item[field] ? item[field] : '';
       }
       return !stringValue || !stringValue.length ? '-' : stringValue;

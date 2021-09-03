@@ -7,7 +7,9 @@ export const mainPageStyles = html`
     :host {
       position: relative;
       display: block;
-      --paper-tab-content-unselected: {color: var(--gray-light)};
+      --paper-tab-content-unselected: {
+        color: var(--gray-light);
+      }
       --ecp-header-bg: var(--module-primary);
     }
     :host .view-container {
@@ -95,7 +97,7 @@ export const mainPageStyles = html`
       color: var(--gray-darkest);
       padding-left: 80px;
     }
-    div[slot="panel-btns"].bookmark {
+    div[slot='panel-btns'].bookmark {
       position: absolute;
       top: 2px;
       right: auto;
@@ -107,13 +109,15 @@ export const mainPageStyles = html`
       -o-transform: scale(0.9, 1.5);
       transform: scale(0.9, 1.5);
     }
-    div[slot="panel-btns"].bookmark iron-icon {
+    div[slot='panel-btns'].bookmark iron-icon {
       width: 70px !important;
       height: 70px !important;
     }
     paper-tab {
       margin-right: 10px;
-      --paper-tab-content: {width: auto};
+      --paper-tab-content: {
+        width: auto;
+      }
     }
   </style>
 `;
