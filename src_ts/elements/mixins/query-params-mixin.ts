@@ -1,4 +1,4 @@
-import {basePath} from '../core-elements/etools-app-config';
+import {basePath} from '../app-shell/etools-app-config';
 
 export const parseQueries = () => {
   const queriesObj: any = {};

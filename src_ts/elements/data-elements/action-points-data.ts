@@ -1,8 +1,8 @@
 import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {getEndpoint} from '../app-mixins/endpoint-mixin';
-import {getQueriesString} from '../app-mixins/query-params-mixin';
-import {ErrorHandlerMixin} from '../app-mixins/error-handler-mixin';
+import {getEndpoint} from '../mixins/endpoint-mixin';
+import {getQueriesString} from '../mixins/query-params-mixin';
+import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('action-points-data')

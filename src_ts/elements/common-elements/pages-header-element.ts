@@ -7,8 +7,8 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {sharedStyles} from '../styles-elements/shared-styles';
-import {moduleStyles} from '../styles-elements/module-styles';
+import {sharedStyles} from '../styles/shared-styles';
+import {moduleStyles} from '../styles/module-styles';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
 

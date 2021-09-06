@@ -4,7 +4,7 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
-import {moduleStyles} from '../styles-elements/module-styles';
+import {moduleStyles} from '../styles/module-styles';
 import {customElement, property} from '@polymer/decorators';
 
 /**

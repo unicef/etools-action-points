@@ -1,10 +1,10 @@
 import {html, PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {_setData} from '../app-mixins/static-data-mixin';
-import {ErrorHandlerMixin} from '../app-mixins/error-handler-mixin';
-import {_addToCollection, getChoices, isValidCollection} from '../app-mixins/permission-controller';
-import {UserControllerMixin} from '../app-mixins/user-controller';
-import {getEndpoint} from '../app-mixins/endpoint-mixin';
+import {_setData} from '../mixins/static-data-mixin';
+import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
+import {_addToCollection, getChoices, isValidCollection} from '../mixins/permission-controller';
+import {UserControllerMixin} from '../mixins/user-controller';
+import {getEndpoint} from '../mixins/endpoint-mixin';
 import './user-data';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';

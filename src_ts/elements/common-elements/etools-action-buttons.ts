@@ -4,7 +4,7 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {moduleStyles} from '../styles-elements/module-styles';
+import {moduleStyles} from '../styles/module-styles';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
 

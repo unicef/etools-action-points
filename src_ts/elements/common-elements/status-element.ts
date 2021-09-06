@@ -6,11 +6,11 @@ import '@polymer/iron-icons/av-icons.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import {getData} from '../app-mixins/static-data-mixin';
+import {getData} from '../mixins/static-data-mixin';
 import './etools-action-buttons';
-import {etoolsStatusStyles} from '../styles-elements/status-styles';
+import {etoolsStatusStyles} from '../styles/status-styles';
 import {customElement, property} from '@polymer/decorators';
-import {noActionsAllowed, getActions} from '../app-mixins/permission-controller';
+import {noActionsAllowed, getActions} from '../mixins/permission-controller';
 
 @customElement('status-element')
 export class StatusElement extends PolymerElement {
