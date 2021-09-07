@@ -16,7 +16,7 @@ import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-item-body';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import {updateQueries} from '../mixins/query-params-mixin';
+import {updateQueries} from '../mixins/query-params-helper';
 import {DateMixin} from '../mixins/date-mixin';
 import {sharedStyles} from '../styles/shared-styles';
 import {moduleStyles} from '../styles/module-styles';
@@ -285,7 +285,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       '_debounceSearch',
       Debouncer.debounce(this._debounceSearch, timeOut.after(300), () => {
         const query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
-        updateQueries({
+        updateQueries(this, {
           search: query,
           page: '1'
         });
@@ -311,7 +311,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       if (this.queryParams[query] === undefined) {
         const queryObject = {};
         queryObject[query] = true;
-        updateQueries(queryObject);
+        updateQueries(this, queryObject);
       }
     }
   }
@@ -340,7 +340,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       this.set(`filters.${filterIndex}.selected`, false);
       this.splice('selectedFilters', indexToRemove, 1);
     }
-    updateQueries(queryObject);
+    updateQueries(this, queryObject);
   }
 
   clearAllFilters() {
@@ -348,7 +348,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     this.set('selectedFilters', []);
     const queryParams = this.queryParams;
     Object.keys(queryParams).forEach((key) => (queryParams[key] = undefined));
-    updateQueries(Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
+    updateQueries(this, Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
     this._updateFilterListboxPosition();
   }
 
@@ -445,7 +445,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       if (this.queryParams[selectedOption.query] === undefined) {
         const queryObject: any = {};
         queryObject[selectedOption.query] = true;
-        updateQueries(queryObject);
+        updateQueries(this, queryObject);
       }
     } else {
       const paredFilters = this.selectedFilters.filter((fil) => fil.query != selectedOption.query);
@@ -453,7 +453,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       this.set(`filters.${selectedIdx}.selected`, false);
       const newQueryObj = this.queryParams;
       newQueryObj[selectedOption.query] = undefined;
-      updateQueries(newQueryObj);
+      updateQueries(this, newQueryObj);
       delete newQueryObj[selectedOption.query];
       this.set('queryParams', newQueryObj);
     }
@@ -500,7 +500,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     }
 
     if (queryObject) {
-      updateQueries(queryObject);
+      updateQueries(this, queryObject);
     }
   }
 }

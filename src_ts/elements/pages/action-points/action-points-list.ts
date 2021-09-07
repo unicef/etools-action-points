@@ -3,7 +3,7 @@ import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
-import '@polymer/iron-location/iron-location.js';
+import '@polymer//app-route/app-location';
 import '@polymer/iron-location/iron-query-params.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
@@ -18,7 +18,7 @@ import {getData} from '../../mixins/static-data-mixin';
 import {LocalizationMixin} from '../../mixins/localization-mixin';
 import {DateMixin} from '../../mixins/date-mixin';
 import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
-import {updateQueries, clearQueries} from '../../mixins/query-params-mixin';
+import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles/module-styles';
 import {sharedStyles} from '../../styles/shared-styles';
@@ -125,9 +125,7 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
         }
       </style>
       <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
-      <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
-      <iron-query-params params-string="{{query}}" params-any="{{queryParams}}"> </iron-query-params>
-      <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}"> </app-route-converter>
+      <app-location path="{{path}}" query-params="{{queryParams}}" url-space-regex="^[[rootPath]]"></app-location>
 
       <pages-header-element
         hide-print-button
@@ -581,7 +579,7 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
       return;
     }
 
-    updateQueries(queryParams, null, true);
+    updateQueries(this, queryParams, null, true);
 
     const listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
     listElements.forEach((element: any) => (element.detailsOpened = false));
@@ -705,7 +703,7 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
       this.set('queryParams.status', 'open');
     } else if (this.queryParams) {
       this.queryParams.status = undefined;
-      updateQueries(this.queryParams);
+      updateQueries(this, this.queryParams);
     }
   }
 
