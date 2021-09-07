@@ -293,6 +293,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
       content: msg
     };
     const confirmNewVersionDialog = createDynamicDialog(conf);
+    // @ts-ignore
     confirmNewVersionDialog.$.dialog.style.zIndex = 9999999;
     confirmNewVersionDialog.opened = true;
   }

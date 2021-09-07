@@ -43,7 +43,7 @@ export class ActionPointsPageMain extends PolymerElement {
         import('./action-points-new.js');
         break;
       case 'detail':
-        import('./action-points-item.js');
+        import('./detail/action-points-item.js');
         break;
       default:
         import('./action-points-list.js');

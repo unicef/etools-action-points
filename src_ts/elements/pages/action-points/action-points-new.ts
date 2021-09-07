@@ -4,12 +4,12 @@ import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
-import './action-point-details';
+import './detail/action-point-details';
 import {pageLayoutStyles} from '../../styles/page-layout-styles';
 import {sharedStyles} from '../../styles/shared-styles';
 import {mainPageStyles} from '../../styles/main-page-styles';
 import {customElement, property} from '@polymer/decorators';
-import {ActionPointDetails} from './action-point-details';
+import {ActionPointDetails} from './detail/action-point-details';
 
 /**
  * @polymer
