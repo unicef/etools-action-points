@@ -5,7 +5,7 @@ import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {getEndpoint} from '../../mixins/endpoint-mixin';
+import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
 import {_addToCollection, _updateCollection, collectionExists} from '../../mixins/permission-controller';
 import {DateMixin} from '../../mixins/date-mixin';

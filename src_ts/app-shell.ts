@@ -18,7 +18,7 @@ import {createDynamicDialog} from '@unicef-polymer/etools-dialog/dynamic-dialog'
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
-import {_checkEnvironment} from './elements/mixins/endpoint-mixin';
+import {_checkEnvironment} from './endpoints/endpoint-mixin';
 import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
 import './elements/app-shell/app-main-header/app-main-header';
@@ -27,7 +27,7 @@ import './elements/common-elements/multi-notifications/multi-notification-list';
 import './elements/app-shell/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/app-shell/page-footer';
-import {basePath} from './elements/app-shell/etools-app-config';
+import {basePath} from './config/config';
 import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import {customElement, property, observe} from '@polymer/decorators';

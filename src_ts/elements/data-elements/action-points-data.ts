@@ -1,6 +1,6 @@
 import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {getEndpoint} from '../mixins/endpoint-mixin';
+import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import {getQueriesString} from '../mixins/query-params-mixin';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {customElement, property} from '@polymer/decorators';

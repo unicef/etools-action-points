@@ -1,6 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-material/paper-material.js';
-import {getAbsolutePath} from '../mixins/endpoint-mixin';
+import {getAbsolutePath} from '../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../styles/shared-styles';
 import {pageLayoutStyles} from '../styles/page-layout-styles';
 import {customElement} from '@polymer/decorators';

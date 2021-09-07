@@ -1,5 +1,5 @@
 import {html, htmlLiteral} from '@polymer/polymer/lib/utils/html-tag.js';
-import {basePath} from '../app-shell/etools-app-config';
+import {basePath} from '../../config/config';
 
 const basePathData: ReadonlyArray<string> = [basePath];
 const baseUrl = htmlLiteral(basePathData as TemplateStringsArray);

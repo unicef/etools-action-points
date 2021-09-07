@@ -5,7 +5,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
-import {resetOldUserData} from '../../mixins/endpoint-mixin';
+import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
 import '../../common-elements/support-btn';

@@ -9,7 +9,7 @@ import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
-import {getEndpoint} from '../../mixins/endpoint-mixin';
+import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/search-and-filter';
 import '../../common-elements/filters-element';
@@ -126,8 +126,7 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
       </style>
       <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
       <iron-location path="{{path}}" query="{{query}}" url-space-regex="^[[rootPath]]"></iron-location>
-      <iron-query-params params-string="{{query}}" params-any="{{queryParams}}"> </iron-query-params>
-      <app-route-converter path="{{path}}" query-params="{{queryParams}}" route="{{route}}"> </app-route-converter>
+
       <pages-header-element
         hide-print-button
         link="action-points/new"

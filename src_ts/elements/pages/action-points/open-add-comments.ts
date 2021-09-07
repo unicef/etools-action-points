@@ -3,7 +3,7 @@ import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import '@polymer/paper-input/paper-input.js';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {getEndpoint} from '../../mixins/endpoint-mixin';
+import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
 import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
 import {customElement, property} from '@polymer/decorators';

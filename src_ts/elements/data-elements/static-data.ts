@@ -4,7 +4,7 @@ import {_setData} from '../mixins/static-data-mixin';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {_addToCollection, getChoices, isValidCollection} from '../mixins/permission-controller';
 import {UserControllerMixin} from '../mixins/user-controller';
-import {getEndpoint} from '../mixins/endpoint-mixin';
+import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import './user-data';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';

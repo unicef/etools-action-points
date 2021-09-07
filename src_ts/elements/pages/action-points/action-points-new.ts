@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
-import {getEndpoint} from '../../mixins/endpoint-mixin';
+import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import './action-point-details';
