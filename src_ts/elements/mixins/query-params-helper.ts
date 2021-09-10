@@ -30,7 +30,7 @@ export const getPath = () => {
   return path.slice(1);
 };
 
-export const updateQueries = (newQueries: any, path?: string, noNotify?: boolean) => {
+export const updateQueries = (element: HTMLElement, newQueries: any, path?: string, noNotify?: boolean) => {
   if (typeof newQueries != 'object') {
     return false;
   }
@@ -60,7 +60,7 @@ export const updateQueries = (newQueries: any, path?: string, noNotify?: boolean
   }
 
   if (!noNotify) {
-    dispatchEvent(
+    element.dispatchEvent(
       new CustomEvent('location-changed', {
         bubbles: true,
         composed: true
