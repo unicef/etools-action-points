@@ -1,7 +1,7 @@
 import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {UserControllerMixin} from '../app-mixins/user-controller';
-import {getEndpoint, resetOldUserData} from '../app-mixins/endpoint-mixin';
+import {UserControllerMixin} from '../mixins/user-controller';
+import {getEndpoint, resetOldUserData} from '../../endpoints/endpoint-mixin';
 import {customElement} from '@polymer/decorators';
 
 @customElement('user-data')

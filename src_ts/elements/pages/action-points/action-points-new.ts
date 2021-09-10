@@ -1,13 +1,13 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {ErrorHandlerMixin} from '../../app-mixins/error-handler-mixin';
-import {getEndpoint} from '../../app-mixins/endpoint-mixin';
+import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
+import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import './action-point-details';
-import {pageLayoutStyles} from '../../styles-elements/page-layout-styles';
-import {sharedStyles} from '../../styles-elements/shared-styles';
-import {mainPageStyles} from '../../styles-elements/main-page-styles';
+import {pageLayoutStyles} from '../../styles/page-layout-styles';
+import {sharedStyles} from '../../styles/shared-styles';
+import {mainPageStyles} from '../../styles/main-page-styles';
 import {customElement, property} from '@polymer/decorators';
 import {ActionPointDetails} from './action-point-details';
 

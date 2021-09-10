@@ -18,18 +18,18 @@ import {createDynamicDialog} from '@unicef-polymer/etools-dialog/dynamic-dialog'
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
-import {_checkEnvironment} from './elements/app-mixins/endpoint-mixin';
-import {UserControllerMixin} from './elements/app-mixins/user-controller';
-import {AppMenuMixin} from './elements/app-mixins/app-menu-mixin';
-import './elements/core-elements/app-main-header/app-main-header';
-import './elements/core-elements/app-sidebar-menu';
+import {_checkEnvironment} from './endpoints/endpoint-mixin';
+import {UserControllerMixin} from './elements/mixins/user-controller';
+import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
+import './elements/app-shell/app-main-header/app-main-header';
+import './elements/app-shell/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list';
-import './elements/core-elements/app-main-header/countries-dropdown';
+import './elements/app-shell/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
-import './elements/core-elements/page-footer';
-import {basePath} from './elements/core-elements/etools-app-config';
-import './elements/styles-elements/app-theme';
-import {appShellStyles} from './elements/styles-elements/app-shell-styles';
+import './elements/app-shell/page-footer';
+import {basePath} from './config/config';
+import './elements/styles/app-theme';
+import {appShellStyles} from './elements/styles/app-shell-styles';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from './typings/globals.types';
 setRootPath(basePath);
@@ -221,7 +221,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         import('./elements/pages/not-found-page-view.js');
         break;
       default:
-        import('./elements/pages/action-points-page-components/action-points-page-main.js');
+        import('./elements/pages/action-points/action-points-page-main.js');
         this._loadPage();
         break;
     }

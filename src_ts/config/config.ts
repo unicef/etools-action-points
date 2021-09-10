@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import endpoints from '../app-mixins/endpoints';
+import endpoints from '../endpoints/endpoints';
 
 declare global {
   interface Window {

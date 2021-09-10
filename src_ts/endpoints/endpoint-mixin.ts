@@ -1,6 +1,6 @@
 // import {PolymerElement} from '@polymer/polymer';
 // import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
-import * as config from '../core-elements/etools-app-config';
+import * as config from '../config/config';
 // import {Constructor} from '../../typings/globals.types';
 
 /**
