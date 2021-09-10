@@ -3,18 +3,18 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {LocalizationMixin} from '../../mixins/localization-mixin';
-import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
-import {tabInputsStyles} from '../../styles/tab-inputs-styles';
-import {moduleStyles} from '../../styles/module-styles';
-import {noActionsAllowed} from '../../mixins/permission-controller';
-import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
-import {DateMixin} from '../../mixins/date-mixin';
+import {LocalizationMixin} from '../../../mixins/localization-mixin';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
+import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
+import {moduleStyles} from '../../../styles/module-styles';
+import {noActionsAllowed} from '../../../mixins/permission-controller';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
+import {DateMixin} from '../../../mixins/date-mixin';
 import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
 import {customElement, property, observe} from '@polymer/decorators';
 
-@customElement('action-point-comments')
+@customElement('action-point-comments') // Actions Taken
 export class ActionPointComments extends LocalizationMixin(
   DateMixin(ErrorHandlerMixin(InputAttrsMixin(PolymerElement)))
 ) {

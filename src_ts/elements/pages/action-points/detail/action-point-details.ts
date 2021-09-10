@@ -7,18 +7,18 @@ import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import {LocalizationMixin} from '../../mixins/localization-mixin';
-import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
-import {getEndpoint} from '../../../endpoints/endpoint-mixin';
-import {DateMixin} from '../../mixins/date-mixin';
-import {getData} from '../../mixins/static-data-mixin';
-import {actionAllowed} from '../../mixins/permission-controller';
-import {pageLayoutStyles} from '../../styles/page-layout-styles';
-import {sharedStyles} from '../../styles/shared-styles';
-import {tabInputsStyles} from '../../styles/tab-inputs-styles';
-import {moduleStyles} from '../../styles/module-styles';
+import {LocalizationMixin} from '../../../mixins/localization-mixin';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
+import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
+import {DateMixin} from '../../../mixins/date-mixin';
+import {getData} from '../../../mixins/static-data-mixin';
+import {actionAllowed} from '../../../mixins/permission-controller';
+import {pageLayoutStyles} from '../../../styles/page-layout-styles';
+import {sharedStyles} from '../../../styles/shared-styles';
+import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
+import {moduleStyles} from '../../../styles/module-styles';
 import {customElement, observe, property} from '@polymer/decorators';
-import {GenericObject} from '../../../typings/globals.types';
+import {GenericObject} from '../../../../typings/globals.types';
 
 @customElement('action-point-details')
 export class ActionPointDetails extends EtoolsAjaxRequestMixin(

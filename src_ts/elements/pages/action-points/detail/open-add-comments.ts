@@ -3,12 +3,12 @@ import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import '@polymer/paper-input/paper-input.js';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {getEndpoint} from '../../../endpoints/endpoint-mixin';
-import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
-import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
+import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {customElement, property} from '@polymer/decorators';
-import {GenericObject} from '../../../typings/globals.types';
-import {isReadOnly} from '../../mixins/permission-controller';
+import {GenericObject} from '../../../../typings/globals.types';
+import {isReadOnly} from '../../../mixins/permission-controller';
 
 @customElement('open-add-comments')
 export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(InputAttrsMixin(PolymerElement))) {

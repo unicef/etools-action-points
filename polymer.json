@@ -3,15 +3,15 @@
   "shell": "src/app-shell.js",
   "fragments": [
     "src/elements/pages/not-found-page-view.js",
-    "src/elements/pages/action-points/action-point-comments.js",
-    "src/elements/pages/action-points/action-point-details.js",
-    "src/elements/pages/action-points/action-points-history.js",
-    "src/elements/pages/action-points/action-points-item.js",
+    "src/elements/pages/action-points/detail/action-point-comments.js",
+    "src/elements/pages/action-points/detail/action-point-details.js",
+    "src/elements/pages/action-points/detail/action-points-history.js",
+    "src/elements/pages/action-points/detail/action-points-item.js",
     "src/elements/pages/action-points/action-points-list.js",
     "src/elements/pages/action-points/action-points-new.js",
     "src/elements/pages/action-points/action-points-page-main.js",
-    "src/elements/pages/action-points/open-add-comments.js",
-    "src/elements/pages/action-points/open-view-history.js"
+    "src/elements/pages/action-points/detail/open-add-comments.js",
+    "src/elements/pages/action-points/detail/open-view-history.js"
   ],
   "sources": ["src/**/*", "images/**/*", "package.json"],
   "extraDependencies": [

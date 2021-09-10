@@ -21,12 +21,12 @@ import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js
 import {_checkEnvironment} from './endpoints/endpoint-mixin';
 import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
-import './elements/app-shell/app-main-header/app-main-header';
-import './elements/app-shell/app-sidebar-menu';
+import './elements/app-shell-components/app-main-header/app-main-header';
+import './elements/app-shell-components/app-sidebar-menu';
 import './elements/common-elements/multi-notifications/multi-notification-list';
-import './elements/app-shell/app-main-header/countries-dropdown';
+import './elements/app-shell-components/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
-import './elements/app-shell/page-footer';
+import './elements/app-shell-components/page-footer';
 import {basePath} from './config/config';
 import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
@@ -293,6 +293,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
       content: msg
     };
     const confirmNewVersionDialog = createDynamicDialog(conf);
+    // @ts-ignore
     confirmNewVersionDialog.$.dialog.style.zIndex = 9999999;
     confirmNewVersionDialog.opened = true;
   }

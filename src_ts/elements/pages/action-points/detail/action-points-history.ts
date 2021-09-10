@@ -1,9 +1,9 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
-import {DateMixin} from '../../mixins/date-mixin';
-import {moduleStyles} from '../../styles/module-styles';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
+import {DateMixin} from '../../../mixins/date-mixin';
+import {moduleStyles} from '../../../styles/module-styles';
 import {customElement, property} from '@polymer/decorators';
 
 @customElement('action-points-history')
