@@ -16,7 +16,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-       - run:
+      - run:
           name: TsLint
           command: npm run tsToJs
       - run:
@@ -26,7 +26,7 @@ jobs:
           name: Polymer3 Build
           command: npm run build
           no_output_timeout: 25m
-     
+
   build_and_deploy:
     working_directory: ~/code
     docker:
