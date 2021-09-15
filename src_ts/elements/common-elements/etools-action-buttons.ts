@@ -23,7 +23,6 @@ export class EtoolsActionButton extends PolymerElement {
           position: relative;
           display: block;
           text-align: center;
-          width: 100%;
         }
         :host .main-action.text {
           font-weight: 500;
