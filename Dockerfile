@@ -1,4 +1,4 @@
-FROM node:12.18.3 as builder
+FROM node:12-alpine3.12 as builder
 RUN apk update
 RUN apk add --update bash
 
