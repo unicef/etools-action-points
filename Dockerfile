@@ -21,7 +21,7 @@ RUN rm -rf node_modules
 RUN cp -a /tmp/node_modules /code/node_modules
 RUN npm run build
 
-FROM node:12.18.3
+FROM node:12-alpine3.12
 RUN apk update
 RUN apk add --update bash
 
