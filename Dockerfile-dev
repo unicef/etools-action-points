@@ -7,7 +7,6 @@ RUN npm config set unsafe-perm true
 
 RUN apk add git
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install -g --unsafe-perm polymer-cli
-RUN npm install -g gulp
 RUN npm install -g typescript
 
 WORKDIR /code
