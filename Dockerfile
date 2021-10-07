@@ -13,7 +13,7 @@ WORKDIR /tmp
 ADD package.json /tmp/
 ADD package-lock.json /tmp/
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm install
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm ci
 
 ADD . /code/
 WORKDIR /code
