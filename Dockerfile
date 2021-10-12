@@ -1,4 +1,4 @@
-FROM node:14.15.1-alpine3.12 as builder
+FROM node:12-alpine3.12 as builder
 RUN apk update
 RUN apk add --update bash
 
@@ -13,7 +13,7 @@ WORKDIR /tmp
 ADD package.json /tmp/
 ADD package-lock.json /tmp/
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm install
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm ci
 
 ADD . /code/
 WORKDIR /code
@@ -21,7 +21,7 @@ RUN rm -rf node_modules
 RUN cp -a /tmp/node_modules /code/node_modules
 RUN npm run build
 
-FROM node:14.15.1-alpine3.12
+FROM node:12-alpine3.12
 RUN apk update
 RUN apk add --update bash
 
