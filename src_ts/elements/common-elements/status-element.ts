@@ -6,11 +6,11 @@ import '@polymer/iron-icons/av-icons.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import {getData} from '../app-mixins/static-data-mixin';
+import {getData} from '../mixins/static-data-mixin';
 import './etools-action-buttons';
-import {etoolsStatusStyles} from '../styles-elements/status-styles';
+import {etoolsStatusStyles} from '../styles/status-styles';
 import {customElement, property} from '@polymer/decorators';
-import {noActionsAllowed, getActions} from '../app-mixins/permission-controller';
+import {noActionsAllowed, getActions} from '../mixins/permission-controller';
 
 @customElement('status-element')
 export class StatusElement extends PolymerElement {
@@ -18,7 +18,6 @@ export class StatusElement extends PolymerElement {
     return html`
       ${etoolsStatusStyles}
       <etools-content-panel panel-title="Status">
-
         <div class="top-container" id="statusList">
           <template is="dom-repeat" items="{{statuses}}" as="status">
             <div class="divider-line"></div>
@@ -53,7 +52,7 @@ export class StatusElement extends PolymerElement {
   }
 
   @property({type: Object})
-  dateProperties: object = () => {
+  dateProperties: any = () => {
     return {
       open: 'created',
       completed: 'date_of_completion'
@@ -61,10 +60,10 @@ export class StatusElement extends PolymerElement {
   };
 
   @property({type: Object})
-  actionPoint: object;
+  actionPoint: any;
 
   @property({type: Array})
-  actions: object[];
+  actions: any[];
 
   @property({type: String})
   permissionPath: string;
@@ -78,11 +77,13 @@ export class StatusElement extends PolymerElement {
   }
 
   _isStatusFinish(actionPoint: any, status: string) {
-    let currentStatus = actionPoint.status;
-    if (!currentStatus) {return false;}
-    let currentStatusIndex = this.statuses.findIndex((x: any) => x.value === currentStatus);
-    let statusIndex = this.statuses.findIndex((x: any) => x.value === status);
-    return (currentStatusIndex >= statusIndex);
+    const currentStatus = actionPoint.status;
+    if (!currentStatus) {
+      return false;
+    }
+    const currentStatusIndex = this.statuses.findIndex((x: any) => x.value === currentStatus);
+    const statusIndex = this.statuses.findIndex((x: any) => x.value === status);
+    return currentStatusIndex >= statusIndex;
   }
 
   noActionsAllowed(path: string) {
@@ -90,7 +91,7 @@ export class StatusElement extends PolymerElement {
   }
 
   _getStatusClass(actionPoint: any, status: string) {
-    let currentStatus = actionPoint.status;
+    const currentStatus = actionPoint.status;
 
     if (!currentStatus && status === 'open') {
       return 'active';
@@ -106,7 +107,7 @@ export class StatusElement extends PolymerElement {
   }
 
   hideDivider(status: string, statuses: any) {
-    let lastStatus = statuses[statuses.length - 1];
+    const lastStatus = statuses[statuses.length - 1];
     return !!(lastStatus && lastStatus.value === status);
   }
 

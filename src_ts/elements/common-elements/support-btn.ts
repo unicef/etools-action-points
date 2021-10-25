@@ -6,7 +6,7 @@ import {customElement, property} from '@polymer/decorators';
 /**
  * @polymer
  * @customElement
-*/
+ */
 @customElement('support-btn')
 export class SupportBtn extends PolymerElement {
   public static get template() {
@@ -25,8 +25,7 @@ export class SupportBtn extends PolymerElement {
         }
       </style>
 
-      <a href="[[url]]"
-        target="_blank">
+      <a href="[[url]]" target="_blank">
         <iron-icon icon="communication:textsms"></iron-icon>
         Support
       </a>
@@ -34,5 +33,6 @@ export class SupportBtn extends PolymerElement {
   }
 
   @property({type: String})
-  url: string = 'https://unicef.service-now.com/cc?id=sc_cat_item&sys_id=c8e43760db622450f65a2aea4b9619ad&sysparm_category=99c51053db0a6f40f65a2aea4b9619af';
+  url =
+    'https://unicef.service-now.com/cc?id=sc_cat_item&sys_id=c8e43760db622450f65a2aea4b9619ad&sysparm_category=99c51053db0a6f40f65a2aea4b9619af';
 }

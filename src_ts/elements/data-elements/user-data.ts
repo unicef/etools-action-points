@@ -1,31 +1,29 @@
 import {PolymerElement} from '@polymer/polymer';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {UserController} from '../app-mixins/user-controller';
-import {getEndpoint, resetOldUserData} from '../app-mixins/endpoint-mixin';
+import {UserControllerMixin} from '../mixins/user-controller';
+import {getEndpoint, resetOldUserData} from '../../endpoints/endpoint-mixin';
 import {customElement} from '@polymer/decorators';
 
 @customElement('user-data')
-export class UserData extends EtoolsAjaxRequestMixin(UserController(PolymerElement)) {
-
+export class UserData extends EtoolsAjaxRequestMixin(UserControllerMixin(PolymerElement)) {
   ready() {
     super.ready();
-    let endpoint = getEndpoint('userProfile');
+    const endpoint = getEndpoint('userProfile');
     this.sendRequest({
       method: 'GET',
       endpoint: {
         url: endpoint.url,
         cachingKey: 'profile'
       }
-    }).then(
-        (resp: any) => this._handleResponse(resp)
-    ).catch(
-        (err: any) => this._handleError(err));
+    })
+      .then((resp: any) => this._handleResponse(resp))
+      .catch((err: any) => this._handleError(err));
   }
 
   _handleResponse(data: any) {
-    let user = data;
-    let lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
-    let countriesAvailable = user.countries_available || [];
+    const user = data;
+    const lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
+    const countriesAvailable = user.countries_available || [];
     this.set('user.countries_available', countriesAvailable);
 
     if (!lastUserId || lastUserId != user.user) {
@@ -39,7 +37,7 @@ export class UserData extends EtoolsAjaxRequestMixin(UserController(PolymerEleme
   }
 
   _handleError(error) {
-    console.error('Can\'t load user data');
+    console.error("Can't load user data");
     if ([403, 401].includes(error.status)) {
       window.location.href = window.location.origin + '/login';
     }

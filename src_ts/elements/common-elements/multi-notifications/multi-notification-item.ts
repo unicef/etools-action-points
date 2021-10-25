@@ -4,9 +4,9 @@ import '@polymer/paper-button/paper-button.js';
 import {customElement, property, observe} from '@polymer/decorators';
 
 /**
-* @polymer
-* @extends HTMLElement
-*/
+ * @polymer
+ * @extends HTMLElement
+ */
 @customElement('multi-notification-item')
 export class MultiNotificationItem extends PolymerElement {
   public static get template() {
@@ -47,7 +47,7 @@ export class MultiNotificationItem extends PolymerElement {
 
         paper-button {
           float: right;
-          color: #0099FF;
+          color: #0099ff;
         }
       </style>
 
@@ -64,19 +64,21 @@ export class MultiNotificationItem extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('transitionend', e => this._onTransitionEnd(e));
+    this.addEventListener('transitionend', (e) => this._onTransitionEnd(e));
   }
 
   _onTransitionEnd(e: any) {
     if (e && e.target === this && e.propertyName === 'opacity') {
       if (!this.opened) {
-        this.dispatchEvent(new CustomEvent('notification-shift', {
-          detail: {
-            id: this.id
-          },
-          bubbles: true,
-          composed: true
-        }));
+        this.dispatchEvent(
+          new CustomEvent('notification-shift', {
+            detail: {
+              id: this.id
+            },
+            bubbles: true,
+            composed: true
+          })
+        );
       }
     }
   }
