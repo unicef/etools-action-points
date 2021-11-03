@@ -2,9 +2,9 @@ import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 
 /**
-* @polymer
-* @extends HTMLElement
-*/
+ * @polymer
+ * @extends HTMLElement
+ */
 @customElement('text-content')
 export class TextContent extends PolymerElement {
   static get template() {

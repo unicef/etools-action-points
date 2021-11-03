@@ -4,21 +4,21 @@ import './multi-notification-item';
 import {customElement, property} from '@polymer/decorators';
 
 /**
-* @polymer
-* @extends HTMLElement
-*/
+ * @polymer
+ * @extends HTMLElement
+ */
 @customElement('multi-notification-list')
 export class MultiNotificationList extends PolymerElement {
   public static get template() {
     return html`
       <style>
         :host {
-            display: block;
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            z-index: 105;
-            left: var(--app-drawer-width);
+          display: block;
+          position: fixed;
+          left: 0;
+          bottom: 0;
+          z-index: 105;
+          left: var(--app-drawer-width);
         }
       </style>
 
@@ -29,10 +29,10 @@ export class MultiNotificationList extends PolymerElement {
   }
 
   @property({type: Array, notify: true})
-  notifications: object[] = [];
+  notifications: any[] = [];
 
   @property({type: Array})
-  notificationsQueue: object[] = [];
+  notificationsQueue: any[] = [];
 
   @property({type: Number})
   limit = 3;
@@ -42,8 +42,8 @@ export class MultiNotificationList extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('notification-push', e => this._onNotificationPush(e));
-    this.addEventListener('notification-shift', e => this._onNotificationShift(e));
+    this.addEventListener('notification-push', (e) => this._onNotificationPush(e));
+    this.addEventListener('notification-shift', (e) => this._onNotificationShift(e));
     this.addEventListener('reset-notifications', () => this._resetNotifications());
   }
 
@@ -64,7 +64,7 @@ export class MultiNotificationList extends PolymerElement {
   }
 
   _onNotificationPush({detail}: any) {
-    let notification = detail;
+    const notification = detail;
     notification.id = `toast___${this.count++}`;
 
     if (this.limit > this.notifications.length) {
