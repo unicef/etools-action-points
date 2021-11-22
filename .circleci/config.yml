@@ -81,4 +81,4 @@ workflows:
                 - master
                 - staging
                 - develop
-                - circleci-tweak
+                - lit-packages
