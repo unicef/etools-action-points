@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
@@ -294,7 +295,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         <div class="row-h group">
           <div class="input-container input-container-l">
             <!-- Description -->
-            <paper-input
+            <paper-textarea
               class$="validate-input disabled-as-readonly [[_setRequired('description', permissionPath)]]"
               value="{{editedItem.description}}"
               label="[[getLabel('description', permissionPath)]]"
@@ -309,7 +310,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               on-tap="_resetFieldError"
               no-title-attr
             >
-            </paper-input>
+            </paper-textarea>
           </div>
         </div>
 
