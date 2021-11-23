@@ -73,7 +73,7 @@ export const moduleStyles = html`
     }
     /* CHECKBOX */
     paper-checkbox {
-      --paper-checkbox-unchecked-color: var(--gray-mid);
+      --paper-checkbox-unchecked-color: var(--gray-mid-dark);
       --paper-checkbox-checked-color: var(--module-primary);
       --paper-checkbox-label: {
         font-size: 17px;
@@ -83,7 +83,7 @@ export const moduleStyles = html`
       --paper-checkbox-label-color: var(--gray-mid);
     }
     paper-radio-button {
-      --paper-radio-button-unchecked-color: var(--gray-mid);
+      --paper-radio-button-unchecked-color: var(--gray-mid-dark);
       --paper-radio-button-checked-color: var(--module-primary);
     }
     etools-data-table-header {
