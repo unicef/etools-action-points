@@ -397,7 +397,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"
-              class$="[[_setRequired('due_date', permissionPath)]]"
+              class$="validate-input [[_setRequired('due_date', permissionPath)]]"
               label$="[[getLabel('due_date', permissionPath)]]"
               modal$="[[datepickerModal]]"
               placeholder$="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
