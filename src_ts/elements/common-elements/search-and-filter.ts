@@ -141,7 +141,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           width: 176px;
           margin-left: 12px;
           margin-right: 12px;
-          --iron-icon-fill-color: var(--gray-mid);
+          --iron-icon-fill-color: var(--gray-mid-dark);
         }
 
         .filter-dropdown {

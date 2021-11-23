@@ -110,7 +110,7 @@ export const tabInputsStyles = html`
     paper-dropdown-menu,
     etools-currency-amount-input,
     datepicker-lite {
-      --iron-icon-fill-color: var(--gray-mid);
+      --iron-icon-fill-color: var(--gray-mid-dark);
       outline: none !important;
       --esmm-placeholder-color: var(--gray-20);
       --paper-input-container-color: var(--gray-20);
