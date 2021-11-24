@@ -81,4 +81,3 @@ workflows:
                 - master
                 - staging
                 - develop
-                - lit-packages
