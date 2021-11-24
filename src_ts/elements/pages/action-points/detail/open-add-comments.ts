@@ -3,6 +3,7 @@ import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import '@polymer/paper-input/paper-input.js';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
+import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
@@ -14,6 +15,7 @@ import {isReadOnly} from '../../../mixins/permission-controller';
 export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(InputAttrsMixin(PolymerElement))) {
   public static get template() {
     return html`
+      ${tabInputsStyles}
       <etools-dialog
         id="commentDialog"
         size="md"
