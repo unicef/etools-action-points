@@ -80,6 +80,9 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           line-height: 16px;
           color: var(--paper-input-container-color, var(--gray-20));
         }
+        .pl-12 {
+          padding-left: 12px;
+        }
       </style>
 
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
@@ -394,7 +397,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               [[getLabel('high_priority', permissionPath)]]</paper-checkbox
             >
           </div>
-          <div class="input-container">
+          <div class="input-container pl-12">
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"

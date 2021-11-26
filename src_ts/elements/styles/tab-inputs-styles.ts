@@ -51,7 +51,7 @@ export const tabInputsStyles = html`
     .input-container.input-checkbox-container {
       height: 62px;
       line-height: 62px;
-      padding: 0 12px;
+      padding: 12px 12px 0 12px;
       box-sizing: border-box;
     }
     .row-h {
