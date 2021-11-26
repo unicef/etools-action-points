@@ -410,6 +410,8 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               clear-btn-inside-dr
               required$="[[_setRequired('due_date', permissionPath)]]"
               disabled$="[[isReadOnly('due_date', permissionPath)]]"
+              on-focus="_resetFieldError"
+              on-tap="_resetFieldError"
               error-message$="{{errors.due_date}}"
               value="{{editedItem.due_date}}"
             >
