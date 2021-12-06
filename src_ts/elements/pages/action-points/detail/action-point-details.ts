@@ -465,6 +465,9 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
   @property({type: Object})
   interventionsData: GenericObject = {};
 
+  @property({type: Object})
+  cpOutputsData: GenericObject = {};
+
   @property({type: Boolean})
   dataIsSet = false;
 
@@ -618,14 +621,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         return;
       }
 
-      const endpoint = getEndpoint('cpOutputsV2', cpIds.join(','));
-      this.set(
-        'cpOutputs',
-        (await this.sendRequest({
-          method: 'GET',
-          endpoint: endpoint
-        })) || []
-      );
+      this.set('cpOutputs', this._getCpOutputs(cpIds.join(',')));
       this.set('interventionRequestInProcess', false);
     } catch (error) {
       console.error('Can not load cpOutputs data');
@@ -643,6 +639,18 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
       });
     }
     return this.interventionsData[interventionId];
+  }
+
+  async _getCpOutputs(cpIds: string) {
+    if (!this.cpOutputsData[cpIds]) {
+      const endpoint = getEndpoint('cpOutputsV2', cpIds);
+      this.cpOutputsData[cpIds] =
+        (await this.sendRequest({
+          method: 'GET',
+          endpoint: endpoint
+        })) || [];
+    }
+    return this.cpOutputsData[cpIds];
   }
 
   _checkAndResetData(intervention: any) {
