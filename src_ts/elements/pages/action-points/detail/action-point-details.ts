@@ -621,7 +621,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         return;
       }
 
-      this.set('cpOutputs', this._getCpOutputs(cpIds.join(',')));
+      this.set('cpOutputs', await this._getCpOutputs(cpIds.join(',')));
       this.set('interventionRequestInProcess', false);
     } catch (error) {
       console.error('Can not load cpOutputs data');
