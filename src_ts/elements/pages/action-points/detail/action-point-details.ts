@@ -462,6 +462,12 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
   @property({type: Object, notify: true})
   originalActionPoint: GenericObject;
 
+  @property({type: Object})
+  interventionsData: GenericObject = {};
+
+  @property({type: Object})
+  cpOutputsData: GenericObject = {};
+
   @property({type: Boolean})
   dataIsSet = false;
 
@@ -591,11 +597,8 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     try {
       this.set('interventionRequestInProcess', true);
       this.set('cpOutputs', undefined);
-      const interventionEndpoint = getEndpoint('interventionDetails', interventionId);
-      const intervention = await this.sendRequest({
-        method: 'GET',
-        endpoint: interventionEndpoint
-      });
+
+      const intervention = await this._getIntervention(interventionId);
 
       const locations = (intervention && intervention.flat_locations) || [];
       this._updateLocations(locations);
@@ -618,14 +621,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         return;
       }
 
-      const endpoint = getEndpoint('cpOutputsV2', cpIds.join(','));
-      this.set(
-        'cpOutputs',
-        (await this.sendRequest({
-          method: 'GET',
-          endpoint: endpoint
-        })) || []
-      );
+      this.set('cpOutputs', await this._getCpOutputs(cpIds.join(',')));
       this.set('interventionRequestInProcess', false);
     } catch (error) {
       console.error('Can not load cpOutputs data');
@@ -633,6 +629,29 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     }
   }
   /* jshint ignore:end */
+
+  async _getIntervention(interventionId: number) {
+    if (!this.interventionsData[interventionId]) {
+      const interventionEndpoint = getEndpoint('interventionDetails', interventionId);
+      this.interventionsData[interventionId] = await this.sendRequest({
+        method: 'GET',
+        endpoint: interventionEndpoint
+      });
+    }
+    return this.interventionsData[interventionId];
+  }
+
+  async _getCpOutputs(cpIds: string) {
+    if (!this.cpOutputsData[cpIds]) {
+      const endpoint = getEndpoint('cpOutputsV2', cpIds);
+      this.cpOutputsData[cpIds] =
+        (await this.sendRequest({
+          method: 'GET',
+          endpoint: endpoint
+        })) || [];
+    }
+    return this.cpOutputsData[cpIds];
+  }
 
   _checkAndResetData(intervention: any) {
     if (!this.originalActionPoint) {
