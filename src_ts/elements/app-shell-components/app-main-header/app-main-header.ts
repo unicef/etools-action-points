@@ -82,9 +82,10 @@ export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
           <countries-dropdown countries="[[user.countries_available]]" country-id="[[user.country.id]]">
           </countries-dropdown>
 
-          <support-btn></support-btn>
+          <support-btn title="Support"></support-btn>
 
           <etools-profile-dropdown
+            title="Profile and Sign out"
             profile="{{user}}"
             users="[[allUsers]]"
             offices="[[offices]]"
@@ -92,7 +93,13 @@ export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
           >
           </etools-profile-dropdown>
 
-          <paper-icon-button id="pageRefresh" icon="refresh" on-tap="refresh" disabled="[[refreshInProgress]]">
+          <paper-icon-button
+            title="Refresh"
+            id="pageRefresh"
+            icon="refresh"
+            on-tap="refresh"
+            disabled="[[refreshInProgress]]"
+          >
           </paper-icon-button>
         </div>
       </app-toolbar>
