@@ -51,7 +51,7 @@ export const tabInputsStyles = html`
     .input-container.input-checkbox-container {
       height: 62px;
       line-height: 62px;
-      padding: 0 12px;
+      padding: 12px 12px 0 12px;
       box-sizing: border-box;
     }
     .row-h {
@@ -110,6 +110,7 @@ export const tabInputsStyles = html`
     paper-dropdown-menu,
     etools-currency-amount-input,
     datepicker-lite {
+      --iron-icon-fill-color: var(--gray-mid-dark);
       outline: none !important;
       --esmm-placeholder-color: var(--gray-20);
       --paper-input-container-color: var(--gray-20);
