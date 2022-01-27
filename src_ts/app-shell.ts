@@ -294,7 +294,12 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     };
     const confirmNewVersionDialog = createDynamicDialog(conf);
     // @ts-ignore
-    confirmNewVersionDialog.$.dialog.style.zIndex = 9999999;
+    setTimeout(() => {
+      const dialog = confirmNewVersionDialog.shadowRoot?.querySelector('#dialog') as any;
+      if (dialog) {
+        dialog.style.zIndex = 9999999;
+      }
+    }, 0);
     confirmNewVersionDialog.opened = true;
   }
 
