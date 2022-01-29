@@ -9,7 +9,6 @@ import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-material/paper-material.js';
 import '@polymer/iron-selector/iron-selector.js';
-import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/social-icons.js';
@@ -46,9 +45,8 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
 
-      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}"> </app-route>
-
       <app-route route="{{route}}" pattern="[[rootPath]]action-points" tail="{{actionPointsRoute}}"> </app-route>
+      <app-route route="{{route}}" pattern="[[rootPath]]action-points/:page" data="{{routeData}}"> </app-route>
 
       <etools-piwik-analytics user="[[user]]" page="[[page]]" toast="[[_toast]]"> </etools-piwik-analytics>
 
@@ -72,23 +70,14 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
           </app-header>
 
           <main role="main" id="page-container">
-            <iron-pages
-              id="pages"
-              selected="[[page]]"
-              attr-for-selected="name"
-              fallback-selection="not-found"
-              role="main"
-              small-menu$="[[smallMenu]]"
+            <action-points-page-main
+              hidden="[[shouldShowPageNotFound(page)]]"
+              id="action-points"
+              static-data-loaded="[[staticDataLoaded]]"
+              route="{{actionPointsRoute}}"
             >
-              <action-points-page-main
-                name="action-points"
-                id="action-points"
-                static-data-loaded="[[staticDataLoaded]]"
-                route="{{actionPointsRoute}}"
-              >
-              </action-points-page-main>
-              <not-found-page-view name="not-found" id="not-found"></not-found-page-view>
-            </iron-pages>
+            </action-points-page-main>
+            <not-found-page-view hidden="[[shouldShowPageNotFound(page)]]" id="not-found"></not-found-page-view>
 
             <multi-notification-list></multi-notification-list>
           </main>
@@ -314,5 +303,8 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         });
       }
     }
+  }
+  shouldShowPageNotFound(page) {
+    return page === 'not-found';
   }
 }
