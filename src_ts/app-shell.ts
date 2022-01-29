@@ -77,7 +77,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
               route="{{actionPointsRoute}}"
             >
             </action-points-page-main>
-            <not-found-page-view hidden="[[shouldShowPageNotFound(page)]]" id="not-found"></not-found-page-view>
+            <not-found-page-view hidden="[[!shouldShowPageNotFound(page)]]" id="not-found"></not-found-page-view>
 
             <multi-notification-list></multi-notification-list>
           </main>
