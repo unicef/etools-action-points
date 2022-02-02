@@ -148,7 +148,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     const eventData = {
       message: 'Loading...',
       active: true,
-      type: 'initialisation'
+      loadingSource: 'initialisation'
     };
     this.dispatchEvent(
       new CustomEvent('global-loading', {
@@ -200,7 +200,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         detail: {
           message: 'Loading...',
           active: true,
-          type: 'initialisation'
+          loadingSource: 'initialisation'
         }
       })
     );
@@ -223,7 +223,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'initialisation'
+          loadingSource: 'initialisation'
         }
       })
     );
@@ -249,7 +249,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'initialisation'
+          loadingSource: 'initialisation'
         }
       })
     );

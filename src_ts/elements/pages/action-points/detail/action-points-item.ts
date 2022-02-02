@@ -230,7 +230,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'ap-complete',
+          loadingSource: 'ap-complete',
           active: true,
           message: 'Completing Action Point...'
         },
@@ -263,7 +263,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
-              type: 'ap-complete'
+              loadingSource: 'ap-complete'
             },
             bubbles: true,
             composed: true
@@ -295,7 +295,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'ap-update',
+          loadingSource: 'ap-update',
           active: true,
           message: 'Update Action Point...'
         },
@@ -324,7 +324,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
-              type: 'ap-update'
+              loadingSource: 'ap-update'
             },
             bubbles: true,
             composed: true

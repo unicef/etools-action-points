@@ -72,7 +72,7 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'ap-creation',
+          loadingSource: 'ap-creation',
           active: true,
           message: 'Creating Action Point...'
         },
@@ -101,7 +101,7 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
-              type: 'ap-creation'
+              loadingSource: 'ap-creation'
             },
             bubbles: true,
             composed: true

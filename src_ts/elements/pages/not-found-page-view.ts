@@ -5,7 +5,7 @@ import {sharedStyles} from '../styles/shared-styles';
 import {pageLayoutStyles} from '../styles/page-layout-styles';
 import {customElement} from '@polymer/decorators';
 
-@customElement('not-fount-page-view')
+@customElement('not-found-page-view')
 export class NotFoundPageView extends PolymerElement {
   public static get template() {
     return html`
@@ -24,6 +24,11 @@ export class NotFoundPageView extends PolymerElement {
         <paper-material elevation="1"> 404 <a href$="[[getLink()]]" class="link">Head back home.</a> </paper-material>
       </div>
     `;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.dispatchEvent(new Event('clear-loading-messages'));
   }
 
   getLink() {
