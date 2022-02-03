@@ -1,6 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-material/paper-material.js';
-import {getAbsolutePath} from '../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../styles/shared-styles';
 import {pageLayoutStyles} from '../styles/page-layout-styles';
 import {customElement} from '@polymer/decorators';
@@ -21,7 +20,9 @@ export class NotFoundPageView extends PolymerElement {
       </style>
 
       <div id="pageContent">
-        <paper-material elevation="1"> 404 <a href$="[[getLink()]]" class="link">Head back home.</a> </paper-material>
+        <paper-material elevation="1">
+          404 <a href="/apd/action-points/list" class="link">Head back home.</a>
+        </paper-material>
       </div>
     `;
   }
@@ -34,10 +35,6 @@ export class NotFoundPageView extends PolymerElement {
         composed: true
       })
     );
-  }
-
-  getLink() {
-    return getAbsolutePath('action-points');
   }
 
   openDrawer() {

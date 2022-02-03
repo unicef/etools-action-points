@@ -34,7 +34,7 @@ export class ActionPointsPageMain extends PolymerElement {
     if (!path.match(/[^\\/]/g)) {
       this.set('route.path', '/list');
     }
-    if (!['detail', 'list', 'new'].includes(path.split('/')[1])) {
+    if (!['detail', 'list', 'new', ''].includes(path.split('/')[1])) {
       this.set('route.path', '/not-found');
     }
   }

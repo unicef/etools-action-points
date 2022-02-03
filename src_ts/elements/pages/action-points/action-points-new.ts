@@ -97,7 +97,7 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
             composed: true
           })
         );
-        this.set('route.path', `detail/${data.id}`);
+        this.set('route.path', `/detail/${data.id}`);
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {

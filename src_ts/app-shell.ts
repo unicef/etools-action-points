@@ -185,7 +185,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     }
   }
 
-  @observe('route.path')
+  @observe('routeData')
   _routePageChanged() {
     if (!this.initLoadingComplete || !this.routeData.page || !this.staticDataLoaded) {
       return;
@@ -214,12 +214,12 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         this._loadPage();
         break;
     }
-  }
-
-  _loadPage() {
     if (!this.initLoadingComplete) {
       this.set('initLoadingComplete', true);
     }
+  }
+
+  _loadPage() {
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
