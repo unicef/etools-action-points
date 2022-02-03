@@ -28,7 +28,12 @@ export class NotFoundPageView extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.dispatchEvent(new Event('clear-loading-messages'));
+    this.dispatchEvent(
+      new CustomEvent('clear-loading-messages', {
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   getLink() {
