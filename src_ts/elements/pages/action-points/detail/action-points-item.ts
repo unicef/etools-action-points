@@ -166,7 +166,15 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
         this.set('actionPoint', this._prepareActionPoint(result));
       })
-      .catch((err: any) => console.log(err));
+      .catch((err: any) => {
+        console.log(err);
+        this.dispatchEvent(
+          new CustomEvent('404', {
+            bubbles: true,
+            composed: true
+          })
+        );
+      });
   }
 
   _loadOptions(id: number) {
@@ -186,7 +194,8 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         }
         this.set('permissionPath', permissionPath);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         this._responseError('Action Point Permissions', 'request error');
         this.dispatchEvent(
           new CustomEvent('404', {

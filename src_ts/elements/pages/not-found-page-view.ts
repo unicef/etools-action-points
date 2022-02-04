@@ -17,11 +17,18 @@ export class NotFoundPageView extends PolymerElement {
         a.link {
           color: #40c4ff;
         }
+        .container {
+          padding: 15px;
+        }
       </style>
 
-      <div id="pageContent">
+      <div class="container">
         <paper-material elevation="1">
-          404 <a href="/apd/action-points/list" class="link">Head back home.</a>
+          <h2>Oops! You hit a 404.</h2>
+          <p>The page you're looking for doesn't seem to exist.</p>
+          <p>
+            <a href="/apd/action-points/list" class="link">Head back home.</a>
+          </p>
         </paper-material>
       </div>
     `;

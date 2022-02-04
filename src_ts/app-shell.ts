@@ -233,19 +233,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
   }
 
   _pageNotFound() {
-    this.set('page', 'not-found');
-    const message =
-      <CustomEvent>event && (<CustomEvent>event).detail && (<CustomEvent>event).detail.message
-        ? `${(<CustomEvent>event).detail.message}`
-        : 'Oops you hit a 404!';
-
-    this.dispatchEvent(
-      new CustomEvent('toast', {
-        detail: {
-          text: message
-        }
-      })
-    );
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
@@ -253,6 +240,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         }
       })
     );
+    this.set('route.path', '/apd/action-points/not-found');
   }
 
   _initRoute() {
