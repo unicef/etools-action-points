@@ -125,7 +125,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'change-country',
+          loadingSource: 'change-country',
           active: true,
           message: 'Please wait while country is changing...'
         },
@@ -149,7 +149,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'change-country'
+          loadingSource: 'change-country'
         },
         bubbles: true,
         composed: true
