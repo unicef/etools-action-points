@@ -148,7 +148,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     const eventData = {
       message: 'Loading...',
       active: true,
-      type: 'initialisation'
+      loadingSource: 'initialisation'
     };
     this.dispatchEvent(
       new CustomEvent('global-loading', {
@@ -185,7 +185,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     }
   }
 
-  @observe('route.path')
+  @observe('routeData')
   _routePageChanged() {
     if (!this.initLoadingComplete || !this.routeData.page || !this.staticDataLoaded) {
       return;
@@ -200,7 +200,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         detail: {
           message: 'Loading...',
           active: true,
-          type: 'initialisation'
+          loadingSource: 'initialisation'
         }
       })
     );
@@ -214,16 +214,16 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         this._loadPage();
         break;
     }
-  }
-
-  _loadPage() {
     if (!this.initLoadingComplete) {
       this.set('initLoadingComplete', true);
     }
+  }
+
+  _loadPage() {
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'initialisation'
+          loadingSource: 'initialisation'
         }
       })
     );
@@ -233,26 +233,14 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
   }
 
   _pageNotFound() {
-    this.set('page', 'not-found');
-    const message =
-      <CustomEvent>event && (<CustomEvent>event).detail && (<CustomEvent>event).detail.message
-        ? `${(<CustomEvent>event).detail.message}`
-        : 'Oops you hit a 404!';
-
-    this.dispatchEvent(
-      new CustomEvent('toast', {
-        detail: {
-          text: message
-        }
-      })
-    );
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'initialisation'
+          loadingSource: 'initialisation'
         }
       })
     );
+    this.set('route.path', '/apd/action-points/not-found');
   }
 
   _initRoute() {
