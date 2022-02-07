@@ -166,7 +166,15 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
         this.set('actionPoint', this._prepareActionPoint(result));
       })
-      .catch((err: any) => console.log(err));
+      .catch((err: any) => {
+        console.log(err);
+        this.dispatchEvent(
+          new CustomEvent('404', {
+            bubbles: true,
+            composed: true
+          })
+        );
+      });
   }
 
   _loadOptions(id: number) {
@@ -186,7 +194,8 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         }
         this.set('permissionPath', permissionPath);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         this._responseError('Action Point Permissions', 'request error');
         this.dispatchEvent(
           new CustomEvent('404', {
@@ -230,7 +239,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'ap-complete',
+          loadingSource: 'ap-complete',
           active: true,
           message: 'Completing Action Point...'
         },
@@ -263,7 +272,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
-              type: 'ap-complete'
+              loadingSource: 'ap-complete'
             },
             bubbles: true,
             composed: true
@@ -295,7 +304,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'ap-update',
+          loadingSource: 'ap-update',
           active: true,
           message: 'Update Action Point...'
         },
@@ -324,7 +333,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
-              type: 'ap-update'
+              loadingSource: 'ap-update'
             },
             bubbles: true,
             composed: true
