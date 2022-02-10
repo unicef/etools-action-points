@@ -30,12 +30,12 @@ export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(In
         <div class="row-h group">
           <div class="input-container input-container-l">
             <paper-input
-              class$="validate-input disabled-as-readonly [[_setRequired('comments.comment', permissionPath)]]"
+              class$="validate-input [[_setRequired('comments.comment', permissionPath)]]"
               value="{{commentText}}"
               label="[[getLabel('comments.comment', permissionPath)]]"
               placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
               required$="[[_setRequired('comments.comment', permissionPath)]]"
-              disabled$="[[isReadOnly('comments.comment', permissionPath)]]"
+              readonly$="[[isReadOnly('comments.comment', permissionPath)]]"
               maxlength="3000"
               invalid$="{{errors.comments.comment}}"
               error-message="{{errors.comments.comment}}"

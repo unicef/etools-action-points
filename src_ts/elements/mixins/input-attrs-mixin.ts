@@ -52,7 +52,7 @@ export function InputAttrsMixin<T extends Constructor<PolymerElement>>(superClas
      */
     public getPlaceholderText(path: string, base: string, special: boolean) {
       if (isReadOnly(`${base}.${path}`)) {
-        return 'Empty Field';
+        return '—';
       }
 
       const label = this.getLabel(path, base);
