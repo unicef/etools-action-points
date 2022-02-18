@@ -1,11 +1,10 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/paper-material/paper-material.js';
-import {getAbsolutePath} from '../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../styles/shared-styles';
 import {pageLayoutStyles} from '../styles/page-layout-styles';
 import {customElement} from '@polymer/decorators';
 
-@customElement('not-fount-page-view')
+@customElement('not-found-page-view')
 export class NotFoundPageView extends PolymerElement {
   public static get template() {
     return html`
@@ -18,16 +17,31 @@ export class NotFoundPageView extends PolymerElement {
         a.link {
           color: #40c4ff;
         }
+        .container {
+          padding: 15px;
+        }
       </style>
 
-      <div id="pageContent">
-        <paper-material elevation="1"> 404 <a href$="[[getLink()]]" class="link">Head back home.</a> </paper-material>
+      <div class="container">
+        <paper-material elevation="1">
+          <h2>Oops! You hit a 404.</h2>
+          <p>The page you're looking for doesn't seem to exist.</p>
+          <p>
+            <a href="/apd/action-points/list" class="link">Head back home.</a>
+          </p>
+        </paper-material>
       </div>
     `;
   }
 
-  getLink() {
-    return getAbsolutePath('action-points');
+  connectedCallback() {
+    super.connectedCallback();
+    this.dispatchEvent(
+      new CustomEvent('clear-loading-messages', {
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   openDrawer() {
