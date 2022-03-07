@@ -87,11 +87,7 @@ export const tabInputsStyles = html`
       padding: 0 12px;
       outline: none !important;
 
-      --paper-input-container-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
       --paper-input-container-input-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
-      --esmm-placeholder-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
-      --esmm-multi-placeholder-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
-      --paper-input-container-focus-color: var(--primary-color, #0099ff);
 
       --paper-input-container-input: {
         font-size: 15px;
