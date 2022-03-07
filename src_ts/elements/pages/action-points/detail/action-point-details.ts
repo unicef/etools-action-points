@@ -193,14 +193,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 dynamic-align
               >
               </etools-dropdown>
-              <etools-loading
-                id="partnersSpinner"
-                active$="[[partnerRequestInProcess]]"
-                no-overlay
-                loading-text=""
-                class="loading"
-              >
-              </etools-loading>
             </template>
             <template is="dom-if" if="[[isReadOnly('partner', permissionPath)]]">
               <paper-input
@@ -210,6 +202,14 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 readonly
               ></paper-input>
             </template>
+            <etools-loading
+              id="partnersSpinner"
+              active$="[[isRequestInProcess('partner', permissionPath, partnerRequestInProcess)]]"
+              no-overlay
+              loading-text=""
+              class="loading"
+            >
+            </etools-loading>
           </div>
           <div class="input-container input-container-ms">
             <!-- PD/SSFA -->
@@ -231,14 +231,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 dynamic-align
               >
               </etools-dropdown>
-              <etools-loading
-                id="pdsSpinner"
-                active$="[[interventionRequestInProcess]]"
-                no-overlay
-                loading-text=""
-                class="loading"
-              >
-              </etools-loading>
             </template>
             <template is="dom-if" if="[[isReadOnly('intervention', permissionPath)]]">
               <paper-input
@@ -248,6 +240,14 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 readonly
               ></paper-input>
             </template>
+            <etools-loading
+              id="pdsSpinner"
+              active$="[[isRequestInProcess('intervention', permissionPath, interventionRequestInProcess)]]"
+              no-overlay
+              loading-text=""
+              class="loading"
+            >
+            </etools-loading>
           </div>
         </div>
 
@@ -742,5 +742,9 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
   _dueDateChanged(e: CustomEvent) {
     const selDate = e.detail.date;
     this.set('editedItem.due_date', selDate);
+  }
+
+  isRequestInProcess(field: string, basePermissionPath: string, isRequestInProcess: boolean) {
+    return !this.isReadOnly(field, basePermissionPath) && isRequestInProcess;
   }
 }
