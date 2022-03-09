@@ -25,7 +25,7 @@ export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(P
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
-          type: 'action-points-list',
+          loadingSource: 'action-points-list',
           active: true,
           message: 'Loading of action points list...'
         },
@@ -52,7 +52,7 @@ export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(P
 
     this.dispatchEvent(
       new CustomEvent('global-loading', {
-        detail: {type: 'action-points-list'},
+        detail: {loadingSource: 'action-points-list'},
         bubbles: true,
         composed: true
       })

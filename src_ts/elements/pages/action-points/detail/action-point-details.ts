@@ -193,7 +193,13 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 dynamic-align
               >
               </etools-dropdown>
-              <etools-loading active="{{partnerRequestInProcess}}" no-overlay loading-text="" class="loading">
+              <etools-loading
+                id="partnersSpinner"
+                active$="[[partnerRequestInProcess]]"
+                no-overlay
+                loading-text=""
+                class="loading"
+              >
               </etools-loading>
             </template>
             <template is="dom-if" if="[[isReadOnly('partner', permissionPath)]]">
@@ -225,7 +231,13 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 dynamic-align
               >
               </etools-dropdown>
-              <etools-loading active="{{interventionRequestInProcess}}" no-overlay loading-text="" class="loading">
+              <etools-loading
+                id="pdsSpinner"
+                active$="[[interventionRequestInProcess]]"
+                no-overlay
+                loading-text=""
+                class="loading"
+              >
               </etools-loading>
             </template>
             <template is="dom-if" if="[[isReadOnly('intervention', permissionPath)]]">
@@ -413,7 +425,9 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               on-focus="_resetFieldError"
               on-tap="_resetFieldError"
               error-message$="{{errors.due_date}}"
-              value="{{editedItem.due_date}}"
+              value="[[editedItem.due_date]]"
+              fire-date-has-changed
+              on-date-has-changed="_dueDateChanged"
             >
             </datepicker-lite>
           </div>
@@ -576,6 +590,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
       .then((data: any) => {
         this.set('partner', data || null);
         this.set('partnerRequestInProcess', false);
+        this.notifyPath('partnerRequestInProcess', false);
       })
       .catch(() => {
         console.error('Can not load partner data');
@@ -623,6 +638,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
 
       this.set('cpOutputs', await this._getCpOutputs(cpIds.join(',')));
       this.set('interventionRequestInProcess', false);
+      this.notifyPath('interventionRequestInProcess', false);
     } catch (error) {
       console.error('Can not load cpOutputs data');
       this._finishCpoRequest();
@@ -721,5 +737,10 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
 
   actionAllowed(path, action) {
     return actionAllowed(path, action);
+  }
+
+  _dueDateChanged(e: CustomEvent) {
+    const selDate = e.detail.date;
+    this.set('editedItem.due_date', selDate);
   }
 }
