@@ -90,8 +90,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="row-h group">
             <div class="input-container">
               <etools-dropdown
-                class$="validate-input disabled-as-readonly readonly
-                without-border [[_setRequired('related_module', permissionPath)]]"
+                class$="validate-input readonly [[_setRequired('related_module', permissionPath)]]"
                 selected="{{editedItem.related_module}}"
                 label="[[getLabel('related_module', permissionPath)]]"
                 placeholder="-"
@@ -99,7 +98,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 option-label="display_name"
                 option-value="value"
                 required$="[[_setRequired('related_module', permissionPath)]]"
-                disabled$="[[isReadOnly('related_module', permissionPath)]]"
                 readonly$="[[isReadOnly('related_module', permissionPath)]]"
                 allow-outside-scroll
                 dynamic-align
@@ -123,7 +121,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             </div>
             <div class="input-container">
               <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('assigned_by', permissionPath)]]"
+                class$="validate-input [[_setRequired('assigned_by', permissionPath)]]"
                 selected="{{editedItem.assigned_by}}"
                 label="[[getLabel('assigned_by', permissionPath)]]"
                 placeholder="-"
@@ -131,7 +129,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 option-label="name"
                 option-value="id"
                 required$="[[_setRequired('assigned_by', permissionPath)]]"
-                disabled$="[[isReadOnly('assigned_by', permissionPath)]]"
                 readonly$="[[isReadOnly('assigned_by', permissionPath)]]"
                 invalid="{{errors.assigned_by}}"
                 error-message="{{errors.assigned_by}}"
@@ -150,7 +147,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             <div class="input-container input-container-l">
               <!-- Category -->
               <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('category', permissionPath)]]"
+                class$="validate-input [[_setRequired('category', permissionPath)]]"
                 selected="{{editedItem.category}}"
                 label="[[getLabel('category', permissionPath)]]"
                 placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
@@ -158,7 +155,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
                 option-label="description"
                 option-value="id"
                 required$="[[_setRequired('category', permissionPath)]]"
-                disabled$="[[isReadOnly('category', permissionPath)]]"
                 readonly$="[[isReadOnly('category', permissionPath)]]"
                 invalid="{{errors.category}}"
                 error-message="{{errors.category}}"
@@ -177,7 +173,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             <!-- Implementing Partner -->
             <template is="dom-if" if="[[!isReadOnly('partner', permissionPath)]]">
               <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('partner', permissionPath)]]"
+                class$="validate-input [[_setRequired('partner', permissionPath)]]"
                 selected="{{editedItem.partner}}"
                 label="[[getLabel('partner', permissionPath)]]"
                 placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
@@ -215,7 +211,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             <!-- PD/SSFA -->
             <template is="dom-if" if="[[!isReadOnly('intervention', permissionPath)]]">
               <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('intervention', permissionPath)]]"
+                class$="validate-input [[_setRequired('intervention', permissionPath)]]"
                 selected="{{editedItem.intervention}}"
                 label="[[getLabel('intervention', permissionPath)]]"
                 placeholder="[[getPlaceholderText('intervention', permissionPath, 'true')]]"
@@ -256,7 +252,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
             <!-- CP Output -->
             <template is="dom-if" if="[[!isReadOnly('cp_output', permissionPath)]]">
               <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('cp_output', permissionPath)]]"
+                class$="validate-input [[_setRequired('cp_output', permissionPath)]]"
                 selected="{{editedItem.cp_output}}"
                 label="[[getLabel('cp_output', permissionPath)]]"
                 placeholder="[[getPlaceholderText('cp_output', permissionPath, 'true')]]"
@@ -286,7 +282,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container input-container-ms">
             <!-- Locations -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('location', permissionPath)]]"
+              class$="validate-input [[_setRequired('location', permissionPath)]]"
               selected="{{editedItem.location}}"
               label="[[getLabel('location', permissionPath)]]"
               placeholder="[[getPlaceholderText('location', permissionPath, 'true')]]"
@@ -294,7 +290,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               option-label="name"
               option-value="id"
               required$="[[_setRequired('location', permissionPath)]]"
-              disabled$="[[isReadOnly('location', permissionPath)]]"
               readonly$="[[isReadOnly('location', permissionPath)]]"
               invalid="{{errors.location}}"
               error-message="{{errors.location}}"
@@ -311,12 +306,11 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container input-container-l">
             <!-- Description -->
             <paper-textarea
-              class$="validate-input disabled-as-readonly [[_setRequired('description', permissionPath)]]"
+              class$="validate-input [[_setRequired('description', permissionPath)]]"
               value="{{editedItem.description}}"
               label="[[getLabel('description', permissionPath)]]"
               placeholder="[[getPlaceholderText('description', permissionPath)]]"
               required$="[[_setRequired('description', permissionPath)]]"
-              disabled$="[[isReadOnly('description', permissionPath)]]"
               readonly$="[[isReadOnly('description', permissionPath)]]"
               max-length="800"
               invalid$="{{errors.description}}"
@@ -333,7 +327,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container">
             <!-- Assigned To -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('assigned_to', permissionPath)]]"
+              class$="validate-input [[_setRequired('assigned_to', permissionPath)]]"
               selected="{{editedItem.assigned_to}}"
               label="[[getLabel('assigned_to', permissionPath)]]"
               placeholder="[[getPlaceholderText('assigned_to', permissionPath, 'true')]]"
@@ -341,7 +335,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               option-label="name"
               option-value="id"
               required$="[[_setRequired('assigned_to', permissionPath)]]"
-              disabled$="[[isReadOnly('assigned_to', permissionPath)]]"
               readonly$="[[isReadOnly('assigned_to', permissionPath)]]"
               invalid="{{errors.assigned_to}}"
               error-message="{{errors.assigned_to}}"
@@ -355,7 +348,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container">
             <!-- Section -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('section', permissionPath)]]"
+              class$="validate-input [[_setRequired('section', permissionPath)]]"
               selected="{{editedItem.section}}"
               label="[[getLabel('section', permissionPath)]]"
               placeholder="[[getPlaceholderText('section', permissionPath, 'true')]]"
@@ -363,7 +356,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               option-label="name"
               option-value="id"
               required$="[[_setRequired('section', permissionPath)]]"
-              disabled$="[[isReadOnly('section', permissionPath)]]"
               readonly$="[[isReadOnly('section', permissionPath)]]"
               invalid="{{errors.section}}"
               error-message="{{errors.section}}"
@@ -377,7 +369,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container">
             <!-- Office -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('office', permissionPath)]]"
+              class$="validate-input [[_setRequired('office', permissionPath)]]"
               selected="{{editedItem.office}}"
               label="[[getLabel('office', permissionPath)]]"
               placeholder="[[getPlaceholderText('office', permissionPath, 'true')]]"
@@ -386,7 +378,6 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               option-value="id"
               update-selected
               required$="[[_setRequired('office', permissionPath)]]"
-              disabled$="[[isReadOnly('office', permissionPath)]]"
               readonly$="[[isReadOnly('office', permissionPath)]]"
               invalid="{{errors.office}}"
               error-message="{{errors.office}}"
@@ -409,7 +400,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               [[getLabel('high_priority', permissionPath)]]</paper-checkbox
             >
           </div>
-          <div class="input-container pl-12">
+          <div class="input-container">
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"
@@ -421,7 +412,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
               selected-date-display-format="D MMM YYYY"
               clear-btn-inside-dr
               required$="[[_setRequired('due_date', permissionPath)]]"
-              disabled$="[[isReadOnly('due_date', permissionPath)]]"
+              readonly$="[[isReadOnly('due_date', permissionPath)]]"
               on-focus="_resetFieldError"
               on-tap="_resetFieldError"
               error-message$="{{errors.due_date}}"

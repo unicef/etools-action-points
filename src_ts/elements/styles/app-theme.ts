@@ -12,6 +12,7 @@ documentContainer.innerHTML = `
       html {
         --primary-color: #0099ff;
         --primary-background-color: white;
+        --secondary-text-color: rgba(0, 0, 0, 0.54);
         --secondary-background-color: var(--paper-indigo-700);
         --ternary-background-color: var(--paper-indigo-800);
         --accent-color: var(--paper-light-blue-a200);
