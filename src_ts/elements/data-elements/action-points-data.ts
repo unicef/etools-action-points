@@ -1,19 +1,18 @@
-import {PolymerElement} from '@polymer/polymer';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
+import {LitElement, customElement, property} from 'lit-element';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import {getQueriesString} from '../mixins/query-params-helper';
-import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
-import {customElement, property} from '@polymer/decorators';
+import {ErrorHandlerMixin} from '../mixins/error-handler-mixin-lit';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 @customElement('action-points-data')
-export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(PolymerElement)) {
-  @property({type: Array, notify: true})
+export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
+  @property({type: Array}) //, notify: true
   public actionPoints: any[];
 
   @property({type: Object})
   public requestQueries: any;
 
-  @property({type: Number, notify: true})
+  @property({type: Number}) // , notify: true
   public listLength: number;
 
   connectedCallback() {
@@ -36,7 +35,7 @@ export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(P
     const endpoint = getEndpoint('actionPointsList');
     endpoint.url += getQueriesString();
 
-    this.sendRequest({
+    sendRequest({
       method: 'GET',
       endpoint: {
         url: endpoint.url
@@ -47,8 +46,24 @@ export class ActionPointsData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(P
   }
 
   _actionPointsLoaded(detail: any) {
-    this.set('actionPoints', detail.results);
-    this.set('listLength', detail.count);
+    this.actionPoints = detail.results;
+    this.listLength = detail.count;
+
+    this.dispatchEvent(
+      new CustomEvent('list-length-changed', {
+        detail: {value: this.listLength},
+        bubbles: true,
+        composed: true
+      })
+    );
+
+    this.dispatchEvent(
+      new CustomEvent('action-points-changed', {
+        detail: {value: this.actionPoints},
+        bubbles: true,
+        composed: true
+      })
+    );
 
     this.dispatchEvent(
       new CustomEvent('global-loading', {

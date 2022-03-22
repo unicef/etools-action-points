@@ -1,32 +1,51 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
+
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
-import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
 import {_addToCollection, _updateCollection, collectionExists} from '../../../mixins/permission-controller';
-import {DateMixin} from '../../../mixins/date-mixin';
-import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
+import {DateMixin} from '../../../mixins/date-mixin-lit';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin-lit';
 import '../../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
-import '../../../common-elements/status-element';
-import {pageLayoutStyles} from '../../../styles/page-layout-styles';
-import {sharedStyles} from '../../../styles/shared-styles';
-import {mainPageStyles} from '../../../styles/main-page-styles';
-import {moduleStyles} from '../../../styles/module-styles';
-import {customElement, property, observe} from '@polymer/decorators';
+import '../../../common-elements/status-element-lit';
+import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
+import {sharedStyles} from '../../../styles/shared-styles-lit';
+import {mainPageStyles} from '../../../styles/main-page-styles-lit';
+import {moduleStyles} from '../../../styles/module-styles-lit';
 import {ActionPointDetails} from './action-point-details';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 @customElement('action-points-item')
-export class ActionPointsItem extends EtoolsAjaxRequestMixin(
-  ErrorHandlerMixin(InputAttrsMixin(DateMixin(PolymerElement)))
-) {
-  public static get template() {
+export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement))) {
+  @property({type: Object}) // , notify: true
+  route: any;
+
+  @property({type: String})
+  routeData: string;
+
+  @property({type: Object})
+  actionPoint: any = {};
+
+  @property({type: Object})
+  originalActionPoint: any = {};
+
+  @property({type: Object}) // , notify: true
+  permissionPath: string;
+
+  @property({type: Object})
+  historyDialog: any;
+
+  @property({type: Number})
+  actionPointId: number;
+
+  render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${mainPageStyles} ${moduleStyles}
       <style include="iron-flex">
@@ -46,59 +65,55 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
         }
       </style>
 
-      <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
-      <div hidden$="[[!actionPoint.id]]">
+      <app-route
+        .route="${this.route}"
+        @route-changed="${this._routeChanged}"
+        pattern="/:id"
+        .data="${this.routeData}"
+        @data-changed="${this._routeDataChanged}"
+      >
+      </app-route>
+
+      <div .hidden="${!this.actionPoint.id}">
         <pages-header-element
-          page-title="[[actionPoint.reference_number]]"
-          export-links="[[_setExportLinks(actionPoint)]]"
+          page-title="${this.actionPoint.reference_number}"
+          export-links="${this._setExportLinks(this.actionPoint)}"
         >
-          <template is="dom-if" if="[[hasHistory(actionPoint.history)]]">
-            <paper-button icon="history" class="header-btn" on-tap="showHistory">
-              <iron-icon icon="history"></iron-icon>
-              History
-            </paper-button>
-          </template>
+          <paper-button
+            icon="history"
+            class="header-btn"
+            @tap="${this.showHistory}"
+            ?hidden="${!this.hasHistory(this.actionPoint.history)}"
+          >
+            <iron-icon icon="history"></iron-icon>
+            History
+          </paper-button>
         </pages-header-element>
 
         <div class="view-container" id="main">
           <div id="pageContent">
             <action-point-details
-              action-point="[[actionPoint]]"
-              original-action-point="[[originalActionPoint]]"
-              permission-path="[[permissionPath]]"
+              .actionPoint="${this.actionPoint}"
+              .originalActionPoint="${this.originalActionPoint}"
+              .permissionPath="${this.permissionPath}"
             ></action-point-details>
-            <action-point-comments action-point="{{actionPoint}}" permission-path="[[permissionPath]]">
+            <action-point-comments .actionPoint="${this.actionPoint}" .permissionPath="${this.permissionPath}">
             </action-point-comments>
           </div>
 
           <div id="sidebar">
-            <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"></status-element>
+            <status-element
+              .actionPoint="${this.actionPoint}"
+              .permissionPath="${this.permissionPath}"
+            ></status-element>
           </div>
         </div>
       </div>
     `;
   }
 
-  @property({type: Object, notify: true})
-  route: any;
-
-  @property({type: String})
-  routeData: string;
-
-  @property({type: Object})
-  actionPoint: any = {};
-
-  @property({type: Object, notify: true})
-  permissionPath: string;
-
-  @property({type: Object})
-  historyDialog: any;
-
-  @property({type: Number})
-  actionPointId: number;
-
-  ready() {
-    super.ready();
+  connectedCallback(): void {
+    super.connectedCallback();
     this._createHistoryDialog();
     this.addEventListener('action-activated', ({detail}: any) => {
       if (detail.type === 'save') {
@@ -122,18 +137,24 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
   }
 
   _createHistoryDialog() {
-    this.set('historyDialog', document.createElement('open-view-history'));
+    this.historyDialog = document.createElement('open-view-history');
     document.querySelector('body').appendChild(this.historyDialog);
   }
 
-  @observe('actionPoint')
+  _routeChanged({detail}: CustomEvent) {
+    this._changeRoutePath(detail.value.path);
+  }
+
+  _routeDataChanged({detail}: CustomEvent) {
+    this._changeActionPointId(detail.value);
+  }
+
   _updateHistoryProp() {
     if (this.historyDialog) {
       this.historyDialog.actionPoint = this.actionPoint;
     }
   }
 
-  @observe('route.path')
   _changeRoutePath(path: string) {
     if (!path) {
       return;
@@ -149,22 +170,21 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
     this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
   }
 
-  @observe('routeData')
   _changeActionPointId(data: any) {
-    this.set('actionPointId', data.id);
+    this.actionPointId = data.id;
     if (!this.actionPointId) {
       return;
     }
-    this.set('actionPoint', {});
+    this.actionPoint = {};
     const endpoint = getEndpoint('actionPoint', this.actionPointId);
     this._loadOptions(this.actionPointId);
-    this.sendRequest({
+    sendRequest({
       method: 'GET',
       endpoint
     })
       .then((result: any) => {
-        this.set('originalActionPoint', JSON.parse(JSON.stringify(result)));
-        this.set('actionPoint', this._prepareActionPoint(result));
+        this.originalActionPoint = JSON.parse(JSON.stringify(result));
+        this.actionPoint = this._prepareActionPoint(result);
       })
       .catch((err: any) => {
         console.log(err);
@@ -180,19 +200,21 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
   _loadOptions(id: number) {
     const permissionPath = `action_points_${id}`;
     const endpoint = getEndpoint('actionPoint', id);
-    return this.sendRequest({
+    return sendRequest({
       method: 'OPTIONS',
       endpoint
     })
       .then((data: any) => {
         const actions = data && data.actions;
+        this.permissionPath = '';
         if (!collectionExists(permissionPath)) {
           _addToCollection(permissionPath, actions);
         } else {
           _updateCollection(permissionPath, actions);
-          this.set('permissionPath', '');
         }
-        this.set('permissionPath', permissionPath);
+        setTimeout(() => {
+          this.permissionPath = permissionPath;
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -203,7 +225,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
             composed: true
           })
         );
-        this.set('permissionPath', permissionPath);
+        this.permissionPath = permissionPath;
       });
   }
 
@@ -248,7 +270,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
       })
     );
 
-    return this.sendRequest({
+    return sendRequest({
       method: 'POST',
       endpoint
     })
@@ -262,8 +284,8 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
             composed: true
           })
         );
-        this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
-        this.set('actionPoint', this._prepareActionPoint(data));
+        this.originalActionPoint = JSON.parse(JSON.stringify(data));
+        this.actionPoint = this._prepareActionPoint(data);
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
@@ -292,7 +314,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
   }
 
   _update() {
-    const detailsElement: ActionPointDetails = this.shadowRoot.querySelector('action-point-details');
+    const detailsElement = this.shadowRoot!.querySelector('action-point-details') as any as ActionPointDetails;
     if (!detailsElement || !detailsElement.validate()) {
       return;
     }
@@ -313,7 +335,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
       })
     );
 
-    return this.sendRequest({
+    return sendRequest({
       method: 'PATCH',
       endpoint,
       body: data
@@ -328,8 +350,8 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
             composed: true
           })
         );
-        this.set('originalActionPoint', JSON.parse(JSON.stringify(data)));
-        this.set('actionPoint', this._prepareActionPoint(data));
+        this.originalActionPoint = JSON.parse(JSON.stringify(data));
+        this.actionPoint = this._prepareActionPoint(data);
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
@@ -346,6 +368,7 @@ export class ActionPointsItem extends EtoolsAjaxRequestMixin(
   }
 
   showHistory() {
+    this._updateHistoryProp();
     this.historyDialog.open();
   }
 

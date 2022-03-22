@@ -1,48 +1,68 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/app-route/app-route.js';
-import {customElement, property, observe} from '@polymer/decorators';
+import {set} from '@polymer/polymer/lib/utils/path';
 
 @customElement('action-points-page-main')
-export class ActionPointsPageMain extends PolymerElement {
-  public static get template() {
-    return html`
-      <app-route route="{{route}}" pattern="/:view" data="{{routeData}}"></app-route>
-      <app-route route="{{route}}" pattern="/list" tail="{{listRoute}}"></app-route>
-      <app-route route="{{route}}" pattern="/new"></app-route>
-      <app-route route="{{route}}" pattern="/detail" tail="{{detailRoute}}"></app-route>
-      <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
-        <action-points-new name="new" route="{{route}}"></action-points-new>
-        <action-points-item name="detail" route="{{detailRoute}}"></action-points-item>
-        <action-points-list name="list" route="{{listRoute}}" static-data-loaded="[[staticDataLoaded]]">
-        </action-points-list>
-      </iron-pages>
-    `;
-  }
-
-  @property({type: Object, notify: true})
+export class ActionPointsPageMain extends LitElement {
+  @property({type: Object})
   route: any = {};
 
   @property({type: Object})
   routeData: any = {};
 
-  @observe('route.path')
-  _setRoutePath(path: string) {
-    if (path === null || path === undefined) {
+  @property({type: Object})
+  listRoute: any = {};
+
+  @property({type: Object})
+  detailRoute: any = {};
+
+  @property({type: Object})
+  staticDataLoaded: any = {};
+
+  render() {
+    return html`
+      <app-route
+        .route="${this.route}"
+        @route-changed="${this._routeChanged}"
+        pattern="/:view"
+        @data-changed="${this._routeDataChanged}"
+      >
+      </app-route>
+
+      <app-route .route="${this.route}" pattern="/list" @tail-changed="${this._listRouteChanged}"> </app-route>
+      <app-route .route="${this.route}" pattern="/new"></app-route>
+      <app-route .route="${this.route}" pattern="/detail" @tail-changed="${this._detailRouteChanged}"></app-route>
+      <iron-pages .selected="${this.routeData.view}" attr-for-selected="name">
+        <action-points-new name="new" .route="${this.route}"></action-points-new>
+        <action-points-item name="detail" .route="${this.detailRoute}"></action-points-item>
+        <action-points-list name="list" .route="${this.listRoute}" .staticDataLoaded="${this.staticDataLoaded}">
+        </action-points-list>
+      </iron-pages>
+    `;
+  }
+
+  _routeChanged({detail}: CustomEvent) {
+    const path = detail.value.path;
+    if (!path || !path.match(/[^\\/]/g)) {
+      this.route = {...this.route, path: '/list'};
+      new CustomEvent('route-changed', {
+        detail: this.route,
+        bubbles: true,
+        composed: true
+      });
       return;
     }
-    if (!path.match(/[^\\/]/g)) {
-      this.set('route.path', '/list');
+
+    if (!['detail', 'list', 'new', 'not-found'].includes(path.split('/')[1])) {
+      this.route = {...this.route, path: '/not-found'};
       return;
-    }
-    if (!['detail', 'list', 'new', ''].includes(path.split('/')[1])) {
-      this.set('route.path', '/not-found');
     }
   }
 
-  @observe('routeData.view')
-  _pageChanged(page: string) {
-    switch (page) {
+  _routeDataChanged({detail}: CustomEvent) {
+    this.routeData = detail.value;
+    switch (this.routeData.view) {
       case 'new':
         import('./action-points-new.js');
         break;
@@ -53,5 +73,29 @@ export class ActionPointsPageMain extends PolymerElement {
         import('./action-points-list.js');
         break;
     }
+  }
+
+  _listRouteChanged({detail}: CustomEvent) {
+    if (this.routeData.view !== 'list') return;
+
+    if (detail.path) {
+      set(this, detail.path.replace('tail.', 'listRoute.'), detail.value);
+      this.listRoute = {...this.listRoute};
+      return;
+    }
+
+    this.listRoute = detail.value;
+  }
+
+  _detailRouteChanged({detail}: CustomEvent) {
+    if (this.routeData.view !== 'detail') return;
+
+    if (detail.path) {
+      set(this, detail.path.replace('tail.', 'detailRoute.'), detail.value);
+      this.detailRoute = {...this.detailRoute};
+      return;
+    }
+
+    this.detailRoute = detail.value;
   }
 }
