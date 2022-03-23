@@ -153,7 +153,13 @@ export class AppSidebarMenu extends PolymerElement {
         >
         </side-bar-item>
 
-        <side-bar-item class="lighter-item" name="Information" icon="icons:info" external side-bar-link="/landing/">
+        <side-bar-item
+          class="lighter-item"
+          name="Information"
+          icon="icons:info"
+          external
+          side-bar-link="https://etools.unicef.org/landing"
+        >
         </side-bar-item>
       </div>
     `;
