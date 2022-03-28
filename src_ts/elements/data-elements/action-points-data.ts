@@ -6,13 +6,13 @@ import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 @customElement('action-points-data')
 export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   public actionPoints: any[];
 
   @property({type: Object})
   public requestQueries: any;
 
-  @property({type: Number}) // , notify: true
+  @property({type: Number}) // notify: true
   public listLength: number;
 
   connectedCallback() {

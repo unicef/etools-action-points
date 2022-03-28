@@ -66,7 +66,7 @@ export class StatusElement extends LitElement {
   @property({type: String})
   permissionPath: string;
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   statuses: any[];
 
   firstUpdated() {

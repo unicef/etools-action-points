@@ -23,40 +23,40 @@ import {sendRequest} from '@unicef-polymer/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
 @customElement('action-point-details')
 export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   partners: any[] = [];
 
-  @property({type: String}) //, notify: true
+  @property({type: String}) // notify: true
   permissionPath: string;
 
   @property({type: Array})
   locations: any[] = [];
 
-  @property({type: Object}) //, notify: true
+  @property({type: Object}) // notify: true
   actionPoint: GenericObject = {};
 
-  @property({type: Object}) //, notify: true
+  @property({type: Object}) // notify: true
   editedItem: GenericObject = {};
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   cpOutputs: any[];
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   interventions: any[] = [];
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   modules: any[];
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   unicefUsers: any[];
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   offices: any[];
 
-  @property({type: Array}) //, notify: true
+  @property({type: Array}) // notify: true
   sectionsCovered: any[];
 
-  @property({type: Object}) //, notify: true
+  @property({type: Object}) // notify: true
   originalActionPoint: GenericObject;
 
   @property({type: Object})
