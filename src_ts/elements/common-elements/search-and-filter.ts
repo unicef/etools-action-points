@@ -17,7 +17,7 @@ import '@polymer/paper-item/paper-item-body';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
 import {updateQueries} from '../mixins/query-params-helper';
-import {DateMixin} from '../mixins/date-mixin-lit';
+import {DateMixin} from '../mixins/date-mixin';
 import {sharedStyles} from '../styles/shared-styles-lit';
 import {moduleStyles} from '../styles/module-styles-lit';
 import {tabInputsStyles} from '../styles/tab-inputs-styles-lit';

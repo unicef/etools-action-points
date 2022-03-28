@@ -1,8 +1,8 @@
 import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin-lit';
-import {DateMixin} from '../../../mixins/date-mixin-lit';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
+import {DateMixin} from '../../../mixins/date-mixin';
 import {moduleStyles} from '../../../styles/module-styles-lit';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';

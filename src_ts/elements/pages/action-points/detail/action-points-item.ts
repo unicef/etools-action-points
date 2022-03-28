@@ -8,8 +8,8 @@ import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
 import {_addToCollection, _updateCollection, collectionExists} from '../../../mixins/permission-controller';
-import {DateMixin} from '../../../mixins/date-mixin-lit';
-import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin-lit';
+import {DateMixin} from '../../../mixins/date-mixin';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import '../../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
@@ -317,6 +317,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   _update() {
     const detailsElement = this.shadowRoot!.querySelector('action-point-details') as any as ActionPointDetails;
     if (!detailsElement || !detailsElement.validate()) {
+      // @ts-ignore
       return;
     }
 

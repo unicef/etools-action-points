@@ -6,7 +6,7 @@ import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles-lit';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
-import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin-lit';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {GenericObject} from '../../../../typings/globals.types';
 
 @customElement('open-add-comments')

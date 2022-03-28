@@ -8,10 +8,10 @@ import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import {LocalizationMixin} from '../../../mixins/localization-mixin-lit';
-import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin-lit';
+import {LocalizationMixin} from '../../../mixins/localization-mixin';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
-import {DateMixin} from '../../../mixins/date-mixin-lit';
+import {DateMixin} from '../../../mixins/date-mixin';
 import {getData} from '../../../mixins/static-data-mixin';
 import {actionAllowed} from '../../../mixins/permission-controller';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
@@ -150,7 +150,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         <div class="row-h group" ?hidden=${this.actionAllowed(this.permissionPath, 'create')}>
           <div class="input-container">
             <etools-dropdown
-              class="validate-input disabled-as-readonly readonly
+              class="validate-input readonly
                 without-border ${this._setRequired('related_module', this.permissionPath)}"
               .selected="${this.editedItem?.related_module}"
               label="${this.getLabel('related_module', this.permissionPath)}"
@@ -159,7 +159,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               option-label="display_name"
               option-value="value"
               ?required="${this._setRequired('related_module', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('related_module', this.permissionPath)}"
               ?readonly="${this.isReadOnly('related_module', this.permissionPath)}"
               allow-outside-scroll
               dynamic-align
@@ -186,7 +185,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           </div>
           <div class="input-container">
             <etools-dropdown
-              class="validate-input disabled-as-readonly ${this._setRequired('assigned_by', this.permissionPath)}"
+              class="validate-input ${this._setRequired('assigned_by', this.permissionPath)}"
               .selected="${this.editedItem?.assigned_by}"
               label="${this.getLabel('assigned_by', this.permissionPath)}"
               placeholder="-"
@@ -194,7 +193,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               option-label="name"
               option-value="id"
               ?required="${this._setRequired('assigned_by', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('assigned_by', this.permissionPath)}"
               ?readonly="${this.isReadOnly('assigned_by', this.permissionPath)}"
               ?invalid="${this.errors.assigned_by}"
               .errorMessage="${this.errors.assigned_by}"
@@ -215,7 +213,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             html` <div class="input-container input-container-l">
               <!-- Category -->
               <etools-dropdown
-                class="validate-input disabled-as-readonly ${this._setRequired('category', this.permissionPath)}"
+                class="validate-input ${this._setRequired('category', this.permissionPath)}"
                 .selected="${this.editedItem?.category}"
                 label="${this.getLabel('category', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('category', this.permissionPath, true)}"
@@ -223,7 +221,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 option-label="description"
                 option-value="id"
                 ?required="${this._setRequired('category', this.permissionPath)}"
-                ?disabled="${this.isReadOnly('category', this.permissionPath)}"
                 ?readonly="${this.isReadOnly('category', this.permissionPath)}"
                 ?invalid="${this.errors.category}"
                 .errorMessage="${this.errors.category}"
@@ -245,7 +242,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <!-- Implementing Partner -->
             ${(!this.isReadOnly('partner', this.permissionPath) &&
               html`<etools-dropdown
-                class="validate-input disabled-as-readonly ${this._setRequired('partner', this.permissionPath)}"
+                class="validate-input ${this._setRequired('partner', this.permissionPath)}"
                 .selected="${this.editedItem?.partner}"
                 label="${this.getLabel('partner', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('partner', this.permissionPath, true)}"
@@ -289,7 +286,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <!-- PD/SSFA -->
             ${(!this.isReadOnly('intervention', this.permissionPath) &&
               html` <etools-dropdown
-                class="validate-input disabled-as-readonly ${this._setRequired('intervention', this.permissionPath)}"
+                class="validate-input ${this._setRequired('intervention', this.permissionPath)}"
                 .selected="${this.editedItem?.intervention}"
                 label="${this.getLabel('intervention', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('intervention', this.permissionPath, true)}"
@@ -340,7 +337,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <!-- CP Output -->
             ${(!this.isReadOnly('cp_output', this.permissionPath) &&
               html` <etools-dropdown
-                class="validate-input disabled-as-readonly ${this._setRequired('cp_output', this.permissionPath)}"
+                class="validate-input ${this._setRequired('cp_output', this.permissionPath)}"
                 .selected="${this.editedItem?.cp_output}"
                 label="${this.getLabel('cp_output', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('cp_output', this.permissionPath, true)}"
@@ -373,7 +370,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           <div class="input-container input-container-ms">
             <!-- Locations -->
             <etools-dropdown
-              class="validate-input disabled-as-readonly ${this._setRequired('location', this.permissionPath)}"
+              class="validate-input ${this._setRequired('location', this.permissionPath)}"
               .selected="${this.editedItem?.location}"
               label="${this.getLabel('location', this.permissionPath)}"
               placeholder="${this.getPlaceholderText('location', this.permissionPath, true)}"
@@ -381,7 +378,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               option-label="name"
               option-value="id"
               ?required="${this._setRequired('location', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('location', this.permissionPath)}"
               ?readonly="${this.isReadOnly('location', this.permissionPath)}"
               ?invalid="${this.errors.location}"
               .errorMessage="${this.errors.location}"
@@ -401,12 +397,11 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           <div class="input-container input-container-l">
             <!-- Description -->
             <paper-textarea
-              class="validate-input disabled-as-readonly ${this._setRequired('description', this.permissionPath)}"
+              class="validate-input ${this._setRequired('description', this.permissionPath)}"
               .value="${this.editedItem?.description}"
               label="${this.getLabel('description', this.permissionPath)}"
               placeholder="${this.getPlaceholderText('description', this.permissionPath)}"
               ?required="${this._setRequired('description', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('description', this.permissionPath)}"
               ?readonly="${this.isReadOnly('description', this.permissionPath)}"
               max-length="800"
               ?invalid="${this.errors.description}"
@@ -424,7 +419,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           <div class="input-container">
             <!-- Assigned To -->
             <etools-dropdown
-              class="validate-input disabled-as-readonly ${this._setRequired('assigned_to', this.permissionPath)}"
+              class="validate-input ${this._setRequired('assigned_to', this.permissionPath)}"
               .selected="${this.editedItem?.assigned_to}"
               label="${this.getLabel('assigned_to', this.permissionPath)}"
               placeholder="${this.getPlaceholderText('assigned_to', this.permissionPath, true)}"
@@ -432,7 +427,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               option-label="name"
               option-value="id"
               ?required="${this._setRequired('assigned_to', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('assigned_to', this.permissionPath)}"
               ?readonly="${this.isReadOnly('assigned_to', this.permissionPath)}"
               ?invalid="${this.errors.assigned_to}"
               .errorMessage="${this.errors.assigned_to}"
@@ -449,7 +443,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           <div class="input-container">
             <!-- Section -->
             <etools-dropdown
-              class="validate-input disabled-as-readonly ${this._setRequired('section', this.permissionPath)}"
+              class="validate-input ${this._setRequired('section', this.permissionPath)}"
               .selected="${this.editedItem?.section}"
               label="${this.getLabel('section', this.permissionPath)}"
               placeholder="${this.getPlaceholderText('section', this.permissionPath, true)}"
@@ -457,7 +451,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               option-label="name"
               option-value="id"
               ?required="${this._setRequired('section', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('section', this.permissionPath)}"
               ?readonly="${this.isReadOnly('section', this.permissionPath)}"
               ?invalid="${this.errors.section}"
               .errorMessage="${this.errors.section}"
@@ -474,7 +467,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           <div class="input-container">
             <!-- Office -->
             <etools-dropdown
-              class="validate-input disabled-as-readonly ${this._setRequired('office', this.permissionPath)}"
+              class="validate-input ${this._setRequired('office', this.permissionPath)}"
               .selected="${this.editedItem?.office}"
               label="${this.getLabel('office', this.permissionPath)}"
               placeholder="${this.getPlaceholderText('office', this.permissionPath, true)}"
@@ -483,7 +476,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               option-value="id"
               update-selected
               ?required="${this._setRequired('office', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('office', this.permissionPath)}"
               ?readonly="${this.isReadOnly('office', this.permissionPath)}"
               ?invalid="${this.errors.office}"
               .errorMessage="${this.errors.office}"
@@ -509,7 +501,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ${this.getLabel('high_priority', this.permissionPath)}</paper-checkbox
             >
           </div>
-          <div class="input-container pl-12">
+          <div class="input-container">
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"
@@ -521,7 +513,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               selected-date-display-format="D MMM YYYY"
               clear-btn-inside-dr
               ?required="${this._setRequired('due_date', this.permissionPath)}"
-              ?disabled="${this.isReadOnly('due_date', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('due_date', this.permissionPath)}"
               @focus=${this._resetFieldError}
               @tap=${this._resetFieldError}
               .errorMessage="${this.errors.due_date}"
