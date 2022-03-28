@@ -1,4 +1,4 @@
-import {PolymerElement} from '@polymer/polymer';
+import {LitElement} from 'lit-element';
 import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
 
@@ -7,8 +7,8 @@ import {Constructor} from '../../typings/globals.types.js';
  * @param superClass
  * @constructor
  */
-export function LocalizationMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-  class LocalizationClass extends (superClass as Constructor<PolymerElement>) {
+export function LocalizationMixin<T extends Constructor<LitElement>>(superClass: T) {
+  class LocalizationClass extends superClass {
     /**
      * Get string label from loaded permission data
      * @param base permission path
