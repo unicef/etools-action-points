@@ -6,7 +6,7 @@ import '../../common-elements/status-element-lit';
 import './detail/action-point-details';
 import {pageLayoutStyles} from '../../styles/page-layout-styles-lit';
 import {sharedStyles} from '../../styles/shared-styles-lit';
-import {mainPageStyles} from '../../styles/main-page-styles-lit';
+import {mainPageStyles} from '../../styles/main-page-styles';
 import {ActionPointDetails} from './detail/action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
 

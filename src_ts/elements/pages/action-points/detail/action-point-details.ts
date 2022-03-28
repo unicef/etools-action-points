@@ -16,7 +16,7 @@ import {getData} from '../../../mixins/static-data-mixin';
 import {actionAllowed} from '../../../mixins/permission-controller';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
 import {sharedStyles} from '../../../styles/shared-styles-lit';
-import {tabInputsStyles} from '../../../styles/tab-inputs-styles-lit';
+import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles-lit';
 import {GenericObject} from '../../../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-ajax';

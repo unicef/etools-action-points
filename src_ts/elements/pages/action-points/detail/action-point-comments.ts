@@ -5,7 +5,7 @@ import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
-import {tabInputsStyles} from '../../../styles/tab-inputs-styles-lit';
+import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles-lit';
 import {noActionsAllowed} from '../../../mixins/permission-controller';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';

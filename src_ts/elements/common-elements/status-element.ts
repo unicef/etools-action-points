@@ -8,7 +8,7 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import {getData} from '../mixins/static-data-mixin';
 import './etools-action-buttons';
-import {etoolsStatusStyles} from '../styles/status-styles-lit';
+import {etoolsStatusStyles} from '../styles/status-styles';
 import {noActionsAllowed, getActions} from '../mixins/permission-controller';
 
 @customElement('status-element')

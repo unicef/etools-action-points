@@ -17,7 +17,7 @@ import './open-view-history';
 import '../../../common-elements/status-element-lit';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
 import {sharedStyles} from '../../../styles/shared-styles-lit';
-import {mainPageStyles} from '../../../styles/main-page-styles-lit';
+import {mainPageStyles} from '../../../styles/main-page-styles';
 import {moduleStyles} from '../../../styles/module-styles-lit';
 import {ActionPointDetails} from './action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-ajax';

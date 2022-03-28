@@ -1,5 +1,5 @@
-import {html} from '@polymer/polymer';
-import {moduleStyles} from './module-styles';
+import {html} from 'lit-element';
+import {moduleStyles} from './module-styles-lit';
 
 export const mainPageStyles = html`
   ${moduleStyles}

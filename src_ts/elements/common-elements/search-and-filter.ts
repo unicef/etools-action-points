@@ -20,7 +20,7 @@ import {updateQueries} from '../mixins/query-params-helper';
 import {DateMixin} from '../mixins/date-mixin';
 import {sharedStyles} from '../styles/shared-styles-lit';
 import {moduleStyles} from '../styles/module-styles-lit';
-import {tabInputsStyles} from '../styles/tab-inputs-styles-lit';
+import {tabInputsStyles} from '../styles/tab-inputs-styles';
 import {GenericObject} from '../../typings/globals.types';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 declare const dayjs: any;
