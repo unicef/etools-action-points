@@ -1,31 +1,92 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
+
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
-import {LocalizationMixin} from '../../../mixins/localization-mixin';
-import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
+import {LocalizationMixin} from '../../../mixins/localization-mixin-lit';
+import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin-lit';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
-import {DateMixin} from '../../../mixins/date-mixin';
+import {DateMixin} from '../../../mixins/date-mixin-lit';
 import {getData} from '../../../mixins/static-data-mixin';
 import {actionAllowed} from '../../../mixins/permission-controller';
-import {pageLayoutStyles} from '../../../styles/page-layout-styles';
-import {sharedStyles} from '../../../styles/shared-styles';
-import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
-import {moduleStyles} from '../../../styles/module-styles';
-import {customElement, observe, property} from '@polymer/decorators';
+import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
+import {sharedStyles} from '../../../styles/shared-styles-lit';
+import {tabInputsStyles} from '../../../styles/tab-inputs-styles-lit';
+import {moduleStyles} from '../../../styles/module-styles-lit';
 import {GenericObject} from '../../../../typings/globals.types';
-
+import {sendRequest} from '@unicef-polymer/etools-ajax';
+import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
 @customElement('action-point-details')
-export class ActionPointDetails extends EtoolsAjaxRequestMixin(
-  InputAttrsMixin(LocalizationMixin(DateMixin(PolymerElement)))
-) {
-  static get template() {
+export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
+  @property({type: Array}) //, notify: true
+  partners: any[] = [];
+
+  @property({type: String}) //, notify: true
+  permissionPath: string;
+
+  @property({type: Array})
+  locations: any[] = [];
+
+  @property({type: Object}) //, notify: true
+  actionPoint: GenericObject = {};
+
+  @property({type: Object}) //, notify: true
+  editedItem: GenericObject = {};
+
+  @property({type: Array}) //, notify: true
+  cpOutputs: any[];
+
+  @property({type: Array}) //, notify: true
+  interventions: any[] = [];
+
+  @property({type: Array}) //, notify: true
+  modules: any[];
+
+  @property({type: Array}) //, notify: true
+  unicefUsers: any[];
+
+  @property({type: Array}) //, notify: true
+  offices: any[];
+
+  @property({type: Array}) //, notify: true
+  sectionsCovered: any[];
+
+  @property({type: Object}) //, notify: true
+  originalActionPoint: GenericObject;
+
+  @property({type: Object})
+  interventionsData: GenericObject = {};
+
+  @property({type: Object})
+  cpOutputsData: GenericObject = {};
+
+  @property({type: Boolean})
+  dataIsSet = false;
+
+  @property({type: Boolean})
+  partnerRequestInProcess: boolean;
+
+  @property({type: Number})
+  lastPartnerId: number;
+
+  @property({type: Array})
+  categories: any[];
+
+  @property({type: Object})
+  partner: any;
+
+  @property({type: Boolean})
+  interventionRequestInProcess = false;
+
+  @property({type: Object})
+  datepickerModal: any;
+
+  render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${tabInputsStyles} ${moduleStyles}
       <style>
@@ -86,125 +147,138 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
       </style>
 
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
-        <template is="dom-if" if="[[!actionAllowed(permissionPath, 'create')]]">
-          <div class="row-h group">
-            <div class="input-container">
-              <etools-dropdown
-                class$="validate-input disabled-as-readonly readonly
-                without-border [[_setRequired('related_module', permissionPath)]]"
-                selected="{{editedItem.related_module}}"
-                label="[[getLabel('related_module', permissionPath)]]"
-                placeholder="-"
-                options="[[modules]]"
-                option-label="display_name"
-                option-value="value"
-                required$="[[_setRequired('related_module', permissionPath)]]"
-                disabled$="[[isReadOnly('related_module', permissionPath)]]"
-                readonly$="[[isReadOnly('related_module', permissionPath)]]"
-                allow-outside-scroll
-                dynamic-align
+        <div class="row-h group" ?hidden=${this.actionAllowed(this.permissionPath, 'create')}>
+          <div class="input-container">
+            <etools-dropdown
+              class="validate-input disabled-as-readonly readonly
+                without-border ${this._setRequired('related_module', this.permissionPath)}"
+              .selected="${this.editedItem?.related_module}"
+              label="${this.getLabel('related_module', this.permissionPath)}"
+              placeholder="-"
+              .options="${this.modules}"
+              option-label="display_name"
+              option-value="value"
+              ?required="${this._setRequired('related_module', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('related_module', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('related_module', this.permissionPath)}"
+              allow-outside-scroll
+              dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('related_module', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('related_module', detail.selectedItem?.id)}"
+            >
+            </etools-dropdown>
+          </div>
+          <div class="input-container">
+            <div class="reference-link">
+              <label>${this.getLabel('related_object_str', this.permissionPath)}</label>
+              <a
+                ?hidden="${!this.editedItem.related_object_url}"
+                target="_blank"
+                href="${this.editedItem?.related_object_url}"
               >
-              </etools-dropdown>
-            </div>
-            <div class="input-container">
-              <div class="reference-link">
-                <label>[[getLabel('related_object_str', permissionPath)]]</label>
-                <a
-                  hidden$="[[!editedItem.related_object_url]]"
-                  target="_blank"
-                  href$="[[editedItem.related_object_url]]"
-                >
-                  [[editedItem.related_object_str]]
-                </a>
-                <span hidden$="[[editedItem.related_object_url]]"
-                  >[[getPlaceholderText('related_object_str', permissionPath, 'true')]]</span
-                >
-              </div>
-            </div>
-            <div class="input-container">
-              <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('assigned_by', permissionPath)]]"
-                selected="{{editedItem.assigned_by}}"
-                label="[[getLabel('assigned_by', permissionPath)]]"
-                placeholder="-"
-                options="[[unicefUsers]]"
-                option-label="name"
-                option-value="id"
-                required$="[[_setRequired('assigned_by', permissionPath)]]"
-                disabled$="[[isReadOnly('assigned_by', permissionPath)]]"
-                readonly$="[[isReadOnly('assigned_by', permissionPath)]]"
-                invalid="{{errors.assigned_by}}"
-                error-message="{{errors.assigned_by}}"
-                on-focus="_resetFieldError"
-                on-tap="_resetFieldError"
-                allow-outside-scroll
-                dynamic-align
+                ${this.editedItem?.related_object_str}
+              </a>
+              <span ?hidden="${this.editedItem?.related_object_url}"
+                >${this.getPlaceholderText('related_object_str', this.permissionPath, true)}</span
               >
-              </etools-dropdown>
             </div>
           </div>
-        </template>
+          <div class="input-container">
+            <etools-dropdown
+              class="validate-input disabled-as-readonly ${this._setRequired('assigned_by', this.permissionPath)}"
+              .selected="${this.editedItem?.assigned_by}"
+              label="${this.getLabel('assigned_by', this.permissionPath)}"
+              placeholder="-"
+              .options="${this.unicefUsers}"
+              option-label="name"
+              option-value="id"
+              ?required="${this._setRequired('assigned_by', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('assigned_by', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('assigned_by', this.permissionPath)}"
+              ?invalid="${this.errors.assigned_by}"
+              .errorMessage="${this.errors.assigned_by}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
+              allow-outside-scroll
+              dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('assigned_by', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('assigned_by', detail.selectedItem?.id)}"
+            >
+            </etools-dropdown>
+          </div>
+        </div>
 
         <div class="row-h group">
-          <template is="dom-if" if="[[showCategory(categories)]]">
-            <div class="input-container input-container-l">
+          ${(this.showCategory(this.categories) &&
+            html` <div class="input-container input-container-l">
               <!-- Category -->
               <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('category', permissionPath)]]"
-                selected="{{editedItem.category}}"
-                label="[[getLabel('category', permissionPath)]]"
-                placeholder="[[getPlaceholderText('category', permissionPath, 'true')]]"
-                options="[[categories]]"
+                class="validate-input disabled-as-readonly ${this._setRequired('category', this.permissionPath)}"
+                .selected="${this.editedItem?.category}"
+                label="${this.getLabel('category', this.permissionPath)}"
+                placeholder="${this.getPlaceholderText('category', this.permissionPath, true)}"
+                .options="${this.categories}"
                 option-label="description"
                 option-value="id"
-                required$="[[_setRequired('category', permissionPath)]]"
-                disabled$="[[isReadOnly('category', permissionPath)]]"
-                readonly$="[[isReadOnly('category', permissionPath)]]"
-                invalid="{{errors.category}}"
-                error-message="{{errors.category}}"
-                on-focus="_resetFieldError"
-                on-tap="_resetFieldError"
+                ?required="${this._setRequired('category', this.permissionPath)}"
+                ?disabled="${this.isReadOnly('category', this.permissionPath)}"
+                ?readonly="${this.isReadOnly('category', this.permissionPath)}"
+                ?invalid="${this.errors.category}"
+                .errorMessage="${this.errors.category}"
+                @focus=${this._resetFieldError}
+                @tap=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
+                ?trigger-value-change-event="${!this.isReadOnly('category', this.permissionPath)}"
+                @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                  this.updateField('category', detail.selectedItem?.id)}"
               >
               </etools-dropdown>
-            </div>
-          </template>
+            </div>`) ||
+          ''}
         </div>
 
         <div class="row-h group">
           <div class="input-container input-container-ms">
             <!-- Implementing Partner -->
-            <template is="dom-if" if="[[!isReadOnly('partner', permissionPath)]]">
-              <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('partner', permissionPath)]]"
-                selected="{{editedItem.partner}}"
-                label="[[getLabel('partner', permissionPath)]]"
-                placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
-                options="[[partners]]"
+            ${(!this.isReadOnly('partner', this.permissionPath) &&
+              html`<etools-dropdown
+                class="validate-input disabled-as-readonly ${this._setRequired('partner', this.permissionPath)}"
+                .selected="${this.editedItem?.partner}"
+                label="${this.getLabel('partner', this.permissionPath)}"
+                placeholder="${this.getPlaceholderText('partner', this.permissionPath, true)}"
+                .options="${this.partners}"
                 option-label="name"
                 option-value="id"
-                required$="[[_setRequired('partner', permissionPath)]]"
-                invalid="{{errors.partner}}"
-                error-message="{{errors.partner}}"
-                on-focus="_resetFieldError"
-                on-tap="_resetFieldError"
+                ?required="${this._setRequired('partner', this.permissionPath)}"
+                ?invalid="${this.errors.partner}"
+                .errorMessage="${this.errors.partner}"
+                @focus=${this._resetFieldError}
+                @tap=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
+                ?trigger-value-change-event="${!this.isReadOnly('partner', this.permissionPath)}"
+                @etools-selected-item-changed="${({detail}: CustomEvent) => {
+                  this.updateField('partner', detail.selectedItem?.id);
+                  this._requestPartner(this.editedItem.partner);
+                }}"
               >
-              </etools-dropdown>
-            </template>
-            <template is="dom-if" if="[[isReadOnly('partner', permissionPath)]]">
-              <paper-input
-                label="[[getLabel('partner', permissionPath)]]"
-                placeholder="[[getPlaceholderText('partner', permissionPath, 'true')]]"
-                value="[[getStringValueOrEmpty(originalActionPoint.partner.name)]]"
+              </etools-dropdown>`) ||
+            ''}
+            ${(this.isReadOnly('partner', this.permissionPath) &&
+              html`<paper-input
+                label="${this.getLabel('partner', this.permissionPath)}"
+                placeholder="${this.getPlaceholderText('partner', this.permissionPath, true)}"
+                value="${this.getStringValueOrEmpty(this.originalActionPoint.partner?.name)}"
                 readonly
-              ></paper-input>
-            </template>
+              ></paper-input>`) ||
+            ''}
+
             <etools-loading
               id="partnersSpinner"
-              active$="[[isRequestInProcess('partner', permissionPath, partnerRequestInProcess)]]"
+              ?active="${this.isRequestInProcess('partner', this.permissionPath, this.partnerRequestInProcess)}"
               no-overlay
               loading-text=""
               class="loading"
@@ -213,36 +287,46 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           </div>
           <div class="input-container input-container-ms">
             <!-- PD/SSFA -->
-            <template is="dom-if" if="[[!isReadOnly('intervention', permissionPath)]]">
-              <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('intervention', permissionPath)]]"
-                selected="{{editedItem.intervention}}"
-                label="[[getLabel('intervention', permissionPath)]]"
-                placeholder="[[getPlaceholderText('intervention', permissionPath, 'true')]]"
-                options="[[interventions]]"
+            ${(!this.isReadOnly('intervention', this.permissionPath) &&
+              html` <etools-dropdown
+                class="validate-input disabled-as-readonly ${this._setRequired('intervention', this.permissionPath)}"
+                .selected="${this.editedItem?.intervention}"
+                label="${this.getLabel('intervention', this.permissionPath)}"
+                placeholder="${this.getPlaceholderText('intervention', this.permissionPath, true)}"
+                .options="${this.interventions}"
                 option-label="title"
                 option-value="id"
-                required$="[[_setRequired('intervention', permissionPath)]]"
-                invalid="{{errors.intervention}}"
-                error-message="{{errors.intervention}}"
-                on-focus="_resetFieldError"
-                on-tap="_resetFieldError"
+                ?required="${this._setRequired('intervention', this.permissionPath)}"
+                ?invalid="${this.errors.intervention}"
+                .errorMessage="${this.errors.intervention}"
+                @focus=${this._resetFieldError}
+                @tap=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
+                ?trigger-value-change-event="${!this.isReadOnly('intervention', this.permissionPath)}"
+                @etools-selected-item-changed="${({detail}: CustomEvent) => {
+                  this.updateField('intervention', detail.selectedItem?.id);
+                  this._updateCpOutputs(this.editedItem.intervention);
+                }}"
               >
-              </etools-dropdown>
-            </template>
-            <template is="dom-if" if="[[isReadOnly('intervention', permissionPath)]]">
-              <paper-input
-                label="[[getLabel('intervention', permissionPath)]]"
-                placeholder="[[getPlaceholderText('intervention', permissionPath, 'true')]]"
-                value="[[getStringValueOrEmpty(originalActionPoint.intervention.title)]]"
+              </etools-dropdown>`) ||
+            ''}
+            ${(this.isReadOnly('intervention', this.permissionPath) &&
+              html`<paper-input
+                label="${this.getLabel('intervention', this.permissionPath)}"
+                placeholder="${this.getPlaceholderText('intervention', this.permissionPath, true)}"
+                value="${this.getStringValueOrEmpty(this.originalActionPoint?.intervention?.title)}"
                 readonly
-              ></paper-input>
-            </template>
+              ></paper-input>`) ||
+            ''}
+
             <etools-loading
               id="pdsSpinner"
-              active$="[[isRequestInProcess('intervention', permissionPath, interventionRequestInProcess)]]"
+              ?active="${this.isRequestInProcess(
+                'intervention',
+                this.permissionPath,
+                this.interventionRequestInProcess
+              )}"
               no-overlay
               loading-text=""
               class="loading"
@@ -254,54 +338,60 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         <div class="row-h group">
           <div class="input-container input-container-ms">
             <!-- CP Output -->
-            <template is="dom-if" if="[[!isReadOnly('cp_output', permissionPath)]]">
-              <etools-dropdown
-                class$="validate-input disabled-as-readonly [[_setRequired('cp_output', permissionPath)]]"
-                selected="{{editedItem.cp_output}}"
-                label="[[getLabel('cp_output', permissionPath)]]"
-                placeholder="[[getPlaceholderText('cp_output', permissionPath, 'true')]]"
-                options="[[cpOutputs]]"
+            ${(!this.isReadOnly('cp_output', this.permissionPath) &&
+              html` <etools-dropdown
+                class="validate-input disabled-as-readonly ${this._setRequired('cp_output', this.permissionPath)}"
+                .selected="${this.editedItem?.cp_output}"
+                label="${this.getLabel('cp_output', this.permissionPath)}"
+                placeholder="${this.getPlaceholderText('cp_output', this.permissionPath, true)}"
+                .options="${this.cpOutputs}"
                 option-label="name"
                 option-value="id"
-                required$="[[_setRequired('cp_output', permissionPath)]]"
-                invalid="{{errors.cp_output}}"
-                error-message="{{errors.cp_output}}"
-                on-focus="_resetFieldError"
-                on-tap="_resetFieldError"
+                ?required="${this._setRequired('cp_output', this.permissionPath)}"
+                ?invalid="${this.errors.cp_output}"
+                .errorMessage="${this.errors.cp_output}"
+                @focus=${this._resetFieldError}
+                @tap=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
+                ?trigger-value-change-event="${!this.isReadOnly('cp_output', this.permissionPath)}"
+                @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                  this.updateField('cp_output', detail.selectedItem?.id)}"
               >
-              </etools-dropdown>
-            </template>
-            <template is="dom-if" if="[[isReadOnly('cp_output', permissionPath)]]">
-              <paper-input
-                label="[[getLabel('cp_output', permissionPath)]]"
-                placeholder="[[getPlaceholderText('cp_output', permissionPath, 'true')]]"
-                value="[[getStringValueOrEmpty(originalActionPoint.cp_output.name)]]"
+              </etools-dropdown>`) ||
+            ''}
+            ${(this.isReadOnly('cp_output', this.permissionPath) &&
+              html` <paper-input
+                .label="${this.getLabel('cp_output', this.permissionPath)}"
+                .placeholder="${this.getPlaceholderText('cp_output', this.permissionPath, true)}"
+                .value="${this.getStringValueOrEmpty(this.originalActionPoint.cp_output?.name)}"
                 readonly
-              ></paper-input>
-            </template>
+              ></paper-input>`) ||
+            ''}
           </div>
 
           <div class="input-container input-container-ms">
             <!-- Locations -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('location', permissionPath)]]"
-              selected="{{editedItem.location}}"
-              label="[[getLabel('location', permissionPath)]]"
-              placeholder="[[getPlaceholderText('location', permissionPath, 'true')]]"
-              options="[[locations]]"
+              class="validate-input disabled-as-readonly ${this._setRequired('location', this.permissionPath)}"
+              .selected="${this.editedItem?.location}"
+              label="${this.getLabel('location', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('location', this.permissionPath, true)}"
+              .options="${this.locations}"
               option-label="name"
               option-value="id"
-              required$="[[_setRequired('location', permissionPath)]]"
-              disabled$="[[isReadOnly('location', permissionPath)]]"
-              readonly$="[[isReadOnly('location', permissionPath)]]"
-              invalid="{{errors.location}}"
-              error-message="{{errors.location}}"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
+              ?required="${this._setRequired('location', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('location', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('location', this.permissionPath)}"
+              ?invalid="${this.errors.location}"
+              .errorMessage="${this.errors.location}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('location', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('location', detail.selectedItem?.id)}"
             >
             </etools-dropdown>
           </div>
@@ -311,18 +401,19 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container input-container-l">
             <!-- Description -->
             <paper-textarea
-              class$="validate-input disabled-as-readonly [[_setRequired('description', permissionPath)]]"
-              value="{{editedItem.description}}"
-              label="[[getLabel('description', permissionPath)]]"
-              placeholder="[[getPlaceholderText('description', permissionPath)]]"
-              required$="[[_setRequired('description', permissionPath)]]"
-              disabled$="[[isReadOnly('description', permissionPath)]]"
-              readonly$="[[isReadOnly('description', permissionPath)]]"
+              class="validate-input disabled-as-readonly ${this._setRequired('description', this.permissionPath)}"
+              .value="${this.editedItem?.description}"
+              label="${this.getLabel('description', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('description', this.permissionPath)}"
+              ?required="${this._setRequired('description', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('description', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('description', this.permissionPath)}"
               max-length="800"
-              invalid$="{{errors.description}}"
-              error-message="{{errors.description}}"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
+              ?invalid="${this.errors.description}"
+              .errorMessage="${this.errors.description}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
+              @value-changed="${({detail}: CustomEvent) => this.updateField('description', detail.value)}"
               no-title-attr
             >
             </paper-textarea>
@@ -333,67 +424,76 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container">
             <!-- Assigned To -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('assigned_to', permissionPath)]]"
-              selected="{{editedItem.assigned_to}}"
-              label="[[getLabel('assigned_to', permissionPath)]]"
-              placeholder="[[getPlaceholderText('assigned_to', permissionPath, 'true')]]"
-              options="[[unicefUsers]]"
+              class="validate-input disabled-as-readonly ${this._setRequired('assigned_to', this.permissionPath)}"
+              .selected="${this.editedItem?.assigned_to}"
+              label="${this.getLabel('assigned_to', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('assigned_to', this.permissionPath, true)}"
+              .options="${this.unicefUsers}"
               option-label="name"
               option-value="id"
-              required$="[[_setRequired('assigned_to', permissionPath)]]"
-              disabled$="[[isReadOnly('assigned_to', permissionPath)]]"
-              readonly$="[[isReadOnly('assigned_to', permissionPath)]]"
-              invalid="{{errors.assigned_to}}"
-              error-message="{{errors.assigned_to}}"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
+              ?required="${this._setRequired('assigned_to', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('assigned_to', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('assigned_to', this.permissionPath)}"
+              ?invalid="${this.errors.assigned_to}"
+              .errorMessage="${this.errors.assigned_to}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('assigned_to', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('assigned_to', detail.selectedItem?.id)}"
             >
             </etools-dropdown>
           </div>
           <div class="input-container">
             <!-- Section -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('section', permissionPath)]]"
-              selected="{{editedItem.section}}"
-              label="[[getLabel('section', permissionPath)]]"
-              placeholder="[[getPlaceholderText('section', permissionPath, 'true')]]"
-              options="[[sectionsCovered]]"
+              class="validate-input disabled-as-readonly ${this._setRequired('section', this.permissionPath)}"
+              .selected="${this.editedItem?.section}"
+              label="${this.getLabel('section', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('section', this.permissionPath, true)}"
+              .options="${this.sectionsCovered}"
               option-label="name"
               option-value="id"
-              required$="[[_setRequired('section', permissionPath)]]"
-              disabled$="[[isReadOnly('section', permissionPath)]]"
-              readonly$="[[isReadOnly('section', permissionPath)]]"
-              invalid="{{errors.section}}"
-              error-message="{{errors.section}}"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
+              ?required="${this._setRequired('section', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('section', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('section', this.permissionPath)}"
+              ?invalid="${this.errors.section}"
+              .errorMessage="${this.errors.section}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('section', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('section', detail.selectedItem?.id)}"
             >
             </etools-dropdown>
           </div>
           <div class="input-container">
             <!-- Office -->
             <etools-dropdown
-              class$="validate-input disabled-as-readonly [[_setRequired('office', permissionPath)]]"
-              selected="{{editedItem.office}}"
-              label="[[getLabel('office', permissionPath)]]"
-              placeholder="[[getPlaceholderText('office', permissionPath, 'true')]]"
-              options="[[offices]]"
+              class="validate-input disabled-as-readonly ${this._setRequired('office', this.permissionPath)}"
+              .selected="${this.editedItem?.office}"
+              label="${this.getLabel('office', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('office', this.permissionPath, true)}"
+              .options="${this.offices}"
               option-label="name"
               option-value="id"
               update-selected
-              required$="[[_setRequired('office', permissionPath)]]"
-              disabled$="[[isReadOnly('office', permissionPath)]]"
-              readonly$="[[isReadOnly('office', permissionPath)]]"
-              invalid="{{errors.office}}"
-              error-message="{{errors.office}}"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
+              ?required="${this._setRequired('office', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('office', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('office', this.permissionPath)}"
+              ?invalid="${this.errors.office}"
+              .errorMessage="${this.errors.office}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('office', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('office', detail.selectedItem?.id)}"
             >
             </etools-dropdown>
           </div>
@@ -403,114 +503,46 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
           <div class="input-container input-checkbox-container">
             <!-- Priority -->
             <paper-checkbox
-              checked="{{editedItem.high_priority}}"
-              disabled$="[[isReadOnly('high_priority', permissionPath)]]"
+              ?checked="${this.editedItem?.high_priority}"
+              ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
             >
-              [[getLabel('high_priority', permissionPath)]]</paper-checkbox
+              ${this.getLabel('high_priority', this.permissionPath)}</paper-checkbox
             >
           </div>
           <div class="input-container pl-12">
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"
-              class$="validate-input [[_setRequired('due_date', permissionPath)]]"
-              label$="[[getLabel('due_date', permissionPath)]]"
-              modal$="[[datepickerModal]]"
-              placeholder$="[[getPlaceholderText('due_date', permissionPath, 'datepicker')]]"
+              class="validate-input ${this._setRequired('due_date', this.permissionPath)}"
+              .label="${this.getLabel('due_date', this.permissionPath)}"
+              .modal="${this.datepickerModal}"
+              placeholder="${this.getPlaceholderText('due_date', this.permissionPath, true)}"
               slot="prefix"
               selected-date-display-format="D MMM YYYY"
               clear-btn-inside-dr
-              required$="[[_setRequired('due_date', permissionPath)]]"
-              disabled$="[[isReadOnly('due_date', permissionPath)]]"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
-              error-message$="{{errors.due_date}}"
-              value="[[editedItem.due_date]]"
+              ?required="${this._setRequired('due_date', this.permissionPath)}"
+              ?disabled="${this.isReadOnly('due_date', this.permissionPath)}"
+              @focus=${this._resetFieldError}
+              @tap=${this._resetFieldError}
+              .errorMessage="${this.errors.due_date}"
+              .value="${this.editedItem?.due_date}"
               fire-date-has-changed
-              on-date-has-changed="_dueDateChanged"
+              @date-has-changed="${this._dueDateChanged}"
             >
             </datepicker-lite>
           </div>
         </div>
-        <template is="dom-if" if="[[editedItem.history.0]]">
-          <div class="last-modify">
-            Last modify by
-            <span class="last-modify__author">[[editedItem.history.0.by_user_display]]</span>
-            [[formatDateInLocal(editedItem.history.0.created, 'D MMM YYYY h:mm A')]]
-          </div>
-        </template>
+        <div class="last-modify" ?hidden="${!this.editedItem.history?.[0]}">
+          Last modify by
+          <span class="last-modify__author">${this.editedItem?.history?.[0]?.by_user_display}</span>
+          ${this.formatDateInLocal(this.editedItem.history?.[0]?.created, 'D MMM YYYY h:mm A')}
+        </div>
       </etools-content-panel>
     `;
   }
 
-  @property({type: Array, notify: true})
-  partners: any[] = [];
-
-  @property({type: String, notify: true})
-  permissionPath: string;
-
-  @property({type: Array})
-  locations: any[] = [];
-
-  @property({type: Object, notify: true})
-  editedItem: GenericObject = {};
-
-  @property({type: Array, notify: true})
-  cpOutputs: any[];
-
-  @property({type: Array, notify: true})
-  interventions: any[] = [];
-
-  @property({type: Array, notify: true})
-  modules: any[];
-
-  @property({type: Array, notify: true})
-  unicefUsers: any[];
-
-  @property({type: Array, notify: true})
-  offices: any[];
-
-  @property({type: Array, notify: true})
-  sectionsCovered: any[];
-
-  @property({type: Object, notify: true})
-  originalActionPoint: GenericObject;
-
-  @property({type: Object})
-  interventionsData: GenericObject = {};
-
-  @property({type: Object})
-  cpOutputsData: GenericObject = {};
-
-  @property({type: Boolean})
-  dataIsSet = false;
-
-  @property({type: Boolean})
-  partnerRequestInProcess: boolean;
-
-  @property({type: Number})
-  lastPartnerId: number;
-
-  @observe('permissionPath')
-  _updateStyles() {
-    this.updateStyles();
-  }
-
-  @observe('editedItem')
-  _setDrDOptions(editedItem: any) {
-    const module = editedItem && editedItem.related_module;
-    let categories = [];
-
-    if (module) {
-      const categoriesList = getData('categoriesList');
-      categories = categoriesList.filter((category: any) => category.module === module);
-    }
-
-    this.set('categories', categories);
-  }
-
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
     document.addEventListener('static-data-loaded', () => this.setData());
     document.addEventListener('locations-loaded', () => this._updateLocations());
     this.addEventListener('reset-validation', ({detail}: any) => {
@@ -527,91 +559,111 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     }
   }
 
-  setData() {
-    this.set('modules', getData('modules'));
-    this.set('partners', getData('partnerOrganisations'));
-    this.set('offices', getData('offices'));
-    this.set('sectionsCovered', getData('sectionsCovered'));
-    this.set('cpOutputs', getData('cpOutputsList'));
-    this.set(
-      'unicefUsers',
-      (getData('unicefUsers') || []).map((user: any) => {
-        return {id: user.id, name: user.name};
-      })
-    );
+  updated(changedProperties) {
+    if (changedProperties.has('actionPoint')) {
+      this._updateEditedItem(this.actionPoint);
+    }
 
-    this._updateLocations();
-    this.set('dataIsSet', true);
+    if (changedProperties.has('editedItem')) {
+      this._setDrDOptions(this.editedItem);
+    }
+
+    if (changedProperties.has('partner') || changedProperties.has('originalActionPoint')) {
+      this._updateInterventions(
+        this.originalActionPoint?.intervention,
+        this.originalActionPoint?.partner?.id,
+        this.partner
+      );
+    }
   }
 
-  @observe('actionPoint')
+  _setDrDOptions(editedItem: any) {
+    const module = editedItem && editedItem.related_module;
+    let categories = [];
+
+    if (module) {
+      const categoriesList = getData('categoriesList');
+      categories = categoriesList.filter((category: any) => category.module === module);
+    }
+
+    this.categories = categories;
+  }
+
+  setData() {
+    this.modules = getData('modules');
+    this.partners = getData('partnerOrganisations');
+    this.offices = getData('offices');
+    this.sectionsCovered = getData('sectionsCovered');
+    this.cpOutputs = getData('cpOutputsList');
+    this.unicefUsers = (getData('unicefUsers') || []).map((user: any) => {
+      return {id: user.id, name: user.name};
+    });
+
+    this._updateLocations();
+    this.dataIsSet = true;
+  }
+
   _updateEditedItem(actionPoint: any) {
-    this.set('editedItem', (actionPoint && JSON.parse(JSON.stringify(actionPoint))) || {});
+    this.editedItem = (actionPoint && JSON.parse(JSON.stringify(actionPoint))) || {};
   }
 
   _updateLocations(filter?: any) {
     const locations = getData('locations') || [];
-    this.set(
-      'locations',
-      locations.filter((location: any) => {
-        return !filter || !!~filter.indexOf(+location.id);
-      })
-    );
+    this.locations = locations.filter((location: any) => {
+      return !filter || !!~filter.indexOf(+location.id);
+    });
   }
 
-  @observe('editedItem.partner')
   _requestPartner(partnerId: number) {
     if (this.partnerRequestInProcess || this.lastPartnerId === partnerId) {
       return;
     }
-    this.set('lastPartnerId', partnerId);
+    this.lastPartnerId = partnerId;
 
     if (!partnerId && partnerId !== 0) {
       return;
     }
 
-    this.set('partnerRequestInProcess', true);
-    this.set('partner', null);
+    this.partnerRequestInProcess = true;
+    this.partner = null;
     if (this.originalActionPoint) {
       const originalPartner = this.originalActionPoint.partner ? this.originalActionPoint.partner.id : null;
       const originalIntervention = this.originalActionPoint.intervention
         ? this.originalActionPoint.intervention.id
         : null;
       if (partnerId !== originalPartner || this.editedItem.intervention !== originalIntervention) {
-        this.set('editedItem.intervention', null);
+        this.editedItem.intervention = null;
       }
     }
 
     const endpoint = getEndpoint('partnerOrganisationDetails', partnerId);
-    this.sendRequest({
+    sendRequest({
       method: 'GET',
       endpoint
     })
       .then((data: any) => {
-        this.set('partner', data || null);
-        this.set('partnerRequestInProcess', false);
-        this.notifyPath('partnerRequestInProcess', false);
+        this.partner = data || null;
+        this.partnerRequestInProcess = false;
       })
       .catch(() => {
         console.error('Can not load partner data');
-        this.set('partnerRequestInProcess', false);
+        this.partnerRequestInProcess = false;
       });
   }
 
-  @observe('editedItem.intervention')
   async _updateCpOutputs(interventionId: number) {
     if (interventionId === undefined) {
       return;
     }
     this._checkAndResetData(interventionId);
     if (interventionId === null) {
-      this.set('cpOutputs', getData('cpOutputsList'));
+      this.cpOutputs = getData('cpOutputsList');
       this._updateLocations();
       return;
     }
     try {
-      this.set('interventionRequestInProcess', true);
-      this.set('cpOutputs', undefined);
+      this.interventionRequestInProcess = true;
+      this.cpOutputs = undefined;
 
       const intervention = await this._getIntervention(interventionId);
 
@@ -636,20 +688,18 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
         return;
       }
 
-      this.set('cpOutputs', await this._getCpOutputs(cpIds.join(',')));
-      this.set('interventionRequestInProcess', false);
-      this.notifyPath('interventionRequestInProcess', false);
+      this.cpOutputs = await this._getCpOutputs(cpIds.join(','));
+      this.interventionRequestInProcess = false;
     } catch (error) {
       console.error('Can not load cpOutputs data');
       this._finishCpoRequest();
     }
   }
-  /* jshint ignore:end */
 
   async _getIntervention(interventionId: number) {
     if (!this.interventionsData[interventionId]) {
       const interventionEndpoint = getEndpoint('interventionDetails', interventionId);
-      this.interventionsData[interventionId] = await this.sendRequest({
+      this.interventionsData[interventionId] = await sendRequest({
         method: 'GET',
         endpoint: interventionEndpoint
       });
@@ -661,7 +711,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
     if (!this.cpOutputsData[cpIds]) {
       const endpoint = getEndpoint('cpOutputsV2', cpIds);
       this.cpOutputsData[cpIds] =
-        (await this.sendRequest({
+        (await sendRequest({
           method: 'GET',
           endpoint: endpoint
         })) || [];
@@ -683,19 +733,19 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
 
     const interventionChanged = originalIntervention !== intervention;
     if (interventionChanged || originalOutput !== currentOutput) {
-      this.set('editedItem.cp_output', null);
+      this.editedItem.cp_output = null;
     }
     if (interventionChanged || originalLocation !== currentLocation) {
-      this.set('editedItem.location', null);
+      this.editedItem.location = null;
     }
   }
 
   _finishCpoRequest() {
-    this.set('cpOutputs', []);
-    this.set('interventionRequestInProcess', false);
+    this.cpOutputs = [];
+    this.interventionRequestInProcess = false;
   }
 
-  @observe('originalActionPoint.intervention, originalActionPoint.partner.id, partner')
+  // @observe('originalActionPoint.intervention, originalActionPoint.partner.id, partner')
   _updateInterventions(intervention: any, originalId: number, partner: any) {
     const interventions = (partner && partner.interventions) || [];
     const id = partner && partner.id;
@@ -709,7 +759,7 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
       interventions.push(intervention);
     }
 
-    this.set('interventions', interventions);
+    this.interventions = interventions;
   }
 
   validate() {
@@ -741,10 +791,23 @@ export class ActionPointDetails extends EtoolsAjaxRequestMixin(
 
   _dueDateChanged(e: CustomEvent) {
     const selDate = e.detail.date;
-    this.set('editedItem.due_date', selDate);
+    this.editedItem.due_date = selDate;
   }
 
   isRequestInProcess(field: string, basePermissionPath: string, isRequestInProcess: boolean) {
     return !this.isReadOnly(field, basePermissionPath) && isRequestInProcess;
+  }
+
+  updateField(field: string, value: any): void {
+    if (value === undefined) {
+      return;
+    }
+
+    if (this.editedItem[field] === value) {
+      return;
+    }
+
+    this.editedItem[field] = value;
+    this.requestUpdate();
   }
 }

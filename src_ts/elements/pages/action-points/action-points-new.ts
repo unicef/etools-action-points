@@ -48,8 +48,10 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   @property({type: String})
   permissionPath = 'action_points';
 
-  static get observers() {
-    return ['_changeRoutePath(route.path)'];
+  updated(changedProperties) {
+    if (changedProperties.has('route')) {
+      this._changeRoutePath();
+    }
   }
 
   connectedCallback() {
@@ -61,6 +63,15 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
     const details: any = this.shadowRoot.querySelector('action-point-details');
     this.actionPoint = {};
     details.dispatchEvent(new CustomEvent('reset-validation'));
+    this.dispatchEvent(
+      new CustomEvent('route-changed', {
+        detail: {
+          value: this.route
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   _createAP() {
@@ -110,6 +121,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
             composed: true
           })
         );
+        this.route = {...this.route};
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);

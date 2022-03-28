@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, property, html, customElement} from 'lit-element';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
@@ -17,22 +17,57 @@ import '@polymer/paper-item/paper-item-body';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-date-time/datepicker-lite.js';
 import {updateQueries} from '../mixins/query-params-helper';
-import {DateMixin} from '../mixins/date-mixin';
-import {sharedStyles} from '../styles/shared-styles';
-import {moduleStyles} from '../styles/module-styles';
-import {tabInputsStyles} from '../styles/tab-inputs-styles';
-import {customElement, property, observe} from '@polymer/decorators';
+import {DateMixin} from '../mixins/date-mixin-lit';
+import {sharedStyles} from '../styles/shared-styles-lit';
+import {moduleStyles} from '../styles/module-styles-lit';
+import {tabInputsStyles} from '../styles/tab-inputs-styles-lit';
 import {GenericObject} from '../../typings/globals.types';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 declare const dayjs: any;
 
 @customElement('search-and-filter')
-export class SearchAndFilter extends DateMixin(PolymerElement) {
-  public static get template() {
+export class SearchAndFilter extends DateMixin(LitElement) {
+  @property({type: Array}) //  notify: true
+  filters: GenericObject[];
+
+  @property({type: Array})
+  availableFilters: GenericObject[];
+
+  @property({type: String})
+  searchLabel: string;
+
+  @property({type: String})
+  searchString: string;
+
+  @property({type: Array})
+  selectedFilters: GenericObject[];
+
+  @property({type: Object}) // notify: true
+  queryParams: GenericObject;
+
+  @property({type: Object})
+  dates: GenericObject = {};
+
+  @property({type: Object})
+  _debounceSearch: Debouncer;
+
+  @property({type: Object})
+  _debounceFilters: Debouncer;
+
+  @property({type: Boolean})
+  restoreInProcess = false;
+
+  filterMenuEl: GenericObject;
+
+  static get styles() {
+    // language=CSS
+    return [gridLayoutStylesLit];
+  }
+
+  render() {
     return html`
-      ${sharedStyles}
-      ${moduleStyles}
-      ${tabInputsStyles}
-      <style include="iron-flex">
+      ${sharedStyles} ${moduleStyles} ${tabInputsStyles}
+      <style>
         :host {
           @apply --layout-horizontal;
           @apply --layout-center;
@@ -47,10 +82,12 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         paper-input {
           --paper-input-container: {
             width: 240px;
-          };
+          }
           --paper-input-container-color: var(--gray-light);
 
-          iron-icon { color: var(--gray-mid); }
+          iron-icon {
+            color: var(--gray-mid);
+          }
         }
 
         .toggle-hidden-div {
@@ -99,7 +136,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
           --paper-menu-focused-item-after: {
             background: var(--primary-background-color);
             opacity: 0;
-          };
+          }
         }
         #filterMenu {
           max-width: 126px;
@@ -178,120 +215,110 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         }
       </style>
 
-      <div class="layout horizontal flex inputs-container">
-        <div class="layout horizontal">
-          <paper-input type="search"
-              value="{{searchString}}"
-              label="[[searchLabel]]"
-              placeholder="Search"
-              always-float-label inline>
-
+      <div class="layout-horizontal flex-c inputs-container">
+        <div class="layout-horizontal">
+          <paper-input
+            type="search"
+            .value="${this.searchString}"
+            .label="${this.searchLabel}"
+            @value-changed="${({detail}: CustomEvent) => (this.searchString = detail.value)}"
+            placeholder="Search"
+            always-float-label
+            inline
+          >
             <iron-icon icon="search" slot="prefix"></iron-icon>
           </paper-input>
         </div>
 
-        <!-- FILTERS -->
-        <template is="dom-repeat" items="[[selectedFilters]]">
-
-          <template is="dom-if" if="[[item.isDatePicker]]">
-            <div class="layout horizontal">
-              <datepicker-lite id="[[item.query]]"
-                  label="[[item.name]]"
+        ${this.selectedFilters.map(
+          (item) => html`
+            ${(item.isDatePicker &&
+              html` <div class="layout-horizontal">
+                <datepicker-lite
+                  id="${item.query}"
+                  label="${item.name}"
                   slot="prefix"
                   selected-date-display-format="D MMM YYYY"
-                  fire-date-has-changed="[[!restoreInProcess]]"
-                  on-date-has-changed="_changeFilterValue"
-                  clear-btn-inside-dr>
-              </datepicker-lite>
-            </div>
-          </template>
-
-          <template is="dom-if" if="[[!item.isDatePicker]]">
-            <div class="layout horizontal">
-              <etools-dropdown id="[[item.query]]" class="filter-dropdown"
-                selected="[[item.value]]"
-                label="[[item.name]]"
-                options="[[item.selection]]"
-                placeholder$="&#8212;"
-                option-label="[[item.optionLabel]]"
-                option-value="[[item.optionValue]]"
-                trigger-value-change-event
-                on-etools-selected-item-changed="_changeFilterValue"
-                hide-search="[[item.hideSearch]]"
-                allow-outside-scroll
-                shown-items-limit="5"
-                enable-none-option>
-              </etools-dropdown>
-            </div>
-          </template>
-
-        </template>
+                  fire-date-has-changed="${!this.restoreInProcess}"
+                  @date-has-changed="${this._changeFilterValue}"
+                  clear-btn-inside-dr
+                >
+                </datepicker-lite>
+              </div>`) ||
+            ''}
+            ${(!item.isDatePicker &&
+              html` <div class="layout-horizontal">
+                <etools-dropdown
+                  id="${item.query}"
+                  class="filter-dropdown"
+                  .selected="${item.value}"
+                  .label="${item.name}"
+                  .options="${item.selection}"
+                  placeholder$="&#8212;"
+                  option-label="${item.optionLabel}"
+                  option-value="${item.optionValue}"
+                  trigger-value-change-event
+                  @etools-selected-item-changed="${this._changeFilterValue}"
+                  ?hide-search="${item.hideSearch}"
+                  allow-outside-scroll
+                  shown-items-limit="5"
+                  enable-none-option
+                >
+                </etools-dropdown>
+              </div>`) ||
+            ''}
+          `
+        )}
       </div>
 
       <!-- ADD FILTERS -->
-      <template is="dom-if" if="[[filters.length]]">
-        <div id="add-filter-container">
-          <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
-            <paper-button slot="dropdown-trigger">
-              <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
-              <span class="add-filter-text">ADD FILTER</span>
-            </paper-button>
-            <div slot="dropdown-content" class="clear-all-filters">
-              <paper-button on-tap="clearAllFilters" class="secondary-btn">Clear All
-              </paper-button>
-            </div>
-            <paper-listbox slot="dropdown-content">
-              <template is="dom-repeat" items="[[filters]]">
-                <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
-                  <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
-                  <paper-item-body>[[item.name]]</span></paper-item-body>
-                </paper-icon-item>
-              </template>
-            </paper-listbox>
-          </paper-menu-button>
-        </div>
-      </template>
+
+      <div id="add-filter-container" ?hidden=${!this.filters.length}>
+        <paper-menu-button id="filterMenu" ignore-select horizontal-align="right" vertical-align="top" no-overlap>
+          <paper-button slot="dropdown-trigger">
+            <iron-icon icon="filter-list" class="filter-list-icon"></iron-icon>
+            <span class="add-filter-text">ADD FILTER</span>
+          </paper-button>
+          <div slot="dropdown-content" class="clear-all-filters">
+            <paper-button @tap="${this.clearAllFilters}" class="secondary-btn">Clear All </paper-button>
+          </div>
+          <paper-listbox slot="dropdown-content">
+            ${this.filters.map(
+              (item, index) => html`
+              <paper-icon-item 
+                @tap="${() => {
+                  this.selectFilter(item, index);
+                }}" 
+                ?selected="${item.selected}">
+                <iron-icon icon="check" slot="item-icon" ?hidden="${!item.selected}"></iron-icon>
+                <paper-item-body>${item.name}</span></paper-item-body>
+              </paper-icon-item>`
+            )}
+          </paper-listbox>
+        </paper-menu-button>
+      </div>
     `;
   }
 
-  @property({type: Array, notify: true})
-  filters: GenericObject[];
+  updated(changedProperties) {
+    if (changedProperties.has('queryParams')) {
+      this._restoreFilters();
+    }
 
-  @property({type: String})
-  searchLabel: string;
+    if (changedProperties.has('searchString')) {
+      this.searchKeyDown();
+    }
+  }
 
-  @property({type: String})
-  searchString: string;
-
-  @property({type: Array})
-  selectedFilters: GenericObject[];
-
-  @property({type: Object, notify: true})
-  queryParams: GenericObject;
-
-  @property({type: Object})
-  dates: GenericObject = {};
-
-  @property({type: Object})
-  _debounceSearch: Debouncer;
-
-  @property({type: Object})
-  _debounceFilters: Debouncer;
-
-  filterMenuEl: GenericObject;
-
-  @observe('searchString')
+  // @observe('searchString')
   searchKeyDown() {
-    this.set(
-      '_debounceSearch',
-      Debouncer.debounce(this._debounceSearch, timeOut.after(300), () => {
-        const query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
-        updateQueries(this, {
-          search: query,
-          page: '1'
-        });
-      })
-    );
+    this._debounceSearch = Debouncer.debounce(this._debounceSearch, timeOut.after(300), () => {
+      const query = this.searchString ? encodeURIComponent(this.searchString) : undefined;
+      updateQueries(this, {
+        search: query,
+        page: '1'
+      });
+    });
   }
 
   addFilter(e: CustomEvent | any) {
@@ -305,9 +332,9 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         return filter.query === query;
       });
       this._setFilterValue(newFilter);
-      this.push('selectedFilters', newFilter);
+      this.selectedFilters.push(newFilter);
       const filterIndex = this.filters.findIndex((filter) => filter.query === query);
-      this.set(`filters.${filterIndex}.selected`, true);
+      this.filters[filterIndex].selected = true;
 
       if (this.queryParams[query] === undefined) {
         const queryObject = {};
@@ -338,15 +365,15 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
 
     if (indexToRemove !== -1) {
       const filterIndex = this.filters.findIndex((filter) => filter.query === query);
-      this.set(`filters.${filterIndex}.selected`, false);
-      this.splice('selectedFilters', indexToRemove, 1);
+      this.filters[filterIndex].selected = false;
+      this.selectedFilters.splice(indexToRemove, 1);
     }
     updateQueries(this, queryObject);
   }
 
   clearAllFilters() {
-    this.filters.forEach((_f, index) => this.set(`filters.${index}.selected`, false));
-    this.set('selectedFilters', []);
+    this.filters.forEach((_f, index) => (this.filters[index].selected = false));
+    this.selectedFilters = [];
     const queryParams = this.queryParams;
     Object.keys(queryParams).forEach((key) => (queryParams[key] = undefined));
     updateQueries(this, Object.assign(queryParams, {page_size: 10, page: 1}), null, false);
@@ -354,47 +381,43 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
   }
 
   _reloadFilters() {
-    this.set('selectedFilters', []);
+    this.selectedFilters = [];
     this._restoreFilters();
   }
 
-  @observe('queryParams.*')
   _restoreFilters() {
-    this.set('restoreInProcess', true);
-    this.set(
-      '_debounceFilters',
-      Debouncer.debounce(this._debounceFilters, timeOut.after(50), () => {
-        const queryParams = this.queryParams;
+    this.restoreInProcess = true;
+    this._debounceFilters = Debouncer.debounce(this._debounceFilters, timeOut.after(50), () => {
+      const queryParams = this.queryParams;
 
-        if (!queryParams) {
-          return;
+      if (!queryParams) {
+        return;
+      }
+
+      const availableFilters = [];
+
+      this.filters.forEach((filter) => {
+        const usedFilter = this.selectedFilters.find((used) => used.query === filter.query);
+
+        if (!usedFilter && queryParams[filter.query] !== undefined) {
+          this.addFilter(filter.query);
+        } else if (queryParams[filter.query] === undefined) {
+          this.removeFilter(filter.query);
+          availableFilters.push(filter);
         }
+      });
+      this.availableFilters = availableFilters;
 
-        const availableFilters = [];
-
-        this.filters.forEach((filter) => {
-          const usedFilter = this.selectedFilters.find((used) => used.query === filter.query);
-
-          if (!usedFilter && queryParams[filter.query] !== undefined) {
-            this.addFilter(filter.query);
-          } else if (queryParams[filter.query] === undefined) {
-            this.removeFilter(filter.query);
-            availableFilters.push(filter);
-          }
-        });
-        this.set('availableFilters', availableFilters);
-
-        if (queryParams.search) {
-          this.set('searchString', queryParams.search);
-        } else {
-          this.set('searchString', '');
-        }
-        setTimeout(() => {
-          this._updateValues();
-          this.set('restoreInProcess', false);
-        });
-      })
-    );
+      if (queryParams.search) {
+        this.searchString = queryParams.search;
+      } else {
+        this.searchString = '';
+      }
+      setTimeout(() => {
+        this._updateValues();
+        this.restoreInProcess = false;
+      });
+    });
   }
 
   _updateValues() {
@@ -422,7 +445,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       return;
     }
 
-    filter.value = this.get(`queryParams.${filter.query}`);
+    filter.value = this.queryParams[filter.query];
   }
 
   _getFilter(query: string) {
@@ -431,18 +454,18 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     });
 
     if (filterIndex !== -1) {
-      return this.get(`filters.${filterIndex}`);
+      return this.filters[filterIndex];
     } else {
       return {};
     }
   }
 
   // select a filter from ADD FILTER menu
-  selectFilter({model: {item: selectedOption, index: selectedIdx}}) {
+  selectFilter(selectedOption, selectedIdx) {
     if (!this._isAlreadySelected(selectedOption)) {
       this._setFilterValue(selectedOption);
-      this.push('selectedFilters', selectedOption);
-      this.set(`filters.${selectedIdx}.selected`, true);
+      this.selectedFilters.push(selectedOption);
+      this.filters[selectedIdx].selected = true;
       if (this.queryParams[selectedOption.query] === undefined) {
         const queryObject: any = {};
         queryObject[selectedOption.query] = true;
@@ -450,15 +473,17 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
       }
     } else {
       const paredFilters = this.selectedFilters.filter((fil) => fil.query != selectedOption.query);
-      this.set('selectedFilters', paredFilters);
-      this.set(`filters.${selectedIdx}.selected`, false);
+      this.selectedFilters = paredFilters;
+      this.filters[selectedIdx].selected = false;
       const newQueryObj = this.queryParams;
       newQueryObj[selectedOption.query] = undefined;
       updateQueries(this, newQueryObj);
       delete newQueryObj[selectedOption.query];
-      this.set('queryParams', newQueryObj);
+      this.queryParams = newQueryObj;
     }
+
     this._updateFilterListboxPosition();
+    this.requestUpdate();
   }
 
   _updateFilterListboxPosition() {
@@ -488,6 +513,7 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
         e.currentTarget.parentElement.value = this.prettyDate(date);
         this.dates[query] = date;
         queryObject = {
+          ...this.queryParams,
           page: '1',
           [query]: date || true
         };
@@ -495,12 +521,22 @@ export class SearchAndFilter extends DateMixin(PolymerElement) {
     } else if (e.detail && query) {
       // if  `detail.selectedItem` is filter selection, else if `queryParams[query]` filter is set to `None`
       if (e.detail.selectedItem || this.queryParams[query]) {
-        queryObject = {page: '1'};
+        queryObject = {
+          ...this.queryParams,
+          page: '1'
+        };
         queryObject[query] = e.detail.selectedItem ? e.detail.selectedItem[e.currentTarget.optionValue] : true;
       }
     }
 
     if (queryObject) {
+      this.dispatchEvent(
+        new CustomEvent('query-params-changed', {
+          detail: {value: queryObject},
+          bubbles: true,
+          composed: true
+        })
+      );
       updateQueries(this, queryObject);
     }
   }

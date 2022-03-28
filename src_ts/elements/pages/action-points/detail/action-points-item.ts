@@ -152,6 +152,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   _updateHistoryProp() {
     if (this.historyDialog) {
       this.historyDialog.actionPoint = this.actionPoint;
+      this.historyDialog.permissionPath = this.permissionPath;
     }
   }
 

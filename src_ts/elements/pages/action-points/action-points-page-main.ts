@@ -34,7 +34,11 @@ export class ActionPointsPageMain extends LitElement {
       <app-route .route="${this.route}" pattern="/new"></app-route>
       <app-route .route="${this.route}" pattern="/detail" @tail-changed="${this._detailRouteChanged}"></app-route>
       <iron-pages .selected="${this.routeData.view}" attr-for-selected="name">
-        <action-points-new name="new" .route="${this.route}"></action-points-new>
+        <action-points-new
+          name="new"
+          .route="${this.route}"
+          @route-changed="${({detail}: CustomEvent) => (this.route = detail.value)}"
+        ></action-points-new>
         <action-points-item name="detail" .route="${this.detailRoute}"></action-points-item>
         <action-points-list name="list" .route="${this.listRoute}" .staticDataLoaded="${this.staticDataLoaded}">
         </action-points-list>

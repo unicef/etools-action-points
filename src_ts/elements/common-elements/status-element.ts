@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, property, html, customElement} from 'lit-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
@@ -8,44 +8,42 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import {getData} from '../mixins/static-data-mixin';
 import './etools-action-buttons';
-import {etoolsStatusStyles} from '../styles/status-styles';
-import {customElement, property} from '@polymer/decorators';
+import {etoolsStatusStyles} from '../styles/status-styles-lit';
 import {noActionsAllowed, getActions} from '../mixins/permission-controller';
 
 @customElement('status-element')
-export class StatusElement extends PolymerElement {
-  public static get template() {
+export class StatusElement extends LitElement {
+  render() {
     return html`
       ${etoolsStatusStyles}
       <etools-content-panel panel-title="Status">
         <div class="top-container" id="statusList">
-          <template is="dom-repeat" items="{{statuses}}" as="status">
-            <div class="divider-line"></div>
-            <div class$="status-container [[_getStatusClass(actionPoint, status.value, statuses)]]">
-              <div class="status-icon">
-                <span class="icon-wrapper">
-                  <span class="status-nr">[[setIndex(index)]]</span>
-                  <iron-icon icon="done"></iron-icon>
-                  <iron-icon icon="cancel"></iron-icon>
-                </span>
+          ${this.statuses?.map(
+            (status: any, index: number) => html`
+              <div class="divider-line"></div>
+              <div class="status-container ${this._getStatusClass(this.actionPoint, status.value)}">
+                <div class="status-icon">
+                  <span class="icon-wrapper">
+                    <span class="status-nr">${index + 1}</span>
+                    <iron-icon icon="done"></iron-icon>
+                    <iron-icon icon="cancel"></iron-icon>
+                  </span>
+                </div>
+
+                <div class="status">
+                  <span class="status-header">${status.display_name}</span>
+                </div>
               </div>
 
-              <div class="status">
-                <span class="status-header">[[status.display_name]]</span>
-                <span class="status-date">
-                  <!--{{_getFormattedDate('partner_contacted_at', engagementData.partner_contacted_at)}}-->
-                </span>
+              <div class="divider" ?hidden="${this.hideDivider(status.value, this.statuses)}">
+                <div class="status-divider"></div>
               </div>
-            </div>
-
-            <div class="divider" hidden$="[[hideDivider(status.value, statuses)]]">
-              <div class="status-divider"></div>
-            </div>
-          </template>
+            `
+          )}
         </div>
 
-        <div class="bottom-container" hidden$="[[noActionsAllowed(permissionPath)]]">
-          <etools-action-button actions="[[getActions(permissionPath)]]"></etools-action-button>
+        <div class="bottom-container" ?hidden="${this.noActionsAllowed(this.permissionPath)}">
+          <etools-action-button .actions="${this.getActions(this.permissionPath)}"></etools-action-button>
         </div>
       </etools-content-panel>
     `;
@@ -68,12 +66,11 @@ export class StatusElement extends PolymerElement {
   @property({type: String})
   permissionPath: string;
 
-  @property({type: Array, notify: true})
-  statuses: string[];
+  @property({type: Array}) //, notify: true
+  statuses: any[];
 
-  ready() {
-    super.ready();
-    this.set('statuses', getData('statuses') || []);
+  firstUpdated() {
+    this.statuses = getData('statuses') || [];
   }
 
   _isStatusFinish(actionPoint: any, status: string) {
@@ -100,10 +97,6 @@ export class StatusElement extends PolymerElement {
     } else {
       return 'pending';
     }
-  }
-
-  setIndex(index: number) {
-    return index + 1;
   }
 
   hideDivider(status: string, statuses: any) {

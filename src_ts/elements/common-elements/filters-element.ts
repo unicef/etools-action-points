@@ -1,17 +1,22 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement} from 'lit-element';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-card/paper-card.js';
-import {customElement} from '@polymer/decorators';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 
 /**
  * @polymer
  * @extends HTMLElement
  */
 @customElement('filters-element')
-export class FiltersElement extends PolymerElement {
-  static get template() {
+export class FiltersElement extends LitElement {
+  static get styles() {
+    // language=CSS
+    return [gridLayoutStylesLit];
+  }
+
+  render() {
     return html`
-      <style include="iron-flex">
+      <style>
         :host {
           display: block;
           margin-top: 25px;
@@ -30,7 +35,7 @@ export class FiltersElement extends PolymerElement {
         }
       </style>
 
-      <paper-card class="second-header horizontal layout flex">
+      <paper-card class="second-header layout-horizontal flex-c">
         <slot></slot>
       </paper-card>
     `;

@@ -49,7 +49,7 @@ export const updateQueries = (element: HTMLElement, newQueries: any, path?: stri
   });
 
   queries = Object.keys(queries).map((key) => {
-    const value = typeof queries[key] === 'boolean' ? '' : `=${queries[key]}`;
+    const value = typeof queries[key] === 'boolean' || queries[key] === '' ? '' : `=${queries[key]}`;
     return `${key}${value}`;
   });
 
