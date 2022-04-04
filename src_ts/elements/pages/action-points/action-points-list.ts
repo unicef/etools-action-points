@@ -11,8 +11,6 @@ import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
-import '../../common-elements/search-and-filter';
-import '../../common-elements/filters-element';
 import '../../data-elements/action-points-data';
 import {getData} from '../../mixins/static-data-mixin';
 import {LocalizationMixin} from '../../mixins/localization-mixin';
@@ -21,16 +19,23 @@ import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
 import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles/module-styles-lit';
-import {sharedStyles} from '../../styles/shared-styles-lit';
+import {sharedStyles} from '@unicef-polymer/etools-modules-common/dist/styles/shared-styles-lit';
 import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
+import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
 import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
-import {SearchAndFilter} from '../../common-elements/search-and-filter';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {EtoolsFilter} from '@unicef-polymer/etools-filters/src/etools-filters';
+import {
+  updateFilterSelectionOptions,
+  updateFiltersSelectedValues,
+  setselectedValueTypeByFilterKey
+} from '@unicef-polymer/etools-filters/src/filters';
+import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 
 @customElement('action-points-list')
 export class ActionPointsList extends PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
@@ -53,138 +58,19 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   lowResolutionLayout = false;
 
   @property({type: Array})
-  filters: any[] = [
-    {
-      name: 'Assignee',
-      query: 'assigned_to',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Assigned By',
-      query: 'assigned_by',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Partner',
-      query: 'partner',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Office',
-      query: 'office',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Location',
-      query: 'location',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Section',
-      query: 'section',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Related App',
-      query: 'related_module',
-      optionValue: 'value',
-      optionLabel: 'display_name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Status',
-      query: 'status',
-      optionValue: 'value',
-      optionLabel: 'display_name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'High Priority',
-      query: 'high_priority',
-      optionValue: 'value',
-      optionLabel: 'display_name',
-      selection: [
-        {
-          display_name: 'Yes',
-          value: 'true'
-        },
-        {
-          display_name: 'No',
-          value: 'false'
-        }
-      ],
-      selected: false
-    },
-    {
-      name: 'PD/SSFA',
-      query: 'intervention',
-      optionValue: 'id',
-      optionLabel: 'title',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'CP Output',
-      query: 'cp_output',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Due On',
-      query: 'due_date',
-      isDatePicker: true,
-      selected: false
-    },
-    {
-      name: 'Due Before',
-      query: 'due_date__lte',
-      isDatePicker: true,
-      selected: false
-    },
-    {
-      name: 'Due After',
-      query: 'due_date__gte',
-      isDatePicker: true,
-      selected: false
-    }
-  ];
+  allFilters!: EtoolsFilter[];
 
-  @property({type: Boolean})
-  isShowCompleted = true;
-
-  @property({type: Number})
-  pageNumber = 1;
-
-  @property({type: Number})
-  pageSize = 10;
+  @property({type: Array})
+  filters: any[];
 
   @property({type: Object}) // , notify: true
   queryParams: GenericObject;
 
+  @property({type: Object}) // , notify: true
+  initialQueryParams: GenericObject;
+
   @property({type: Object})
-  oldQueryParams: GenericObject;
+  prevQueryParams: GenericObject;
 
   @property({type: Array})
   totalResults: number;
@@ -223,13 +109,12 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   render() {
     return html`
-      ${moduleStyles} ${sharedStyles}
+      ${moduleStyles}
       <style>
-        ${dataTableStylesLit} :host {
+        ${sharedStyles} ${elevationStyles} ${dataTableStylesLit} :host {
           position: relative;
           display: block;
         }
-
         paper-card {
           display: block;
           margin-top: 25px;
@@ -237,22 +122,39 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           margin: 24px 24px 0 24px;
           width: calc(100% - 48px);
         }
-
         etools-data-table-row {
           --row-width_-_width: 100%;
         }
-
-        .show-completed-toggle {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          border-left: 2px solid var(--gray-lighter);
-          margin: 8px 16px 8px 16px;
-          padding: 18px 0 18px 10px;
+        *[slot='row-data'] {
+          max-width: calc(100% - 56px);
         }
-        .show-completed-toggle span {
-          padding: 0 12px;
-          font-size: 16px;
+        section.page-content.filters {
+          padding: 8px 24px;
+          margin: 24px;
+        }
+        @media (max-width: 576px) {
+          section.page-content.filters {
+            margin: 5px 0;
+          }
+          .page-content {
+            margin: 5px;
+          }
+        }
+        datepicker-lite {
+          width: 176px;
+          margin-left: 12px;
+          margin-right: 12px;
+          --iron-icon-fill-color: var(--gray-mid-dark);
+        }
+
+        .filter-dropdown {
+          width: 200px;
+
+          --esmm-list-wrapper: {
+            margin-top: 0;
+            padding-top: 12px;
+            -ms-overflow-style: auto;
+          }
         }
       </style>
       <iron-media-query
@@ -289,29 +191,15 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           this.actionPoints = detail.value;
         }}
         @list-length-changed=${({detail}: CustomEvent) => {
-          this.paginator.count = detail.value;
+          this.paginator = {...this.paginator, count: detail.value};
         }}
       >
       </action-points-data>
-      <filters-element>
-        <search-and-filter
-          id="filters"
-          .filters="${this.filters}"
-          .queryParams="${this.queryParams}"
-          .searchParams="${this.searchParams}"
-          @query-params-changed=${this.queryParamsChanged}
-        >
-        </search-and-filter>
-        <div class="show-completed-toggle">
-          <span>Show Completed</span>
-          <paper-toggle-button
-            ?checked="${this.isShowCompleted}"
-            @iron-change="${(event: CustomEvent) =>
-              (this.isShowCompleted = (event.currentTarget as HTMLInputElement).checked)}"
-          >
-          </paper-toggle-button>
-        </div>
-      </filters-element>
+
+      <section class="elevation page-content filters" elevation="1">
+        <etools-filters .filters="${this.allFilters}" @filter-change="${this.filtersChange}"></etools-filters>
+      </section>
+
       <paper-card>
         <etools-data-table-header
           id="listHeader"
@@ -364,7 +252,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
         ${this.actionPoints?.map(
           (entry) => html`
             <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
-              <div slot="row-data" class="layout-horizontal">
+              <div slot="row-data">
                 <div
                   class="col-data col-1"
                   data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
@@ -431,35 +319,35 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                   <span class="truncate">${this._getPriorityValue(entry.high_priority)}</span>
                 </div>
               </div>
-              <div slot="row-data-details" class="layout-horizontal">
-                <div class="row-details-content layout-vertical flex-c">
+              <div slot="row-data-details">
+                <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
                   <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
                   <paper-tooltip offset="0">${this.getStringValue(entry.description)}</paper-tooltip>
                 </div>
-                <div class="row-details-content layout-vertical flex-c">
+                <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
                   <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
                   <paper-tooltip offset="0">${this.getStringValue(entry.intervention?.number)}</paper-tooltip>
                 </div>
-                <div class="row-details-content layout-vertical flex-c">
+                <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
                   <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
                   <paper-tooltip offset="0">${this.getStringValue(entry.location?.name)}</paper-tooltip>
                 </div>
-                <div class="row-details-content layout-vertical flex-c">
+                <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('related_module', this.basePermissionPath)}</div>
                   <div class="truncate">${this.getStringValue(entry.related_module, this.modules, 'display_name')}</div>
                   <paper-tooltip offset="0"
                     >${this.getStringValue(entry.related_module, this.modules, 'display_name')}
                   </paper-tooltip>
                 </div>
-                <div class="row-details-content layout-vertical flex-c">
+                <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
                   <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
                   <paper-tooltip offset="0">${this.getStringValue(entry.assigned_by?.name)}</paper-tooltip>
                 </div>
-                <div class="row-details-content layout-vertical flex-c">
+                <div class="row-details-content flex-c">
                   <div ?hidden="${!entry.date_of_completion?.length}">
                     <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
                     <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
@@ -488,17 +376,14 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   firstUpdated() {
     this._initSort();
-    this.isShowCompleted = this.queryParams?.status !== 'open';
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
   updated(changedProperties) {
     if (changedProperties.has('staticDataLoaded')) {
-      this.setData();
-    }
-
-    if (changedProperties.has('isShowCompleted')) {
-      this._setShowCompleted();
+      if (!this.allFilters) {
+        this.initFiltersForDisplay();
+      }
     }
 
     if (changedProperties.has('exportParams')) {
@@ -511,16 +396,13 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   queryParamsChanged({detail}: CustomEvent) {
-    if (!this.oldQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
+    if (!detail.value || !Object.keys(detail.value).length) {
+      return;
+    }
+    if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
       this.queryParams = detail.value;
       this._updateQueries(detail.value);
     }
-  }
-
-  setData() {
-    this.modules = getData('modules') || [];
-    this.statuses = getData('statuses') || [];
-    this._initFilters();
   }
 
   noActionsAllowed(path: string) {
@@ -549,9 +431,16 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _setPath(path: string) {
-    if (path.indexOf('/list')) {
+    if (path.includes('/list')) {
       this.path = path;
-      this.queryParams = Object.assign({}, this.queryParams, {page_size: this.pageSize, page: this.pageNumber});
+      this.queryParams = Object.assign({}, this.queryParams, {
+        page: this.queryParams && this.queryParams.page ? this.queryParams.page : this.paginator.page,
+        page_size:
+          this.queryParams && this.queryParams.page_size ? this.queryParams.page_size : this.paginator.page_size
+      });
+      if (!this.initialQueryParams) {
+        this.initialQueryParams = Object.assign({}, this.queryParams);
+      }
     }
   }
 
@@ -559,6 +448,14 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     if (!this.path?.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
       return;
     }
+
+    queryParams = Object.keys(queryParams).reduce((acc, key) => {
+      if (queryParams[key]) {
+        acc[key] = String(queryParams[key]);
+      }
+      return acc;
+    }, {});
+
     const exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
     delete exportParams['page'];
@@ -566,15 +463,16 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
     if (queryParams.reload) {
       clearQueries();
-      this.oldQueryParams = {};
-      this.queryParams = Object.assign({}, {page_size: this.pageSize, page: this.pageNumber});
+      this.prevQueryParams = {};
+      this.resetPageNumber();
+      this.queryParams = Object.assign({}, {page: this.paginator.page, page_size: this.paginator.page_size});
       return;
     } else if (queryParams.page) {
-      this.pageNumber = Number(queryParams.page);
+      this.paginator.page = Number(queryParams.page);
     }
 
-    if (!this.oldQueryParams || JSON.stringify(queryParams) !== JSON.stringify(this.oldQueryParams)) {
-      this.oldQueryParams = Object.assign({}, queryParams);
+    if (!this.prevQueryParams || JSON.stringify(queryParams) !== JSON.stringify(this.prevQueryParams)) {
+      this.prevQueryParams = Object.assign({}, queryParams);
     } else {
       return;
     }
@@ -589,124 +487,75 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     });
   }
 
+  filtersChange(e: CustomEvent) {
+    this._updateQueries({...e.detail, page: 1, page_size: this.paginator.page_size});
+  }
+
+  paginatorChanged() {
+    if (
+      String(this.prevQueryParams.page) !== String(this.paginator.page) ||
+      String(this.prevQueryParams.page_size) !== String(this.paginator.page_size)
+    ) {
+      const queryParams = {
+        ...this.prevQueryParams,
+        page: this.paginator.page,
+        page_size: this.paginator.page_size
+      };
+      this._updateQueries(queryParams);
+    }
+  }
+
   _sort({detail}: any) {
     let ordering = detail.field;
-    if (this.queryParams.ordering && this.queryParams.ordering === ordering) {
-      ordering = this.queryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
+    if (this.prevQueryParams.ordering && this.prevQueryParams.ordering === ordering) {
+      ordering = this.prevQueryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
     }
-    this.queryParams.ordering = ordering;
-    this.queryParams = {...this.queryParams};
+    const queryParams = {...this.prevQueryParams, ordering: ordering};
+    this._updateQueries(queryParams);
   }
 
   _getLink(actionPointId: number) {
     return `action-points/detail/${actionPointId}`;
   }
 
-  _initFilters() {
-    const filtersElement: SearchAndFilter = this.shadowRoot.querySelector('#filters');
-    this.setFiltersSelections();
-    if (filtersElement) {
-      filtersElement._reloadFilters();
-    }
+  initFiltersForDisplay() {
+    setselectedValueTypeByFilterKey(selectedValueTypeByFilterKey);
+    const availableFilters = JSON.parse(JSON.stringify(getAPFilters()));
+    this.populateDropdownFilterOptionsFromCommonData(availableFilters);
+    const currentParams = Object.assign({}, this.queryParams || {});
+    ['page', 'page_size', 'sort'].forEach((key) => {
+      if (currentParams[key]) {
+        delete currentParams[key];
+      }
+    });
+    this.allFilters = availableFilters;
+    this.allFilters = updateFiltersSelectedValues(currentParams, this.allFilters);
   }
 
-  setFiltersSelections() {
+  populateDropdownFilterOptionsFromCommonData(allFilters: EtoolsFilter[]) {
+    this.modules = getData('modules') || [];
+    this.statuses = getData('statuses') || [];
     const usersList = getData('unicefUsers').map((user: any) => {
       return {
         id: user.id,
         name: user.name
       };
     });
-    const queryDataPairs = [
-      {
-        query: 'assigned_to',
-        data: usersList
-      },
-      {
-        query: 'assigned_by',
-        data: usersList
-      },
-      {
-        query: 'partner',
-        dataKey: 'partnerOrganisations'
-      },
-      {
-        query: 'office',
-        dataKey: 'offices'
-      },
-      {
-        query: 'location',
-        dataKey: 'locations'
-      },
-      {
-        query: 'cp_output',
-        dataKey: 'cpOutputsList'
-      },
-      {
-        query: 'intervention',
-        dataKey: 'interventionsList'
-      },
-      {
-        query: 'status',
-        dataKey: 'statuses'
-      },
-      {
-        query: 'section',
-        dataKey: 'sectionsCovered'
-      },
-      {
-        query: 'related_module',
-        dataKey: 'modules'
-      }
-    ];
-
-    queryDataPairs.forEach((pair) => {
-      const filterIndex = this._getFilterIndex(pair.query);
-      const data = !pair.data ? getData(pair.dataKey) : pair.data || [];
-      this.setFilterSelection(filterIndex, data);
-    });
-  }
-
-  _getFilterIndex(query: any) {
-    if (!this.filters) {
-      return -1;
-    }
-
-    return this.filters.findIndex((filter: any) => {
-      return filter.query === query;
-    });
-  }
-
-  setFilterSelection(filterIndex: number, data: any) {
-    if (filterIndex !== undefined && filterIndex !== -1) {
-      this.filters[filterIndex].selection = data;
-      return true;
-    }
-    return false;
+    updateFilterSelectionOptions(allFilters, APFilterKeys.assigned_to, usersList);
+    updateFilterSelectionOptions(allFilters, APFilterKeys.assigned_by, usersList);
+    updateFilterSelectionOptions(allFilters, APFilterKeys.partner, getData('partnerOrganisations'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.office, getData('offices'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.location, getData('locations'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.cp_output, getData('cpOutputsList'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.intervention, getData('interventionsList'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.status, getData('statuses'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.section, getData('sectionsCovered'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.related_module, getData('modules'));
   }
 
   _requestData() {
     const actionPointData = this.shadowRoot.querySelector('action-points-data');
     actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
-  }
-
-  paginatorChanged() {
-    if (this.queryParams.page !== this.paginator.page || this.queryParams.page_size !== this.paginator.page_size) {
-      this.queryParams = {
-        ...this.queryParams,
-        page: this.paginator.page,
-        page_size: this.paginator.page_size
-      };
-    }
-  }
-
-  _setShowCompleted() {
-    if (!this.isShowCompleted) {
-      this.queryParams.status = 'open';
-    } else if (this.queryParams) {
-      this.queryParams.status = undefined;
-    }
-    this.queryParams = {...this.queryParams};
   }
 
   _setExportLinks() {

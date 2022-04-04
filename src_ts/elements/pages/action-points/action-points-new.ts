@@ -2,7 +2,7 @@ import {LitElement, html, customElement, property} from 'lit-element';
 import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin-lit';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
-import '../../common-elements/status-element-lit';
+import '../../common-elements/status-element';
 import './detail/action-point-details';
 import {pageLayoutStyles} from '../../styles/page-layout-styles-lit';
 import {sharedStyles} from '../../styles/shared-styles-lit';
