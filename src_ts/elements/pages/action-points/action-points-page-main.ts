@@ -38,20 +38,12 @@ export class ActionPointsPageMain extends LitElement {
           name="new"
           .route="${this.route}"
           @route-changed="${({detail}: CustomEvent) => {
-            if (JSON.stringify(this.route) !== JSON.stringify(detail.value)) {
+            if (JSON.stringify(this.route) !== JSON.stringify(detail.value) || detail.value.path.includes('/detail')) {
               this.route = detail.value;
             }
           }}"
         ></action-points-new>
-        <action-points-item
-          name="detail"
-          .route="${this.detailRoute}"
-          @route-changed="${({detail}: CustomEvent) => {
-            if (JSON.stringify(this.detailRoute) !== JSON.stringify(detail.value)) {
-              this.detailRoute = detail.value;
-            }
-          }}"
-        ></action-points-item>
+        <action-points-item name="detail" .route="${this.detailRoute}"></action-points-item>
         <action-points-list name="list" .route="${this.listRoute}" .staticDataLoaded="${this.staticDataLoaded}">
         </action-points-list>
       </iron-pages>
