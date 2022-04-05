@@ -14,7 +14,7 @@ import '../../../common-elements/pages-header-element';
 import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
-import '../../../common-elements/status-element-lit';
+import '../../../common-elements/status-element';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
 import {sharedStyles} from '../../../styles/shared-styles-lit';
 import {mainPageStyles} from '../../../styles/main-page-styles';

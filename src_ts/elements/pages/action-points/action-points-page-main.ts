@@ -37,7 +37,11 @@ export class ActionPointsPageMain extends LitElement {
         <action-points-new
           name="new"
           .route="${this.route}"
-          @route-changed="${({detail}: CustomEvent) => (this.route = detail.value)}"
+          @route-changed="${({detail}: CustomEvent) => {
+            if (JSON.stringify(this.route) !== JSON.stringify(detail.value) || detail.value.path.includes('/detail')) {
+              this.route = detail.value;
+            }
+          }}"
         ></action-points-new>
         <action-points-item name="detail" .route="${this.detailRoute}"></action-points-item>
         <action-points-list name="list" .route="${this.listRoute}" .staticDataLoaded="${this.staticDataLoaded}">

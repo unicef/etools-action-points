@@ -31,30 +31,19 @@ export const getPath = () => {
 };
 
 export const updateQueries = (element: HTMLElement, newQueries: any, path?: string, noNotify?: boolean) => {
-  if (typeof newQueries != 'object') {
-    return false;
-  }
-  const keys = Object.keys(newQueries);
-
-  if (!keys.length) {
+  if (typeof newQueries != 'object' || !Object.keys(newQueries).length) {
     return false;
   }
 
   path = path && typeof path === 'string' ? path : getPath();
-  let queries = parseQueries();
 
-  keys.forEach((key) => {
-    if (newQueries[key] === undefined || newQueries[key] === false) delete queries[key];
-    else queries[key] = newQueries[key];
-  });
-
-  queries = Object.keys(queries).map((key) => {
-    const value = typeof queries[key] === 'boolean' || queries[key] === '' ? '' : `=${queries[key]}`;
+  newQueries = Object.keys(newQueries).map((key) => {
+    const value = typeof newQueries[key] === 'boolean' || newQueries[key] === '' ? '' : `=${newQueries[key]}`;
     return `${key}${value}`;
   });
 
   try {
-    window.history.replaceState({}, '', `${basePath}${path}?${queries.join('&')}`);
+    window.history.replaceState({}, '', `${basePath}${path}?${newQueries.join('&')}`);
   } catch (err) {
     console.warn(err);
   }
