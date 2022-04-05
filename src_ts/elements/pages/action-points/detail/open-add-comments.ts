@@ -26,6 +26,11 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
   render() {
     return html`
       ${tabInputsStyles}
+      <style>
+        .group {
+          padding: 16px;
+        }
+      </style>
       <etools-dialog
         id="commentDialog"
         size="md"

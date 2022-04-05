@@ -33,7 +33,8 @@ import {EtoolsFilter} from '@unicef-polymer/etools-filters/src/etools-filters';
 import {
   updateFilterSelectionOptions,
   updateFiltersSelectedValues,
-  setselectedValueTypeByFilterKey
+  setselectedValueTypeByFilterKey,
+  clearSelectedValuesInFilters
 } from '@unicef-polymer/etools-filters/src/filters';
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 
@@ -463,6 +464,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
     if (queryParams.reload) {
       clearQueries();
+      clearSelectedValuesInFilters(this.allFilters);
+      this.allFilters = [...this.allFilters];
       this.prevQueryParams = {};
       this.resetPageNumber();
       this.queryParams = Object.assign({}, {page: this.paginator.page, page_size: this.paginator.page_size});
