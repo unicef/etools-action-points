@@ -28,7 +28,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
       ${tabInputsStyles}
       <style>
         .group {
-          padding: 16px;
+          padding: 16px 0px;
         }
       </style>
       <etools-dialog
