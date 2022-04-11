@@ -324,7 +324,9 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
                   <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
-                  <paper-tooltip offset="0">${this.getStringValue(entry.description)}</paper-tooltip>
+                  <paper-tooltip fit-to-visible-bounds offset="0">
+                    ${this.getStringValue(entry.description)}
+                  </paper-tooltip>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
