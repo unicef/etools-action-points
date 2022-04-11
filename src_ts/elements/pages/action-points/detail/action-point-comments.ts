@@ -24,6 +24,7 @@ export class ActionPointComments extends LocalizationMixin(
       <style>
         .comments-list {
           padding: 8px 12px;
+          text-align: justify;
         }
 
         .comment-item {
