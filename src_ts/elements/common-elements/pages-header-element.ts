@@ -11,9 +11,10 @@ import {sharedStyles} from '../styles/shared-styles-lit';
 import {moduleStyles} from '../styles/module-styles-lit';
 import {GenericObject} from '../../typings/globals.types';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 @customElement('pages-header-element')
-export class PagesHeaderElement extends LitElement {
+export class PagesHeaderElement extends MatomoMixin(LitElement) {
   @property({type: String, attribute: 'page-title'})
   pageTitle: string;
 
@@ -145,12 +146,16 @@ export class PagesHeaderElement extends LitElement {
 
                 <paper-listbox id="dropdownMenu" slot="dropdown-content">
                   ${this.exportLinks?.map(
-                    (item) => html` <paper-item @tap="${this.exportData}">${item.name}</paper-item> `
+                    (item) =>
+                      html`
+                        <paper-item tracker="Export ${item.name}" @tap="${this.exportData}">${item.name}</paper-item>
+                      `
                   )}
                 </paper-listbox>
               </paper-menu-button>
               <paper-button
                 class="grey-buttons"
+                tracker="Export"
                 ?hidden="${!this.showExportButton || this._isDropDown(this.exportLinks)}"
                 @tap="${this.exportData}"
               >
@@ -162,6 +167,7 @@ export class PagesHeaderElement extends LitElement {
             <paper-button
               class="add-btn"
               raised
+              tracker="Add Action Point"
               ?hidden="${this._hideAddButton(this.showAddButton)}"
               @tap="${this.addNewTap}"
             >
@@ -185,7 +191,8 @@ export class PagesHeaderElement extends LitElement {
     return !show;
   }
 
-  addNewTap() {
+  addNewTap(e: CustomEvent) {
+    this.trackAnalytics(e);
     this.dispatchEvent(new CustomEvent('add-new-tap'));
   }
 
@@ -204,6 +211,7 @@ export class PagesHeaderElement extends LitElement {
     if (this.exportLinks.length < 1) {
       throw new Error('Can not find export link!');
     }
+    this.trackAnalytics(e);
     const url = e && e.model && e.model.item ? e.model.item.url : this.exportLinks[0].url;
     window.open(url, '_blank');
   }
