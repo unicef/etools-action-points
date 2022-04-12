@@ -133,7 +133,7 @@ export const navMenuStyles = css`
     font-size: 13px;
     font-weight: 500;
     text-transform: none;
-    border-top: 1px solid var(--light-divider-color);
+    border-top: 1px solid var(--dark-divider-color);
   }
 
   :host([small-menu]) .nav-menu-item.section-title {

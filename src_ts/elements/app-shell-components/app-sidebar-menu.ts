@@ -27,8 +27,8 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
       ${moduleStyles} ${apdIcons}
       <style>
         :host {
-          @apply --layout-vertical;
-
+          display: flex;
+          flex-direction: column;
           height: 100%;
           overflow-y: auto;
           overflow-x: hidden;
@@ -36,8 +36,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         }
 
         .menu-header {
-          @apply --layout-horizontal;
-          @apply --layout-center;
+          justify-content: space-between;
           background-color: var(--module-color);
           color: white;
           min-height: 60px;
@@ -59,7 +58,8 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         }
 
         .nav-menu {
-          @apply --layout-vertical;
+          display: flex;
+          flex-direction: column;
           background: #fff;
           padding-top: 8px;
           margin-bottom: 18px;
@@ -69,7 +69,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
 
         .nav-menu,
         .nav-menu iron-selector[role='navigation'] {
-          @apply --layout-flex;
+          flex: 1;
         }
 
         .secondary-header {
