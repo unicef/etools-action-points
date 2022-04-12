@@ -302,8 +302,11 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('intervention', this.permissionPath)}"
                 @etools-selected-item-changed="${({detail}: CustomEvent) => {
-                  this.updateField('intervention', detail.selectedItem?.id);
-                  this._updateCpOutputs(this.editedItem.intervention);
+                  const selectedValue = detail.selectedItem ? detail.selectedItem.id : null;
+                  if (selectedValue !== this.editedItem.intervention) {
+                    this.updateField('intervention', detail.selectedItem?.id);
+                    this._updateCpOutputs(this.editedItem.intervention);
+                  }
                 }}"
               >
               </etools-dropdown>`) ||
@@ -497,6 +500,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <paper-checkbox
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
+              @checked-changed=${({detail}) => this.updateField('high_priority', detail.value)}
             >
               ${this.getLabel('high_priority', this.permissionPath)}</paper-checkbox
             >
