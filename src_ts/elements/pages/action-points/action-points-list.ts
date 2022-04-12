@@ -324,37 +324,60 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
                   <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
-                  <paper-tooltip fit-to-visible-bounds offset="0">
+                  <paper-tooltip fit-to-visible-bounds offset="0" ?hidden="${!this._showTooltip(entry.description)}">
                     ${this.getStringValue(entry.description)}
                   </paper-tooltip>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
-                  <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
-                  <paper-tooltip offset="0">${this.getStringValue(entry.intervention?.number)}</paper-tooltip>
+                  <div>
+                    <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
+                    <paper-tooltip ?hidden="${!this._showTooltip(entry.intervention?.number)}" offset="0"
+                      >${this.getStringValue(entry.intervention?.number)}</paper-tooltip
+                    >
+                  </div>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
-                  <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
-                  <paper-tooltip offset="0">${this.getStringValue(entry.location?.name)}</paper-tooltip>
+                  <div>
+                    <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
+                    <paper-tooltip ?hidden="${!this._showTooltip(entry.location?.name)}" offset="0"
+                      >${this.getStringValue(entry.location?.name)}</paper-tooltip
+                    >
+                  </div>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('related_module', this.basePermissionPath)}</div>
-                  <div class="truncate">${this.getStringValue(entry.related_module, this.modules, 'display_name')}</div>
-                  <paper-tooltip offset="0"
-                    >${this.getStringValue(entry.related_module, this.modules, 'display_name')}
-                  </paper-tooltip>
+                  <div>
+                    <div class="truncate">
+                      ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
+                    </div>
+                    <paper-tooltip
+                      offset="0"
+                      ?hidden="${!this._showTooltip(entry.related_module, this.modules, 'display_name')}"
+                    >
+                      ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
+                    </paper-tooltip>
+                  </div>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
-                  <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
-                  <paper-tooltip offset="0">${this.getStringValue(entry.assigned_by?.name)}</paper-tooltip>
+                  <div>
+                    <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
+                    <paper-tooltip ?hidden="${!this._showTooltip(entry.assigned_by?.name)}" offset="0"
+                      >${this.getStringValue(entry.assigned_by?.name)}</paper-tooltip
+                    >
+                  </div>
                 </div>
                 <div class="row-details-content flex-c">
                   <div ?hidden="${!entry.date_of_completion?.length}">
                     <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
-                    <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
-                    <paper-tooltip offset="0">${this.prettyDate(entry.date_of_completion)}</paper-tooltip>
+                    <div>
+                      <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
+                      <paper-tooltip ?hidden="${!this._showTooltip(entry.date_of_completion)}" offset="0"
+                        >${this.prettyDate(entry.date_of_completion)}</paper-tooltip
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -580,5 +603,9 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   _getPriorityValue(priority: boolean) {
     return priority === true ? 'high' : '';
+  }
+
+  _showTooltip(value: string, list?: [], field?: string) {
+    return  this.getStringValue(value, list, field) !== '-';
   }
 }
