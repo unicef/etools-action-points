@@ -401,7 +401,6 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   firstUpdated() {
-    this._initSort();
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
@@ -409,6 +408,9 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     if (changedProperties.has('staticDataLoaded')) {
       if (!this.allFilters) {
         this.initFiltersForDisplay();
+        setTimeout(() => {
+          this._setInitialTableSorting();
+        }, 200);
       }
     }
 
@@ -435,25 +437,15 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     return noActionsAllowed(path);
   }
 
-  _initSort() {
+  _setInitialTableSorting() {
     const sortParams = this.queryParams && this.queryParams.ordering;
     if (!sortParams) return;
     const field = sortParams.replace(/^-/, '');
     const direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
     const column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
     if (!column) return;
-    column.dispatchEvent(
-      new CustomEvent('sort-changed', {
-        detail: {
-          field: field,
-          direction: direction
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
-    column.set('selected', true);
-    column.set('direction', direction);
+    column.setAttribute('selected', 'true');
+    column.setAttribute('direction', direction);
   }
 
   _setPath(path: string) {
@@ -535,10 +527,11 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   _sort({detail}: any) {
     let ordering = detail.field;
-    if (this.prevQueryParams.ordering && this.prevQueryParams.ordering === ordering) {
+    const prevQueryParams = this.prevQueryParams ? this.prevQueryParams : {};
+    if (prevQueryParams.ordering && prevQueryParams.ordering === ordering) {
       ordering = this.prevQueryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
     }
-    const queryParams = {...this.prevQueryParams, ordering: ordering};
+    const queryParams = {...prevQueryParams, ordering: ordering};
     this._updateQueries(queryParams);
   }
 
@@ -606,6 +599,6 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _showTooltip(value: string, list?: [], field?: string) {
-    return  this.getStringValue(value, list, field) !== '-';
+    return this.getStringValue(value, list, field) !== '-';
   }
 }
