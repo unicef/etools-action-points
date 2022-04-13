@@ -1,13 +1,14 @@
 import {LitElement, html, property, customElement} from 'lit-element';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/communication-icons.js';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('support-btn')
-export class SupportBtn extends LitElement {
+export class SupportBtn extends MatomoMixin(LitElement) {
   render() {
     return html`
       <style>
@@ -24,7 +25,7 @@ export class SupportBtn extends LitElement {
         }
       </style>
 
-      <a href="${this.url}" target="_blank">
+      <a href="${this.url}" target="_blank" @tap="${this.trackAnalytics}" tracker="Support">
         <iron-icon icon="communication:textsms"></iron-icon>
         Support
       </a>
