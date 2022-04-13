@@ -606,6 +606,6 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _showTooltip(value: string, list?: [], field?: string) {
-    return  this.getStringValue(value, list, field) !== '-';
+    return this.getStringValue(value, list, field) !== '-';
   }
 }
