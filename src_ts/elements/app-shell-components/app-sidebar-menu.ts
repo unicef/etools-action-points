@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {customElement, html, LitElement, property} from 'lit-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icon/iron-icon.js';
@@ -7,24 +7,28 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/iron-icons/maps-icons.js';
 import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
-import {moduleStyles} from '../styles/module-styles';
+import {moduleStyles} from '../styles/module-styles-lit';
 import {navMenuStyles} from '../styles/nav-menu-styles';
 import {apdIcons} from '../styles/apd-icons';
-import {customElement, property, observe} from '@polymer/decorators';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('app-sidebar-menu')
-export class AppSidebarMenu extends PolymerElement {
-  public static get template() {
+export class AppSidebarMenu extends MatomoMixin(LitElement) {
+  static get styles() {
+    return [navMenuStyles];
+  }
+
+  public render() {
     return html`
-      ${navMenuStyles} ${moduleStyles} ${apdIcons}
+      ${moduleStyles} ${apdIcons}
       <style>
         :host {
-          @apply --layout-vertical;
-
+          display: flex;
+          flex-direction: column;
           height: 100%;
           overflow-y: auto;
           overflow-x: hidden;
@@ -32,8 +36,7 @@ export class AppSidebarMenu extends PolymerElement {
         }
 
         .menu-header {
-          @apply --layout-horizontal;
-          @apply --layout-center;
+          justify-content: space-between;
           background-color: var(--module-color);
           color: white;
           min-height: 60px;
@@ -55,7 +58,8 @@ export class AppSidebarMenu extends PolymerElement {
         }
 
         .nav-menu {
-          @apply --layout-vertical;
+          display: flex;
+          flex-direction: column;
           background: #fff;
           padding-top: 8px;
           margin-bottom: 18px;
@@ -65,7 +69,7 @@ export class AppSidebarMenu extends PolymerElement {
 
         .nav-menu,
         .nav-menu iron-selector[role='navigation'] {
-          @apply --layout-flex;
+          flex: 1;
         }
 
         .secondary-header {
@@ -75,10 +79,6 @@ export class AppSidebarMenu extends PolymerElement {
           text-align: center;
           font-size: 13px;
           font-weight: 500;
-        }
-
-        [small-menu].secondary-header {
-          display: none;
         }
 
         app-toolbar {
@@ -91,27 +91,27 @@ export class AppSidebarMenu extends PolymerElement {
       </style>
 
       <div class="menu-header">
-        <span id="app-name" small-menu="[[smallMenu]]" main-title>Action Points</span>
+        <span id="app-name" main-title>Action Points</span>
 
         <span class="ripple-wrapper main menu-header">
-          <iron-icon id="menu-header-top-icon" icon="flag" on-tap="_toggleSmallMenu"></iron-icon>
+          <iron-icon id="menu-header-top-icon" icon="flag" @tap="${() => this._toggleSmallMenu()}"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
 
         <paper-tooltip for="menu-header-top-icon" position="right"> Action Points </paper-tooltip>
 
         <span class="chev-right">
-          <iron-icon id="expand-menu" icon="chevron-right" on-tap="_toggleSmallMenu"></iron-icon>
+          <iron-icon id="expand-menu" icon="chevron-right" @tap="${() => this._toggleSmallMenu()}"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
 
         <span class="ripple-wrapper">
-          <iron-icon id="minimize-menu" icon="chevron-left" on-tap="_toggleSmallMenu"></iron-icon>
+          <iron-icon id="minimize-menu" icon="chevron-left" @tap="${() => this._toggleSmallMenu()}"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
       </div>
 
-      <div class="nav-menu" small-menu$="[[smallMenu]]">
+      <div class="nav-menu">
         <iron-selector selected="action-points" attr-for-selected="view" selectable="side-bar-item" role="navigation">
           <side-bar-item
             view="action-points"
@@ -122,14 +122,14 @@ export class AppSidebarMenu extends PolymerElement {
           </side-bar-item>
         </iron-selector>
 
-        <div class="secondary-header nav-menu-item section-title" small-menu$="[[smallMenu]]">
-          eTools Community Channels
-        </div>
+        <div class="secondary-header nav-menu-item section-title">eTools Community Channels</div>
 
         <side-bar-item
           class="lighter-item no-transform"
           name="Implementation Intelligence"
           icon="apd-icons:power-bi"
+          @tap="${this.trackAnalytics}"
+          tracker="Implementation Intelligence"
           side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/5e60ab16-cce5-4c21-8620-de0c4c6415de/ReportSectionfe8562e6ef8c4eddcb52?chromeless=1"
           external
         >
@@ -138,6 +138,8 @@ export class AppSidebarMenu extends PolymerElement {
         <side-bar-item
           class="lighter-item"
           name="Knowledge Base"
+          @tap="${this.trackAnalytics}"
+          tracker="Knowledge Base"
           icon="maps:local-library"
           side-bar-link="http://etools.zendesk.com"
           external
@@ -148,6 +150,8 @@ export class AppSidebarMenu extends PolymerElement {
           class="lighter-item"
           name="Discussion"
           icon="icons:question-answer"
+          @tap="${this.trackAnalytics}"
+          tracker="Discussion"
           external
           side-bar-link="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"
         >
@@ -157,8 +161,10 @@ export class AppSidebarMenu extends PolymerElement {
           class="lighter-item"
           name="Information"
           icon="icons:info"
+          @tap="${this.trackAnalytics}"
+          tracker="Information"
           external
-          side-bar-link="https://etools.unicef.org/landing"
+          side-bar-link="/landing/"
         >
         </side-bar-item>
       </div>
@@ -168,11 +174,14 @@ export class AppSidebarMenu extends PolymerElement {
   @property({type: String})
   page: string;
 
-  @property({type: Boolean})
-  smallMenu = false;
+  _smallMenu = false;
+  @property({type: Boolean, reflect: true})
+  get smallMenu() {
+    return this._smallMenu;
+  }
 
-  @observe('smallMenu')
-  _menuSizeChange() {
+  set smallMenu(newVal) {
+    this._smallMenu = newVal;
     this.dispatchEvent(
       new CustomEvent('resize-main-layout', {
         bubbles: true,
@@ -181,8 +190,8 @@ export class AppSidebarMenu extends PolymerElement {
     );
   }
 
-  _toggleSmallMenu(e: CustomEvent) {
-    e.stopImmediatePropagation();
+  _toggleSmallMenu() {
+    this.smallMenu = !this.smallMenu;
     this.dispatchEvent(
       new CustomEvent('toggle-small-menu', {
         bubbles: true,

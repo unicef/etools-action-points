@@ -1,5 +1,5 @@
 import {Constructor} from '../../typings/globals.types';
-import {PolymerElement} from '@polymer/polymer';
+import {LitElement} from 'lit-element';
 
 declare const dayjs: any;
 
@@ -8,8 +8,8 @@ declare const dayjs: any;
  * @polymer
  * @mixinFunction
  */
-export function DateMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-  class DateMixinClass extends (superClass as Constructor<PolymerElement>) {
+export function DateMixin<T extends Constructor<LitElement>>(superClass: T) {
+  class DateMixinClass extends superClass {
     /**
      * Format date from string
      */

@@ -1,23 +1,22 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
+import {LitElement, html, customElement, property} from 'lit-element';
+import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin-lit';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import './detail/action-point-details';
-import {pageLayoutStyles} from '../../styles/page-layout-styles';
-import {sharedStyles} from '../../styles/shared-styles';
+import {pageLayoutStyles} from '../../styles/page-layout-styles-lit';
+import {sharedStyles} from '../../styles/shared-styles-lit';
 import {mainPageStyles} from '../../styles/main-page-styles';
-import {customElement, property} from '@polymer/decorators';
 import {ActionPointDetails} from './detail/action-point-details';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('action-points-new')
-export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(PolymerElement)) {
-  public static get template() {
+export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
+  render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${mainPageStyles}
 
@@ -25,18 +24,22 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
 
       <div class="view-container" id="main">
         <div id="pageContent">
-          <action-point-details id="ap-details" action-point="[[actionPoint]]" permission-path="[[permissionPath]]">
+          <action-point-details
+            id="ap-details"
+            .actionPoint="${this.actionPoint}"
+            .permissionPath="${this.permissionPath}"
+          >
           </action-point-details>
         </div>
 
         <div id="sidebar">
-          <status-element action-point="[[actionPoint]]" permission-path="[[permissionPath]]"> </status-element>
+          <status-element .actionPoint="${this.actionPoint}" .permissionPath="${this.permissionPath}"> </status-element>
         </div>
       </div>
     `;
   }
 
-  @property({type: Object, notify: true})
+  @property({type: Object}) // notify: true
   route: any;
 
   @property({type: Object})
@@ -45,19 +48,30 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
   @property({type: String})
   permissionPath = 'action_points';
 
-  static get observers() {
-    return ['_changeRoutePath(route.path)'];
+  updated(changedProperties) {
+    if (changedProperties.has('route')) {
+      this._changeRoutePath();
+    }
   }
 
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
     this.addEventListener('action-activated', () => this._createAP());
   }
 
   _changeRoutePath() {
     const details: any = this.shadowRoot.querySelector('action-point-details');
-    this.set('actionPoint', {});
+    this.actionPoint = {};
     details.dispatchEvent(new CustomEvent('reset-validation'));
+    this.dispatchEvent(
+      new CustomEvent('route-changed', {
+        detail: {
+          value: this.route
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   _createAP() {
@@ -81,13 +95,13 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
       })
     );
 
-    this.sendRequest({
+    sendRequest({
       method: 'POST',
       endpoint: endpoint,
       body: data
     })
       .then((data: any) => {
-        this.set('actionPoint', {});
+        this.actionPoint = {};
         this.dispatchEvent(
           new CustomEvent('toast', {
             detail: {
@@ -97,7 +111,7 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
             composed: true
           })
         );
-        this.set('route.path', `/detail/${data.id}`);
+        this.route.path = `/detail/${data.id}`;
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
@@ -107,6 +121,7 @@ export class ActionPointsNew extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(Po
             composed: true
           })
         );
+        this.route = {...this.route};
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);

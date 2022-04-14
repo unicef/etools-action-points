@@ -1,55 +1,16 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import '@polymer/paper-input/paper-input.js';
+import {sendRequest} from '@unicef-polymer/etools-ajax/etools-ajax-request';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
-import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
-import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../../../typings/globals.types';
-import {isReadOnly} from '../../../mixins/permission-controller';
 
 @customElement('open-add-comments')
-export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(InputAttrsMixin(PolymerElement))) {
-  public static get template() {
-    return html`
-      ${tabInputsStyles}
-      <etools-dialog
-        id="commentDialog"
-        size="md"
-        dialog-title="Add [[getLabel('comments', permissionPath)]]"
-        keep-dialog-open
-        ok-btn-text="SAVE"
-        on-confirm-btn-clicked="saveComment"
-        on-iron-overlay-closed="_resetInputs"
-        show-spinner="[[requestInProcess]]"
-        spinner-text="Save comment"
-      >
-        <div class="row-h group">
-          <div class="input-container input-container-l">
-            <paper-input
-              class$="validate-input [[_setRequired('comments.comment', permissionPath)]]"
-              value="{{commentText}}"
-              label="[[getLabel('comments.comment', permissionPath)]]"
-              placeholder="[[getPlaceholderText('comments.comment', permissionPath)]]"
-              required$="[[_setRequired('comments.comment', permissionPath)]]"
-              readonly$="[[isReadOnly('comments.comment', permissionPath)]]"
-              maxlength="3000"
-              invalid$="{{errors.comments.comment}}"
-              error-message="{{errors.comments.comment}}"
-              on-focus="_resetFieldError"
-              on-tap="_resetFieldError"
-              no-title-attr
-            >
-            </paper-input>
-          </div>
-        </div>
-      </etools-dialog>
-    `;
-  }
-
+export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElement)) {
   @property({type: String})
   commentText: string;
 
@@ -62,21 +23,65 @@ export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(In
   @property({type: Boolean})
   requestInProcess = false;
 
+  render() {
+    return html`
+      ${tabInputsStyles}
+      <style>
+        .group {
+          padding: 16px 0px;
+        }
+      </style>
+      <etools-dialog
+        id="commentDialog"
+        size="md"
+        .dialogTitle="Add ${this.getLabel('comments', this.permissionPath)}"
+        keep-dialog-open
+        ok-btn-text="SAVE"
+        @confirm-btn-clicked="${this.saveComment}"
+        @iron-overlay-closed="${this._resetInputs}"
+        ?show-spinner="${this.requestInProcess}"
+        spinner-text="Save comment"
+      >
+        <div class="row-h group">
+          <div class="input-container input-container-l">
+            <paper-input
+              class="validate-input ${this._setRequired('comments.comment', this.permissionPath)}"
+              .value="${this.commentText}"
+              label="${this.getLabel('comments.comment', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('comments.comment', this.permissionPath)}"
+              ?required="${this._setRequired('comments.comment', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('comments.comment', this.permissionPath)}"
+              maxlength="3000"
+              ?invalid="${this.errors?.comments?.comment}"
+              error-message="${this.errors?.comments?.comment}"
+              @value-changed="${({detail}: CustomEvent) => (this.commentText = detail.value)}"
+              @focus="${this._resetFieldError}"
+              @click="${this._resetFieldError}"
+              no-title-attr
+            >
+            </paper-input>
+          </div>
+        </div>
+      </etools-dialog>
+    `;
+  }
+
   open() {
-    (this.$.commentDialog as EtoolsDialog).opened = true;
+    const dialog = this.shadowRoot!.querySelector<any>('#commentDialog') as EtoolsDialog;
+    dialog.opened = true;
   }
 
   saveComment() {
     if (!this.validate()) return;
-    const dialog: EtoolsDialog = this.$.commentDialog as EtoolsDialog;
+    const dialog = this.shadowRoot!.querySelector<any>('#commentDialog') as EtoolsDialog;
     const endpoint = getEndpoint('actionPoint', this.actionPoint.id);
     const comments = [
       {
         comment: this.commentText
       }
     ];
-    this.set('requestInProcess', true);
-    this.sendRequest({
+    this.requestInProcess = true;
+    sendRequest({
       method: 'PATCH',
       endpoint: endpoint,
       body: {
@@ -92,11 +97,11 @@ export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(In
           })
         );
         dialog.opened = false;
-        this.set('requestInProcess', false);
+        this.requestInProcess = false;
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
-        this.set('requestInProcess', false);
+        this.requestInProcess = false;
       });
   }
 
@@ -113,9 +118,5 @@ export class OpenAddComments extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(In
     });
 
     return valid;
-  }
-
-  isReadOnly(path) {
-    return isReadOnly(path);
   }
 }

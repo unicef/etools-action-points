@@ -244,7 +244,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
   }
 
   _initRoute() {
-    const path = `${this.rootPath}action-points`;
+    const path = `${this.rootPath}action-points/list`;
     this.set('route.path', path);
     return 'action-points';
   }

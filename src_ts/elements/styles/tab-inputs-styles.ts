@@ -1,8 +1,5 @@
-import {html, htmlLiteral} from '@polymer/polymer/lib/utils/html-tag.js';
+import {html} from 'lit-element';
 import {basePath} from '../../config/config';
-
-const basePathData: ReadonlyArray<string> = [basePath];
-const baseUrl = htmlLiteral(basePathData as TemplateStringsArray);
 
 export const tabInputsStyles = html`
   <style>
@@ -165,7 +162,7 @@ export const tabInputsStyles = html`
     paper-input.required:not([disabled]),
     datepicker-lite.required:not([disabled]) {
       --paper-input-container-label: {
-        background: url('${baseUrl}images/required.svg') no-repeat 98% 14%/7px;
+        background: url('${basePath}images/required.svg') no-repeat 98% 14%/7px;
         width: auto !important;
         max-width: 90%;
         right: auto;
