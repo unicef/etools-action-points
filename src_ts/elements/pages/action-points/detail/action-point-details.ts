@@ -303,7 +303,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?trigger-value-change-event="${!this.isReadOnly('intervention', this.permissionPath)}"
                 @etools-selected-item-changed="${({detail}: CustomEvent) => {
                   const selectedValue = detail.selectedItem ? detail.selectedItem.id : null;
-                  if (selectedValue !== this.editedItem.intervention) {
+                  if (selectedValue !== this.editedItem.intervention && (this.interventions || []).length) {
                     this.updateField('intervention', detail.selectedItem?.id);
                     this._updateCpOutputs(this.editedItem.intervention);
                   }
