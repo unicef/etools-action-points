@@ -1,13 +1,12 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import {customElement, property} from '@polymer/decorators';
+import {LitElement, html, property, customElement} from 'lit-element';
 
 /**
  * @polymer
  * @extends HTMLElement
  */
 @customElement('text-content')
-export class TextContent extends PolymerElement {
-  static get template() {
+export class TextContent extends LitElement {
+  render() {
     return html`
       <style>
         #content {
@@ -15,7 +14,7 @@ export class TextContent extends PolymerElement {
           overflow: hidden;
         }
       </style>
-      <div id="content">[[text]]</div>
+      <div id="content">${this.text}</div>
     `;
   }
 

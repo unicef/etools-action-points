@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, property, html, customElement} from 'lit-element';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
@@ -7,17 +7,47 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {sharedStyles} from '../styles/shared-styles';
-import {moduleStyles} from '../styles/module-styles';
-import {customElement, property} from '@polymer/decorators';
+import {sharedStyles} from '../styles/shared-styles-lit';
+import {moduleStyles} from '../styles/module-styles-lit';
 import {GenericObject} from '../../typings/globals.types';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 @customElement('pages-header-element')
-export class PagesHeaderElement extends PolymerElement {
-  public static get template() {
+export class PagesHeaderElement extends MatomoMixin(LitElement) {
+  @property({type: String, attribute: 'page-title'})
+  pageTitle: string;
+
+  @property({type: String, attribute: 'btn-text'})
+  btnText: string;
+
+  @property({type: Boolean, attribute: 'show-add-button'})
+  showAddButton = false;
+
+  @property({type: Boolean, reflect: true, attribute: 'show-export-button'})
+  showExportButton = false;
+
+  @property({type: String})
+  link = '';
+
+  @property({type: Object})
+  pageData: any;
+
+  @property({type: String})
+  exportLinks: GenericObject[];
+
+  @property({type: String})
+  downloadLetterUrl = '';
+
+  static get styles() {
+    // language=CSS
+    return [gridLayoutStylesLit];
+  }
+
+  render() {
     return html`
       ${sharedStyles} ${moduleStyles}
-      <style include="iron-flex">
+      <style>
         :host {
           position: relative;
           display: block;
@@ -98,15 +128,15 @@ export class PagesHeaderElement extends PolymerElement {
       </style>
 
       <div class="header-wrapper">
-        <div class="side-heading horizontal layout center around-justified">
-          <span class="flex title">[[_setTitle(pageData, pageTitle)]]</span>
+        <div class="side-heading layout-horizontal align-items-center around-justified">
+          <span class="flex-c title">${this._setTitle(this.pageData, this.pageTitle)}</span>
 
-          <div class="horizontal layout center">
-            <div class="export-buttons" hidden$="[[!exportLinks.length]]">
+          <div class="layout-horizontal align-items-center">
+            <div class="export-buttons" ?hidden="${!this.exportLinks?.length}">
               <paper-menu-button
                 id="dropdown"
-                hidden$="[[!_isDropDown(exportLinks)]]"
-                on-tap="_toggleOpened"
+                ?hidden="${!this._isDropDown(this.exportLinks)}"
+                @tap="${this._toggleOpened}"
                 horizontal-align="right"
               >
                 <paper-button slot="dropdown-trigger" class="grey-buttons">
@@ -115,23 +145,35 @@ export class PagesHeaderElement extends PolymerElement {
                 </paper-button>
 
                 <paper-listbox id="dropdownMenu" slot="dropdown-content">
-                  <template is="dom-repeat" items="[[exportLinks]]">
-                    <paper-item on-tap="exportData">[[item.name]]</paper-item>
-                  </template>
+                  ${this.exportLinks?.map(
+                    (item) =>
+                      html`
+                        <paper-item tracker="Export ${item.name}" @tap="${this.exportData}">${item.name}</paper-item>
+                      `
+                  )}
                 </paper-listbox>
               </paper-menu-button>
-              <template is="dom-if" if="[[showExportButton]]">
-                <paper-button class="grey-buttons" hidden$="[[_isDropDown(exportLinks)]]" on-tap="exportData">
-                  <iron-icon icon="file-download"></iron-icon>
-                  Export
-                </paper-button>
-              </template>
+              <paper-button
+                class="grey-buttons"
+                tracker="Export"
+                ?hidden="${!this.showExportButton || this._isDropDown(this.exportLinks)}"
+                @tap="${this.exportData}"
+              >
+                <iron-icon icon="file-download"></iron-icon>
+                Export
+              </paper-button>
             </div>
 
-            <paper-button class="add-btn" raised hidden$="[[_hideAddButton(showAddButton)]]" on-tap="addNewTap">
-              <template is="dom-if" if="{{_showLink(link)}}"><a href$="{{link}}" class="btn-link"></a></template>
+            <paper-button
+              class="add-btn"
+              raised
+              tracker="Add Action Point"
+              ?hidden="${this._hideAddButton(this.showAddButton)}"
+              @tap="${this.addNewTap}"
+            >
+              <a href="${this.link}" class="btn-link" ?hidden="${!this._showLink(this.link)}"></a>
               <iron-icon icon="add"></iron-icon>
-              <span>[[btnText]]</span>
+              <span>${this.btnText}</span>
             </paper-button>
             <slot></slot>
           </div>
@@ -139,30 +181,6 @@ export class PagesHeaderElement extends PolymerElement {
       </div>
     `;
   }
-
-  @property({type: String})
-  pageTitle: string;
-
-  @property({type: String})
-  btnText: string;
-
-  @property({type: Boolean})
-  showAddButton = false;
-
-  @property({type: Boolean, reflectToAttribute: true})
-  showExportButton = false;
-
-  @property({type: String})
-  link = '';
-
-  @property({type: Object})
-  pageData: any;
-
-  @property({type: String})
-  exportLinks: GenericObject[];
-
-  @property({type: String})
-  downloadLetterUrl = '';
 
   _toggleOpened() {
     const dropdown: PaperListboxElement = this.shadowRoot.querySelector('#dropdownMenu');
@@ -173,7 +191,8 @@ export class PagesHeaderElement extends PolymerElement {
     return !show;
   }
 
-  addNewTap() {
+  addNewTap(e: CustomEvent) {
+    this.trackAnalytics(e);
     this.dispatchEvent(new CustomEvent('add-new-tap'));
   }
 
@@ -192,6 +211,7 @@ export class PagesHeaderElement extends PolymerElement {
     if (this.exportLinks.length < 1) {
       throw new Error('Can not find export link!');
     }
+    this.trackAnalytics(e);
     const url = e && e.model && e.model.item ? e.model.item.url : this.exportLinks[0].url;
     window.open(url, '_blank');
   }

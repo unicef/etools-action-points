@@ -12,6 +12,7 @@ documentContainer.innerHTML = `
       html {
         --primary-color: #0099ff;
         --primary-background-color: white;
+        --secondary-text-color: rgba(0, 0, 0, 0.54);
         --secondary-background-color: var(--paper-indigo-700);
         --ternary-background-color: var(--paper-indigo-800);
         --accent-color: var(--paper-light-blue-a200);
@@ -53,13 +54,13 @@ documentContainer.innerHTML = `
             width: 100%;
             margin: 0;
         };
-        
+
         /* etools-action-button styles*/
         --etools-action-button-main-color: var(--primary-color);
         --etools-action-button-text-color: var(--light-primary-text-color);
         --etools-action-button-dropdown-higlight-bg: var(--list-second-bg-color);
         --etools-action-button-divider-color: var(--light-divider-color);
-  
+
         /* etools-status styles */
         --etools-status-divider-color: var(--dark-divider-color);
         --etools-status-icon-inactive-color: var(--medium-icon-color);
@@ -68,6 +69,14 @@ documentContainer.innerHTML = `
         --etools-status-icon-text-color: var(--light-primary-text-color);
         --etools-status-text-color: var(--medium-primary-text-color);
         --etools-status-inactive-text-color: var(--primary-text-color);
+
+          --paper-input-container-label-floating: {
+          color: var(--secondary-text-color, #737373);
+        };
+
+        --paper-input-prefix: {
+          color: var(--secondary-text-color, #737373);
+        };
       }
     </style>
   </custom-style>

@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
@@ -11,8 +11,6 @@ import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
-import '../../common-elements/search-and-filter';
-import '../../common-elements/filters-element';
 import '../../data-elements/action-points-data';
 import {getData} from '../../mixins/static-data-mixin';
 import {LocalizationMixin} from '../../mixins/localization-mixin';
@@ -20,484 +18,75 @@ import {DateMixin} from '../../mixins/date-mixin';
 import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
 import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
-import {moduleStyles} from '../../styles/module-styles';
-import {sharedStyles} from '../../styles/shared-styles';
-import {dataTableStyles} from '../../styles/data-table-styles';
-import {customElement, property, observe} from '@polymer/decorators';
+import {moduleStyles} from '../../styles/module-styles-lit';
+import {sharedStyles} from '@unicef-polymer/etools-modules-common/dist/styles/shared-styles-lit';
+import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
+import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
 import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
-import {SearchAndFilter} from '../../common-elements/search-and-filter';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@polymer/iron-media-query/iron-media-query.js';
+import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {EtoolsFilter} from '@unicef-polymer/etools-filters/src/etools-filters';
+import {
+  updateFilterSelectionOptions,
+  updateFiltersSelectedValues,
+  setselectedValueTypeByFilterKey,
+  clearSelectedValuesInFilters
+} from '@unicef-polymer/etools-filters/src/filters';
+import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 
 @customElement('action-points-list')
-export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixin(PolymerElement))) {
-  public static get template() {
-    return html`
-      ${moduleStyles} ${sharedStyles} ${dataTableStyles}
-      <style include="iron-flex-factors iron-flex">
-        :host {
-          position: relative;
-          display: block;
-        }
-
-        .col-data a {
-          color: var(--module-primary);
-          font-weight: 500;
-          cursor: pointer;
-        }
-
-        .row-details-content {
-          position: relative;
-          min-width: 0;
-        }
-
-        .row-details-content .truncate {
-          display: inline-block;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        etools-data-table-row[low-resolution-layout] *[slot="row-data-details"] {
-          margin-left: 32px;
-        }
-
-        etools-data-table-row *[slot="row-data-details"] {
-          margin-left: 14px;
-        }
-
-        paper-card {
-          display: block;
-          margin-top: 25px;
-          background-color: white;
-          margin: 24px 24px 0 24px;
-          width: calc(100% - 48px);
-        }
-
-        .no-content {
-          padding: 16px 24px;
-        }
-
-        .show-completed-toggle {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          border-left: 2px solid var(--gray-lighter);
-          margin: 8px 16px 8px 16px;
-          padding: 18px 0 18px 10px;
-        }
-        .show-completed-toggle span {
-          padding: 0 12px;
-          font-size: 16px;
-        }
-
-        .ellipse {
-          max-height: 4.4em;
-          overflow: hidden;
-        }
-
-        .tooltip-container {
-          display: inline-block;
-          max-width: 100%;
-          overflow: hidden;
-        }
-
-        pages-header-element {
-          box-shadow: 1px -3px 9px 0 #000000;
-        }
-
-        etools-data-table-row::part(edt-icon-wrapper) {
-          padding: 0 24px;
-        }
-        etools-data-table-row {
-          --list-icon-color: {
-            rgba(0, 0, 0, 0.54);
-          }
-        }
-        etools-data-table-header::part(edt-header-title){
-          padding-left: 47px;
-          font-weight: 500;
-        }
-        etools-data-table-header::part(edt-header-columns){
-          margin-left: 47px;
-        }
-      </style>
-      <iron-media-query query="(max-width: 767px)" query-matches="{{lowResolutionLayout}}"></iron-media-query>
-      <app-location path="{{path}}" query-params="{{queryParams}}" url-space-regex="^[[rootPath]]"></app-location>
-
-      <pages-header-element
-        hide-print-button
-        link="action-points/new"
-        show-add-button="[[!noActionsAllowed(basePermissionPath)]]"
-        show-export-button
-        export-links="[[exportLinks]]"
-        btn-text="Add Action Point"
-        page-title="Action Points"
-      >
-      </pages-header-element>
-      <action-points-data
-        action-points="{{actionPoints}}"
-        request-queries="{{queryParams}}"
-        list-length="{{totalResults}}"
-      >
-      </action-points-data>
-      <filters-element>
-        <search-and-filter
-          id="filters"
-          filters="[[filters]]"
-          query-params="{{queryParams}}"
-          search-params="[[searchParams]]"
-        >
-        </search-and-filter>
-        <div class="show-completed-toggle">
-          <span>Show Completed</span>
-          <paper-toggle-button checked="{{isShowCompleted}}"></paper-toggle-button>
-        </div>
-      </filters-element>
-      <paper-card>
-        <etools-data-table-header
-          id="listHeader"
-          no-collapse="[[!actionPoints.length]]"
-          low-resolution-layout="[[lowResolutionLayout]]"
-          label="[[visibleRange.0]] - [[visibleRange.1]] of [[totalResults]] results to show"
-        >
-          <etools-data-table-column class="flex-1" field="reference_number" sortable>
-            [[getLabel('reference_number', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-2" field="cp_output__name" sortable>
-            [[getLabel('cp_output', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-2" field="partner__name" sortable>
-            [[getLabel('partner', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-2" field="office__name" sortable>
-            [[getLabel('office', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-2" field="section__name" sortable>
-            [[getLabel('section', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-2" field="assigned_to__first_name,assigned_to__last_name" sortable>
-            [[getLabel('assigned_to', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-1" field="due_date" sortable>
-            [[getLabel('due_date', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-1" field="status" sortable>
-            [[getLabel('status', basePermissionPath)]]
-          </etools-data-table-column>
-          <etools-data-table-column class="flex-1" field="high_priority" sortable> Priority </etools-data-table-column>
-        </etools-data-table-header>
-
-        <template is="dom-if" if="[[!actionPoints.length]]">
-          <etools-data-table-row no-collapse>
-            <div slot="row-data" class="layout horizontal">
-              <div class="col-data flex-1 truncate">-</div>
-              <div class="col-data flex-2 truncate">-</div>
-              <div class="col-data flex-2 truncate">-</div>
-              <div class="col-data flex-2 truncate">-</div>
-              <div class="col-data flex-2 truncate">-</div>
-              <div class="col-data flex-2 truncate">-</div>
-              <div class="col-data flex-1 truncate">-</div>
-              <div class="col-data flex-1 truncate">-</div>
-              <div class="col-data flex-1 truncate"></div>
-            </div>
-          </etools-data-table-row>
-        </template>
-
-        <template id="rows" is="dom-repeat" items="[[actionPoints]]" as="entry">
-          <etools-data-table-row low-resolution-layout="[[lowResolutionLayout]]">
-            <div slot="row-data" class="layout horizontal">
-              <div
-                class="col-data flex-1 truncate"
-                data-col-header-label$="[[getLabel('reference_number', basePermissionPath)]]"
-              >
-                <div class="tooltip-container">
-                  <a href$="[[_getLink(entry.id)]]">[[getStringValue(entry.reference_number)]]</a>
-                  <paper-tooltip offset="0">[[getStringValue(entry.reference_number)]]</paper-tooltip>
-                </div>
-              </div>
-              <div
-                class="col-data flex-2 truncate"
-                data-col-header-label$="[[getLabel('cp_output', basePermissionPath)]]"
-              >
-                <div class="tooltip-container">
-                  [[getStringValue(entry.cp_output.name)]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.cp_output.name)]]</paper-tooltip>
-                </div>
-              </div>
-              <div
-                class="col-data flex-2 truncate"
-                data-col-header-label$="[[getLabel('partner', basePermissionPath)]]"
-              >
-                <div class="tooltip-container">
-                  [[getStringValue(entry.partner.name)]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.partner.name)]]</paper-tooltip>
-                </div>
-              </div>
-              <div class="col-data flex-2 truncate" data-col-header-label$="[[getLabel('office', basePermissionPath)]]">
-                <div class="tooltip-container">
-                  [[getStringValue(entry.office.name)]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.office.name)]]</paper-tooltip>
-                </div>
-              </div>
-              <div
-                class="col-data flex-2 truncate"
-                data-col-header-label$="[[getLabel('section', basePermissionPath)]]"
-              >
-                <div class="tooltip-container">
-                  [[getStringValue(entry.section.name)]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.section.name)]]</paper-tooltip>
-                </div>
-              </div>
-              <div
-                class="col-data flex-2 truncate"
-                data-col-header-label$="[[getLabel('assigned_to', basePermissionPath)]]"
-              >
-                <div class="tooltip-container">
-                  <span>[[getStringValue(entry.assigned_to.name)]]</span>
-                  <paper-tooltip offset="0">[[getStringValue(entry.assigned_to.name)]]</paper-tooltip>
-                </div>
-              </div>
-              <div
-                class="col-data flex-1 truncate"
-                data-col-header-label$="[[getLabel('due_date', basePermissionPath)]]"
-              >
-                <div class="tooltip-container">
-                  [[prettyDate(entry.due_date, null, '-')]]
-                  <paper-tooltip offset="0">[[prettyDate(entry.due_date, null, '-')]]</paper-tooltip>
-                </div>
-              </div>
-              <div class="col-data flex-1 truncate" data-col-header-label$="[[getLabel('status', basePermissionPath)]]">
-                <div class="tooltip-container">
-                  [[getStringValue(entry.status)]]
-                  <paper-tooltip offset="0">[[getStringValue(entry.status)]] </paper-tooltip>
-                </div>
-              </div>
-              <div class="col-data flex-1 truncate" data-col-header-label="Priority">
-                <div class="tooltip-container">
-                  [[_getPriorityValue(entry.high_priority)]]
-                  <paper-tooltip offset="0">[[_getPriorityValue(entry.high_priority)]] </paper-tooltip>
-                </div>
-              </div>
-            </div>
-            <div slot="row-data-details" class="layout horizontal">
-              <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('description', basePermissionPath)]]</div>
-                <text-content rows="3" text="[[getStringValue(entry.description)]]"></text-content>
-                <paper-tooltip offset="0">[[getStringValue(entry.description)]]</paper-tooltip>
-              </div>
-              <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('intervention', basePermissionPath)]]</div>
-                <div class="truncate">[[getStringValue(entry.intervention.number)]]</div>
-                <paper-tooltip offset="0">[[getStringValue(entry.intervention.number)]]</paper-tooltip>
-              </div>
-              <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('location', basePermissionPath)]]</div>
-                <div class="truncate">[[getStringValue(entry.location.name)]]</div>
-                <paper-tooltip offset="0">[[getStringValue(entry.location.name)]]</paper-tooltip>
-              </div>
-              <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('related_module', basePermissionPath)]]</div>
-                <div class="truncate">[[getStringValue(entry.related_module, modules, 'display_name')]]</div>
-                <paper-tooltip offset="0"
-                  >[[getStringValue(entry.related_module, modules, 'display_name')]]
-                </paper-tooltip>
-              </div>
-              <div class="row-details-content layout vertical flex">
-                <div class="rdc-title">[[getLabel('assigned_by', basePermissionPath)]]</div>
-                <div class="truncate">[[getStringValue(entry.assigned_by.name)]]</div>
-                <paper-tooltip offset="0">[[getStringValue(entry.assigned_by.name)]]</paper-tooltip>
-              </div>
-              <div class="row-details-content layout vertical flex">
-                <template is="dom-if" if="[[entry.date_of_completion.length]]">
-                  <div class="rdc-title">[[getLabel('date_of_completion', basePermissionPath)]]</div>
-                  <div class="truncate">[[prettyDate(entry.date_of_completion)]]</div>
-                  <paper-tooltip offset="0">[[prettyDate(entry.date_of_completion)]]</paper-tooltip>
-                </template>
-              </div>
-            </div>
-          </etools-data-table-row>
-        </template>
-
-        <etools-data-table-footer
-          page-size="{{pageSize}}"
-          page-number="{{pageNumber}}"
-          low-resolution-layout="[[lowResolutionLayout]]"
-          total-results="[[totalResults]]"
-          visible-range="{{visibleRange}}"
-          on-page-size-changed="_pageSizeSelected"
-          on-page-number-changed="_pageNumberChanged"
-        >
-        </etools-data-table-footer>
-      </paper-card>
-    `;
-  }
-
-  @property({type: Array, notify: true})
+export class ActionPointsList extends PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
+  @property({type: Array}) // , notify: true
   actionPoints: any[];
 
-  @property({type: Object, notify: true})
+  @property({type: Object}) // , notify: true
   labels: any;
 
-  @property({type: Array, notify: true})
+  @property({type: Array}) // , notify: true
   createLink = '/new';
 
-  @property({type: Array, notify: true})
+  @property({type: Array}) // , notify: true
   statuses: any[];
+
+  @property({type: Array})
+  modules: [];
 
   @property({type: Boolean})
   lowResolutionLayout = false;
 
   @property({type: Array})
-  filters: any[] = [
-    {
-      name: 'Assignee',
-      query: 'assigned_to',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Assigned By',
-      query: 'assigned_by',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Partner',
-      query: 'partner',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Office',
-      query: 'office',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Location',
-      query: 'location',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Section',
-      query: 'section',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Related App',
-      query: 'related_module',
-      optionValue: 'value',
-      optionLabel: 'display_name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Status',
-      query: 'status',
-      optionValue: 'value',
-      optionLabel: 'display_name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'High Priority',
-      query: 'high_priority',
-      optionValue: 'value',
-      optionLabel: 'display_name',
-      selection: [
-        {
-          display_name: 'Yes',
-          value: 'true'
-        },
-        {
-          display_name: 'No',
-          value: 'false'
-        }
-      ],
-      selected: false
-    },
-    {
-      name: 'PD/SSFA',
-      query: 'intervention',
-      optionValue: 'id',
-      optionLabel: 'title',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'CP Output',
-      query: 'cp_output',
-      optionValue: 'id',
-      optionLabel: 'name',
-      selection: [],
-      selected: false
-    },
-    {
-      name: 'Due On',
-      query: 'due_date',
-      isDatePicker: true,
-      selected: false
-    },
-    {
-      name: 'Due Before',
-      query: 'due_date__lte',
-      isDatePicker: true,
-      selected: false
-    },
-    {
-      name: 'Due After',
-      query: 'due_date__gte',
-      isDatePicker: true,
-      selected: false
-    }
-  ];
+  allFilters!: EtoolsFilter[];
 
-  @property({type: Boolean})
-  isShowCompleted = true;
+  @property({type: Array})
+  filters: any[];
 
-  @property({type: Number})
-  pageNumber = 1;
-
-  @property({type: Number})
-  pageSize = 10;
-
-  @property({type: Object, notify: true})
+  @property({type: Object}) // , notify: true
   queryParams: GenericObject;
 
+  @property({type: Object}) // , notify: true
+  initialQueryParams: GenericObject;
+
   @property({type: Object})
-  oldQueryParams: GenericObject;
+  prevQueryParams: GenericObject;
 
   @property({type: Array})
   totalResults: number;
 
-  @property({type: Object, notify: true})
+  @property({type: Object}) // , notify: true
   route: any;
 
   @property({type: String})
   basePermissionPath = 'action_points';
 
-  @property({type: Array, notify: true})
+  @property({type: Object}) // , notify: true
   exportParams: any;
 
-  @property({type: Array, notify: true})
-  exportLinks: string[];
+  @property({type: Array}) // , notify: true
+  exportLinks: any[];
 
   @property({type: Boolean})
   staticDataLoaded: boolean;
@@ -508,73 +97,402 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
   @property({type: Object})
   _debounceLoadData: Debouncer;
 
-  ready() {
-    super.ready();
-    this._initSort();
-    this.set('isShowCompleted', this.queryParams.status !== 'open');
+  @property({type: Object})
+  searchParams: any;
+
+  @property({type: String})
+  rootPath: string;
+
+  static get styles() {
+    // language=CSS
+    return [gridLayoutStylesLit];
+  }
+
+  render() {
+    return html`
+      ${moduleStyles}
+      <style>
+        ${sharedStyles} ${elevationStyles} ${dataTableStylesLit} :host {
+          position: relative;
+          display: block;
+        }
+        paper-card {
+          display: block;
+          margin-top: 25px;
+          background-color: white;
+          margin: 24px 24px 0 24px;
+          width: calc(100% - 48px);
+        }
+        etools-data-table-row {
+          --row-width_-_width: 100%;
+        }
+        *[slot='row-data'] {
+          max-width: calc(100% - 56px);
+        }
+        section.page-content.filters {
+          padding: 8px 24px;
+          margin: 24px;
+        }
+        @media (max-width: 576px) {
+          section.page-content.filters {
+            margin: 5px 0;
+          }
+          .page-content {
+            margin: 5px;
+          }
+        }
+        datepicker-lite {
+          width: 176px;
+          margin-left: 12px;
+          margin-right: 12px;
+          --iron-icon-fill-color: var(--gray-mid-dark);
+        }
+
+        .filter-dropdown {
+          width: 200px;
+
+          --esmm-list-wrapper: {
+            margin-top: 0;
+            padding-top: 12px;
+            -ms-overflow-style: auto;
+          }
+        }
+      </style>
+      <iron-media-query
+        query="(max-width: 767px)"
+        .queryMatches="${this.lowResolutionLayout}"
+        @query-matches-changed="${(e: CustomEvent) => {
+          this.lowResolutionLayout = e.detail.value;
+        }}"
+      ></iron-media-query>
+      <app-location
+        .path="${this.path}"
+        .queryParams="${this.queryParams}"
+        url-space-regex="^${this.rootPath}"
+        @path-changed=${this.pathChanged}
+        @query-params-changed=${this.queryParamsChanged}
+      >
+      </app-location>
+
+      <pages-header-element
+        hide-print-button
+        link="action-points/new"
+        .showAddButton="${!this.noActionsAllowed(this.basePermissionPath)}"
+        show-export-button
+        .exportLinks="${this.exportLinks}"
+        btn-text="Add Action Point"
+        page-title="Action Points"
+      >
+      </pages-header-element>
+      <action-points-data
+        .actionPoints="${this.actionPoints}"
+        .requestQueries="${this.queryParams}"
+        .listLength="${this.paginator.count}"
+        @action-points-changed=${({detail}: CustomEvent) => {
+          this.actionPoints = detail.value;
+        }}
+        @list-length-changed=${({detail}: CustomEvent) => {
+          this.paginator = {...this.paginator, count: detail.value};
+        }}
+      >
+      </action-points-data>
+
+      <section class="elevation page-content filters" elevation="1">
+        <etools-filters .filters="${this.allFilters}" @filter-change="${this.filtersChange}"></etools-filters>
+      </section>
+
+      <paper-card>
+        <etools-data-table-header
+          id="listHeader"
+          ?no-collapse="${!this.actionPoints?.length}"
+          .lowResolutionLayout="${this.lowResolutionLayout}"
+          label="${this.paginator.visible_range[0]} - ${this.paginator.visible_range[1]} of ${this.paginator
+            .count} results to show"
+        >
+          <etools-data-table-column class="col-1" field="reference_number" sortable>
+            ${this.getLabel('reference_number', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-2" field="cp_output__name" sortable>
+            ${this.getLabel('cp_output', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-2" field="partner__name" sortable>
+            ${this.getLabel('partner', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-2" field="office__name" sortable>
+            ${this.getLabel('office', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-1" field="section__name" sortable>
+            ${this.getLabel('section', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-1" field="assigned_to__first_name,assigned_to__last_name" sortable>
+            ${this.getLabel('assigned_to', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-1" field="due_date" sortable>
+            ${this.getLabel('due_date', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-1" field="status" sortable>
+            ${this.getLabel('status', this.basePermissionPath)}
+          </etools-data-table-column>
+          <etools-data-table-column class="col-1" field="high_priority" sortable> Priority </etools-data-table-column>
+        </etools-data-table-header>
+
+        <etools-data-table-row no-collapse ?hidden="${this.actionPoints?.length}">
+          <div slot="row-data" class="layout-horizontal">
+            <div class="col-data col-1">-</div>
+            <div class="col-data col-2">-</div>
+            <div class="col-data col-2">-</div>
+            <div class="col-data col-2">-</div>
+            <div class="col-data col-1">-</div>
+            <div class="col-data col-1">-</div>
+            <div class="col-data col-1">-</div>
+            <div class="col-data col-1">-</div>
+            <div class="col-data col-1"></div>
+          </div>
+        </etools-data-table-row>
+
+        ${this.actionPoints?.map(
+          (entry) => html`
+            <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
+              <div slot="row-data">
+                <div
+                  class="col-data col-1"
+                  data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.reference_number)}"
+                >
+                  <a href="${this._getLink(entry.id)}" class="truncate"
+                    >${this.getStringValue(entry.reference_number)}</a
+                  >
+                </div>
+                <div
+                  class="col-data col-2"
+                  data-col-header-label="${this.getLabel('cp_output', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.cp_output?.name)}"
+                >
+                  <span class="truncate">${this.getStringValue(entry.cp_output?.name)}</span>
+                </div>
+                <div
+                  class="col-data col-2"
+                  data-col-header-label="${this.getLabel('partner', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.partner?.name)}"
+                >
+                  <span class="truncate">${this.getStringValue(entry.partner?.name)}</span>
+                </div>
+                <div
+                  class="col-data col-2"
+                  data-col-header-label="${this.getLabel('office', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.office?.name)}"
+                >
+                  <span class="truncate">${this.getStringValue(entry.office?.name)}</span>
+                </div>
+                <div
+                  class="col-data col-1"
+                  data-col-header-label="${this.getLabel('section', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.section?.name)}"
+                >
+                  <span class="truncate">${this.getStringValue(entry.section?.name)}</span>
+                </div>
+                <div
+                  class="col-data col-1"
+                  data-col-header-label="${this.getLabel('assigned_to', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.assigned_to?.name)}"
+                >
+                  <span class="truncate">${this.getStringValue(entry.assigned_to?.name)}</span>
+                </div>
+                <div
+                  class="col-data col-1"
+                  data-col-header-label="${this.getLabel('due_date', this.basePermissionPath)}"
+                  title="${this.prettyDate(entry.due_date, null, '-')}"
+                >
+                  <span class="truncate">${this.prettyDate(entry.due_date, null, '-')}</span>
+                </div>
+                <div
+                  class="col-data col-1"
+                  data-col-header-label="${this.getLabel('status', this.basePermissionPath)}"
+                  title="${this.getStringValue(entry.status)}"
+                >
+                  <span class="truncate">${this.getStringValue(entry.status)}</span>
+                </div>
+                <div
+                  class="col-data col-1"
+                  data-col-header-label="Priority"
+                  title=${this._getPriorityValue(entry.high_priority)}
+                >
+                  <span class="truncate">${this._getPriorityValue(entry.high_priority)}</span>
+                </div>
+              </div>
+              <div slot="row-data-details">
+                <div class="row-details-content flex-c">
+                  <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
+                  <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
+                  <paper-tooltip fit-to-visible-bounds offset="0" ?hidden="${!this._showTooltip(entry.description)}">
+                    ${this.getStringValue(entry.description)}
+                  </paper-tooltip>
+                </div>
+                <div class="row-details-content flex-c">
+                  <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
+                  <div>
+                    <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
+                    <paper-tooltip ?hidden="${!this._showTooltip(entry.intervention?.number)}" offset="0"
+                      >${this.getStringValue(entry.intervention?.number)}</paper-tooltip
+                    >
+                  </div>
+                </div>
+                <div class="row-details-content flex-c">
+                  <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
+                  <div>
+                    <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
+                    <paper-tooltip ?hidden="${!this._showTooltip(entry.location?.name)}" offset="0"
+                      >${this.getStringValue(entry.location?.name)}</paper-tooltip
+                    >
+                  </div>
+                </div>
+                <div class="row-details-content flex-c">
+                  <div class="rdc-title">${this.getLabel('related_module', this.basePermissionPath)}</div>
+                  <div>
+                    <div class="truncate">
+                      ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
+                    </div>
+                    <paper-tooltip
+                      offset="0"
+                      ?hidden="${!this._showTooltip(entry.related_module, this.modules, 'display_name')}"
+                    >
+                      ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
+                    </paper-tooltip>
+                  </div>
+                </div>
+                <div class="row-details-content flex-c">
+                  <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
+                  <div>
+                    <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
+                    <paper-tooltip ?hidden="${!this._showTooltip(entry.assigned_by?.name)}" offset="0"
+                      >${this.getStringValue(entry.assigned_by?.name)}</paper-tooltip
+                    >
+                  </div>
+                </div>
+                <div class="row-details-content flex-c">
+                  <div ?hidden="${!entry.date_of_completion?.length}">
+                    <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
+                    <div>
+                      <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
+                      <paper-tooltip ?hidden="${!this._showTooltip(entry.date_of_completion)}" offset="0"
+                        >${this.prettyDate(entry.date_of_completion)}</paper-tooltip
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </etools-data-table-row>
+          `
+        )}
+
+        <etools-data-table-footer
+          .lowResolutionLayout="${this.lowResolutionLayout}"
+          .pageSize="${this.paginator.page_size}"
+          .pageNumber="${this.paginator.page}"
+          .totalResults="${this.paginator.count}"
+          .visibleRange="${this.paginator.visible_range}"
+          @visible-range-changed="${this.visibleRangeChanged}"
+          @page-size-changed="${this.pageSizeChanged}"
+          @page-number-changed="${this.pageNumberChanged}"
+        >
+        </etools-data-table-footer>
+      </paper-card>
+    `;
+  }
+
+  firstUpdated() {
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
-  @observe('staticDataLoaded')
-  setData() {
-    this.set('modules', getData('modules') || []);
-    this.set('statuses', getData('statuses') || []);
-    this._initFilters();
+  updated(changedProperties) {
+    if (changedProperties.has('staticDataLoaded')) {
+      if (!this.allFilters) {
+        this.initFiltersForDisplay();
+        setTimeout(() => {
+          this._setInitialTableSorting();
+        }, 200);
+      }
+    }
+
+    if (changedProperties.has('exportParams')) {
+      this._setExportLinks();
+    }
+  }
+
+  pathChanged({detail}: CustomEvent) {
+    this._setPath(detail.value);
+  }
+
+  queryParamsChanged({detail}: CustomEvent) {
+    if (!detail.value || !Object.keys(detail.value).length) {
+      return;
+    }
+    if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
+      this.queryParams = detail.value;
+      this._updateQueries(detail.value);
+    }
   }
 
   noActionsAllowed(path: string) {
     return noActionsAllowed(path);
   }
 
-  _initSort() {
+  _setInitialTableSorting() {
     const sortParams = this.queryParams && this.queryParams.ordering;
     if (!sortParams) return;
     const field = sortParams.replace(/^-/, '');
     const direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
     const column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
     if (!column) return;
-    column.dispatchEvent(
-      new CustomEvent('sort-changed', {
-        detail: {
-          field: field,
-          direction: direction
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
-    column.set('selected', true);
-    column.set('direction', direction);
+    column.setAttribute('selected', 'true');
+    column.setAttribute('direction', direction);
   }
 
-  @observe('path')
   _setPath(path: string) {
-    if (~path.indexOf('/list')) {
-      this.set('queryParams', Object.assign({}, this.queryParams, {page_size: this.pageSize, page: this.pageNumber}));
+    if (path.includes('/list')) {
+      this.path = path;
+      this.queryParams = Object.assign({}, this.queryParams, {
+        page: this.queryParams && this.queryParams.page ? this.queryParams.page : this.paginator.page,
+        page_size:
+          this.queryParams && this.queryParams.page_size ? this.queryParams.page_size : this.paginator.page_size
+      });
+      if (!this.initialQueryParams) {
+        this.initialQueryParams = Object.assign({}, this.queryParams);
+      }
     }
   }
 
-  @observe('queryParams')
   _updateQueries(queryParams: GenericObject) {
-    if (!~this.path.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
+    if (!this.path?.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
       return;
     }
+
+    queryParams = Object.keys(queryParams).reduce((acc, key) => {
+      if (queryParams[key]) {
+        acc[key] = String(queryParams[key]);
+      }
+      return acc;
+    }, {});
+
     const exportParams = JSON.parse(JSON.stringify(queryParams));
     delete exportParams['page_size'];
     delete exportParams['page'];
-    this.set('exportParams', exportParams);
+    this.exportParams = exportParams;
 
     if (queryParams.reload) {
       clearQueries();
-      this.oldQueryParams = {};
-      this.set('queryParams', Object.assign({}, {page_size: this.pageSize, page: this.pageNumber}));
+      clearSelectedValuesInFilters(this.allFilters);
+      this.allFilters = [...this.allFilters];
+      this.prevQueryParams = {};
+      this.resetPageNumber();
+      this.queryParams = Object.assign({}, {page: this.paginator.page, page_size: this.paginator.page_size});
       return;
     } else if (queryParams.page) {
-      this.set('pageNumber', Number(queryParams.page));
+      this.paginator.page = Number(queryParams.page);
     }
 
-    if (!this.oldQueryParams || JSON.stringify(queryParams) !== JSON.stringify(this.oldQueryParams)) {
-      this.oldQueryParams = Object.assign({}, queryParams);
+    if (!this.prevQueryParams || JSON.stringify(queryParams) !== JSON.stringify(this.prevQueryParams)) {
+      this.prevQueryParams = Object.assign({}, queryParams);
     } else {
       return;
     }
@@ -589,99 +507,71 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
     });
   }
 
+  filtersChange(e: CustomEvent) {
+    this._updateQueries({...e.detail, page: 1, page_size: this.paginator.page_size});
+  }
+
+  paginatorChanged() {
+    if (
+      String(this.prevQueryParams.page) !== String(this.paginator.page) ||
+      String(this.prevQueryParams.page_size) !== String(this.paginator.page_size)
+    ) {
+      const queryParams = {
+        ...this.prevQueryParams,
+        page: this.paginator.page,
+        page_size: this.paginator.page_size
+      };
+      this._updateQueries(queryParams);
+    }
+  }
+
   _sort({detail}: any) {
     let ordering = detail.field;
-    if (this.queryParams.ordering && this.queryParams.ordering === ordering) {
-      ordering = this.queryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
+    const prevQueryParams = this.prevQueryParams ? this.prevQueryParams : {};
+    if (prevQueryParams.ordering && prevQueryParams.ordering === ordering) {
+      ordering = this.prevQueryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
     }
-    this.set('queryParams.ordering', ordering);
+    const queryParams = {...prevQueryParams, ordering: ordering};
+    this._updateQueries(queryParams);
   }
 
   _getLink(actionPointId: number) {
     return `action-points/detail/${actionPointId}`;
   }
 
-  _initFilters() {
-    const filtersElement: SearchAndFilter = this.shadowRoot.querySelector('#filters');
-    this.setFiltersSelections();
-    if (filtersElement) {
-      filtersElement._reloadFilters();
-    }
+  initFiltersForDisplay() {
+    setselectedValueTypeByFilterKey(selectedValueTypeByFilterKey);
+    const availableFilters = JSON.parse(JSON.stringify(getAPFilters()));
+    this.populateDropdownFilterOptionsFromCommonData(availableFilters);
+    const currentParams = Object.assign({}, this.queryParams || {});
+    ['page', 'page_size', 'sort'].forEach((key) => {
+      if (currentParams[key]) {
+        delete currentParams[key];
+      }
+    });
+    this.allFilters = availableFilters;
+    this.allFilters = updateFiltersSelectedValues(currentParams, this.allFilters);
   }
 
-  setFiltersSelections() {
+  populateDropdownFilterOptionsFromCommonData(allFilters: EtoolsFilter[]) {
+    this.modules = getData('modules') || [];
+    this.statuses = getData('statuses') || [];
     const usersList = getData('unicefUsers').map((user: any) => {
       return {
         id: user.id,
         name: user.name
       };
     });
-    const queryDataPairs = [
-      {
-        query: 'assigned_to',
-        data: usersList
-      },
-      {
-        query: 'assigned_by',
-        data: usersList
-      },
-      {
-        query: 'partner',
-        dataKey: 'partnerOrganisations'
-      },
-      {
-        query: 'office',
-        dataKey: 'offices'
-      },
-      {
-        query: 'location',
-        dataKey: 'locations'
-      },
-      {
-        query: 'cp_output',
-        dataKey: 'cpOutputsList'
-      },
-      {
-        query: 'intervention',
-        dataKey: 'interventionsList'
-      },
-      {
-        query: 'status',
-        dataKey: 'statuses'
-      },
-      {
-        query: 'section',
-        dataKey: 'sectionsCovered'
-      },
-      {
-        query: 'related_module',
-        dataKey: 'modules'
-      }
-    ];
-
-    queryDataPairs.forEach((pair) => {
-      const filterIndex = this._getFilterIndex(pair.query);
-      const data = !pair.data ? getData(pair.dataKey) : pair.data || [];
-      this.setFilterSelection(filterIndex, data);
-    });
-  }
-
-  _getFilterIndex(query: any) {
-    if (!this.filters) {
-      return -1;
-    }
-
-    return this.filters.findIndex((filter: any) => {
-      return filter.query === query;
-    });
-  }
-
-  setFilterSelection(filterIndex: number, data: any) {
-    if (filterIndex !== undefined && filterIndex !== -1) {
-      this.set(`filters.${filterIndex}.selection`, data);
-      return true;
-    }
-    return false;
+    updateFilterSelectionOptions(allFilters, APFilterKeys.assigned_to, usersList);
+    updateFilterSelectionOptions(allFilters, APFilterKeys.assigned_by, usersList);
+    updateFilterSelectionOptions(allFilters, APFilterKeys.partner, getData('partnerOrganisations'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.office, getData('offices'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.location, getData('locations'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.cp_output, getData('cpOutputsList'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.intervention, getData('interventionsList'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.status, getData('statuses'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.section, getData('sectionsCovered'));
+    updateFilterSelectionOptions(allFilters, APFilterKeys.related_module, getData('modules'));
   }
 
   _requestData() {
@@ -689,25 +579,6 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
     actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
   }
 
-  _pageNumberChanged({detail}: any) {
-    this.set('queryParams.page', detail.value);
-  }
-
-  _pageSizeSelected({detail}: any) {
-    this.set('queryParams.page_size', detail.value);
-  }
-
-  @observe('isShowCompleted')
-  _setShowCompleted(isShowCompleted: boolean) {
-    if (!isShowCompleted) {
-      this.set('queryParams.status', 'open');
-    } else if (this.queryParams) {
-      this.queryParams.status = undefined;
-      updateQueries(this, this.queryParams);
-    }
-  }
-
-  @observe('exportParams')
   _setExportLinks() {
     let qs = '';
     if (this.exportParams) {
@@ -715,15 +586,19 @@ export class ActionPointsList extends InputAttrsMixin(LocalizationMixin(DateMixi
       const queryArray = keys.map((k) => k + '=' + this.exportParams[k]);
       qs = '?' + queryArray.join('&');
     }
-    this.set('exportLinks', [
+    this.exportLinks = [
       {
         name: 'Export CSV',
         url: getEndpoint('actionPointsListExport').url + qs
       }
-    ]);
+    ];
   }
 
   _getPriorityValue(priority: boolean) {
     return priority === true ? 'high' : '';
+  }
+
+  _showTooltip(value: string, list?: [], field?: string) {
+    return this.getStringValue(value, list, field) !== '-';
   }
 }

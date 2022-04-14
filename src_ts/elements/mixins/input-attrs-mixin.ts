@@ -1,17 +1,15 @@
 import {isRequired, getFieldAttribute, isReadOnly} from './permission-controller.js';
 import {Constructor, GenericObject} from '../../typings/globals.types.js';
-import {PolymerElement} from '@polymer/polymer';
-import {property} from '@polymer/decorators';
-
+import {LitElement, property} from 'lit-element';
 /*
  * Mixin for input field functionality.
  * @polymer
  * @mixinFunction
  */
-export function InputAttrsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-  class InputAttrsClass extends (superClass as Constructor<PolymerElement>) {
+export function InputAttrsMixin<T extends Constructor<LitElement>>(superClass: T) {
+  class InputAttrsClass extends superClass {
     @property({type: Object})
-    errors: GenericObject;
+    errors: GenericObject = {};
 
     /**
      * Set required class from OPTIONS data by path
@@ -50,9 +48,9 @@ export function InputAttrsMixin<T extends Constructor<PolymerElement>>(superClas
      * @param special
      * @returns {*}
      */
-    public getPlaceholderText(path: string, base: string, special: boolean) {
+    public getPlaceholderText(path: string, base: string, special?: boolean) {
       if (isReadOnly(`${base}.${path}`)) {
-        return 'Empty Field';
+        return '—';
       }
 
       const label = this.getLabel(path, base);
@@ -93,7 +91,7 @@ export function InputAttrsMixin<T extends Constructor<PolymerElement>>(superClas
 
       const field = event.target.getAttribute('field');
       if (field) {
-        this.set(`errors.${field}`, false);
+        this.errors[field] = false;
       }
 
       event.target.invalid = false;
