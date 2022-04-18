@@ -355,8 +355,11 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('cp_output', this.permissionPath)}"
-                @etools-selected-item-changed="${({detail}: CustomEvent) =>
-                  this.updateField('cp_output', detail.selectedItem?.id)}"
+                @etools-selected-item-changed="${({detail}: CustomEvent) => {
+                  if (this.cpOutputs && this.cpOutputs.length) {
+                    this.updateField('cp_output', detail.selectedItem?.id);
+                  }
+                }}"
               >
               </etools-dropdown>`) ||
             ''}
@@ -500,7 +503,11 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <paper-checkbox
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
-              @checked-changed=${({detail}) => this.updateField('high_priority', detail.value)}
+              @checked-changed=${({detail}) => {
+                if (this.editedItem && Object.keys(this.editedItem).length) {
+                  this.updateField('high_priority', detail.value);
+                }
+              }}
             >
               ${this.getLabel('high_priority', this.permissionPath)}</paper-checkbox
             >
@@ -600,7 +607,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   _updateEditedItem(actionPoint: any) {
-    this.editedItem = (actionPoint && JSON.parse(JSON.stringify(actionPoint))) || {};
+    if (actionPoint && JSON.stringify(actionPoint) !== JSON.stringify(this.editedItem)) {
+      if (actionPoint.intervention) {
+        this._updateCpOutputs(actionPoint.intervention);
+      }
+      this.editedItem = {...actionPoint};
+    }
   }
 
   _updateLocations(filter?: any) {
@@ -683,7 +695,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         this._finishCpoRequest();
         return;
       }
-
       this.cpOutputs = await this._getCpOutputs(cpIds.join(','));
       this.interventionRequestInProcess = false;
     } catch (error) {
