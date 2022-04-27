@@ -11,13 +11,14 @@ import './countries-dropdown';
 import '../../common-elements/support-btn';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('app-main-header')
-export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
+export class AppMainHeader extends MatomoMixin(EtoolsPageRefreshMixin(PolymerElement)) {
   public static get template() {
     return html`
       ${sharedStyles}
@@ -97,7 +98,8 @@ export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
             title="Refresh"
             id="pageRefresh"
             icon="refresh"
-            on-tap="refresh"
+            tracker="Refresh"
+            on-tap="onRefreshClick"
             disabled="[[refreshInProgress]]"
           >
           </paper-icon-button>
@@ -124,6 +126,11 @@ export class AppMainHeader extends EtoolsPageRefreshMixin(PolymerElement) {
   _logout() {
     resetOldUserData();
     window.location.href = `${window.location.origin}/logout/`;
+  }
+
+  onRefreshClick(e: CustomEvent) {
+    this.trackAnalytics(e);
+    this.refresh();
   }
 
   @observe('environment')
