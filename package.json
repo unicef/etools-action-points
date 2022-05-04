@@ -109,7 +109,7 @@
     "ua-parser-js": ">=0.7.31",
     "cached-path-relative": ">=1.1.0",
     "follow-redirects": ">=1.14.9",
-    "urijs": ">=1.19.9",
+    "urijs": ">=1.19.11",
     "ajv": ">=6.12.6"
   }
 }
