@@ -1,29 +1,30 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
-import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
-import {moduleStyles} from '../../../styles/module-styles';
+import {moduleStyles} from '../../../styles/module-styles-lit';
 import {noActionsAllowed} from '../../../mixins/permission-controller';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {DateMixin} from '../../../mixins/date-mixin';
 import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
-import {customElement, property, observe} from '@polymer/decorators';
+import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
 
 @customElement('action-point-comments') // Actions Taken
-export class ActionPointComments extends LocalizationMixin(
-  DateMixin(ErrorHandlerMixin(InputAttrsMixin(PolymerElement)))
+export class ActionPointComments extends PaginationMixin(
+  LocalizationMixin(DateMixin(ErrorHandlerMixin(InputAttrsMixin(LitElement))))
 ) {
-  static get template() {
+  render() {
     return html`
       ${tabInputsStyles} ${moduleStyles}
       <style>
         .comments-list {
           padding: 8px 12px;
+          text-align: justify;
         }
 
         .comment-item {
@@ -49,33 +50,46 @@ export class ActionPointComments extends LocalizationMixin(
         }
       </style>
 
-      <etools-content-panel panel-title="[[getLabel('comments', permissionPath)]]">
+      <iron-media-query
+        query="(max-width: 767px)"
+        .queryMatches="${this.lowResolutionLayout}"
+        @query-matches-changed="${(e: CustomEvent) => {
+          this.lowResolutionLayout = e.detail.value;
+        }}"
+      ></iron-media-query>
+
+      <etools-content-panel panel-title="${this.getLabel('comments', this.permissionPath)}">
         <div slot="panel-btns">
           <paper-icon-button
             class="panel-button"
-            hidden$="[[noActionsAllowed(permissionPath)]]"
+            ?hidden="${this.noActionsAllowed(this.permissionPath)}"
             icon="add-box"
-            on-tap="_openAddComment"
+            @tap="${this._openAddComment}"
           ></paper-icon-button>
         </div>
         <div class="comments-list">
-          <template is="dom-if" if="[[!filteredComments.length]]">
-            <span>No actions taken</span>
-          </template>
-          <template id="rows" is="dom-repeat" items="[[filteredComments]]" as="item">
-            <div class="comment-item">
-              <div class="comment-item__header">
-                <span class="comment-item__user">[[item.user.name]]</span>
-                <span class="comment-item__date">[[prettyDate(item.submit_date)]]</span>
+          <span ?hidden=${this.filteredComments?.length}>No actions taken</span>
+          ${this.filteredComments?.map(
+            (item) => html`
+              <div class="comment-item">
+                <div class="comment-item__header">
+                  <span class="comment-item__user">${item.user?.name}</span>
+                  <span class="comment-item__date">${this.prettyDate(item.submit_date)}</span>
+                </div>
+                <div class="comment-item__body" id="commentArea" .innerHTML="${this.checkLinks(item.comment)}"></div>
               </div>
-              <div class="comment-item__body" id="commentArea" inner-h-t-m-l="[[checkLinks(item.comment)]]"></div>
-            </div>
-          </template>
+            `
+          )}
         </div>
         <etools-data-table-footer
-          page-size="{{pageSize}}"
-          page-number="{{pageNumber}}"
-          total-results="[[actionPoint.comments.length]]"
+          .lowResolutionLayout="${this.lowResolutionLayout}"
+          .pageSize="${this.paginator.page_size}"
+          .pageNumber="${this.paginator.page}"
+          .totalResults="${this.paginator.count}"
+          .visibleRange="${this.paginator.visible_range}"
+          @visible-range-changed="${this.visibleRangeChanged}"
+          @page-size-changed="${this.pageSizeChanged}"
+          @page-number-changed="${this.pageNumberChanged}"
         >
         </etools-data-table-footer>
       </etools-content-panel>
@@ -85,17 +99,14 @@ export class ActionPointComments extends LocalizationMixin(
   @property({type: String})
   permissionPath: string;
 
-  @property({type: Array, notify: true})
-  actionPoint: any[];
+  @property({type: Array}) // notify: true
+  actionPoint: any;
 
   @property({type: Array})
   filteredComments: any[];
 
-  @property({type: Number})
-  pageSize = 10;
-
-  @property({type: String})
-  pageNumber = 1;
+  @property({type: Boolean})
+  lowResolutionLayout = false;
 
   @property({type: String})
   commentText: string;
@@ -108,9 +119,19 @@ export class ActionPointComments extends LocalizationMixin(
     document.addEventListener('new-comment-added', (e: CustomEvent) => this._newCommentAdded(e));
   }
 
-  ready() {
-    super.ready();
+  firstUpdated() {
     this._createCommentDialog();
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('actionPoint')) {
+      this._resetPaginator();
+      this.paginatorChanged();
+    }
+
+    if (changedProperties.has('permissionPath')) {
+      this._updateCommentProp();
+    }
   }
 
   noActionsAllowed(path: string) {
@@ -118,26 +139,27 @@ export class ActionPointComments extends LocalizationMixin(
   }
 
   _createCommentDialog() {
-    this.set('commentDialog', document.createElement('open-add-comments'));
+    this.commentDialog = document.createElement('open-add-comments') as OpenAddComments;
     document.querySelector('body').appendChild(this.commentDialog);
   }
 
-  @observe('actionPoint')
   _updateCommentProp() {
     if (this.commentDialog) {
       this.commentDialog.actionPoint = this.actionPoint;
+      this.commentDialog.permissionPath = this.permissionPath;
     }
   }
 
   _newCommentAdded(response) {
-    this.set('actionPoint.comments', response.detail.comments);
-    this.set('actionPoint.history', response.detail.history);
+    this.actionPoint.comments = response.detail.comments;
+    this.actionPoint.history = response.detail.history;
+    this.actionPoint = {...this.actionPoint};
   }
 
-  @observe('permissionPath')
-  _updatePermission() {
-    this.set('pageNumber', 1);
-    this.set('pageSize', 10);
+  _resetPaginator() {
+    this.paginator.page = 1;
+    this.paginator.page_size = 10;
+    this.paginator.count = this.actionPoint?.comments?.length;
   }
 
   checkLinks(comment) {
@@ -152,13 +174,13 @@ export class ActionPointComments extends LocalizationMixin(
     this.commentDialog.open();
   }
 
-  @observe('actionPoint.comments', 'pageNumber', 'pageSize')
-  _filterComments(comments: string[], pageNumber: number, pageSize: number) {
-    if (!comments) {
+  paginatorChanged() {
+    if (!this.actionPoint.comments) {
       return;
     }
-    const from = (pageNumber - 1) * pageSize;
-    const to = pageNumber * pageSize;
-    this.set('filteredComments', comments.slice(from, to));
+
+    const from = (this.paginator.page - 1) * this.paginator.page_size;
+    const to = this.paginator.page * this.paginator.page_size;
+    this.filteredComments = this.actionPoint.comments.slice(from, to);
   }
 }

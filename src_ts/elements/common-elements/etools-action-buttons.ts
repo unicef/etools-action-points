@@ -1,21 +1,15 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, property, customElement} from 'lit-element';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {moduleStyles} from '../styles/module-styles';
-import {customElement, property} from '@polymer/decorators';
+import {moduleStyles} from '../styles/module-styles-lit';
 import {GenericObject} from '../../typings/globals.types';
 
-/**
- * @polymer
- * @customElement
- * @extends {PolymerElement}
- */
 @customElement('etools-action-button')
-export class EtoolsActionButton extends PolymerElement {
-  public static get template() {
+export class EtoolsActionButton extends LitElement {
+  render() {
     return html`
       ${moduleStyles}
       <style>
@@ -94,29 +88,35 @@ export class EtoolsActionButton extends PolymerElement {
 
       <paper-button
         raised
-        on-tap="_btnClicked"
-        class$="main-action status-tab-button {{withActionsMenu(actions.length)}}"
+        @tap="${this._btnClicked}"
+        class="main-action status-tab-button ${this.withActionsMenu(this.actions?.length)}"
       >
-        <span class="main-action text">[[_setButtonText(actions.0)]]</span>
-        <template is="dom-if" if="{{_showOtherActions(actions.length)}}">
-          <paper-menu-button dynamic-align opened="{{statusBtnMenuOpened}}" class="option-button">
-            <paper-icon-button icon="expand-more" slot="dropdown-trigger" class="option-button"></paper-icon-button>
+        <span class="main-action text">${this._setButtonText(this.actions?.[0])}</span>
 
-            <paper-listbox slot="dropdown-content">
-              <template is="dom-repeat" items="[[actions]]" filter="_filterActions" class="other-btns-template">
+        <paper-menu-button
+          dynamic-align
+          .opened="${this.statusBtnMenuOpened}"
+          class="option-button"
+          ?hidden="${!this._showOtherActions(this.actions?.length)}"
+        >
+          <paper-icon-button icon="expand-more" slot="dropdown-trigger" class="option-button"></paper-icon-button>
+
+          <paper-listbox slot="dropdown-content">
+            ${this.actions?.filter(this._filterActions.bind(this)).map(
+              (item) => html`
                 <div
                   class="other-options"
-                  on-tap="_btnClicked"
-                  on-click="closeMenu"
-                  action-code$="[[_setActionCode(item)]]"
+                  @tap="${this._btnClicked}"
+                  @click="${this.closeMenu}"
+                  action-code="${this._setActionCode(item)}"
                 >
-                  <iron-icon icon="[[_setIcon(item, icons)]]" class="option-icon"></iron-icon>
-                  <span>{{_setButtonText(item)}}</span>
+                  <iron-icon icon="${this._setIcon(item, this.icons)}" class="option-icon"></iron-icon>
+                  <span>${this._setButtonText(item)}</span>
                 </div>
-              </template>
-            </paper-listbox>
-          </paper-menu-button>
-        </template>
+              `
+            )}
+          </paper-listbox>
+        </paper-menu-button>
       </paper-button>
     `;
   }
@@ -195,7 +195,7 @@ export class EtoolsActionButton extends PolymerElement {
   }
 
   _filterActions(action: any) {
-    return !(action === this.actions[0]);
+    return !(action === this.actions?.[0]);
   }
 
   _setIcon(item: any, icons: any) {

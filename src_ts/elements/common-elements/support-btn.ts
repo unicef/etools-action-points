@@ -1,15 +1,15 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, property, customElement} from 'lit-element';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/communication-icons.js';
-import {customElement, property} from '@polymer/decorators';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('support-btn')
-export class SupportBtn extends PolymerElement {
-  public static get template() {
+export class SupportBtn extends MatomoMixin(LitElement) {
+  render() {
     return html`
       <style>
         :host(:hover) {
@@ -25,7 +25,7 @@ export class SupportBtn extends PolymerElement {
         }
       </style>
 
-      <a href="[[url]]" target="_blank">
+      <a href="${this.url}" target="_blank" @tap="${this.trackAnalytics}" tracker="Support">
         <iron-icon icon="communication:textsms"></iron-icon>
         Support
       </a>

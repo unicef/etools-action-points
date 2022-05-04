@@ -1,12 +1,11 @@
-import {PolymerElement, html} from '@polymer/polymer';
+import {LitElement, html, customElement} from 'lit-element';
 import '@polymer/paper-material/paper-material.js';
-import {sharedStyles} from '../styles/shared-styles';
-import {pageLayoutStyles} from '../styles/page-layout-styles';
-import {customElement} from '@polymer/decorators';
+import {sharedStyles} from '../styles/shared-styles-lit';
+import {pageLayoutStyles} from '../styles/page-layout-styles-lit';
 
 @customElement('not-found-page-view')
-export class NotFoundPageView extends PolymerElement {
-  public static get template() {
+export class NotFoundPageView extends LitElement {
+  render() {
     return html`
       ${sharedStyles} ${pageLayoutStyles}
       <style>
