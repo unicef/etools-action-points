@@ -130,7 +130,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           icon="apd-icons:power-bi"
           @tap="${this.trackAnalytics}"
           tracker="Implementation Intelligence"
-          side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/f9497d74-a670-4051-8800-a9d82284954f/ReportSection"
+          side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/9726e9e7-c72f-4153-9fd2-7b418a1e426c/ReportSection?ctid=77410195-14e1-4fb8-904b-ab1892023667"
           external
         >
         </side-bar-item>
