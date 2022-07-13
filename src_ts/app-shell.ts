@@ -143,7 +143,9 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     super.connectedCallback();
 
     this.checkAppVersion();
-    window.EtoolsEsmmFitIntoEl = this.$.appHeadLayout!.shadowRoot!.querySelector('#contentContainer');
+    window.EtoolsEsmmFitIntoEl = this.shadowRoot
+      .querySelector('#appHeadLayout')
+      .shadowRoot!.querySelector('#contentContainer');
 
     const eventData = {
       message: 'Loading...',
