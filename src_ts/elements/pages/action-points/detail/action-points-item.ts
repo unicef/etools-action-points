@@ -97,6 +97,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           <div id="pageContent">
             <action-point-details
               .actionPoint="${this.actionPoint}"
+              .apUnicefUsers="${this.apUnicefUsers}"
               .originalActionPoint="${this.originalActionPoint}"
               .permissionPath="${this.permissionPath}"
             ></action-point-details>

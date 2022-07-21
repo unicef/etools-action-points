@@ -28,6 +28,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
             id="ap-details"
             .actionPoint="${this.actionPoint}"
             .permissionPath="${this.permissionPath}"
+            .apUnicefUsers="${[]}"
           >
           </action-point-details>
         </div>

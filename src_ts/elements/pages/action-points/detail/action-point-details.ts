@@ -50,8 +50,16 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   @property({type: Array}) // notify: true
   unicefUsers: any[];
 
-  @property({type: Array}) // notify: true
-  apUnicefUsers: any[];
+  private _apUnicefUsers!: any[];
+  @property({type: Array})
+  get apUnicefUsers() {
+    return this._apUnicefUsers;
+  }
+
+  set apUnicefUsers(newVal: any[]) {
+    this._apUnicefUsers = newVal;
+    this.setAvailableUnicefUsers();
+  }
 
   @property({type: Array}) // notify: true
   offices: any[];
@@ -601,10 +609,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.offices = getData('offices');
     this.sectionsCovered = getData('sectionsCovered');
     this.cpOutputs = getData('cpOutputsList');
-    this.unicefUsers = (getData('unicefUsers') || []).map((user: any) => {
-      return {id: user.id, name: user.name};
-    });
-    // this.setAvailableUnicefUsers();
     this._updateLocations();
     this.dataIsSet = true;
   }
@@ -614,11 +618,11 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
       return {id: user.id, name: user.name};
     });
 
-    this.handleUsersNoLongerAssignedToCurrentCountry(users, this.apUnicefUsers);
-    return users;
+    this.addUsersNoLongerAssignedToCurrentCountry(users, this.apUnicefUsers);
+    this.unicefUsers = users;
   }
 
-  handleUsersNoLongerAssignedToCurrentCountry(availableUsers, savedUsers) {
+  addUsersNoLongerAssignedToCurrentCountry(availableUsers, savedUsers) {
     if (!(savedUsers && savedUsers.length > 0 && availableUsers && availableUsers.length > 0)) {
       return false;
     }
