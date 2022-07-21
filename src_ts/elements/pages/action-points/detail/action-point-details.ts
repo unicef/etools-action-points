@@ -51,6 +51,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   unicefUsers: any[];
 
   @property({type: Array}) // notify: true
+  apUnicefUsers: any[];
+
+  @property({type: Array}) // notify: true
   offices: any[];
 
   @property({type: Array}) // notify: true
@@ -601,11 +604,36 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.unicefUsers = (getData('unicefUsers') || []).map((user: any) => {
       return {id: user.id, name: user.name};
     });
-
+    // this.setAvailableUnicefUsers();
     this._updateLocations();
     this.dataIsSet = true;
   }
 
+  setAvailableUnicefUsers() {
+    const users = (getData('unicefUsers') || []).map((user: any) => {
+      return {id: user.id, name: user.name};
+    });
+
+    this.handleUsersNoLongerAssignedToCurrentCountry(users, this.apUnicefUsers);
+    return users;
+  }
+
+  handleUsersNoLongerAssignedToCurrentCountry(availableUsers, savedUsers) {
+    if (!(savedUsers && savedUsers.length > 0 && availableUsers && availableUsers.length > 0)) {
+      return false;
+    }
+    let changed = false;
+    savedUsers.forEach((savedUsr) => {
+      if (availableUsers.findIndex((x) => x.id === savedUsr.id) < 0) {
+        availableUsers.push(savedUsr);
+        changed = true;
+      }
+    });
+    if (changed) {
+      availableUsers.sort((a, b) => (a.name < b.name ? -1 : 1));
+    }
+    return changed;
+  }
   _updateEditedItem(actionPoint: any) {
     if (actionPoint && JSON.stringify(actionPoint) !== JSON.stringify(this.editedItem)) {
       if (actionPoint.intervention) {

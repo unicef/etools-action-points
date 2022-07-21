@@ -33,6 +33,9 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   @property({type: Object})
   actionPoint: any = {};
 
+  @property({type: Array})
+  apUnicefUsers: any = [];
+
   @property({type: Object})
   originalActionPoint: any = {};
 
@@ -185,7 +188,9 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     })
       .then((result: any) => {
         this.originalActionPoint = JSON.parse(JSON.stringify(result));
-        this.actionPoint = this._prepareActionPoint(result);
+        const apData = this._prepareActionPoint(result);
+        this.actionPoint = apData.data;
+        this.apUnicefUsers = apData.apUnicefUsers;
       })
       .catch((err: any) => {
         console.log(err);
@@ -247,13 +252,22 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
 
   _resolveFields(actionPoint: any, fields: string[]) {
     const data: any = actionPoint || {};
+    const apUnicefUsers = this.idName([actionPoint.assigned_by, actionPoint.assigned_to]).filter(
+      (user: any) => !!user?.id
+    );
     for (const field of fields) {
       const fieldValue = data[field];
       if (fieldValue && fieldValue.id) {
         data[field] = fieldValue.id;
       }
     }
-    return data;
+    return {data, apUnicefUsers};
+  }
+
+  idName(users: any[]) {
+    return users?.map((user: any) => {
+      return {id: user.id, name: user.name};
+    });
   }
 
   _complete() {
@@ -286,7 +300,9 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           })
         );
         this.originalActionPoint = JSON.parse(JSON.stringify(data));
-        this.actionPoint = this._prepareActionPoint(data);
+        const apData = this._prepareActionPoint(data);
+        this.actionPoint = apData.data;
+        this.apUnicefUsers = apData.apUnicefUsers;
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
@@ -353,7 +369,9 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           })
         );
         this.originalActionPoint = JSON.parse(JSON.stringify(data));
-        this.actionPoint = this._prepareActionPoint(data);
+        const apData = this._prepareActionPoint(data);
+        this.actionPoint = apData.data;
+        this.apUnicefUsers = apData.apUnicefUsers;
         this.dispatchEvent(
           new CustomEvent('global-loading', {
             detail: {
