@@ -4,6 +4,8 @@ import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
@@ -47,6 +49,8 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
 
   @property({type: Number})
   actionPointId: number;
+
+  private _debounceLoadData: Debouncer;
 
   render() {
     return html`
@@ -150,7 +154,9 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   }
 
   _routeDataChanged({detail}: CustomEvent) {
-    this._changeActionPointId(detail.value);
+    this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(200), () => {
+      this._changeActionPointId(detail.value);
+    });
   }
 
   _updateHistoryProp() {
