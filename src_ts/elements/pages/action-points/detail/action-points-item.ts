@@ -50,8 +50,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   @property({type: Number})
   actionPointId: number;
 
-  @property({type: Object})
-  _debounceLoadData: Debouncer;
+  private _debounceLoadData: Debouncer;
 
   render() {
     return html`
