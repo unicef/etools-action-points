@@ -50,6 +50,17 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   @property({type: Array}) // notify: true
   unicefUsers: any[];
 
+  private _apUnicefUsers!: any[];
+  @property({type: Array})
+  get apUnicefUsers() {
+    return this._apUnicefUsers;
+  }
+
+  set apUnicefUsers(newVal: any[]) {
+    this._apUnicefUsers = newVal;
+    this.setAvailableUnicefUsers();
+  }
+
   @property({type: Array}) // notify: true
   offices: any[];
 
@@ -598,14 +609,35 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.offices = getData('offices');
     this.sectionsCovered = getData('sectionsCovered');
     this.cpOutputs = getData('cpOutputsList');
-    this.unicefUsers = (getData('unicefUsers') || []).map((user: any) => {
-      return {id: user.id, name: user.name};
-    });
-
     this._updateLocations();
     this.dataIsSet = true;
   }
 
+  setAvailableUnicefUsers() {
+    const users = (getData('unicefUsers') || []).map((user: any) => {
+      return {id: user.id, name: user.name};
+    });
+
+    this.addUsersNoLongerAssignedToCurrentCountry(users, this.apUnicefUsers);
+    this.unicefUsers = users;
+  }
+
+  addUsersNoLongerAssignedToCurrentCountry(availableUsers, savedUsers) {
+    if (!(savedUsers && savedUsers.length > 0 && availableUsers && availableUsers.length > 0)) {
+      return false;
+    }
+    let changed = false;
+    savedUsers.forEach((savedUsr) => {
+      if (availableUsers.findIndex((x) => x.id === savedUsr.id) < 0) {
+        availableUsers.push(savedUsr);
+        changed = true;
+      }
+    });
+    if (changed) {
+      availableUsers.sort((a, b) => (a.name < b.name ? -1 : 1));
+    }
+    return changed;
+  }
   _updateEditedItem(actionPoint: any) {
     if (actionPoint && JSON.stringify(actionPoint) !== JSON.stringify(this.editedItem)) {
       if (actionPoint.intervention) {

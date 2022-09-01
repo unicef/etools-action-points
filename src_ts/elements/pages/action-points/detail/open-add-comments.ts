@@ -68,6 +68,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
 
   open() {
     const dialog = this.shadowRoot!.querySelector<any>('#commentDialog') as EtoolsDialog;
+    this.commentText = '';
     dialog.opened = true;
   }
 
