@@ -167,13 +167,7 @@ export class EtoolsActionButton extends LitElement {
       : target && target.getAttribute('action-code');
 
     if (action) {
-      this.dispatchEvent(
-        new CustomEvent('toast', {
-          detail: {
-            reset: true
-          }
-        })
-      );
+      this.dispatchEvent(new CustomEvent('close-toasts'));
       this.dispatchEvent(
         new CustomEvent('action-activated', {
           detail: {
