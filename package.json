@@ -97,7 +97,7 @@
     "eslint-plugin-html": "^6.2.0",
     "eslint-plugin-prettier": "^4.0.0",
     "gulp": "^4.0.2",
-    "mocha": "^5.2.0",
+    "mocha": "^10.2.0",
     "pixelmatch": "^4.0.2",
     "polymer-cli": "^1.9.11",
     "polyserve": "^0.27.14",
