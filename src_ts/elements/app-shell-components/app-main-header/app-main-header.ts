@@ -125,7 +125,7 @@ export class AppMainHeader extends MatomoMixin(EtoolsPageRefreshMixin(PolymerEle
 
   _logout() {
     resetOldUserData();
-    window.location.href = `${window.location.origin}/logout/`;
+    window.location.href = `${window.location.origin}/social/unicef-logout/`;
   }
 
   onRefreshClick(e: CustomEvent) {

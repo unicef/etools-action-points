@@ -22,7 +22,6 @@ import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
 import './elements/app-shell-components/app-main-header/app-main-header';
 import './elements/app-shell-components/app-sidebar-menu';
-import './elements/common-elements/multi-notifications/multi-notification-list';
 import './elements/app-shell-components/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/app-shell-components/page-footer';
@@ -31,6 +30,7 @@ import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from './typings/globals.types';
+import '@unicef-polymer/etools-toasts/src/etools-toasts';
 setRootPath(basePath);
 declare const dayjs: any;
 declare const dayjs_plugin_utc: any;
@@ -42,6 +42,7 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     return html`
       ${appShellStyles}
       <static-data></static-data>
+      <etools-toasts></etools-toasts>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
 
@@ -78,8 +79,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
             >
             </action-points-page-main>
             <not-found-page-view hidden="[[!shouldShowPageNotFound(page)]]" id="not-found"></not-found-page-view>
-
-            <multi-notification-list></multi-notification-list>
           </main>
 
           <page-footer small-menu$="[[smallMenu]]"></page-footer>
@@ -133,7 +132,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
   public ready(): void {
     super.ready();
     this.addEventListener('404', () => this._pageNotFound());
-    this.addEventListener('toast', (e: CustomEvent) => this.queueToast(e));
     this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this.set('environment', _checkEnvironment());
@@ -166,24 +164,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
     if (this.staticDataLoaded) {
       this.set('user', this.getUserData());
       this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
-    }
-  }
-
-  queueToast(e: CustomEvent) {
-    const detail = e.detail;
-    const notificationList = this.shadowRoot.querySelector('multi-notification-list');
-    if (!notificationList) {
-      return;
-    }
-
-    if (detail && detail.reset) {
-      notificationList.dispatchEvent(new CustomEvent('reset-notifications'));
-    } else {
-      notificationList.dispatchEvent(
-        new CustomEvent('notification-push', {
-          detail: detail
-        })
-      );
     }
   }
 
