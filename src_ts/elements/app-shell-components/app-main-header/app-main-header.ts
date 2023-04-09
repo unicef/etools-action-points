@@ -11,7 +11,7 @@ import '../../common-elements/support-btn';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
-import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh'
+import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 
 /**
  * @polymer
