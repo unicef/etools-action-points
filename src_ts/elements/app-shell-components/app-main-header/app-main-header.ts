@@ -19,6 +19,8 @@ import {sendRequest} from '@unicef-polymer/etools-ajax';
 import {parseRequestErrorsAndShowAsToastMsgs} from '@unicef-polymer/etools-ajax/ajax-error-parser';
 import apdEndpoints from '../../../endpoints/endpoints';
 import {UserControllerMixin} from '../../mixins/user-controller';
+import {_updateCollection, getChoices, isValidCollection} from '../../mixins/permission-controller';
+import {_setData} from '../../mixins/static-data-mixin';
 
 /**
  * @polymer
@@ -197,7 +199,9 @@ export class AppMainHeader extends MatomoMixin(UserControllerMixin(PolymerElemen
       // Event caught by self translating npm packages
       this.dispatchEvent(
         new CustomEvent('language-changed', {
-          detail: {language: newLanguage}
+          detail: {language: newLanguage},
+          bubbles: true,
+          composed: true
         })
       );
     }
@@ -211,6 +215,33 @@ export class AppMainHeader extends MatomoMixin(UserControllerMixin(PolymerElemen
     }
   }
 
+  _loadAPOptions() {
+    const endpoint = apdEndpoints.actionPointsList;
+    sendRequest({method: 'OPTIONS', endpoint})
+      .then((data: any) => {
+        const actions = data && data.actions;
+        if (!isValidCollection(actions)) {
+          console.error('invalid options');
+          return;
+        }
+
+        _updateCollection('action_points', actions);
+
+        const statusesData = getChoices('action_points.status');
+        if (!statusesData) {
+          console.error('Can not load action points statuses data');
+        }
+        _setData('statuses', statusesData);
+
+        const modulesData = getChoices('action_points.related_module');
+        if (!modulesData) {
+          console.error('Can not load action points modules data');
+        }
+        _setData('modules', modulesData);
+      })
+      .catch((err) => console.error(err));
+  }
+
   appLanguages() {
     return appLanguages;
   }
@@ -218,7 +249,8 @@ export class AppMainHeader extends MatomoMixin(UserControllerMixin(PolymerElemen
   private updateUserPreference(language: string) {
     sendRequest({endpoint: apdEndpoints.userProfile, method: 'PATCH', body: {preferences: {language: language}}})
       .then((response) => {
-        this._setUserData(response);
+        this._setUserData(response, true);
+        this._loadAPOptions();
       })
       .catch((err: any) => parseRequestErrorsAndShowAsToastMsgs(err, this));
   }

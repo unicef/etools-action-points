@@ -11,8 +11,8 @@ let _groups: any;
  */
 export function UserControllerMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class UserControllerClass extends (superClass as Constructor<PolymerElement>) {
-    _setUserData(user: any) {
-      if (_user) {
+    _setUserData(user: any, allowUpdate = false) {
+      if (_user && !allowUpdate) {
         throw new Error('User already exists!');
       }
 
