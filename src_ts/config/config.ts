@@ -6,6 +6,7 @@ declare global {
     EtoolsApdApp: any;
     EtoolsRequestCacheDb: any;
     EtoolsEsmmFitIntoEl: any;
+    EtoolsApp: any;
   }
 }
 
