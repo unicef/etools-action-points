@@ -33,8 +33,38 @@ export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserCon
   connectedCallback() {
     super.connectedCallback();
     this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
-      this.loadStaticData();
+      this.changeLanguageIfNeeded().then(() => {
+        this.loadStaticData();
+      });
     });
+  }
+
+  changeLanguageIfNeeded() {
+    // @ts-ignore
+    const user = this.getUserData();
+    if (user.preferences?.language !== 'en') {
+      localStorage.setItem('defaultLanguage', 'en');
+      const endpoint = getEndpoint('userProfile');
+      return this.sendRequest({
+        method: 'PATCH',
+        endpoint: {
+          url: endpoint.url
+        },
+        body: {preferences: {language: 'en'}}
+      }).then(() =>
+        this.dispatchEvent(
+          new CustomEvent('toast', {
+            detail: {
+              text: 'Language set to English',
+              duration: 5000
+            },
+            bubbles: true,
+            composed: true
+          })
+        )
+      );
+    }
+    return Promise.resolve();
   }
 
   loadStaticData() {
