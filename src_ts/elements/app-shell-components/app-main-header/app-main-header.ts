@@ -7,6 +7,7 @@ import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
+import './organizations-dropdown';
 import '../../common-elements/support-btn';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
@@ -82,6 +83,8 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
         <div class="content-align">
           <countries-dropdown countries="[[user.countries_available]]" country-id="[[user.country.id]]">
           </countries-dropdown>
+
+          <organizations-dropdown user="[[user]]"></organizations-dropdown>
 
           <support-btn title="Support"></support-btn>
 
