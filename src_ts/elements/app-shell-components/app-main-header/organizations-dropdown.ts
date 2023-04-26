@@ -26,7 +26,7 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
           }
         }
         etools-dropdown {
-           --esmm-icons: {
+          --esmm-icons: {
             color: var(--light-secondary-text-color);
             cursor: pointer;
           }
@@ -45,8 +45,8 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
             font-size: 16px;
             text-align: right;
             width: 100%;
+            }
           }
-        }
 
       </style>
       <etools-dropdown
@@ -134,7 +134,7 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
   }
 
   triggerOrganizationChangeRequest(organizationId) {
-      this.dispatchEvent(
+    this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {
           loadingSource: 'change-organization',
