@@ -45,9 +45,8 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
             font-size: 16px;
             text-align: right;
             width: 100%;
-            }
           }
-
+        }
       </style>
       <etools-dropdown
         id="organizationSelector"
