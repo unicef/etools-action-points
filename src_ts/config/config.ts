@@ -6,7 +6,7 @@ declare global {
     EtoolsApdApp: any;
     EtoolsRequestCacheDb: any;
     EtoolsEsmmFitIntoEl: any;
-    Internationalization: any;
+    EtoolsLanguage: any;
   }
 }
 

@@ -5,11 +5,11 @@ import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 /**
  * @polymer
@@ -19,7 +19,7 @@ import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-re
  * @extends {PolymerElement}
  */
 @customElement('countries-dropdown')
-export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
+export class CountriesDropdown extends PolymerElement {
   public static get template() {
     return html`
       <style>
@@ -134,7 +134,7 @@ export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
       })
     );
     const endpoint = getEndpoint('changeCountry');
-    this.sendRequest({
+    sendRequest({
       method: 'POST',
       endpoint: endpoint,
       body: {
