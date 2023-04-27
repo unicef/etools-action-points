@@ -1,6 +1,5 @@
 import {LitElement, html, customElement, property} from 'lit-element';
 
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';
@@ -8,7 +7,7 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
-import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {_addToCollection, _updateCollection, collectionExists} from '../../../mixins/permission-controller';
 import {DateMixin} from '../../../mixins/date-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
@@ -17,12 +16,13 @@ import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
 import '../../../common-elements/status-element';
-import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
-import {sharedStyles} from '../../../styles/shared-styles-lit';
+import {pageLayoutStyles} from '../../../styles/page-layout-styles';
+import {sharedStyles} from '../../../styles/shared-styles';
 import {mainPageStyles} from '../../../styles/main-page-styles';
-import {moduleStyles} from '../../../styles/module-styles-lit';
+import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
+import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement))) {
@@ -55,7 +55,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${mainPageStyles} ${moduleStyles}
-      <style include="iron-flex">
+      <style>
         #pageContent > * {
           display: block;
           margin-bottom: 25px;
@@ -171,12 +171,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
       return;
     }
     if (!path.match(/[^\\/]/g)) {
-      this.dispatchEvent(
-        new CustomEvent('404', {
-          bubbles: true,
-          composed: true
-        })
-      );
+      fireEvent(this, '404');
     }
     this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
   }
@@ -201,12 +196,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
       })
       .catch((err: any) => {
         console.log(err);
-        this.dispatchEvent(
-          new CustomEvent('404', {
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, '404');
       });
   }
 
@@ -232,12 +222,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
       .catch((err) => {
         console.log(err);
         this._responseError('Action Point Permissions', 'request error');
-        this.dispatchEvent(
-          new CustomEvent('404', {
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, '404');
         this.permissionPath = permissionPath;
       });
   }
@@ -280,32 +265,20 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   _complete() {
     const endpoint = getEndpoint('actionPointComplete', this.actionPointId);
 
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'ap-complete',
-          active: true,
-          message: 'Completing Action Point...'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'ap-complete',
+      active: true,
+      message: 'Completing Action Point...'
+    });
 
     return sendRequest({
       method: 'POST',
       endpoint
     })
       .then((data: any) => {
-        this.dispatchEvent(
-          new CustomEvent('toast', {
-            detail: {
-              text: ' Action Point successfully completed.'
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'toast', {
+          text: ' Action Point successfully completed.'
+        });
         this.originalActionPoint = JSON.parse(JSON.stringify(data));
         const apData = this._prepareActionPoint(data);
         this.actionPoint = apData.data;
@@ -315,15 +288,9 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
         this.errorHandler(err, this.permissionPath);
       })
       .finally(() => {
-        this.dispatchEvent(
-          new CustomEvent('global-loading', {
-            detail: {
-              loadingSource: 'ap-complete'
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'global-loading', {
+          loadingSource: 'ap-complete'
+        });
       });
   }
 
@@ -348,17 +315,11 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     const data = this._getChangedData(this.actionPoint, editedData);
     const endpoint = getEndpoint('actionPoint', this.actionPointId);
 
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'ap-update',
-          active: true,
-          message: 'Update Action Point...'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'ap-update',
+      active: true,
+      message: 'Update Action Point...'
+    });
 
     return sendRequest({
       method: 'PATCH',
@@ -366,28 +327,16 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
       body: data
     })
       .then((data: any) => {
-        this.dispatchEvent(
-          new CustomEvent('toast', {
-            detail: {
-              text: ' Action Point successfully updated.'
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'toast', {
+          text: ' Action Point successfully updated.'
+        });
         this.originalActionPoint = JSON.parse(JSON.stringify(data));
         const apData = this._prepareActionPoint(data);
         this.actionPoint = apData.data;
         this.apUnicefUsers = apData.apUnicefUsers;
-        this.dispatchEvent(
-          new CustomEvent('global-loading', {
-            detail: {
-              loadingSource: 'ap-update'
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'global-loading', {
+          loadingSource: 'ap-update'
+        });
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);

@@ -1,7 +1,6 @@
-import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
+import {LitElement, property} from 'lit-element';
+
 import {Constructor} from '../../typings/globals.types';
-import {PolymerElement} from '@polymer/polymer';
-import {property} from '@polymer/decorators';
 import {AppDrawerElement} from '@polymer/app-layout/app-drawer/app-drawer.js';
 import {AppDrawerLayoutElement} from '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import {AppHeaderLayoutElement} from '@polymer/app-layout/app-header-layout/app-header-layout.js';
@@ -11,13 +10,13 @@ import {AppHeaderLayoutElement} from '@polymer/app-layout/app-header-layout/app-
  * @polymer
  * @mixinFunction
  */
-const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
-  class AppMenuClass extends (superClass as Constructor<PolymerElement>) {
+export function AppMenuMixin <T extends Constructor<LitElement>>(superClass: T) {
+  class AppMenuClass extends (superClass as Constructor<LitElement>) {
     @property({type: Boolean})
     smallMenu = false;
 
-    ready() {
-      super.ready();
+    constructor(...args: any[]){
+      super(args);
       this._initMenuListeners();
       this._initMenuSize();
     }
@@ -44,7 +43,7 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
     }
 
     public _initMenuSize() {
-      this.set('smallMenu', this._isSmallMenuActive());
+      this.smallMenu = this._isSmallMenuActive();
     }
 
     public _isSmallMenuActive() {
@@ -60,8 +59,9 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
 
     public _toggleSmallMenu(e: any) {
       e.stopImmediatePropagation();
-      this.set('smallMenu', !this.smallMenu);
+      this.smallMenu = !this.smallMenu;
       this._smallMenuValueChanged(this.smallMenu);
+      this.requestUpdate();
     }
 
     public _resizeMainLayout(e: any) {
@@ -102,7 +102,6 @@ const mixin = function <T extends Constructor<PolymerElement>>(superClass: T) {
       drawer.toggle();
     }
   }
-  return AppMenuClass;
+  return AppMenuClass as (typeof AppMenuClass) & T
 };
 
-export const AppMenuMixin = dedupingMixin(mixin);

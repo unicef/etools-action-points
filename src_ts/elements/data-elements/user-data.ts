@@ -1,15 +1,15 @@
-import {PolymerElement} from '@polymer/polymer';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
+import {LitElement, customElement} from 'lit-element';
 import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint, resetOldUserData} from '../../endpoints/endpoint-mixin';
-import {customElement} from '@polymer/decorators';
+import { sendRequest } from '@unicef-polymer/etools-ajax';
+import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('user-data')
-export class UserData extends EtoolsAjaxRequestMixin(UserControllerMixin(PolymerElement)) {
-  ready() {
-    super.ready();
+export class UserData extends UserControllerMixin(LitElement) {
+  constructor() {
+    super();
     const endpoint = getEndpoint('userProfile');
-    this.sendRequest({
+    sendRequest({
       method: 'GET',
       endpoint: {
         url: endpoint.url,
@@ -24,7 +24,7 @@ export class UserData extends EtoolsAjaxRequestMixin(UserControllerMixin(Polymer
     const user = data;
     const lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
     const countriesAvailable = user.countries_available || [];
-    this.set('user.countries_available', countriesAvailable);
+    user.countries_available = countriesAvailable;
 
     if (!lastUserId || lastUserId != user.user) {
       resetOldUserData();
@@ -33,7 +33,7 @@ export class UserData extends EtoolsAjaxRequestMixin(UserControllerMixin(Polymer
     localStorage.setItem('userId', user.user);
 
     this._setUserData(user);
-    this.dispatchEvent(new CustomEvent('user-profile-loaded', {bubbles: true}));
+    fireEvent(this, 'user-profile-loaded');
   }
 
   _handleError(error) {

@@ -1,14 +1,15 @@
 import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
-import {PolymerElement} from '@polymer/polymer';
+import {LitElement} from 'lit-element';
+import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
 
 /**
  * Mixin error handling
  * @param superClass
  * @constructor
  */
-export function ErrorHandlerMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-  class ErrorHandlerClass extends (superClass as Constructor<PolymerElement>) {
+export function ErrorHandlerMixin<T extends Constructor<LitElement>>(superClass: T) {
+  class ErrorHandlerClass extends superClass {
     public refactorErrorObject(errorData: any) {
       if (!errorData) {
         return {};
@@ -30,15 +31,9 @@ export function ErrorHandlerMixin<T extends Constructor<PolymerElement>>(superCl
         errorMessages.push(nonFieldMessage);
       }
       for (const message of errorMessages) {
-        this.dispatchEvent(
-          new CustomEvent('toast', {
-            detail: {
-              text: message
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'toast', {
+          text: message
+        });
       }
     }
 
@@ -109,9 +104,8 @@ export function ErrorHandlerMixin<T extends Constructor<PolymerElement>>(superCl
     }
 
     public _responseError(message: string, type?: string, eventType = 'error') {
-      let console: any;
       console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
     }
   }
-  return ErrorHandlerClass;
+  return ErrorHandlerClass as typeof ErrorHandlerClass & T;
 }

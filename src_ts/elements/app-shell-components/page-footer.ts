@@ -1,17 +1,20 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
-import {customElement} from '@polymer/decorators';
+import {LitElement, html, customElement} from 'lit-element';
+import { basePath } from '../../config/config';
+import { gridLayoutStylesLit } from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 
 /**
  * @polymer
  * @extends HTMLElement
  */
 @customElement('page-footer')
-export class PageFooter extends PolymerElement {
-  public static get template() {
+export class PageFooter extends LitElement {
+  static get styles() {
+    return [gridLayoutStylesLit];
+  }
+
+  public render() {
     return html`
-      <style include="iron-flex">
+      <style>
         :host {
           display: flex;
           padding: 18px 24px;
@@ -23,13 +26,7 @@ export class PageFooter extends PolymerElement {
         }
 
         #footer-content {
-          @apply --layout-horizontal;
           padding-left: 24px;
-        }
-
-        #unicef-logo {
-          @apply --layout-horizontal;
-          @apply --layout-inline;
         }
 
         #unicef-logo img {
@@ -55,9 +52,9 @@ export class PageFooter extends PolymerElement {
       </style>
 
       <footer>
-        <div id="footer-content">
-          <span id="unicef-logo">
-            <img src$="[[rootPath]]../../../../../../apd/images/UNICEF_logo.png" alt="UNICEF logo" />
+        <div id="footer-content" class="layout-horizontal">
+          <span id="unicef-logo" class="layout-horizontal layout-inline">
+            <img src="${basePath}images/UNICEF_logo.png" alt="UNICEF logo" />
           </span>
         </div>
       </footer>

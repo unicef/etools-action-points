@@ -1,26 +1,37 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
-import {customElement, property} from '@polymer/decorators';
-import {GenericObject} from '../../../typings/globals.types';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
+import { sendRequest } from '@unicef-polymer/etools-ajax';
+import { EtoolsDropdownEl } from '@unicef-polymer/etools-dropdown/etools-dropdown';
+import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
-/**
- * @polymer
- * @customElement
- * @applies EtoolsPageRefreshMixin
- * @applies EtoolsAjaxRequestMixin
- * @extends {PolymerElement}
- */
 @customElement('countries-dropdown')
-export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
-  public static get template() {
+export class CountriesDropdown extends LitElement {
+  private _countries: [] = [];
+
+  @property({type: Array})
+  get countries() {
+    return this._countries;
+  }
+
+  set countries(val: []) {
+    this._countries = val;
+    this._countrySelectorUpdate(this._countries);
+  }
+
+  @property({type: Number})
+  countryId: number;
+
+  @property({type: Boolean})
+  countrySelectorVisible = false;
+
+  render() {
     return html`
       <style>
         *[hidden] {
@@ -76,31 +87,22 @@ export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
 
       <etools-dropdown
         id="countrySelector"
-        hidden$="[[!countrySelectorVisible]]"
-        selected="[[countryId]]"
+        ?hidden="${!this.countrySelectorVisible}"
+        .selected="${this.countryId}"
+        placeholder="Country"
         allow-outside-scroll
         no-label-float
-        options="[[countries]]"
+        .options="${this.countries}"
         option-label="name"
         option-value="id"
         trigger-value-change-event
-        on-etools-selected-item-changed="_countrySelected"
-        shown-options-limit="250"
+        @etools-selected-item-changed="${this._countrySelected}"
+        .shownOptionsLimit="${250}"
         hide-search
-        min-width="160px"
         auto-width
       ></etools-dropdown>
     `;
   }
-
-  @property({type: Array, observer: '_countrySelectorUpdate'})
-  countries: GenericObject[];
-
-  @property({type: Number})
-  countryId: number;
-
-  @property({type: Boolean})
-  countrySelectorVisible = false;
 
   _countrySelectorUpdate(countries: any) {
     if (Array.isArray(countries) && countries.length > 1) {
@@ -121,20 +123,23 @@ export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
     }
   }
 
+  public connectedCallback() {
+    super.connectedCallback();
+
+    setTimeout(() => {
+      const fitInto = document.querySelector('app-shell')!.shadowRoot!.querySelector('#appHeadLayout');
+      (this.shadowRoot?.querySelector('#countrySelector') as EtoolsDropdownEl).fitInto = fitInto;
+    }, 0);
+  }
+
   _changeCountry(countryId: any) {
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'change-country',
-          active: true,
-          message: 'Please wait while country is changing...'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'change-country',
+      active: true,
+      message: 'Please wait while country is changing...'
+    });
     const endpoint = getEndpoint('changeCountry');
-    this.sendRequest({
+    sendRequest({
       method: 'POST',
       endpoint: endpoint,
       body: {
@@ -146,24 +151,12 @@ export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
   }
 
   _handleError() {
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'change-country'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
-    this.dispatchEvent(
-      new CustomEvent('toast', {
-        detail: {
-          text: 'Can not change country. Please, try again later'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'change-country'
+    });
+    fireEvent(this, 'toast', {
+      text: 'Can not change country. Please, try again later'
+    });
   }
 
   _handleResponse() {

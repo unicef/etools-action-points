@@ -1,4 +1,4 @@
-import {html} from '@polymer/polymer';
+import {html} from 'lit-element';
 import {pageLayoutStyles} from './page-layout-styles';
 import {sharedStyles} from './shared-styles';
 import {appDrawerStyles} from './app-drawer-styles';

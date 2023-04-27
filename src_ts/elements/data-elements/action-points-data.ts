@@ -1,8 +1,9 @@
 import {LitElement, customElement, property} from 'lit-element';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import {getQueriesString} from '../mixins/query-params-helper';
-import {ErrorHandlerMixin} from '../mixins/error-handler-mixin-lit';
+import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
+import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('action-points-data')
 export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
@@ -21,17 +22,11 @@ export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
   }
 
   _loadList() {
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'action-points-list',
-          active: true,
-          message: 'Loading of action points list...'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'action-points-list',
+      active: true,
+      message: 'Loading of action points list...'
+    });
     const endpoint = getEndpoint('actionPointsList');
     endpoint.url += getQueriesString();
 
@@ -49,28 +44,14 @@ export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
     this.actionPoints = detail.results;
     this.listLength = detail.count;
 
-    this.dispatchEvent(
-      new CustomEvent('list-length-changed', {
-        detail: {value: this.listLength},
-        bubbles: true,
-        composed: true
-      })
-    );
-
-    this.dispatchEvent(
-      new CustomEvent('action-points-changed', {
-        detail: {value: this.actionPoints},
-        bubbles: true,
-        composed: true
-      })
-    );
-
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {loadingSource: 'action-points-list'},
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'list-length-changed', {
+      value: this.listLength
+    });
+    fireEvent(this, 'action-points-changed', {
+      value: this.actionPoints
+    });
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'action-points-list'
+    });
   }
 }

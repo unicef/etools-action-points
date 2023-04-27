@@ -1,16 +1,11 @@
 import {Constructor} from '../../typings/globals.types';
-import {PolymerElement} from '@polymer/polymer';
+import {LitElement} from 'lit-element';
 
 let _user: any;
 let _groups: any;
 
-/*
- * Mixin for manage user data.
- * @polymer
- * @mixinFunction
- */
-export function UserControllerMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-  class UserControllerClass extends (superClass as Constructor<PolymerElement>) {
+export function UserControllerMixin<T extends Constructor<LitElement>>(superClass: T) {
+  class UserControllerClass extends (superClass as Constructor<LitElement>) {
     _setUserData(user: any) {
       if (_user) {
         throw new Error('User already exists!');
@@ -47,7 +42,5 @@ export function UserControllerMixin<T extends Constructor<PolymerElement>>(super
       return !!~_groups.indexOf('Auditor');
     }
   }
-  return UserControllerClass;
+  return UserControllerClass as (typeof UserControllerClass) & T;
 }
-
-// export default UserController;
