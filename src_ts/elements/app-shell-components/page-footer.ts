@@ -1,6 +1,6 @@
 import {LitElement, html, customElement} from 'lit-element';
-import { basePath } from '../../config/config';
-import { gridLayoutStylesLit } from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {basePath} from '../../config/config';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 
 /**
  * @polymer

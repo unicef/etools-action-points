@@ -42,5 +42,5 @@ export function UserControllerMixin<T extends Constructor<LitElement>>(superClas
       return !!~_groups.indexOf('Auditor');
     }
   }
-  return UserControllerClass as (typeof UserControllerClass) & T;
+  return UserControllerClass as typeof UserControllerClass & T;
 }

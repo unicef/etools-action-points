@@ -6,7 +6,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icon/iron-icon.js';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('etools-action-button')
 export class EtoolsActionButton extends LitElement {

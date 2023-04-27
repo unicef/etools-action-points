@@ -31,7 +31,7 @@ import {appShellStyles} from './elements/styles/app-shell-styles';
 import {GenericObject} from './typings/globals.types';
 import '@unicef-polymer/etools-toasts/src/etools-toasts';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 setRootPath(basePath);
 declare const dayjs: any;
@@ -121,7 +121,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
         .route="${this.route}"
         @route-changed=${this.routeChanged}
         pattern="${basePath}action-points"
-   
         @tail-changed="${this.actionPointsRouteChanged}"
       >
       </app-route>
@@ -171,7 +170,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
               id="action-points"
               .staticDataLoaded="${this.staticDataLoaded}"
               .route="${this.actionPointsRoute}"
-            
             >
             </action-points-page-main>
             <not-found-page-view .hidden="${this.shouldShowPageNotFound()}" id="not-found"></not-found-page-view>

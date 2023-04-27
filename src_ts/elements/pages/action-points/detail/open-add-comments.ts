@@ -8,7 +8,7 @@ import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {GenericObject} from '../../../../typings/globals.types';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('open-add-comments')
 export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElement)) {

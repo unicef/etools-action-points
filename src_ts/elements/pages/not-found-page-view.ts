@@ -2,7 +2,7 @@ import {LitElement, html, customElement} from 'lit-element';
 import '@polymer/paper-material/paper-material.js';
 import {sharedStyles} from '../styles/shared-styles';
 import {pageLayoutStyles} from '../styles/page-layout-styles';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('not-found-page-view')
 export class NotFoundPageView extends LitElement {

@@ -2,7 +2,7 @@ import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/app-route/app-route.js';
 import {set} from '@polymer/polymer/lib/utils/path';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
 
 @customElement('action-points-page-main')
 export class ActionPointsPageMain extends LitElement {
@@ -44,7 +44,7 @@ export class ActionPointsPageMain extends LitElement {
             }
           }}"
         ></action-points-new>
-        <action-points-item name="detail" .route="${this.detailRoute}" ></action-points-item>
+        <action-points-item name="detail" .route="${this.detailRoute}"></action-points-item>
         <action-points-list name="list" .route="${this.listRoute}" .staticDataLoaded="${this.staticDataLoaded}">
         </action-points-list>
       </iron-pages>

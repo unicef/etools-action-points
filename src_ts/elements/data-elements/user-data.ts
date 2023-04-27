@@ -1,8 +1,8 @@
 import {LitElement, customElement} from 'lit-element';
 import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint, resetOldUserData} from '../../endpoints/endpoint-mixin';
-import { sendRequest } from '@unicef-polymer/etools-ajax';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('user-data')
 export class UserData extends UserControllerMixin(LitElement) {

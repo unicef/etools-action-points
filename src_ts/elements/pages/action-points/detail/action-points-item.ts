@@ -22,7 +22,7 @@ import {mainPageStyles} from '../../../styles/main-page-styles';
 import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement))) {

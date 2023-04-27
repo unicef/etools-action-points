@@ -12,7 +12,7 @@ import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('pages-header-element')
 export class PagesHeaderElement extends MatomoMixin(LitElement) {

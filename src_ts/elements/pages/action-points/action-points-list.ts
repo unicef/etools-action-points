@@ -421,7 +421,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   queryParamsChanged({detail}: CustomEvent) {
-    if(this.path?.includes('/list')){
+    if (this.path?.includes('/list')) {
       if (!detail.value || !Object.keys(detail.value).length) {
         if (this.prevQueryParams) {
           this.queryParams = this.prevQueryParams;
@@ -462,7 +462,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
       if (!this.initialQueryParams) {
         this.initialQueryParams = Object.assign({}, this.queryParams);
       }
-    }else{
+    } else {
       this.queryParams = {};
       clearQueries();
       this.requestUpdate();

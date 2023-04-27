@@ -7,9 +7,9 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
-import { sendRequest } from '@unicef-polymer/etools-ajax';
-import { EtoolsDropdownEl } from '@unicef-polymer/etools-dropdown/etools-dropdown';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {EtoolsDropdownEl} from '@unicef-polymer/etools-dropdown/etools-dropdown';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('countries-dropdown')
 export class CountriesDropdown extends LitElement {

@@ -7,7 +7,7 @@ import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import './user-data';
 import {GenericObject} from '../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
  * @polymer
@@ -27,11 +27,13 @@ export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement
   };
 
   render() {
-    return html`<user-data @user-profile-loaded=${() => {
-      this.changeLanguageIfNeeded().then(() => {
-        this.loadStaticData();
-      });
-    }}></user-data>`;
+    return html`<user-data
+      @user-profile-loaded=${() => {
+        this.changeLanguageIfNeeded().then(() => {
+          this.loadStaticData();
+        });
+      }}
+    ></user-data>`;
   }
 
   changeLanguageIfNeeded() {

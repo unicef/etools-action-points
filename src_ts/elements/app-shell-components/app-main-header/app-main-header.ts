@@ -10,9 +10,9 @@ import '../../common-elements/support-btn';
 import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
-import { basePath } from '../../../config/config';
-import { gridLayoutStylesLit } from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {basePath} from '../../../config/config';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
  * @polymer
@@ -52,7 +52,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         }
 
         :host([environment]) app-toolbar {
-          background-color: var(--nonprod-header-color)
+          background-color: var(--nonprod-header-color);
         }
 
         #pageRefresh {
@@ -127,7 +127,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
     super.connectedCallback();
     this.addEventListener('sign-out', this._logout);
   }
-  
+
   openDrawer() {
     fireEvent(this, 'drawer');
   }

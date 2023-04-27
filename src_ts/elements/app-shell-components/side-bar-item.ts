@@ -4,8 +4,8 @@ import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import {moduleStyles} from '../styles/module-styles';
-import { gridLayoutStylesLit } from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
-import { fireEvent } from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('side-bar-item')
 export class SideBarItem extends LitElement {
@@ -27,7 +27,7 @@ export class SideBarItem extends LitElement {
   static get styles() {
     return [gridLayoutStylesLit];
   }
-  
+
   render() {
     return html`
       ${moduleStyles}
@@ -109,7 +109,13 @@ export class SideBarItem extends LitElement {
         }
       </style>
 
-      <a id="main" class="layout-horizontal align-items-center" target="${this._setTarget()}" href="${this.sideBarLink}" @click="${this._handleMainTap}">
+      <a
+        id="main"
+        class="layout-horizontal align-items-center"
+        target="${this._setTarget()}"
+        href="${this.sideBarLink}"
+        @click="${this._handleMainTap}"
+      >
         <iron-icon .icon="${this.icon}" id="icon"></iron-icon>
         <div id="name">${this.name}</div>
       </a>

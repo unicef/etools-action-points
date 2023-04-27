@@ -10,12 +10,13 @@ import {AppHeaderLayoutElement} from '@polymer/app-layout/app-header-layout/app-
  * @polymer
  * @mixinFunction
  */
-export function AppMenuMixin <T extends Constructor<LitElement>>(superClass: T) {
+export function AppMenuMixin<T extends Constructor<LitElement>>(superClass: T) {
   class AppMenuClass extends (superClass as Constructor<LitElement>) {
     @property({type: Boolean})
     smallMenu = false;
 
-    constructor(...args: any[]){
+    constructor(...args) {
+      // @ts-ignore
       super(args);
       this._initMenuListeners();
       this._initMenuSize();
@@ -102,6 +103,5 @@ export function AppMenuMixin <T extends Constructor<LitElement>>(superClass: T) 
       drawer.toggle();
     }
   }
-  return AppMenuClass as (typeof AppMenuClass) & T
-};
-
+  return AppMenuClass as typeof AppMenuClass & T;
+}
