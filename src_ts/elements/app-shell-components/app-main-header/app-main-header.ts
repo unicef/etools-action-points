@@ -2,9 +2,8 @@ import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
+import '@unicef-polymer/etools-app-selector/dist/etools-app-selector';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
-import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
@@ -12,13 +11,14 @@ import '../../common-elements/support-btn';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
+import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('app-main-header')
-export class AppMainHeader extends MatomoMixin(EtoolsPageRefreshMixin(PolymerElement)) {
+export class AppMainHeader extends MatomoMixin(PolymerElement) {
   public static get template() {
     return html`
       ${sharedStyles}
@@ -130,7 +130,7 @@ export class AppMainHeader extends MatomoMixin(EtoolsPageRefreshMixin(PolymerEle
 
   onRefreshClick(e: CustomEvent) {
     this.trackAnalytics(e);
-    this.refresh();
+    DexieRefresh.refresh();
   }
 
   @observe('environment')

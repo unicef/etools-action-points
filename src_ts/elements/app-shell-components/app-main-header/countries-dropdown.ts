@@ -5,11 +5,11 @@ import '@polymer/paper-item/paper-item';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
-import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
+import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 
 /**
  * @polymer
@@ -19,7 +19,7 @@ import {GenericObject} from '../../../typings/globals.types';
  * @extends {PolymerElement}
  */
 @customElement('countries-dropdown')
-export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestMixin(PolymerElement)) {
+export class CountriesDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
   public static get template() {
     return html`
       <style>
@@ -167,12 +167,12 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EtoolsAjaxRequestM
   }
 
   _handleResponse() {
-    this.refreshInProgress = true;
-    this.clearDexieDbs();
+    DexieRefresh.refreshInProgress = true;
+    DexieRefresh.clearDexieDbs();
   }
 
   _refreshPage() {
-    this.refreshInProgress = false;
+    DexieRefresh.refreshInProgress = false;
     window.location.href = `${window.location.origin}/apd/`;
   }
 }

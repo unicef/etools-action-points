@@ -117,7 +117,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
             view="action-points"
             name="Action Points"
             icon="av:playlist-add-check"
-            side-bar-link="action-points/list?reload=true"
+            side-bar-link="action-points/list"
           >
           </side-bar-item>
         </iron-selector>
