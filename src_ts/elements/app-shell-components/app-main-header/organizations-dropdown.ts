@@ -179,9 +179,6 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
   _handleResponse() {
     DexieRefresh.refreshInProgress = true;
     DexieRefresh.clearDexieDbs();
-  }
-
-  _refreshPage() {
     DexieRefresh.refreshInProgress = false;
     window.location.href = `${window.location.origin}/apd/`;
   }
