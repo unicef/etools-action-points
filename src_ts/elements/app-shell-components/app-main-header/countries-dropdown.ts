@@ -11,7 +11,6 @@ import {sendRequest} from '@unicef-polymer/etools-ajax';
 import {EtoolsDropdownEl} from '@unicef-polymer/etools-dropdown/etools-dropdown';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
-
 @customElement('countries-dropdown')
 export class CountriesDropdown extends LitElement {
   private _countries: [] = [];
