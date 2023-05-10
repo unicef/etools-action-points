@@ -15,7 +15,6 @@ import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
  */
 @customElement('static-data')
 export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement)) {
-
   @property({type: Object})
   dataLoaded: GenericObject = {
     organizations: false,
@@ -28,12 +27,7 @@ export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement
   };
 
   render() {
-    return html`<user-data
-      @user-profile-loaded=${() => 
-          this.loadStaticData()
-        );
-      }}
-    ></user-data>`;
+    return html`<user-data @user-profile-loaded="${this.loadStaticData}}"></user-data>`;
   }
 
   loadStaticData() {
