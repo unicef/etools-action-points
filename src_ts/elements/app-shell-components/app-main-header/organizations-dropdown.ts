@@ -1,18 +1,17 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element';
-import {property, query} from '@polymer/decorators';
+import {LitElement, html, property, query} from 'lit-element';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {EtoolsDropdownEl} from '@unicef-polymer/etools-dropdown/etools-dropdown';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 /**
  * @polymer
  * @customElement
  * @appliesMixin EtoolsAjaxRequestMixin
  */
-class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
-  public static get template() {
+class OrganizationsDropdown extends LitElement {
+  render() {
     return html`
       <style>
         #organizationSelector {
@@ -50,14 +49,14 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
       </style>
       <etools-dropdown
         id="organizationSelector"
-        class$="[[checkMustSelectOrganization(user)]]"
-        selected="[[currentOrganizationId]]"
+        class="${this.checkMustSelectOrganization(this.user)}"
+        .selected="${this.currentOrganizationId}"
         placeholder="Select Organization"
-        options="[[organizations]]"
+        .options="${this.organizations}"
         option-label="name"
         option-value="id"
         trigger-value-change-event
-        on-etools-selected-item-changed="onOrganizationChange"
+        @etools-selected-item-changed="${(e: CustomEvent) => this.onOrganizationChange(e)}"
         allow-outside-scroll
         no-label-float
         hide-search
@@ -72,14 +71,18 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
   @property({type: Array})
   organizations: any[] = [];
 
+  private _user!: any;
   @property({type: Object})
-  user!: any;
+  get user() {
+    return this._user;
+  }
+
+  set user(val: any) {
+    this._user = val;
+    this.onUserChange(this._user);
+  }
 
   @query('#organizationSelector') organizationSelectorDropdown!: EtoolsDropdownEl;
-
-  public static get observers() {
-    return ['onUserChange(user)'];
-  }
 
   public connectedCallback() {
     super.connectedCallback();
@@ -97,8 +100,8 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
       return;
     }
 
-    this.set('organizations', this.user.organizations_available);
-    this.set('currentOrganizationId', this.user.organization?.id || null);
+    this.organizations = this.user.organizations_available;
+    this.currentOrganizationId = this.user.organization?.id || null;
   }
 
   checkMustSelectOrganization(user) {
@@ -145,7 +148,7 @@ class OrganizationsDropdown extends EtoolsAjaxRequestMixin(PolymerElement) {
       })
     );
     const endpoint = getEndpoint('changeOrganization');
-    this.sendRequest({
+    sendRequest({
       method: 'POST',
       endpoint: endpoint,
       body: {organization: organizationId}
