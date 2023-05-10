@@ -6,6 +6,7 @@ import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
+import './organizations-dropdown';
 import '../../common-elements/support-btn';
 import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
@@ -97,6 +98,8 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         <div class="layout-horizontal align-items-center">
           <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
           </countries-dropdown>
+
+          <organizations-dropdown user="[[user]]"></organizations-dropdown>
 
           <support-btn title="Support"></support-btn>
 

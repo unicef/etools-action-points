@@ -5,6 +5,9 @@ const apdEndpoints = {
   changeCountry: {
     url: '/api/v3/users/changecountry/'
   },
+  changeOrganization: {
+    url: '/api/v3/users/changeorganization/'
+  },
   partnerOrganisations: {
     url: '/api/v2/partners/?hidden=false',
     exp: 2 * 60 * 60 * 1000, // 2h

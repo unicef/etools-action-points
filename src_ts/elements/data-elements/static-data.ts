@@ -15,6 +15,7 @@ import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
  */
 @customElement('static-data')
 export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement)) {
+
   @property({type: Object})
   dataLoaded: GenericObject = {
     organizations: false,
@@ -28,34 +29,11 @@ export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement
 
   render() {
     return html`<user-data
-      @user-profile-loaded=${() => {
-        this.changeLanguageIfNeeded().then(() => {
-          this.loadStaticData();
-        });
+      @user-profile-loaded=${() => 
+          this.loadStaticData()
+        );
       }}
     ></user-data>`;
-  }
-
-  changeLanguageIfNeeded() {
-    // @ts-ignore
-    const user = this.getUserData();
-    if (user.preferences?.language !== 'en') {
-      localStorage.setItem('defaultLanguage', 'en');
-      const endpoint = getEndpoint('userProfile');
-      return sendRequest({
-        method: 'PATCH',
-        endpoint: {
-          url: endpoint.url
-        },
-        body: {preferences: {language: 'en'}}
-      }).then(() =>
-        fireEvent(this, 'toast', {
-          text: 'Language set to English',
-          duration: 5000
-        })
-      );
-    }
-    return Promise.resolve();
   }
 
   loadStaticData() {
