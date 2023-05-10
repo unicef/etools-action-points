@@ -1,6 +1,5 @@
 import {LitElement, html, customElement, property} from 'lit-element';
 
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
@@ -14,10 +13,10 @@ import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {DateMixin} from '../../../mixins/date-mixin';
 import {getData} from '../../../mixins/static-data-mixin';
 import {actionAllowed} from '../../../mixins/permission-controller';
-import {pageLayoutStyles} from '../../../styles/page-layout-styles-lit';
-import {sharedStyles} from '../../../styles/shared-styles-lit';
+import {pageLayoutStyles} from '../../../styles/page-layout-styles';
+import {sharedStyles} from '../../../styles/shared-styles';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
-import {moduleStyles} from '../../../styles/module-styles-lit';
+import {moduleStyles} from '../../../styles/module-styles';
 import {GenericObject} from '../../../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
@@ -126,7 +125,8 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         }
 
         .reference-link {
-          @apply --layout-vertical;
+          display: flex;
+          flex-direction: column;
           padding: 8px 12px;
           position: relative;
         }

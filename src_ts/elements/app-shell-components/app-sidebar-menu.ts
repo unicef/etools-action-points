@@ -1,5 +1,4 @@
 import {customElement, html, LitElement, property} from 'lit-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
@@ -7,10 +6,11 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/iron-icons/maps-icons.js';
 import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
-import {moduleStyles} from '../styles/module-styles-lit';
+import {moduleStyles} from '../styles/module-styles';
 import {navMenuStyles} from '../styles/nav-menu-styles';
 import {apdIcons} from '../styles/apd-icons';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
  * @polymer
@@ -85,7 +85,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           padding: 0;
         }
 
-        [small-menu][main-title] {
+        :host([small-menu]) [main-title] {
           display: none;
         }
       </style>
@@ -94,19 +94,19 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         <span id="app-name" main-title>Action Points</span>
 
         <span class="ripple-wrapper main menu-header">
-          <iron-icon id="menu-header-top-icon" icon="flag" @tap="${() => this._toggleSmallMenu()}"></iron-icon>
+          <iron-icon id="menu-header-top-icon" icon="flag" @click="${() => this._toggleSmallMenu()}"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
 
         <paper-tooltip for="menu-header-top-icon" position="right"> Action Points </paper-tooltip>
 
         <span class="chev-right">
-          <iron-icon id="expand-menu" icon="chevron-right" @tap="${() => this._toggleSmallMenu()}"></iron-icon>
+          <iron-icon id="expand-menu" icon="chevron-right" @click="${() => this._toggleSmallMenu()}"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
 
         <span class="ripple-wrapper">
-          <iron-icon id="minimize-menu" icon="chevron-left" @tap="${() => this._toggleSmallMenu()}"></iron-icon>
+          <iron-icon id="minimize-menu" icon="chevron-left" @click="${() => this._toggleSmallMenu()}"></iron-icon>
           <paper-ripple class="circle" center></paper-ripple>
         </span>
       </div>
@@ -175,28 +175,18 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
   page: string;
 
   _smallMenu = false;
-  @property({type: Boolean, reflect: true})
+  @property({type: Boolean, reflect: true, attribute: 'small-menu'})
   get smallMenu() {
     return this._smallMenu;
   }
 
   set smallMenu(newVal) {
     this._smallMenu = newVal;
-    this.dispatchEvent(
-      new CustomEvent('resize-main-layout', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    setTimeout(() => fireEvent(this, 'resize-main-layout'));
   }
 
   _toggleSmallMenu() {
     this.smallMenu = !this.smallMenu;
-    this.dispatchEvent(
-      new CustomEvent('toggle-small-menu', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'toggle-small-menu');
   }
 }

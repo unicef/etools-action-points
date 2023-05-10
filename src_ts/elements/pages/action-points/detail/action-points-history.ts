@@ -1,9 +1,8 @@
 import {LitElement, html, customElement, property} from 'lit-element';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {DateMixin} from '../../../mixins/date-mixin';
-import {moduleStyles} from '../../../styles/module-styles-lit';
+import {moduleStyles} from '../../../styles/module-styles';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
 
@@ -23,7 +22,7 @@ export class ActionPointsHistory extends DateMixin(InputAttrsMixin(LitElement)) 
   render() {
     return html`
       ${moduleStyles}
-      <style include="iron-flex">
+      <style>
         ${dataTableStylesLit} etools-data-table-header::part(edt-data-table-header) {
           margin-left: 0;
         }

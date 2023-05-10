@@ -1,11 +1,9 @@
 // This file will be dedicated to page layout and related layout elements
 
-import {html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import {html} from 'lit-element';
 
 export const pageLayoutStyles = html`
-  <style include="iron-flex">
+  <style>
     @media only screen and (max-width: 1359px) {
       #sidebar {
         width: 100% !important;
@@ -19,7 +17,8 @@ export const pageLayoutStyles = html`
 
     @media only screen and (min-width: 1360px) {
       #pageContent {
-        @apply --layout-flex;
+        flex: 1;
+        flex-basis: 0.000000001px;
       }
     }
     /* -------------------*/
@@ -29,8 +28,9 @@ export const pageLayoutStyles = html`
     }
 
     #main {
-      @apply --layout-horizontal;
-      @apply --layout-wrap;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
       padding: 24px;
     }
 
@@ -39,7 +39,7 @@ export const pageLayoutStyles = html`
     }
 
     #sidebar {
-      @apply --layout;
+      display: flex;
       width: 224px;
       padding-left: 24px;
       -webkit-box-sizing: border-box;

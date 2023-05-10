@@ -1,8 +1,6 @@
 // shared styles for all views
 // not for styling index.html or apd-shell
-
-import {html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import {html} from 'lit-element';
 
 export const sharedStyles = html`
   <style>
@@ -47,8 +45,10 @@ export const sharedStyles = html`
     }
 
     .tab-link {
-      @apply --layout-horizontal;
-      @apply --layout-center-center;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
     }
 
     iron-pages[hidden] {

@@ -1,19 +1,34 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import {moduleStyles} from '../styles/module-styles';
-import {customElement, property} from '@polymer/decorators';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
-/**
- * @polymer
- * @extends {PolymerElement}
- */
 @customElement('side-bar-item')
-export class SideBarItem extends PolymerElement {
-  public static get template() {
+export class SideBarItem extends LitElement {
+  @property({type: String})
+  name: string;
+
+  @property({type: String})
+  icon: string;
+
+  @property({type: String, attribute: 'side-bar-link'})
+  sideBarLink: string;
+
+  @property({type: Boolean})
+  external = false;
+
+  @property({type: Boolean})
+  opened = false;
+
+  static get styles() {
+    return [gridLayoutStylesLit];
+  }
+
+  render() {
     return html`
       ${moduleStyles}
       <style>
@@ -48,8 +63,6 @@ export class SideBarItem extends PolymerElement {
         }
 
         #main {
-          @apply --layout-horizontal;
-          @apply --layout-center;
           position: relative;
           height: 48px;
           cursor: pointer;
@@ -96,13 +109,19 @@ export class SideBarItem extends PolymerElement {
         }
       </style>
 
-      <a id="main" target$="[[_setTarget(external)]]" href$="[[sideBarLink]]" on-tap="_handleMainTap">
-        <iron-icon icon="{{icon}}" id="icon"></iron-icon>
-        <div id="name">[[name]]</div>
+      <a
+        id="main"
+        class="layout-horizontal align-items-center"
+        target="${this._setTarget()}"
+        href="${this.sideBarLink}"
+        @click="${this._handleMainTap}"
+      >
+        <iron-icon .icon="${this.icon}" id="icon"></iron-icon>
+        <div id="name">${this.name}</div>
       </a>
-      <paper-tooltip position="right" offset="-10">[[name]]</paper-tooltip>
+      <paper-tooltip position="right" offset="-10">${this.name}</paper-tooltip>
 
-      <iron-collapse id="collapse" opened="{{opened}}">
+      <iron-collapse id="collapse" .opened="${this.opened}">
         <div class="content-wrapper">
           <slot></slot>
         </div>
@@ -110,20 +129,8 @@ export class SideBarItem extends PolymerElement {
     `;
   }
 
-  @property({type: String})
-  name: string;
-
-  @property({type: String})
-  icon: string;
-
-  @property({type: String})
-  sideBarLink: string;
-
-  @property({type: Boolean})
-  external = false;
-
   _handleMainTap() {
-    this.dispatchEvent(new CustomEvent('selected'));
+    fireEvent(this, 'selected');
   }
 
   _setTarget() {

@@ -1,24 +1,20 @@
-import {html, PolymerElement} from '@polymer/polymer';
+import {LitElement, html, customElement, property} from 'lit-element';
 import {_setData} from '../mixins/static-data-mixin';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {_addToCollection, getChoices, isValidCollection} from '../mixins/permission-controller';
 import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import './user-data';
-import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('static-data')
-export class StaticData extends ErrorHandlerMixin(UserControllerMixin(PolymerElement)) {
-  public static get template() {
-    return html` <user-data></user-data> `;
-  }
-
+export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement)) {
   @property({type: Object})
   dataLoaded: GenericObject = {
     organizations: false,
@@ -30,11 +26,8 @@ export class StaticData extends ErrorHandlerMixin(UserControllerMixin(PolymerEle
     interventionsList: false
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
-      this.loadStaticData();
-    });
+  render() {
+    return html`<user-data @user-profile-loaded="${this.loadStaticData}}"></user-data>`;
   }
 
   loadStaticData() {
@@ -59,7 +52,7 @@ export class StaticData extends ErrorHandlerMixin(UserControllerMixin(PolymerEle
       this.dataLoaded.cpOutputsList &&
       this.dataLoaded.interventionsList
     ) {
-      this.dispatchEvent(new CustomEvent('static-data-loaded', {bubbles: true, composed: true}));
+      fireEvent(this, 'static-data-loaded');
     }
   }
 
