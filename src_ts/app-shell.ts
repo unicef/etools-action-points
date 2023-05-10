@@ -35,6 +35,7 @@ setRootPath(basePath);
 declare const dayjs: any;
 declare const dayjs_plugin_utc: any;
 dayjs.extend(dayjs_plugin_utc);
+window.EtoolsLanguage = 'en';
 
 @customElement('app-shell')
 export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(PolymerElement))) {

@@ -1,5 +1,4 @@
 import {html, PolymerElement} from '@polymer/polymer';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {_setData} from '../mixins/static-data-mixin';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {_addToCollection, getChoices, isValidCollection} from '../mixins/permission-controller';
@@ -8,13 +7,14 @@ import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import './user-data';
 import {customElement, property} from '@polymer/decorators';
 import {GenericObject} from '../../typings/globals.types';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('static-data')
-export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserControllerMixin(PolymerElement))) {
+export class StaticData extends ErrorHandlerMixin(UserControllerMixin(PolymerElement)) {
   public static get template() {
     return html` <user-data></user-data> `;
   }
@@ -33,38 +33,8 @@ export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserCon
   connectedCallback() {
     super.connectedCallback();
     this.shadowRoot.querySelector('user-data').addEventListener('user-profile-loaded', () => {
-      this.changeLanguageIfNeeded().then(() => {
-        this.loadStaticData();
-      });
+      this.loadStaticData();
     });
-  }
-
-  changeLanguageIfNeeded() {
-    // @ts-ignore
-    const user = this.getUserData();
-    if (user.preferences?.language !== 'en') {
-      localStorage.setItem('defaultLanguage', 'en');
-      const endpoint = getEndpoint('userProfile');
-      return this.sendRequest({
-        method: 'PATCH',
-        endpoint: {
-          url: endpoint.url
-        },
-        body: {preferences: {language: 'en'}}
-      }).then(() =>
-        this.dispatchEvent(
-          new CustomEvent('toast', {
-            detail: {
-              text: 'Language set to English',
-              duration: 5000
-            },
-            bubbles: true,
-            composed: true
-          })
-        )
-      );
-    }
-    return Promise.resolve();
   }
 
   loadStaticData() {
@@ -95,7 +65,7 @@ export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserCon
 
   _loadAPOptions() {
     const endpoint = getEndpoint('actionPointsList');
-    this.sendRequest({method: 'OPTIONS', endpoint})
+    sendRequest({method: 'OPTIONS', endpoint})
       .then((data: any) => {
         const actions = data && data.actions;
         if (!isValidCollection(actions)) {
@@ -125,7 +95,7 @@ export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserCon
 
   _loadPartners() {
     const endpoint = getEndpoint('partnerOrganisations');
-    this.sendRequest({method: 'GET', endpoint})
+    sendRequest({method: 'GET', endpoint})
       .then((data: any) => {
         _setData('partnerOrganisations', data);
         this.dataLoaded.organizations = true;
@@ -136,7 +106,7 @@ export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserCon
 
   _loadLocations() {
     const endpoint = getEndpoint('locations');
-    this.sendRequest({method: 'GET', endpoint})
+    sendRequest({method: 'GET', endpoint})
       .then((data: any) => {
         _setData('locations', data);
         const locationsLoaded = new CustomEvent('locations-loaded');
@@ -147,7 +117,7 @@ export class StaticData extends EtoolsAjaxRequestMixin(ErrorHandlerMixin(UserCon
 
   _loadData(dataName: string) {
     const endpoint = getEndpoint(dataName);
-    this.sendRequest({method: 'GET', endpoint})
+    sendRequest({method: 'GET', endpoint})
       .then((data: any) => {
         _setData(dataName, data);
         this.dataLoaded[dataName] = true;
