@@ -22,14 +22,10 @@ export class CountriesDropdown extends LitElement {
 
   set countries(val: []) {
     this._countries = val;
-    this._countrySelectorUpdate(this._countries);
   }
 
   @property({type: Number})
   countryId: number;
-
-  @property({type: Boolean})
-  countrySelectorVisible = false;
 
   render() {
     return html`
@@ -87,7 +83,6 @@ export class CountriesDropdown extends LitElement {
 
       <etools-dropdown
         id="countrySelector"
-        ?hidden="${!this.countrySelectorVisible}"
         .selected="${this.countryId}"
         placeholder="Country"
         allow-outside-scroll
@@ -102,12 +97,6 @@ export class CountriesDropdown extends LitElement {
         auto-width
       ></etools-dropdown>
     `;
-  }
-
-  _countrySelectorUpdate(countries: any) {
-    if (Array.isArray(countries) && countries.length > 1) {
-      this.countrySelectorVisible = true;
-    }
   }
 
   _countrySelected(e: CustomEvent) {
