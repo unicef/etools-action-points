@@ -99,7 +99,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
           <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
           </countries-dropdown>
 
-          <organizations-dropdown user="[[user]]"></organizations-dropdown>
+          <organizations-dropdown .user="${this.user}"></organizations-dropdown>
 
           <support-btn title="Support"></support-btn>
 
@@ -118,7 +118,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
             icon="refresh"
             tracker="Refresh"
             @click="${this.onRefreshClick}"
-            disabled="${this.refreshInProgress}"
+            ?disabled="${this.refreshInProgress}"
           >
           </paper-icon-button>
         </div>
