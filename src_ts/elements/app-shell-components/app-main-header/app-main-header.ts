@@ -118,7 +118,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
             icon="refresh"
             tracker="Refresh"
             @click="${this.onRefreshClick}"
-            disabled="${this.refreshInProgress}"
+            ?disabled="${this.refreshInProgress}"
           >
           </paper-icon-button>
         </div>
