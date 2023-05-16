@@ -9,7 +9,7 @@ const apdEndpoints = {
     url: '/api/v3/users/changeorganization/'
   },
   partnerOrganisations: {
-    url: '/api/v2/partners/?hidden=false',
+    url: '/api/pmp/v3/partners/?hidden=false',
     exp: 2 * 60 * 60 * 1000, // 2h
     cacheTableName: 'partners'
   },
