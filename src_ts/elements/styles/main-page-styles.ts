@@ -1,5 +1,5 @@
 import {html} from 'lit-element';
-import {moduleStyles} from './module-styles-lit';
+import {moduleStyles} from './module-styles';
 
 export const mainPageStyles = html`
   ${moduleStyles}

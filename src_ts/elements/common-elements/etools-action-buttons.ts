@@ -4,8 +4,9 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {moduleStyles} from '../styles/module-styles-lit';
+import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('etools-action-button')
 export class EtoolsActionButton extends LitElement {
@@ -167,16 +168,10 @@ export class EtoolsActionButton extends LitElement {
       : target && target.getAttribute('action-code');
 
     if (action) {
-      this.dispatchEvent(new CustomEvent('close-toasts'));
-      this.dispatchEvent(
-        new CustomEvent('action-activated', {
-          detail: {
-            type: action
-          },
-          bubbles: true,
-          composed: true
-        })
-      );
+      fireEvent(this, 'close-toasts');
+      fireEvent(this, 'action-activated', {
+        type: action
+      });
     }
   }
 

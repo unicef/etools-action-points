@@ -1,8 +1,5 @@
 import {LitElement, html, customElement, property} from 'lit-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/paper-card/paper-card.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer//app-route/app-location';
 import '@polymer/iron-location/iron-query-params.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
@@ -18,7 +15,7 @@ import {DateMixin} from '../../mixins/date-mixin';
 import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
 import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
-import {moduleStyles} from '../../styles/module-styles-lit';
+import {moduleStyles} from '../../styles/module-styles';
 import {sharedStyles} from '@unicef-polymer/etools-modules-common/dist/styles/shared-styles-lit';
 import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
 import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
@@ -424,16 +421,18 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   queryParamsChanged({detail}: CustomEvent) {
-    if (!detail.value || !Object.keys(detail.value).length) {
-      if (this.prevQueryParams) {
-        this.queryParams = this.prevQueryParams;
-        this._updateQueries(this.queryParams);
+    if (this.path?.includes('/list')) {
+      if (!detail.value || !Object.keys(detail.value).length) {
+        if (this.prevQueryParams) {
+          this.queryParams = this.prevQueryParams;
+          this._updateQueries(this.queryParams);
+        }
+        return;
       }
-      return;
-    }
-    if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
-      this.queryParams = detail.value;
-      this._updateQueries(detail.value);
+      if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
+        this.queryParams = detail.value;
+        this._updateQueries(detail.value);
+      }
     }
   }
 
@@ -453,8 +452,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _setPath(path: string) {
+    this.path = path;
     if (path.includes('/list')) {
-      this.path = path;
       this.queryParams = Object.assign({}, this.queryParams, {
         page: this.queryParams && this.queryParams.page ? this.queryParams.page : this.paginator.page,
         page_size:
@@ -463,6 +462,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
       if (!this.initialQueryParams) {
         this.initialQueryParams = Object.assign({}, this.queryParams);
       }
+    } else {
+      this.queryParams = {};
+      clearQueries();
+      this.requestUpdate();
     }
   }
 

@@ -30,7 +30,8 @@ export const etoolsStatusStyles = html`
     }
 
     .divider-line {
-      @apply --layout-flex;
+      flex: 1;
+      flex-basis: 0.000000001px;
     }
 
     .divider-line:first-child {
@@ -38,21 +39,23 @@ export const etoolsStatusStyles = html`
     }
 
     .status-container {
-      @apply --layout-horizontal;
+      display: flex;
+      flex-direction: row;
       min-height: 24px;
-      @apply --etools-status-container;
     }
 
     .status-icon,
     .status {
-      @apply --layout-vertical;
-      @apply --layout-center-justified;
-      @apply --layout-wrap;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .icon-wrapper {
-      @apply --layout-vertical;
-      @apply --layout-center-justified;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       background-color: var(--etools-status-icon-inactive-color, #9d9d9d);
       width: 24px;
       height: 24px;
@@ -73,7 +76,7 @@ export const etoolsStatusStyles = html`
 
     .icon-wrapper iron-icon,
     .icon-wrapper span {
-      @apply --layout-self-center;
+      align-self: center;
     }
 
     .icon-wrapper span {
@@ -134,7 +137,6 @@ export const etoolsStatusStyles = html`
     .custom .status {
       font-weight: bold;
       color: var(--etools-status-inactive-text-color, rgba(0, 0, 0, 0.87));
-      @apply --etools-status-label-style;
     }
 
     .completed .icon-wrapper span {

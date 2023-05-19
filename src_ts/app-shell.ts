@@ -1,5 +1,5 @@
-import {PolymerElement, html} from '@polymer/polymer';
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import {LitElement, customElement, html, property} from 'lit-element';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
@@ -28,67 +28,33 @@ import './elements/app-shell-components/page-footer';
 import {basePath} from './config/config';
 import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
-import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from './typings/globals.types';
 import '@unicef-polymer/etools-toasts/src/etools-toasts';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+
 setRootPath(basePath);
 declare const dayjs: any;
 declare const dayjs_plugin_utc: any;
 dayjs.extend(dayjs_plugin_utc);
+window.EtoolsLanguage = 'en';
 
 @customElement('app-shell')
-export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(PolymerElement))) {
-  public static get template(): HTMLTemplateElement {
-    return html`
-      ${appShellStyles}
-      <static-data></static-data>
-      <etools-toasts></etools-toasts>
-
-      <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
-
-      <app-route route="{{route}}" pattern="[[rootPath]]action-points" tail="{{actionPointsRoute}}"> </app-route>
-      <app-route route="{{route}}" pattern="[[rootPath]]action-points/:page" data="{{routeData}}"> </app-route>
-
-      <etools-piwik-analytics user="[[user]]" page="[[page]]" toast="[[_toast]]"> </etools-piwik-analytics>
-
-      <app-drawer-layout id="layout" responsive-width="850px" fullbleed narrow="{{narrow}}" small-menu$="[[smallMenu]]">
-        <!-- Drawer content -->
-        <app-drawer
-          slot="drawer"
-          id="drawer"
-          transition-duration="350"
-          swipe-open="[[narrow]]"
-          small-menu$="[[smallMenu]]"
-        >
-          <app-sidebar-menu route="{{route}}" page="[[page]]" small-menu$="[[smallMenu]]"></app-sidebar-menu>
-        </app-drawer>
-
-        <!-- Main content -->
-
-        <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
-          <app-header id="header" slot="header" fixed shadow>
-            <app-main-header id="pageheader" user="[[user]]" environment="[[environment]]"></app-main-header>
-          </app-header>
-
-          <main role="main" id="page-container">
-            <action-points-page-main
-              hidden="[[shouldShowPageNotFound(page)]]"
-              id="action-points"
-              static-data-loaded="[[staticDataLoaded]]"
-              route="{{actionPointsRoute}}"
-            >
-            </action-points-page-main>
-            <not-found-page-view hidden="[[!shouldShowPageNotFound(page)]]" id="not-found"></not-found-page-view>
-          </main>
-
-          <page-footer small-menu$="[[smallMenu]]"></page-footer>
-        </app-header-layout>
-      </app-drawer-layout>
-    `;
+export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitElement))) {
+  static get styles() {
+    return [gridLayoutStylesLit];
   }
 
-  @property({observer: AppShell.prototype._pageChanged, type: String, reflectToAttribute: true})
-  page: string;
+  _page: string;
+  @property({type: String, reflect: true, attribute: 'page'})
+  get page() {
+    return this._page;
+  }
+
+  set page(value) {
+    this._page = value;
+    this._pageChanged(value);
+  }
 
   @property({type: Boolean})
   narrow: boolean;
@@ -105,11 +71,28 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
   @property({type: Object})
   user: any;
 
-  @property({type: Object, notify: true})
-  route: GenericObject;
+  actionPointsRoute: any = {};
 
+  private _route: GenericObject;
   @property({type: Object})
-  public routeData: GenericObject;
+  get route() {
+    return this._route;
+  }
+
+  set route(value) {
+    this._route = value;
+  }
+
+  private _routeData: GenericObject;
+  @property({type: Object})
+  get routeData() {
+    return this._routeData;
+  }
+
+  set routeData(value) {
+    this._routeData = value;
+    this._routePageChanged();
+  }
 
   @property({type: Object})
   queryParams: any;
@@ -120,72 +103,130 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
   @property({type: Boolean})
   staticDataLoaded = false;
 
-  @property({type: String})
-  basePath: string;
-
   @property({type: Boolean})
   smallMenu: boolean;
 
   @property({type: Boolean})
   initLoadingComplete = false;
 
-  public ready(): void {
-    super.ready();
-    this.addEventListener('404', () => this._pageNotFound());
-    this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
-    this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
-    this.set('environment', _checkEnvironment());
+  render() {
+    return html`
+      ${appShellStyles}
+      <static-data></static-data>
+      <etools-toasts></etools-toasts>
+
+      <app-location @route-changed=${this.routeChanged} .route="${this.route}" url-space-regex="^${basePath}">
+      </app-location>
+
+      <app-route
+        .route="${this.route}"
+        @route-changed=${this.routeChanged}
+        pattern="${basePath}action-points"
+        @tail-changed="${this.actionPointsRouteChanged}"
+      >
+      </app-route>
+      <app-route
+        .route="${this.route}"
+        @route-changed=${this.routeChanged}
+        pattern="${basePath}action-points/:page"
+        @data-changed="${this.routeDataChanged}"
+      >
+      </app-route>
+
+      <etools-piwik-analytics .user="${this.user}" .page="${this.page}" .toast="${this._toast}">
+      </etools-piwik-analytics>
+
+      <app-drawer-layout
+        id="layout"
+        responsive-width="850px"
+        fullbleed
+        .narrow="${this.narrow}"
+        ?small-menu="${this.smallMenu}"
+      >
+        <!-- Drawer content -->
+        <app-drawer
+          slot="drawer"
+          id="drawer"
+          transition-duration="350"
+          ?swipe-open="${this.narrow}"
+          ?small-menu="${this.smallMenu}"
+        >
+          <app-sidebar-menu
+            .route="${this.route}"
+            .page="${this.page}"
+            ?small-menu="${this.smallMenu}"
+          ></app-sidebar-menu>
+        </app-drawer>
+
+        <!-- Main content -->
+
+        <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
+          <app-header id="header" slot="header" fixed shadow>
+            <app-main-header id="pageheader" .user="${this.user}" .environment="${this.environment}"></app-main-header>
+          </app-header>
+
+          <main role="main" id="page-container">
+            <action-points-page-main
+              .hidden="${this.shouldShowPageNotFound()}"
+              id="action-points"
+              .staticDataLoaded="${this.staticDataLoaded}"
+              .route="${this.actionPointsRoute}"
+            >
+            </action-points-page-main>
+            <not-found-page-view .hidden="${this.shouldShowPageNotFound()}" id="not-found"></not-found-page-view>
+          </main>
+
+          <page-footer ?small-menu="${this.smallMenu}"></page-footer>
+        </app-header-layout>
+      </app-drawer-layout>
+    `;
   }
 
   connectedCallback() {
     super.connectedCallback();
 
+    this.addEventListener('404', () => this._pageNotFound());
+    this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
+    this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
+    this.environment = _checkEnvironment();
+
     this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.shadowRoot
       .querySelector('#appHeadLayout')
-      .shadowRoot!.querySelector('#contentContainer');
+      ?.shadowRoot?.querySelector('#contentContainer');
 
     const eventData = {
       message: 'Loading...',
       active: true,
       loadingSource: 'initialisation'
     };
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: eventData
-      })
-    );
+    fireEvent(this, 'global-loading', eventData);
   }
 
   _staticDataLoaded(e: CustomEvent) {
     if (e && e.type === 'static-data-loaded') {
-      this.set('staticDataLoaded', true);
+      this.staticDataLoaded = true;
     }
     if (this.staticDataLoaded) {
-      this.set('user', this.getUserData());
-      this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
+      this.user = this.getUserData();
+      this.page = this.routeData?.page ? this.routeData.page : this._initRoute();
     }
   }
 
-  @observe('routeData')
   _routePageChanged() {
     if (!this.initLoadingComplete || !this.routeData.page || !this.staticDataLoaded) {
       return;
     }
-    this.set('page', this.routeData.page ? this.routeData.page : this._initRoute());
+    this.page = this.routeData?.page ? this.routeData.page : this._initRoute();
     this.scroll(0, 0);
   }
 
   _pageChanged(page: string) {
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          message: 'Loading...',
-          active: true,
-          loadingSource: 'initialisation'
-        }
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      message: 'Loading...',
+      active: true,
+      loadingSource: 'initialisation'
+    });
 
     switch (page) {
       case 'not-found':
@@ -197,37 +238,28 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
         break;
     }
     if (!this.initLoadingComplete) {
-      this.set('initLoadingComplete', true);
+      this.initLoadingComplete = true;
     }
   }
 
   _loadPage() {
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'initialisation'
-        }
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'initialisation'
+    });
     if (this.route.path === '/') {
       this._initRoute();
     }
   }
 
   _pageNotFound() {
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'initialisation'
-        }
-      })
-    );
-    this.set('route.path', '/apd/action-points/not-found');
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'initialisation'
+    });
+    this.route = {...this.route, path: `${basePath}action-points/not-found`};
   }
 
   _initRoute() {
-    const path = `${this.rootPath}action-points/list`;
-    this.set('route.path', path);
+    this.route = {...this.route, path: `${basePath}action-points/list`};
     return 'action-points';
   }
 
@@ -274,7 +306,35 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(Poly
       }
     }
   }
-  shouldShowPageNotFound(page) {
-    return page === 'not-found';
+
+  shouldShowPageNotFound() {
+    return this.page === 'not-found';
+  }
+
+  actionPointsRouteChanged({detail}: CustomEvent) {
+    if (!detail.value?.path) {
+      return;
+    }
+
+    this.actionPointsRoute = detail.value;
+    this.requestUpdate();
+  }
+
+  routeDataChanged({detail}: CustomEvent) {
+    if (!detail.value?.page) {
+      return;
+    }
+
+    this.routeData = detail.value;
+    this.requestUpdate();
+  }
+
+  routeChanged({detail}: CustomEvent) {
+    if (!detail.value?.path) {
+      return;
+    }
+
+    this.route = detail.value;
+    this.requestUpdate();
   }
 }

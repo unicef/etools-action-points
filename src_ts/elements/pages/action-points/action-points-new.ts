@@ -1,14 +1,15 @@
 import {LitElement, html, customElement, property} from 'lit-element';
-import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin-lit';
+import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../common-elements/status-element';
 import './detail/action-point-details';
-import {pageLayoutStyles} from '../../styles/page-layout-styles-lit';
-import {sharedStyles} from '../../styles/shared-styles-lit';
+import {pageLayoutStyles} from '../../styles/page-layout-styles';
+import {sharedStyles} from '../../styles/shared-styles';
 import {mainPageStyles} from '../../styles/main-page-styles';
 import {ActionPointDetails} from './detail/action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
  * @polymer
@@ -64,15 +65,9 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
     const details: any = this.shadowRoot.querySelector('action-point-details');
     this.actionPoint = {};
     details.dispatchEvent(new CustomEvent('reset-validation'));
-    this.dispatchEvent(
-      new CustomEvent('route-changed', {
-        detail: {
-          value: this.route
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'route-changed', {
+      value: this.route
+    });
   }
 
   _createAP() {
@@ -84,17 +79,11 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
     const data = JSON.parse(JSON.stringify(detailsElement.editedItem));
     const endpoint = getEndpoint('actionPointsList');
 
-    this.dispatchEvent(
-      new CustomEvent('global-loading', {
-        detail: {
-          loadingSource: 'ap-creation',
-          active: true,
-          message: 'Creating Action Point...'
-        },
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'global-loading', {
+      loadingSource: 'ap-creation',
+      active: true,
+      message: 'Creating Action Point...'
+    });
 
     sendRequest({
       method: 'POST',
@@ -103,25 +92,13 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
     })
       .then((data: any) => {
         this.actionPoint = {};
-        this.dispatchEvent(
-          new CustomEvent('toast', {
-            detail: {
-              text: ' Action Point successfully created.'
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'toast', {
+          text: ' Action Point successfully created.'
+        });
         this.route.path = `/detail/${data.id}`;
-        this.dispatchEvent(
-          new CustomEvent('global-loading', {
-            detail: {
-              loadingSource: 'ap-creation'
-            },
-            bubbles: true,
-            composed: true
-          })
-        );
+        fireEvent(this, 'global-loading', {
+          loadingSource: 'ap-creation'
+        });
         this.route = {...this.route};
       })
       .catch((err: any) => {

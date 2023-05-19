@@ -1,7 +1,8 @@
 import {LitElement, html, customElement} from 'lit-element';
 import '@polymer/paper-material/paper-material.js';
-import {sharedStyles} from '../styles/shared-styles-lit';
-import {pageLayoutStyles} from '../styles/page-layout-styles-lit';
+import {sharedStyles} from '../styles/shared-styles';
+import {pageLayoutStyles} from '../styles/page-layout-styles';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('not-found-page-view')
 export class NotFoundPageView extends LitElement {
@@ -35,20 +36,10 @@ export class NotFoundPageView extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.dispatchEvent(
-      new CustomEvent('clear-loading-messages', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'clear-loading-messages');
   }
 
   openDrawer() {
-    this.dispatchEvent(
-      new CustomEvent('drawer', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    fireEvent(this, 'drawer');
   }
 }
