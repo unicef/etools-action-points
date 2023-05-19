@@ -60,7 +60,7 @@
     "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.5.1",
     "@unicef-polymer/etools-ajax": "^4.4.2",
-    "@unicef-polymer/etools-app-selector": "^5.0.0",
+    "@unicef-polymer/etools-app-selector": "^5.0.1",
     "@unicef-polymer/etools-content-panel": "^5.1.0",
     "@unicef-polymer/etools-data-table": "^7.0.0",
     "@unicef-polymer/etools-date-time": "^3.1.3",
