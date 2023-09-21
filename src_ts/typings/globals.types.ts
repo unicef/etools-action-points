@@ -1,4 +1,4 @@
-import {PolymerElement} from '@polymer/polymer';
+import {LitElement} from 'lit-element';
 
 /*
  * The type Constructor<T> is an alias for the construct signature
@@ -8,7 +8,7 @@ import {PolymerElement} from '@polymer/polymer';
  */
 export type Constructor<T> = new (...args: any[]) => T;
 
-export type MixinFunction = <T extends Constructor<PolymerElement>>(
+export type MixinFunction = <T extends Constructor<LitElement>>(
   baseClass: T
 ) => T & {
   new (...args: any[]): any;

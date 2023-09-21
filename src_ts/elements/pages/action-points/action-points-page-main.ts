@@ -2,6 +2,7 @@ import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/app-route/app-route.js';
 import {set} from '@polymer/polymer/lib/utils/path';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
 
 @customElement('action-points-page-main')
 export class ActionPointsPageMain extends LitElement {
@@ -51,14 +52,10 @@ export class ActionPointsPageMain extends LitElement {
   }
 
   _routeChanged({detail}: CustomEvent) {
-    const path = detail.value.path;
+    const path = detail?.value?.path;
     if (!path || !path.match(/[^\\/]/g)) {
       this.route = {...this.route, path: '/list'};
-      new CustomEvent('route-changed', {
-        detail: this.route,
-        bubbles: true,
-        composed: true
-      });
+      fireEvent(this, 'route-changed', {value: this.route});
       return;
     }
 

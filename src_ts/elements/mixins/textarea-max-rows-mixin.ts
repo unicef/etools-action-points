@@ -1,4 +1,4 @@
-import {PolymerElement} from '@polymer/polymer';
+import {LitElement} from 'lit-element';
 import {Constructor} from '../../typings/globals.types';
 import {flush} from '@polymer/polymer/lib/utils/flush.js';
 import {microTask} from '@polymer/polymer/lib/utils/async.js';
@@ -8,8 +8,8 @@ import {microTask} from '@polymer/polymer/lib/utils/async.js';
  * @polymer
  * @mixinFunction
  */
-export function TextAreaMaxRows<T extends Constructor<PolymerElement>>(superClass: T) {
-  class TextAreaMaxRowsClass extends (superClass as Constructor<PolymerElement>) {
+export function TextAreaMaxRows<T extends Constructor<LitElement>>(superClass: T) {
+  class TextAreaMaxRowsClass extends (superClass as Constructor<LitElement>) {
     connectedCallback() {
       super.connectedCallback();
       flush();

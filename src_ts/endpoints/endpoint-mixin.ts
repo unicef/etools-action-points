@@ -1,15 +1,11 @@
-// import {PolymerElement} from '@polymer/polymer';
-// import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
 import * as config from '../config/config';
-// import {Constructor} from '../../typings/globals.types';
 
 /**
  * App global configuration
  * @polymer
  * @mixinFunction
  */
-// export function EndpointMixin<T extends Constructor<PolymerElement>>(superClass: T) {
-// class EndpointMixinClass extends (superClass as Constructor<PolymerElement>) {
+
 export const getEndpoint = (endpointName: string, data?: any) => {
   const endpoint = config.epsData[endpointName];
   // eslint-disable-next-line no-prototype-builtins
@@ -23,7 +19,6 @@ export const getEndpoint = (endpointName: string, data?: any) => {
 };
 
 export const resetOldUserData = () => {
-  console.log('resetOldUserData()');
   localStorage.removeItem('userId');
   config.appDexieDb.listsExpireMapTable.clear();
 };
@@ -49,8 +44,3 @@ export const _checkEnvironment = () => {
   }
   return null;
 };
-// }
-// return EndpointMixinClass;
-// };
-
-// export const EndpointMixin = dedupingMixin(mixin);

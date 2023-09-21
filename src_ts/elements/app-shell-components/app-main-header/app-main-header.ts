@@ -1,5 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/dist/etools-app-selector';
@@ -7,19 +6,44 @@ import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
+import './organizations-dropdown';
 import '../../common-elements/support-btn';
-import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
+import {basePath} from '../../../config/config';
+import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
  * @polymer
  * @customElement
  */
 @customElement('app-main-header')
-export class AppMainHeader extends MatomoMixin(PolymerElement) {
-  public static get template() {
+export class AppMainHeader extends MatomoMixin(LitElement) {
+  @property({type: Object})
+  user: GenericObject;
+
+  @property({type: String, reflect: true, attribute: 'environment'})
+  environment: string;
+
+  @property({type: Array})
+  allUsers: any[];
+
+  @property({type: Array})
+  offices: any[];
+
+  @property({type: Array})
+  sections: any[];
+
+  @property({type: Boolean})
+  refreshInProgress: boolean;
+
+  static get styles() {
+    return [gridLayoutStylesLit];
+  }
+
+  public render() {
     return html`
       ${sharedStyles}
       <style>
@@ -28,14 +52,13 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
           padding: 0 8px 0 0;
         }
 
+        :host([environment]) app-toolbar {
+          background-color: var(--nonprod-header-color);
+        }
+
         #pageRefresh {
           color: #bcc1c6;
           margin-left: 8px;
-        }
-
-        .right-side {
-          @apply --layout-horizontal;
-          @apply --layout-center;
         }
 
         support-btn {
@@ -57,11 +80,6 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
           margin: 0 8px 0 24px;
         }
 
-        .content-align {
-          @apply --layout-horizontal;
-          @apply --layout-center;
-        }
-
         .envWarning {
           color: var(--nonprod-text-warn-color);
           font-weight: 700;
@@ -69,28 +87,28 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
         }
       </style>
 
-      <app-toolbar sticky class="content-align">
-        <div class="titlebar content-align">
-          <etools-app-selector user="[[user]]"></etools-app-selector>
+      <app-toolbar sticky class="layout-horizontal align-items-center">
+        <div class="titlebar layout-horizontal align-items-center">
+          <etools-app-selector .user="${this.user}"></etools-app-selector>
 
-          <img src$="[[rootPath]]../../../../../../apd/images/etools-logo-color-white.svg" />
-          <template is="dom-if" if="[[environment]]">
-            <div class="envWarning">- [[environment]] TESTING ENVIRONMENT</div>
-          </template>
+          <img src="${basePath}/images/etools-logo-color-white.svg" />
+          <div class="envWarning" .hidden="${!this.environment}">- ${this.environment} TESTING ENVIRONMENT</div>
         </div>
 
-        <div class="content-align">
-          <countries-dropdown countries="[[user.countries_available]]" country-id="[[user.country.id]]">
+        <div class="layout-horizontal align-items-center">
+          <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
           </countries-dropdown>
+
+          <organizations-dropdown .user="${this.user}"></organizations-dropdown>
 
           <support-btn title="Support"></support-btn>
 
           <etools-profile-dropdown
             title="Profile and Sign out"
-            profile="{{user}}"
-            users="[[allUsers]]"
-            offices="[[offices]]"
-            sections="[[sections]]"
+            .profile="${this.user}"
+            .users="${this.allUsers}"
+            .offices="${this.offices}"
+            .sections="${this.sections}"
           >
           </etools-profile-dropdown>
 
@@ -99,8 +117,8 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
             id="pageRefresh"
             icon="refresh"
             tracker="Refresh"
-            on-tap="onRefreshClick"
-            disabled="[[refreshInProgress]]"
+            @click="${this.onRefreshClick}"
+            ?disabled="${this.refreshInProgress}"
           >
           </paper-icon-button>
         </div>
@@ -108,19 +126,13 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
     `;
   }
 
-  @property({type: Object})
-  user: GenericObject;
-
-  @property({type: String})
-  environment: string;
-
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('sign-out', this._logout);
   }
 
   openDrawer() {
-    this.dispatchEvent(new CustomEvent('drawer'));
+    fireEvent(this, 'drawer');
   }
 
   _logout() {
@@ -131,15 +143,5 @@ export class AppMainHeader extends MatomoMixin(PolymerElement) {
   onRefreshClick(e: CustomEvent) {
     this.trackAnalytics(e);
     DexieRefresh.refresh();
-  }
-
-  @observe('environment')
-  _setBgColor() {
-    // If not production environment, changing header color to red
-    if (this.environment) {
-      this.updateStyles({
-        '--header-bg-color': 'var(--nonprod-header-color)'
-      });
-    }
   }
 }

@@ -5,9 +5,10 @@ import {sendRequest} from '@unicef-polymer/etools-ajax/etools-ajax-request';
 import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
-import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin-lit';
+import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {GenericObject} from '../../../../typings/globals.types';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('open-add-comments')
 export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElement)) {
@@ -90,13 +91,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
       }
     })
       .then((response: any) => {
-        this.dispatchEvent(
-          new CustomEvent('new-comment-added', {
-            bubbles: true,
-            composed: true,
-            detail: response
-          })
-        );
+        fireEvent(this, 'new-comment-added', response);
         dialog.opened = false;
         this.requestInProcess = false;
       })

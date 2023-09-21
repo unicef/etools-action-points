@@ -7,11 +7,12 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {sharedStyles} from '../styles/shared-styles-lit';
-import {moduleStyles} from '../styles/module-styles-lit';
+import {sharedStyles} from '../styles/shared-styles';
+import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('pages-header-element')
 export class PagesHeaderElement extends MatomoMixin(LitElement) {
@@ -40,7 +41,6 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   downloadLetterUrl = '';
 
   static get styles() {
-    // language=CSS
     return [gridLayoutStylesLit];
   }
 
@@ -193,7 +193,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
 
   addNewTap(e: CustomEvent) {
     this.trackAnalytics(e);
-    this.dispatchEvent(new CustomEvent('add-new-tap'));
+    fireEvent(this, 'add-new-tap');
   }
 
   _showLink(link: string) {
