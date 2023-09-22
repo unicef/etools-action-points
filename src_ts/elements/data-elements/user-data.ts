@@ -22,6 +22,10 @@ export class UserData extends UserControllerMixin(LitElement) {
 
   _handleResponse(data: any) {
     const user = data;
+    if (!user.is_unicef_user) {
+      window.location.href = window.location.origin + '/menu/';
+    }
+
     const lastUserId = JSON.parse(JSON.stringify(localStorage.getItem('userId')));
     const countriesAvailable = user.countries_available || [];
     user.countries_available = countriesAvailable;
