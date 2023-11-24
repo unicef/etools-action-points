@@ -72,6 +72,8 @@ workflows:
                 - staging
                 - develop
       - build_and_deploy:
+          requires:
+            - lint
           filters:
             branches:
               only:
