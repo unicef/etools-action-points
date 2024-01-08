@@ -1,4 +1,4 @@
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
 

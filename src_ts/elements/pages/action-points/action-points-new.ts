@@ -1,4 +1,5 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';

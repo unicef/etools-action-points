@@ -1,5 +1,5 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-button/paper-button.js';

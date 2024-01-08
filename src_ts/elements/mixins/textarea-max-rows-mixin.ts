@@ -1,4 +1,4 @@
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 import {Constructor} from '../../typings/globals.types';
 import {flush} from '@polymer/polymer/lib/utils/flush.js';
 import {microTask} from '@polymer/polymer/lib/utils/async.js';

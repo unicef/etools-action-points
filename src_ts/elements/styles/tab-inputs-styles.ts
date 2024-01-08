@@ -1,4 +1,4 @@
-import {html} from 'lit-element';
+import {html} from 'lit';
 import {basePath} from '../../config/config';
 
 export const tabInputsStyles = html`

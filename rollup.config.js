@@ -5,7 +5,7 @@ import path from 'path';
 const importMetaUrlCurrentModulePlugin = () => {
   return {
     name: 'import-meta-url-current-module',
-    resolveImportMeta(property, { moduleId }) {
+    resolveImportMeta(property, {moduleId}) {
       if (property === 'url') {
         return `new URL('${path.relative(process.cwd(), moduleId)}', document.baseURI).href`;
       }
@@ -25,11 +25,7 @@ const config = {
     if (warning.code === 'THIS_IS_UNDEFINED') return;
     warn(warning);
   },
-  plugins: [
-    importMetaUrlCurrentModulePlugin(),
-    resolve(),
-    esbuild()
-  ],
+  plugins: [importMetaUrlCurrentModulePlugin(), resolve(), esbuild()],
   preserveEntrySignatures: false
 };
 

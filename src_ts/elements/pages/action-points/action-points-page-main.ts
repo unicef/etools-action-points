@@ -1,4 +1,5 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/app-route/app-route.js';
 import {set} from '@polymer/polymer/lib/utils/path';

@@ -1,5 +1,5 @@
-import {LitElement, property} from 'lit-element';
-
+import {LitElement} from 'lit';
+import {property} from 'lit/decorators.js';
 import {Constructor} from '../../typings/globals.types';
 import {AppDrawerElement} from '@polymer/app-layout/app-drawer/app-drawer.js';
 import {AppDrawerLayoutElement} from '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';

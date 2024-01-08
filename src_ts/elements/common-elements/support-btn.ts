@@ -1,4 +1,5 @@
-import {LitElement, html, property, customElement} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/communication-icons.js';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';

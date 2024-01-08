@@ -1,5 +1,5 @@
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
-import {html, TemplateResult} from 'lit-element';
+import {html, TemplateResult} from 'lit';
 /* eslint-disable max-len */
 
 export const apdIcons: TemplateResult = html`

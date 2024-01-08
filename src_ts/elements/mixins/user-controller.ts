@@ -1,5 +1,5 @@
 import {Constructor} from '../../typings/globals.types';
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 
 let _user: any;
 let _groups: any;
