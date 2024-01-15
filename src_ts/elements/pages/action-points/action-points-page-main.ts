@@ -1,107 +1,84 @@
-import {LitElement, html} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
-import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/app-route/app-route.js';
-import {set} from '@polymer/polymer/lib/utils/path';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
+import { LitElement, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { fireEvent } from "@unicef-polymer/etools-utils/dist/fire-event.util.js";
+import { connect } from "pwa-helpers";
+import { RootState, store } from "../../../redux/store";
+import get from "lodash-es/get";
+import { isJsonStrMatch } from "@unicef-polymer/etools-utils/dist/equality-comparisons.util";
 
-@customElement('action-points-page-main')
-export class ActionPointsPageMain extends LitElement {
-  @property({type: Object})
+@customElement("action-points-page-main")
+export class ActionPointsPageMain extends connect(store)(LitElement) {
+  @property({ type: Object })
   route: any = {};
 
-  @property({type: Object})
+  @property({ type: Object })
   routeData: any = {};
 
-  @property({type: Object})
-  listRoute: any = {};
-
-  @property({type: Object})
-  detailRoute: any = {};
-
-  @property({type: Object})
-  staticDataLoaded: any = {};
+  @property({ type: Boolean })
+  staticDataLoaded?: boolean;
 
   render() {
     return html`
-      <app-route
-        .route="${this.route}"
-        @route-changed="${this._routeChanged}"
-        pattern="/:view"
-        @data-changed="${this._routeDataChanged}"
-      >
-      </app-route>
-
-      <app-route .route="${this.route}" pattern="/list" @tail-changed="${this._listRouteChanged}"> </app-route>
-      <app-route .route="${this.route}" pattern="/new"></app-route>
-      <app-route .route="${this.route}" pattern="/detail" @tail-changed="${this._detailRouteChanged}"></app-route>
-      <iron-pages .selected="${this.routeData.view}" attr-for-selected="name">
-        <action-points-new
-          name="new"
-          .route="${this.route}"
-          @route-changed="${({detail}: CustomEvent) => {
-            if (JSON.stringify(this.route) !== JSON.stringify(detail.value) || detail.value.path.includes('/detail')) {
-              this.route = detail.value;
-            }
-          }}"
-        ></action-points-new>
-        <action-points-item name="detail" .route="${this.detailRoute}"></action-points-item>
-        <action-points-list name="list" .route="${this.listRoute}" .staticDataLoaded="${this.staticDataLoaded}">
-        </action-points-list>
-      </iron-pages>
+      <style>
+        :host([hidden]) {
+          display: none;
+        }
+      </style>
+      ${this.renderPage(this.routeData.subRouteName)}
     `;
   }
 
-  _routeChanged({detail}: CustomEvent) {
-    const path = detail?.value?.path;
-    if (!path || !path.match(/[^\\/]/g)) {
-      this.route = {...this.route, path: '/list'};
-      fireEvent(this, 'route-changed', {value: this.route});
-      return;
-    }
-
-    if (!['detail', 'list', 'new', 'not-found'].includes(path.split('/')[1])) {
-      this.route = {...this.route, path: '/not-found'};
-      return;
+  renderPage( view: string ) {
+    switch (view) {
+      case "new":
+        return html`
+          <action-points-new
+            .route="${this.route}"
+            ?hidden="true"
+          ></action-points-new>`;
+      case "detail":
+        return html`
+          <action-points-item .route="${this.routeData}"></action-points-item>`;
+      default:
+        return html`
+          <action-points-list .route="${this.routeData}" .staticDataLoaded="${this.staticDataLoaded}">
+          </action-points-list>`;
     }
   }
 
-  _routeDataChanged({detail}: CustomEvent) {
-    this.routeData = detail.value;
-    switch (this.routeData.view) {
-      case 'new':
-        import('./action-points-new.js');
+  routeDataChanged( view: string ) {
+    switch (view) {
+      case "new":
+        import("./action-points-new.js");
         break;
-      case 'detail':
-        import('./detail/action-points-item.js');
+      case "detail":
+        import("./detail/action-points-item.js");
         break;
       default:
-        import('./action-points-list.js');
+        import("./action-points-list.js");
         break;
     }
   }
 
-  _listRouteChanged({detail}: CustomEvent) {
-    if (this.routeData.view !== 'list') return;
-
-    if (detail.path) {
-      set(this, detail.path.replace('tail.', 'listRoute.'), detail.value);
-      this.listRoute = {...this.listRoute};
+  stateChanged( state: RootState ) {
+    if (this.pageIsNotCurrentlyActive(get(state, "app.routeDetails.routeName"), "action-points")) {
       return;
     }
-
-    this.listRoute = detail.value;
+    if (state.app.routeDetails && !isJsonStrMatch(state.app.routeDetails, this.routeData)) {
+      this.routeData = state.app.routeDetails;
+      this.route = this.route.path;
+      this.routeDataChanged(this.routeData.subRouteName);
+      fireEvent(this, "global-loading", {
+        loadingSource: "action-points"
+      });
+    }
   }
 
-  _detailRouteChanged({detail}: CustomEvent) {
-    if (this.routeData.view !== 'detail') return;
-
-    if (detail.path) {
-      set(this, detail.path.replace('tail.', 'detailRoute.'), detail.value);
-      this.detailRoute = {...this.detailRoute};
-      return;
+  pageIsNotCurrentlyActive( routeName: string, pageName: string ) {
+    if (!routeName) {
+      return true;
     }
-
-    this.detailRoute = detail.value;
+    const arrPageName = pageName.split("|");
+    return !arrPageName.includes(routeName);
   }
 }

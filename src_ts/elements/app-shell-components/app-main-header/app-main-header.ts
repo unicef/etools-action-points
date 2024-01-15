@@ -1,9 +1,9 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@unicef-polymer/etools-app-selector/dist/etools-app-selector';
-import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-toolbar';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import '@unicef-polymer/etools-unicef/src/etools-app-selector/etools-app-selector';
+import '@unicef-polymer/etools-unicef/src/etools-profile-dropdown/etools-profile-dropdown';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
@@ -113,15 +113,15 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
           >
           </etools-profile-dropdown>
 
-          <paper-icon-button
+          <etools-icon-button
             title="Refresh"
             id="pageRefresh"
-            icon="refresh"
+            name="refresh"
             tracker="Refresh"
             @click="${this.onRefreshClick}"
             ?disabled="${this.refreshInProgress}"
           >
-          </paper-icon-button>
+          </etools-icon-button>
         </div>
       </app-toolbar>
     `;
@@ -133,7 +133,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
   }
 
   openDrawer() {
-    fireEvent(this, 'drawer');
+    fireEvent(this, 'change-drawer-state');
   }
 
   _logout() {

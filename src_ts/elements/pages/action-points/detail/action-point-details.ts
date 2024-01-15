@@ -1,12 +1,12 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-input/paper-textarea.js';
-import '@polymer/paper-checkbox/paper-checkbox.js';
-import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
-import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import '@unicef-polymer/etools-loading/etools-loading.js';
-import '@unicef-polymer/etools-date-time/datepicker-lite.js';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
+import '@unicef-polymer/etools-unicef/src/etools-checkbox/etools-checkbox';
+import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown.js';
+import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
+import '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading.js';
+import '@unicef-polymer/etools-unicef/src/etools-date-time/datepicker-lite.js';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
@@ -18,7 +18,7 @@ import {sharedStyles} from '../../../styles/shared-styles';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles';
 import {GenericObject} from '../../../../typings/globals.types';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
 @customElement('action-point-details')
 export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
@@ -276,12 +276,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>`) ||
             ''}
             ${(this.isReadOnly('partner', this.permissionPath) &&
-              html`<paper-input
+              html`<etools-input
                 label="${this.getLabel('partner', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('partner', this.permissionPath, true)}"
                 value="${this.getStringValueOrEmpty(this.originalActionPoint.partner?.name)}"
                 readonly
-              ></paper-input>`) ||
+              ></etools-input>`) ||
             ''}
 
             <etools-loading
@@ -323,12 +323,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>`) ||
             ''}
             ${(this.isReadOnly('intervention', this.permissionPath) &&
-              html`<paper-input
+              html`<etools-input
                 label="${this.getLabel('intervention', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('intervention', this.permissionPath, true)}"
                 value="${this.getStringValueOrEmpty(this.originalActionPoint?.intervention?.title)}"
                 readonly
-              ></paper-input>`) ||
+              ></etools-input>`) ||
             ''}
 
             <etools-loading
@@ -375,12 +375,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>`) ||
             ''}
             ${(this.isReadOnly('cp_output', this.permissionPath) &&
-              html` <paper-input
+              html` <etools-input
                 .label="${this.getLabel('cp_output', this.permissionPath)}"
                 .placeholder="${this.getPlaceholderText('cp_output', this.permissionPath, true)}"
                 .value="${this.getStringValueOrEmpty(this.originalActionPoint.cp_output?.name)}"
                 readonly
-              ></paper-input>`) ||
+              ></etools-input>`) ||
             ''}
           </div>
 
@@ -413,7 +413,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         <div class="row-h group">
           <div class="input-container input-container-l">
             <!-- Description -->
-            <paper-textarea
+            <etools-textarea
               class="validate-input ${this._setRequired('description', this.permissionPath)}"
               .value="${this.editedItem?.description}"
               label="${this.getLabel('description', this.permissionPath)}"
@@ -428,7 +428,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               @value-changed="${({detail}: CustomEvent) => this.updateField('description', detail.value)}"
               no-title-attr
             >
-            </paper-textarea>
+            </etools-textarea>
           </div>
         </div>
 
@@ -511,7 +511,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         <div class="row-h group">
           <div class="input-container input-checkbox-container">
             <!-- Priority -->
-            <paper-checkbox
+            <etools-checkbox
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
               @checked-changed=${({detail}) => {
@@ -520,7 +520,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 }
               }}
             >
-              ${this.getLabel('high_priority', this.permissionPath)}</paper-checkbox
+              ${this.getLabel('high_priority', this.permissionPath)}</etools-checkbox
             >
           </div>
           <div class="input-container">

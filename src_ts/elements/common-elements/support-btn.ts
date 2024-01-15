@@ -1,7 +1,6 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/iron-icons/communication-icons.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 
 /**
@@ -27,7 +26,7 @@ export class SupportBtn extends MatomoMixin(LitElement) {
       </style>
 
       <a href="${this.url}" target="_blank" @tap="${this.trackAnalytics}" tracker="Support">
-        <iron-icon icon="communication:textsms"></iron-icon>
+        <etools-icon name="communication:textsms"></etools-icon>
         Support
       </a>
     `;

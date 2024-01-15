@@ -1,6 +1,5 @@
 import {LitElement, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
-import '@polymer/paper-material/paper-material.js';
 import {sharedStyles} from '../styles/shared-styles';
 import {pageLayoutStyles} from '../styles/page-layout-styles';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
@@ -23,15 +22,13 @@ export class NotFoundPageView extends LitElement {
         }
       </style>
 
-      <div class="container">
-        <paper-material elevation="1">
+      <section class="page-content elevation" elevation="1">
           <h2>Oops! You hit a 404.</h2>
           <p>The page you're looking for doesn't seem to exist.</p>
           <p>
             <a href="/apd/action-points/list" class="link">Head back home.</a>
           </p>
-        </paper-material>
-      </div>
+      </section>
     `;
   }
 
@@ -41,6 +38,6 @@ export class NotFoundPageView extends LitElement {
   }
 
   openDrawer() {
-    fireEvent(this, 'drawer');
+    fireEvent(this, 'change-drawer-state');
   }
 }

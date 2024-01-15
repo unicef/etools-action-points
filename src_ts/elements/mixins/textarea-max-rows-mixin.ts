@@ -4,7 +4,7 @@ import {flush} from '@polymer/polymer/lib/utils/flush.js';
 import {microTask} from '@polymer/polymer/lib/utils/async.js';
 
 /*
- * Mixin for fix max-rows in paper-textarea.
+ * Mixin for fix max-rows in etools-textarea.
  * @polymer
  * @mixinFunction
  */
@@ -13,7 +13,7 @@ export function TextAreaMaxRows<T extends Constructor<LitElement>>(superClass: T
     connectedCallback() {
       super.connectedCallback();
       flush();
-      const paperTextareas = this.shadowRoot.querySelectorAll('paper-textarea') || [];
+      const paperTextareas = this.shadowRoot.querySelectorAll('etools-textarea') || [];
 
       paperTextareas.forEach((paperTextarea: any) => {
         this.setMaxHeight(paperTextarea);
@@ -25,8 +25,8 @@ export function TextAreaMaxRows<T extends Constructor<LitElement>>(superClass: T
         return false;
       }
 
-      const paperInputContainer = paperTextarea.shadowRoot.querySelector('paper-input-container');
-      const textareaAutogrow = paperInputContainer.querySelector('.paper-input-input');
+      const paperInputContainer = paperTextarea.shadowRoot.querySelector('etools-input-container');
+      const textareaAutogrow = paperInputContainer.querySelector('.etools-input-input');
       const mirror = textareaAutogrow.shadowRoot.querySelector('#mirror');
 
       if (!textareaAutogrow) {

@@ -1,23 +1,14 @@
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/app-route/app-location.js';
-import '@polymer/app-route/app-route.js';
-import '@polymer/app-layout/app-drawer/app-drawer.js';
-import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
-import '@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '@polymer/app-layout/app-header/app-header.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/paper-material/paper-material.js';
-import '@polymer/iron-selector/iron-selector.js';
-import '@polymer/iron-collapse/iron-collapse.js';
-import '@polymer/iron-icons/iron-icons.js';
-import '@polymer/iron-icons/social-icons.js';
-import '@polymer/iron-icons/av-icons.js';
-import {createDynamicDialog} from '@unicef-polymer/etools-dialog/dynamic-dialog';
-import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer-layout';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-header-layout';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-header';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import {createDynamicDialog} from '@unicef-polymer/etools-unicef/src/etools-dialog/dynamic-dialog';
 import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
-import {LoadingMixin} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin.js';
+import {LoadingMixin} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin';
 import {_checkEnvironment} from './endpoints/endpoint-mixin';
 import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
@@ -26,86 +17,77 @@ import './elements/app-shell-components/app-sidebar-menu';
 import './elements/app-shell-components/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/app-shell-components/page-footer';
+import './routing/routes.js';
 import {basePath} from './config/config';
 import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
-import {GenericObject} from './typings/globals.types';
-import '@unicef-polymer/etools-toasts/src/etools-toasts';
+import '@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {setBasePath} from '@shoelace-style/shoelace/dist/utilities/base-path.js';
+import {EtoolsIconSet, initializeIcons} from '@unicef-polymer/etools-unicef/src/etools-icons/etools-icons';
+import {apdIcons} from './elements/styles/apd-icons';
+import {connect, installMediaQueryWatcher, installRouter} from 'pwa-helpers';
+import {RootState, store} from './redux/store';
+import {handleUrlChange} from './redux/actions/app.js';
+import {RouteDetails} from '@unicef-polymer/etools-types';
+import {setStore} from '@unicef-polymer/etools-utils/dist/store.util';
 
-setRootPath(basePath);
+setStore(store as any);
 declare const dayjs: any;
 declare const dayjs_plugin_utc: any;
 dayjs.extend(dayjs_plugin_utc);
 window.EtoolsLanguage = 'en';
 
+setBasePath(basePath);
+initializeIcons(
+  [
+    EtoolsIconSet.communication,
+    EtoolsIconSet.device,
+    EtoolsIconSet.social,
+    EtoolsIconSet.av,
+    EtoolsIconSet.image,
+    EtoolsIconSet.maps
+  ],
+  apdIcons
+);
 @customElement('app-shell')
-export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitElement))) {
+export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(AppMenuMixin(LitElement)))) {
   static get styles() {
     return [gridLayoutStylesLit];
   }
 
-  _page: string;
-  @property({type: String, reflect: true, attribute: 'page'})
-  get page() {
-    return this._page;
-  }
+  @property({type: Object})
+  public routeDetails!: RouteDetails;
 
-  set page(value) {
-    this._page = value;
-    this._pageChanged(value);
-  }
+  @property({type: String})
+  public mainPage = ''; // routeName
 
-  @property({type: Boolean})
-  narrow: boolean;
+  @property({type: String})
+  public subPage: string | null = null; // subRouteName
+
+  @property({type: Boolean, reflect: true})
+  narrow = false;
 
   @property({type: Object})
   _toast: any;
-
-  @property({type: Array})
-  _toastQueue: any[];
-
-  @property({type: Array})
-  globalLoadingQueue: any[];
 
   @property({type: Object})
   user: any;
 
   actionPointsRoute: any = {};
 
-  private _route: GenericObject;
-  @property({type: Object})
-  get route() {
-    return this._route;
-  }
-
-  set route(value) {
-    this._route = value;
-  }
-
-  private _routeData: GenericObject;
-  @property({type: Object})
-  get routeData() {
-    return this._routeData;
-  }
-
-  set routeData(value) {
-    this._routeData = value;
-    this._routePageChanged();
-  }
-
   @property({type: Object})
   queryParams: any;
 
   @property({type: String})
-  environment: string;
+  environment: string | null = null;
 
   @property({type: Boolean})
-  staticDataLoaded = false;
+  staticDataLoaded?: boolean;
 
   @property({type: Boolean})
-  smallMenu: boolean;
+  smallMenu: boolean = false;
 
   @property({type: Boolean})
   initLoadingComplete = false;
@@ -115,24 +97,6 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
       ${appShellStyles}
       <static-data></static-data>
       <etools-toasts></etools-toasts>
-
-      <app-location @route-changed=${this.routeChanged} .route="${this.route}" url-space-regex="^${basePath}">
-      </app-location>
-
-      <app-route
-        .route="${this.route}"
-        @route-changed=${this.routeChanged}
-        pattern="${basePath}action-points"
-        @tail-changed="${this.actionPointsRouteChanged}"
-      >
-      </app-route>
-      <app-route
-        .route="${this.route}"
-        @route-changed=${this.routeChanged}
-        pattern="${basePath}action-points/:page"
-        @data-changed="${this.routeDataChanged}"
-      >
-      </app-route>
 
       <etools-piwik-analytics .user="${this.user}" .page="${this.page}" .toast="${this._toast}">
       </etools-piwik-analytics>
@@ -149,14 +113,12 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
           slot="drawer"
           id="drawer"
           transition-duration="350"
+          @app-drawer-transitioned="${this.onDrawerToggle}"
+          ?opened="${this.drawerOpened}"
           ?swipe-open="${this.narrow}"
           ?small-menu="${this.smallMenu}"
         >
-          <app-sidebar-menu
-            .route="${this.route}"
-            .page="${this.page}"
-            ?small-menu="${this.smallMenu}"
-          ></app-sidebar-menu>
+          <app-sidebar-menu .page="${this.mainPage}" ?small-menu="${this.smallMenu}"></app-sidebar-menu>
         </app-drawer>
 
         <!-- Main content -->
@@ -168,13 +130,16 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
 
           <main role="main" id="page-container">
             <action-points-page-main
-              .hidden="${this.shouldShowPageNotFound()}"
+              ?hidden="${!this.isActivePage(this.mainPage, 'action-points')}"
               id="action-points"
               .staticDataLoaded="${this.staticDataLoaded}"
               .route="${this.actionPointsRoute}"
             >
             </action-points-page-main>
-            <not-found-page-view .hidden="${this.shouldShowPageNotFound()}" id="not-found"></not-found-page-view>
+            <not-found-page-view
+              ?hidden="${!this.isActivePage(this.page, 'not-found')}"
+              id="not-found"
+            ></not-found-page-view>
           </main>
 
           <page-footer ?small-menu="${this.smallMenu}"></page-footer>
@@ -185,17 +150,19 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
 
   connectedCallback() {
     super.connectedCallback();
-
+    installMediaQueryWatcher(`(min-width: 460px)`, () => fireEvent(this, 'change-drawer-state'));
     this.addEventListener('404', () => this._pageNotFound());
-    this.addEventListener('static-data-loaded', (e: CustomEvent) => this._staticDataLoaded(e));
+    this.addEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this.environment = _checkEnvironment();
-
+    this.addEventListener('change-drawer-state', this.changeDrawerState);
     this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.shadowRoot
-      .querySelector('#appHeadLayout')
+      ?.querySelector('#appHeadLayout')
       ?.shadowRoot?.querySelector('#contentContainer');
-
+    installRouter((location) =>
+      store.dispatch(handleUrlChange(decodeURIComponent(location.pathname + location.search)))
+    );
     const eventData = {
       message: 'Loading...',
       active: true,
@@ -204,64 +171,50 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
     fireEvent(this, 'global-loading', eventData);
   }
 
+  public disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('change-drawer-state', this.changeDrawerState);
+    this.removeEventListener('404', () => this._pageNotFound());
+    this.removeEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
+  }
+
+  public stateChanged(state: RootState) {
+    if (!state.app.routeDetails?.routeName) {
+      return;
+    }
+    if (
+      state.app.routeDetails.path.includes('/new') &&
+      (!this.routeDetails || !this.routeDetails.path.includes('/new'))
+    )
+      fireEvent(this, 'global-loading', {
+        active: true,
+        loadingSource: state.app.routeDetails.routeName
+      });
+    this.routeDetails = state.app!.routeDetails;
+    this.mainPage = state.app!.routeDetails!.routeName;
+    this.subPage = state.app!.routeDetails!.subRouteName;
+  }
+  _pageNotFound(event?: any) {
+    const message = event && event.detail && event.detail.message ? `${event.detail.message}` : 'Oops you hit a 404!';
+    fireEvent(this, 'toast', {text: message});
+    this.goToPageNotFound();
+  }
+  goToPageNotFound() {
+    history.pushState(window.history.state, '', 'not-found');
+    window.dispatchEvent(new CustomEvent('popstate'));
+  }
   _staticDataLoaded(e: CustomEvent) {
     if (e && e.type === 'static-data-loaded') {
       this.staticDataLoaded = true;
     }
     if (this.staticDataLoaded) {
       this.user = this.getUserData();
-      this.page = this.routeData?.page ? this.routeData.page : this._initRoute();
+      const eventData = {
+        active: false,
+        loadingSource: 'initialisation'
+      };
+      fireEvent(this, 'global-loading', eventData);
     }
-  }
-
-  _routePageChanged() {
-    if (!this.initLoadingComplete || !this.routeData.page || !this.staticDataLoaded) {
-      return;
-    }
-    this.page = this.routeData?.page ? this.routeData.page : this._initRoute();
-    this.scroll(0, 0);
-  }
-
-  _pageChanged(page: string) {
-    fireEvent(this, 'global-loading', {
-      message: 'Loading...',
-      active: true,
-      loadingSource: 'initialisation'
-    });
-
-    switch (page) {
-      case 'not-found':
-        import('./elements/pages/not-found-page-view.js');
-        break;
-      default:
-        import('./elements/pages/action-points/action-points-page-main.js');
-        this._loadPage();
-        break;
-    }
-    if (!this.initLoadingComplete) {
-      this.initLoadingComplete = true;
-    }
-  }
-
-  _loadPage() {
-    fireEvent(this, 'global-loading', {
-      loadingSource: 'initialisation'
-    });
-    if (this.route.path === '/') {
-      this._initRoute();
-    }
-  }
-
-  _pageNotFound() {
-    fireEvent(this, 'global-loading', {
-      loadingSource: 'initialisation'
-    });
-    this.route = {...this.route, path: `${basePath}action-points/not-found`};
-  }
-
-  _initRoute() {
-    this.route = {...this.route, path: `${basePath}action-points/list`};
-    return 'action-points';
   }
 
   checkAppVersion() {
@@ -308,34 +261,8 @@ export class AppShell extends LoadingMixin(UserControllerMixin(AppMenuMixin(LitE
     }
   }
 
-  shouldShowPageNotFound() {
-    return this.page === 'not-found';
-  }
-
-  actionPointsRouteChanged({detail}: CustomEvent) {
-    if (!detail.value?.path) {
-      return;
-    }
-
-    this.actionPointsRoute = detail.value;
-    this.requestUpdate();
-  }
-
-  routeDataChanged({detail}: CustomEvent) {
-    if (!detail.value?.page) {
-      return;
-    }
-
-    this.routeData = detail.value;
-    this.requestUpdate();
-  }
-
-  routeChanged({detail}: CustomEvent) {
-    if (!detail.value?.path) {
-      return;
-    }
-
-    this.route = detail.value;
-    this.requestUpdate();
+  isActivePage(activeModule: string, expectedModule: string) {
+    const pagesToMatch = expectedModule.split('|');
+    return pagesToMatch.indexOf(activeModule) > -1;
   }
 }

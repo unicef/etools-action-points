@@ -1,13 +1,11 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-menu-button/paper-menu-button.js';
-import '@polymer/paper-tooltip/paper-tooltip.js';
-import '@polymer/paper-listbox/paper-listbox.js';
-import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
-import '@polymer/paper-item/paper-item.js';
-import '@polymer/iron-icon/iron-icon.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
+import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js';
+import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {sharedStyles} from '../styles/shared-styles';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
@@ -54,7 +52,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           display: block;
         }
 
-        paper-menu-button.mw-150 {
+        etools-button-group.mw-150 {
           min-width: 150px;
           white-space: nowrap;
         }
@@ -100,7 +98,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           margin-right: 8px;
         }
 
-        .side-heading paper-button.add-btn {
+        .side-heading etools-button.add-btn {
           background-color: var(--module-primary);
           color: white;
           height: 36px;
@@ -109,7 +107,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           padding-right: 15px;
         }
 
-        .side-heading paper-button.add-btn span {
+        .side-heading etools-button.add-btn span {
           margin-left: 4px;
         }
 
@@ -134,48 +132,52 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
 
           <div class="layout-horizontal align-items-center">
             <div class="export-buttons" ?hidden="${!this.exportLinks?.length}">
-              <paper-menu-button
+              <etools-button-group
                 id="dropdown"
                 ?hidden="${!this._isDropDown(this.exportLinks)}"
                 @tap="${this._toggleOpened}"
                 horizontal-align="right"
               >
-                <paper-button slot="dropdown-trigger" class="grey-buttons">
-                  <iron-icon icon="file-download"></iron-icon>
+                <etools-button slot="dropdown-trigger" class="grey-buttons">
+                  <etools-icon name="file-download"></etools-icon>
                   Export
-                </paper-button>
+                </etools-button>
 
-                <paper-listbox id="dropdownMenu" slot="dropdown-content">
+                <sl-dropdown id="dropdownMenu"
+                             placement="bottom-end"
+                             @click="${(event: MouseEvent) => event.stopImmediatePropagation()}">
+                  <sl-menu>
                   ${this.exportLinks?.map(
                     (item) =>
                       html`
-                        <paper-item tracker="Export ${item.name}" @tap="${this.exportData}">${item.name}</paper-item>
+                        <sl-menu-item tracker="Export ${item.name}" @tap="${this.exportData}">${item.name}</sl-menu-item>
                       `
                   )}
-                </paper-listbox>
-              </paper-menu-button>
-              <paper-button
+                  </sl-menu>
+                </sl-dropdown>
+              </etools-button-group>
+              <etools-button
                 class="grey-buttons"
                 tracker="Export"
                 ?hidden="${!this.showExportButton || this._isDropDown(this.exportLinks)}"
-                @tap="${this.exportData}"
+                @click="${this.exportData}"
               >
-                <iron-icon icon="file-download"></iron-icon>
+                <etools-icon name="file-download"></etools-icon>
                 Export
-              </paper-button>
+              </etools-button>
             </div>
 
-            <paper-button
+            <etools-button
               class="add-btn"
               raised
               tracker="Add Action Point"
               ?hidden="${this._hideAddButton(this.showAddButton)}"
-              @tap="${this.addNewTap}"
+              @click="${this.addNewTap}"
             >
               <a href="${this.link}" class="btn-link" ?hidden="${!this._showLink(this.link)}"></a>
-              <iron-icon icon="add"></iron-icon>
+              <etools-icon name="add"></etools-icon>
               <span>${this.btnText}</span>
-            </paper-button>
+            </etools-button>
             <slot></slot>
           </div>
         </div>
@@ -184,7 +186,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   }
 
   _toggleOpened() {
-    const dropdown: PaperListboxElement = this.shadowRoot.querySelector('#dropdownMenu');
+    const dropdown: any = this.shadowRoot?.querySelector('#dropdownMenu');
     dropdown.select(null);
   }
 

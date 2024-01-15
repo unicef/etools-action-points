@@ -9,7 +9,7 @@ import {pageLayoutStyles} from '../../styles/page-layout-styles';
 import {sharedStyles} from '../../styles/shared-styles';
 import {mainPageStyles} from '../../styles/main-page-styles';
 import {ActionPointDetails} from './detail/action-point-details';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**

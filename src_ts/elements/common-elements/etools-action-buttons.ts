@@ -1,10 +1,10 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-menu-button/paper-menu-button.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/paper-listbox/paper-listbox.js';
-import '@polymer/iron-icon/iron-icon.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
@@ -23,20 +23,20 @@ export class EtoolsActionButton extends LitElement {
         :host .main-action.text {
           font-weight: 500;
         }
-        :host paper-button {
+        :host etools-button {
           height: 34px;
           color: #fff;
           background-color: var(--module-primary);
           margin: 0;
           width: 100%;
         }
-        :host paper-button span {
+        :host etools-button span {
           padding: 0 29px;
         }
-        :host paper-button.with-menu {
+        :host etools-button.with-menu {
           padding-right: calc(0.57em + 41px);
         }
-        :host paper-menu-button {
+        :host etools-button-group {
           padding: 0;
           border-left: solid 1px rgba(255, 255, 255, 0.5);
           position: absolute;
@@ -45,7 +45,7 @@ export class EtoolsActionButton extends LitElement {
           height: 34px;
           overflow: hidden;
         }
-        :host paper-menu-button paper-icon-button {
+        :host etools-button-group etools-icon-button {
           top: -2px;
         }
         :host [slot='dropdown-content'] {
@@ -88,22 +88,24 @@ export class EtoolsActionButton extends LitElement {
         }
       </style>
 
-      <paper-button
+      <etools-button
         raised
-        @tap="${this._btnClicked}"
+        @click="${this._btnClicked}"
         class="main-action status-tab-button ${this.withActionsMenu(this.actions?.length)}"
       >
         <span class="main-action text">${this._setButtonText(this.actions?.[0])}</span>
 
-        <paper-menu-button
+        <etools-button-group
           dynamic-align
           .opened="${this.statusBtnMenuOpened}"
           class="option-button"
           ?hidden="${!this._showOtherActions(this.actions?.length)}"
         >
-          <paper-icon-button icon="expand-more" slot="dropdown-trigger" class="option-button"></paper-icon-button>
+          <etools-icon-button name="expand-more" slot="dropdown-trigger" class="option-button"></etools-icon-button>
 
-          <paper-listbox slot="dropdown-content">
+          <sl-dropdown 
+            placement="bottom-end"
+            @click="${(event: MouseEvent) => event.stopImmediatePropagation()}">
             ${this.actions?.filter(this._filterActions.bind(this)).map(
               (item) => html`
                 <div
@@ -112,14 +114,14 @@ export class EtoolsActionButton extends LitElement {
                   @click="${this.closeMenu}"
                   action-code="${this._setActionCode(item)}"
                 >
-                  <iron-icon icon="${this._setIcon(item, this.icons)}" class="option-icon"></iron-icon>
+                  <etools-icon name="${this._setIcon(item, this.icons)}" class="option-icon"></etools-icon>
                   <span>${this._setButtonText(item)}</span>
                 </div>
               `
             )}
-          </paper-listbox>
-        </paper-menu-button>
-      </paper-button>
+          </sl-dropdown>
+        </etools-button-group>
+      </etools-button>
     `;
   }
 

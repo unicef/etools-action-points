@@ -1,11 +1,10 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/app-route/app-route.js';
-import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/paper-button/paper-button.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
-import '@unicef-polymer/etools-dialog/etools-dialog.js';
+import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {_addToCollection, _updateCollection, collectionExists} from '../../../mixins/permission-controller';
@@ -21,7 +20,7 @@ import {sharedStyles} from '../../../styles/shared-styles';
 import {mainPageStyles} from '../../../styles/main-page-styles';
 import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('action-points-item')
@@ -72,29 +71,20 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
         }
       </style>
 
-      <app-route
-        .route="${this.route}"
-        @route-changed="${this._routeChanged}"
-        pattern="/:id"
-        .data="${this.routeData}"
-        @data-changed="${this._routeDataChanged}"
-      >
-      </app-route>
-
       <div .hidden="${!this.actionPoint.id}">
         <pages-header-element
           page-title="${this.actionPoint.reference_number}"
           export-links="${this._setExportLinks(this.actionPoint)}"
         >
-          <paper-button
+          <etools-button
             icon="history"
             class="header-btn"
-            @tap="${this.showHistory}"
+            @click="${this.showHistory}"
             ?hidden="${!this.hasHistory(this.actionPoint.history)}"
           >
-            <iron-icon icon="history"></iron-icon>
+            <etools-icon name="history"></etools-icon>
             History
-          </paper-button>
+          </etools-button>
         </pages-header-element>
 
         <div class="view-container" id="main">

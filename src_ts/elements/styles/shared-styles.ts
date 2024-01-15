@@ -68,12 +68,12 @@ export const sharedStyles = html`
       --iron-icon-fill-color: var(--light-icon-color);
     }
 
-    paper-icon-button.dark {
+    etools-icon-button.dark {
       color: var(--dark-icon-color);
       --paper-icon-button-ink-color: var(--dark-ink-color);
     }
 
-    paper-icon-button.light {
+    etools-icon-button.light {
       color: var(--light-icon-color);
       --paper-icon-button-ink-color: var(--light-ink-color);
     }

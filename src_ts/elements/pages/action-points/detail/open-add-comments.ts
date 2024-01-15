@@ -1,9 +1,9 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@unicef-polymer/etools-dialog/etools-dialog.js';
-import '@polymer/paper-input/paper-input.js';
-import {sendRequest} from '@unicef-polymer/etools-ajax/etools-ajax-request';
-import EtoolsDialog from '@unicef-polymer/etools-dialog/etools-dialog.js';
+import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax/ajax-request';
+import EtoolsDialog from '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog.js';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
@@ -46,7 +46,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
       >
         <div class="row-h group">
           <div class="input-container input-container-l">
-            <paper-input
+            <etools-input
               class="validate-input ${this._setRequired('comments.comment', this.permissionPath)}"
               .value="${this.commentText}"
               label="${this.getLabel('comments.comment', this.permissionPath)}"
@@ -61,7 +61,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
               @click="${this._resetFieldError}"
               no-title-attr
             >
-            </paper-input>
+            </etools-input>
           </div>
         </div>
       </etools-dialog>

@@ -1,11 +1,11 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@unicef-polymer/etools-data-table/etools-data-table.js';
+import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {DateMixin} from '../../../mixins/date-mixin';
 import {moduleStyles} from '../../../styles/module-styles';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
-import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
+import {dataTableStylesLit} from '@unicef-polymer/etools-unicef/src/etools-data-table/styles/data-table-styles';
 
 @customElement('action-points-history')
 export class ActionPointsHistory extends DateMixin(InputAttrsMixin(LitElement)) {
