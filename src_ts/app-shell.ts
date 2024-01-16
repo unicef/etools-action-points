@@ -87,7 +87,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
   staticDataLoaded?: boolean;
 
   @property({type: Boolean})
-  smallMenu: boolean = false;
+  smallMenu = false;
 
   @property({type: Boolean})
   initLoadingComplete = false;

@@ -103,9 +103,7 @@ export class EtoolsActionButton extends LitElement {
         >
           <etools-icon-button name="expand-more" slot="dropdown-trigger" class="option-button"></etools-icon-button>
 
-          <sl-dropdown 
-            placement="bottom-end"
-            @click="${(event: MouseEvent) => event.stopImmediatePropagation()}">
+          <sl-dropdown placement="bottom-end" @click="${(event: MouseEvent) => event.stopImmediatePropagation()}">
             ${this.actions?.filter(this._filterActions.bind(this)).map(
               (item) => html`
                 <div

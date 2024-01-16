@@ -1,6 +1,6 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import { _setData, getData } from "../mixins/static-data-mixin";
+import {_setData, getData} from '../mixins/static-data-mixin';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {_addToCollection, getChoices, isValidCollection} from '../mixins/permission-controller';
 import {UserControllerMixin} from '../mixins/user-controller';

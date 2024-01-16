@@ -1,6 +1,3 @@
-
-
-
 const documentContainer = document.createElement('template');
 documentContainer.innerHTML = `
   <custom-style>

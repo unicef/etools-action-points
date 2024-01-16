@@ -1,4 +1,4 @@
-import { LitElement, html, PropertyValues } from "lit";
+import {LitElement, html, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';

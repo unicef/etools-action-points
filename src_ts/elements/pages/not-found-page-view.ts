@@ -23,11 +23,11 @@ export class NotFoundPageView extends LitElement {
       </style>
 
       <section class="page-content elevation" elevation="1">
-          <h2>Oops! You hit a 404.</h2>
-          <p>The page you're looking for doesn't seem to exist.</p>
-          <p>
-            <a href="/apd/action-points/list" class="link">Head back home.</a>
-          </p>
+        <h2>Oops! You hit a 404.</h2>
+        <p>The page you're looking for doesn't seem to exist.</p>
+        <p>
+          <a href="/apd/action-points/list" class="link">Head back home.</a>
+        </p>
       </section>
     `;
   }
