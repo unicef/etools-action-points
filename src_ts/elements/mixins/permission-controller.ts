@@ -2,6 +2,45 @@ import {GenericObject} from '../../typings/globals.types';
 
 export const _permissionCollection: GenericObject = {};
 
+export const isValidCollection = (collection: string) => {
+  if (collection && Object.keys(collection).length) {
+    return collection;
+  } else {
+    return false;
+  }
+};
+
+export const _createAction = (action: string, existedAction: any) => {
+  if (!existedAction || typeof existedAction === 'string') {
+    return action;
+  }
+  return {
+    code: action,
+    display_name: action
+  };
+};
+
+export const _manageActions = (collectionName: string) => {
+  const collection = _permissionCollection[collectionName];
+  if (!collection) {
+    console.warn(`Collection ${collectionName} does not exist!`);
+    return false;
+  }
+
+  const allowedActions = collection.allowed_FSM_transitions || [];
+
+  const actions = [];
+  if (isValidCollection(collection.PUT)) {
+    actions.push(_createAction('save', allowedActions[0]));
+  }
+  if (isValidCollection(collection.POST)) {
+    actions.push(_createAction('create', allowedActions[0]));
+  }
+
+  collection.allowed_actions = actions.concat(allowedActions);
+  return true;
+};
+
 export const _addToCollection = (collectionName: string, data: any) => {
   // check arguments
   if (!collectionName || !data) {
@@ -44,79 +83,6 @@ export const _updateCollection = (collectionName: string, data: any) => {
   return true;
 };
 
-export const _manageActions = (collectionName: string) => {
-  const collection = _permissionCollection[collectionName];
-  if (!collection) {
-    console.warn(`Collection ${collectionName} does not exist!`);
-    return false;
-  }
-
-  const allowedActions = collection.allowed_FSM_transitions || [];
-
-  const actions = [];
-  if (isValidCollection(collection.PUT)) {
-    actions.push(_createAction('save', allowedActions[0]));
-  }
-  if (isValidCollection(collection.POST)) {
-    actions.push(_createAction('create', allowedActions[0]));
-  }
-
-  collection.allowed_actions = actions.concat(allowedActions);
-  return true;
-};
-
-export const _createAction = (action: string, existedAction: any) => {
-  if (!existedAction || typeof existedAction === 'string') {
-    return action;
-  }
-  return {
-    code: action,
-    display_name: action
-  };
-};
-
-export const getFieldAttribute = (path: string, attribute: string, actionType?: string | undefined) => {
-  if (!path || !attribute) {
-    throw new Error('path and attribute arguments must be provided');
-  }
-  if (typeof path !== 'string') {
-    throw new Error('path argument must be a string');
-  }
-  if (typeof attribute !== 'string') {
-    throw new Error('attribute argument must be a string');
-  }
-  let value: any = _getCollection(path, actionType);
-
-  if (value) {
-    value = value[attribute];
-  }
-
-  return value === undefined ? null : value;
-};
-
-export const isReadOnly = (path: string) => {
-  return !collectionExists(path, 'POST') && !collectionExists(path, 'PUT');
-};
-
-export const isRequired = (path: string) => {
-  return getFieldAttribute(path, 'required', 'POST') || getFieldAttribute(path, 'required', 'PUT');
-};
-
-export const collectionExists = (path: string, actionType?: string) => {
-  if (!path) {
-    throw new Error('path argument must be provided');
-  }
-  if (typeof path !== 'string') {
-    throw new Error('path argument must be a string');
-  }
-
-  return !!_getCollection(path, actionType);
-};
-
-export const getChoices = (path: string) => {
-  return getFieldAttribute(path, 'choices', 'GET') || getFieldAttribute(path, 'choices', 'POST');
-};
-
 export const _getCollection = (path: any, actionType: string | undefined) => {
   path = path.split('.');
 
@@ -143,12 +109,46 @@ export const _getCollection = (path: any, actionType: string | undefined) => {
   return value;
 };
 
-export const isValidCollection = (collection: string) => {
-  if (collection && Object.keys(collection).length) {
-    return collection;
-  } else {
-    return false;
+export const getFieldAttribute = (path: string, attribute: string, actionType?: string | undefined) => {
+  if (!path || !attribute) {
+    throw new Error('path and attribute arguments must be provided');
   }
+  if (typeof path !== 'string') {
+    throw new Error('path argument must be a string');
+  }
+  if (typeof attribute !== 'string') {
+    throw new Error('attribute argument must be a string');
+  }
+  let value: any = _getCollection(path, actionType);
+
+  if (value) {
+    value = value[attribute];
+  }
+
+  return value === undefined ? null : value;
+};
+
+export const collectionExists = (path: string, actionType?: string) => {
+  if (!path) {
+    throw new Error('path argument must be provided');
+  }
+  if (typeof path !== 'string') {
+    throw new Error('path argument must be a string');
+  }
+
+  return !!_getCollection(path, actionType);
+};
+
+export const isReadOnly = (path: string) => {
+  return !collectionExists(path, 'POST') && !collectionExists(path, 'PUT');
+};
+
+export const isRequired = (path: string) => {
+  return getFieldAttribute(path, 'required', 'POST') || getFieldAttribute(path, 'required', 'PUT');
+};
+
+export const getChoices = (path: string) => {
+  return getFieldAttribute(path, 'choices', 'GET') || getFieldAttribute(path, 'choices', 'POST');
 };
 
 export const actionAllowed = (collection: any, action: string) => {
