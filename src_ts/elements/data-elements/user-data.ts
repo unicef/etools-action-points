@@ -1,4 +1,5 @@
-import {LitElement, customElement} from 'lit-element';
+import {LitElement} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint, resetOldUserData} from '../../endpoints/endpoint-mixin';
 import {sendRequest} from '@unicef-polymer/etools-ajax';

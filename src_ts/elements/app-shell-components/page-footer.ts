@@ -1,4 +1,5 @@
-import {LitElement, html, customElement} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {basePath} from '../../config/config';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 

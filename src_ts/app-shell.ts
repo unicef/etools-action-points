@@ -1,5 +1,6 @@
 import '@webcomponents/shadycss/entrypoints/apply-shim.js';
-import {LitElement, customElement, html, property} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
@@ -16,7 +17,7 @@ import '@polymer/iron-icons/av-icons.js';
 import {createDynamicDialog} from '@unicef-polymer/etools-dialog/dynamic-dialog';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
-import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
+import {LoadingMixin} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin.js';
 import {_checkEnvironment} from './endpoints/endpoint-mixin';
 import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';

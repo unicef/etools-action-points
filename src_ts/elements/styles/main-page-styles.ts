@@ -1,4 +1,4 @@
-import {html} from 'lit-element';
+import {html} from 'lit';
 import {moduleStyles} from './module-styles';
 
 export const mainPageStyles = html`

@@ -1,4 +1,5 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-data-table/etools-data-table.js';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {DateMixin} from '../../../mixins/date-mixin';

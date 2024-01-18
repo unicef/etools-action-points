@@ -1,6 +1,7 @@
 import {isRequired, getFieldAttribute, isReadOnly} from './permission-controller.js';
 import {Constructor, GenericObject} from '../../typings/globals.types.js';
-import {LitElement, property} from 'lit-element';
+import {LitElement} from 'lit';
+import {property} from 'lit/decorators.js';
 /*
  * Mixin for input field functionality.
  * @polymer

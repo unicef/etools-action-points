@@ -1,4 +1,5 @@
-import {LitElement, customElement, property} from 'lit-element';
+import {LitElement} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import {getQueriesString} from '../mixins/query-params-helper';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';

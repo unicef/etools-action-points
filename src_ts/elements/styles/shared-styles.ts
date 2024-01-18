@@ -1,6 +1,6 @@
 // shared styles for all views
 // not for styling index.html or apd-shell
-import {html} from 'lit-element';
+import {html} from 'lit';
 
 export const sharedStyles = html`
   <style>
