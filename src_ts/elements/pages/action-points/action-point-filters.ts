@@ -1,6 +1,6 @@
 import {AnyObject} from '@unicef-polymer/etools-types/dist/global.types';
-import {setselectedValueTypeByFilterKey} from '@unicef-polymer/etools-filters/src/filters';
-import {EtoolsFilterTypes} from '@unicef-polymer/etools-filters/src/etools-filters';
+import {setselectedValueTypeByFilterKey} from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
+import {EtoolsFilterTypes} from '@unicef-polymer/etools-unicef/src/etools-filters/etools-filters';
 
 export enum APFilterKeys {
   search = 'search',

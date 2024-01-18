@@ -1,9 +1,9 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/paper-input/paper-textarea.js';
-import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import '@unicef-polymer/etools-data-table/etools-data-table.js';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
+import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
+import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
@@ -51,22 +51,22 @@ export class ActionPointComments extends PaginationMixin(
         }
       </style>
 
-      <iron-media-query
+      <etools-media-query
         query="(max-width: 767px)"
         .queryMatches="${this.lowResolutionLayout}"
         @query-matches-changed="${(e: CustomEvent) => {
           this.lowResolutionLayout = e.detail.value;
         }}"
-      ></iron-media-query>
+      ></etools-media-query>
 
       <etools-content-panel panel-title="${this.getLabel('comments', this.permissionPath)}">
         <div slot="panel-btns">
-          <paper-icon-button
+          <etools-icon-button
             class="panel-button"
             ?hidden="${this.noActionsAllowed(this.permissionPath)}"
-            icon="add-box"
+            name="add-box"
             @tap="${this._openAddComment}"
-          ></paper-icon-button>
+          ></etools-icon-button>
         </div>
         <div class="comments-list">
           <span ?hidden=${this.filteredComments?.length}>No actions taken</span>
@@ -117,7 +117,7 @@ export class ActionPointComments extends PaginationMixin(
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('new-comment-added', (e: CustomEvent) => this._newCommentAdded(e));
+    document.addEventListener('new-comment-added', (e: any) => this._newCommentAdded(e));
   }
 
   firstUpdated() {
@@ -141,7 +141,7 @@ export class ActionPointComments extends PaginationMixin(
 
   _createCommentDialog() {
     this.commentDialog = document.createElement('open-add-comments') as OpenAddComments;
-    document.querySelector('body').appendChild(this.commentDialog);
+    document.querySelector('body')?.appendChild(this.commentDialog);
   }
 
   _updateCommentProp() {

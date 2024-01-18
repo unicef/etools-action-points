@@ -1,12 +1,8 @@
-import {LitElement, html} from 'lit';
+import {LitElement, html, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/paper-card/paper-card.js';
-import '@polymer//app-route/app-location';
-import '@polymer/iron-location/iron-query-params.js';
-import '@polymer/paper-tooltip/paper-tooltip.js';
-import '@polymer/paper-toggle-button/paper-toggle-button.js';
-import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
+import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
+import {EtoolsDataTableColumn} from '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table-column.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../data-elements/action-points-data';
@@ -18,28 +14,28 @@ import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles/module-styles';
 import {sharedStyles} from '@unicef-polymer/etools-modules-common/dist/styles/shared-styles-lit';
-import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
+import {dataTableStylesLit} from '@unicef-polymer/etools-unicef/src/etools-data-table/styles/data-table-styles';
 import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
 import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import '@polymer/iron-media-query/iron-media-query.js';
+import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query.js';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
-import {EtoolsFilter} from '@unicef-polymer/etools-filters/src/etools-filters';
+import {EtoolsFilter} from '@unicef-polymer/etools-unicef/src/etools-filters/etools-filters';
 import {
   updateFilterSelectionOptions,
   updateFiltersSelectedValues,
   setselectedValueTypeByFilterKey,
   clearSelectedValuesInFilters
-} from '@unicef-polymer/etools-filters/src/filters';
+} from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 
 @customElement('action-points-list')
 export class ActionPointsList extends PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
   @property({type: Array}) // , notify: true
-  actionPoints: any[];
+  actionPoints?: any[];
 
   @property({type: Object}) // , notify: true
   labels: any;
@@ -48,10 +44,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   createLink = '/new';
 
   @property({type: Array}) // , notify: true
-  statuses: any[];
+  statuses?: any[];
 
   @property({type: Array})
-  modules: [];
+  modules?: [];
 
   @property({type: Boolean})
   lowResolutionLayout = false;
@@ -87,7 +83,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   exportLinks: any[];
 
   @property({type: Boolean})
-  staticDataLoaded: boolean;
+  staticDataLoaded?: boolean;
 
   @property({type: String})
   path: string;
@@ -114,7 +110,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           position: relative;
           display: block;
         }
-        paper-card {
+        section {
           display: block;
           margin-top: 25px;
           background-color: white;
@@ -148,30 +144,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
         .filter-dropdown {
           width: 200px;
-
-          --esmm-list-wrapper: {
-            margin-top: 0;
-            padding-top: 12px;
-            -ms-overflow-style: auto;
-          }
         }
       </style>
-      <iron-media-query
-        query="(max-width: 767px)"
-        .queryMatches="${this.lowResolutionLayout}"
-        @query-matches-changed="${(e: CustomEvent) => {
-          this.lowResolutionLayout = e.detail.value;
-        }}"
-      ></iron-media-query>
-      <app-location
-        .path="${this.path}"
-        .queryParams="${this.queryParams}"
-        url-space-regex="^${this.rootPath}"
-        @path-changed=${this.pathChanged}
-        @query-params-changed=${this.queryParamsChanged}
-      >
-      </app-location>
-
       <pages-header-element
         hide-print-button
         link="action-points/new"
@@ -199,7 +173,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
         <etools-filters .filters="${this.allFilters}" @filter-change="${this.filtersChange}"></etools-filters>
       </section>
 
-      <paper-card>
+      <section class="elevation page-content card-container" elevation="1">
         <etools-data-table-header
           id="listHeader"
           ?no-collapse="${!this.actionPoints?.length}"
@@ -322,16 +296,16 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
                   <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
-                  <paper-tooltip fit-to-visible-bounds offset="0" ?hidden="${!this._showTooltip(entry.description)}">
+                  <sl-tooltip fit-to-visible-bounds offset="0" ?hidden="${!this._showTooltip(entry.description)}">
                     ${this.getStringValue(entry.description)}
-                  </paper-tooltip>
+                  </sl-tooltip>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
-                    <paper-tooltip ?hidden="${!this._showTooltip(entry.intervention?.number)}" offset="0"
-                      >${this.getStringValue(entry.intervention?.number)}</paper-tooltip
+                    <sl-tooltip ?hidden="${!this._showTooltip(entry.intervention?.number)}" offset="0"
+                      >${this.getStringValue(entry.intervention?.number)}</sl-tooltip
                     >
                   </div>
                 </div>
@@ -339,8 +313,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                   <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
-                    <paper-tooltip ?hidden="${!this._showTooltip(entry.location?.name)}" offset="0"
-                      >${this.getStringValue(entry.location?.name)}</paper-tooltip
+                    <sl-tooltip ?hidden="${!this._showTooltip(entry.location?.name)}" offset="0"
+                      >${this.getStringValue(entry.location?.name)}</sl-tooltip
                     >
                   </div>
                 </div>
@@ -350,20 +324,20 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                     <div class="truncate">
                       ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
                     </div>
-                    <paper-tooltip
+                    <sl-tooltip
                       offset="0"
                       ?hidden="${!this._showTooltip(entry.related_module, this.modules, 'display_name')}"
                     >
                       ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
-                    </paper-tooltip>
+                    </sl-tooltip>
                   </div>
                 </div>
                 <div class="row-details-content flex-c">
                   <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
-                    <paper-tooltip ?hidden="${!this._showTooltip(entry.assigned_by?.name)}" offset="0"
-                      >${this.getStringValue(entry.assigned_by?.name)}</paper-tooltip
+                    <sl-tooltip ?hidden="${!this._showTooltip(entry.assigned_by?.name)}" offset="0"
+                      >${this.getStringValue(entry.assigned_by?.name)}</sl-tooltip
                     >
                   </div>
                 </div>
@@ -372,8 +346,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                     <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
                     <div>
                       <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
-                      <paper-tooltip ?hidden="${!this._showTooltip(entry.date_of_completion)}" offset="0"
-                        >${this.prettyDate(entry.date_of_completion)}</paper-tooltip
+                      <sl-tooltip ?hidden="${!this._showTooltip(entry.date_of_completion)}" offset="0"
+                        >${this.prettyDate(entry.date_of_completion)}</sl-tooltip
                       >
                     </div>
                   </div>
@@ -394,7 +368,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           @page-number-changed="${this.pageNumberChanged}"
         >
         </etools-data-table-footer>
-      </paper-card>
+      </section>
     `;
   }
 
@@ -402,8 +376,9 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
   }
 
-  updated(changedProperties) {
+  updated(changedProperties: PropertyValues) {
     if (changedProperties.has('staticDataLoaded')) {
+      console.log(changedProperties.get('staticDataLoaded'));
       if (!this.allFilters) {
         this.initFiltersForDisplay();
         setTimeout(() => {

@@ -1,15 +1,11 @@
 import {html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/iron-icons/iron-icons.js';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@polymer/iron-selector/iron-selector.js';
-import '@polymer/iron-icons/maps-icons.js';
-import '@polymer/app-layout/app-layout.js';
 import './side-bar-item';
 import {moduleStyles} from '../styles/module-styles';
 import {navMenuStyles} from '../styles/nav-menu-styles';
-import {apdIcons} from '../styles/apd-icons';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
@@ -25,7 +21,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
 
   public render() {
     return html`
-      ${moduleStyles} ${apdIcons}
+      ${moduleStyles}
       <style>
         :host {
           display: flex;
@@ -92,35 +88,31 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
       </style>
 
       <div class="menu-header">
-        <span id="app-name" main-title>Action Points</span>
+        <sl-tooltip for="menu-header-top-icon" position="right" content="Action Points">
+          <span id="app-name" main-title>Action Points</span>
 
-        <span class="ripple-wrapper main menu-header">
-          <iron-icon id="menu-header-top-icon" icon="flag" @click="${() => this._toggleSmallMenu()}"></iron-icon>
-          <paper-ripple class="circle" center></paper-ripple>
+          <span class="ripple-wrapper main menu-header">
+          <etools-icon id="menu-header-top-icon" name="flag" @click="${() => this._toggleSmallMenu()}"></etools-icon>
         </span>
-
-        <paper-tooltip for="menu-header-top-icon" position="right"> Action Points </paper-tooltip>
+        </sl-tooltip>
 
         <span class="chev-right">
-          <iron-icon id="expand-menu" icon="chevron-right" @click="${() => this._toggleSmallMenu()}"></iron-icon>
-          <paper-ripple class="circle" center></paper-ripple>
+          <etools-icon id="expand-menu" name="chevron-right" @click="${() => this._toggleSmallMenu()}"></etools-icon>
         </span>
 
         <span class="ripple-wrapper">
-          <iron-icon id="minimize-menu" icon="chevron-left" @click="${() => this._toggleSmallMenu()}"></iron-icon>
-          <paper-ripple class="circle" center></paper-ripple>
+          <etools-icon id="minimize-menu" name="chevron-left" @click="${() => this._toggleSmallMenu()}"></etools-icon>
         </span>
       </div>
 
       <div class="nav-menu">
-        <iron-selector selected="action-points" attr-for-selected="view" selectable="side-bar-item" role="navigation">
           <side-bar-item
             view="action-points"
             name="Action Points"
             icon="av:playlist-add-check"
             side-bar-link="action-points/list"
+            selected="${this.page === 'action-points'}"
           >
-          </side-bar-item>
         </iron-selector>
 
         <div class="secondary-header nav-menu-item section-title">eTools Community Channels</div>
@@ -173,7 +165,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
   }
 
   @property({type: String})
-  page: string;
+  page?: string = '';
 
   _smallMenu = false;
   @property({type: Boolean, reflect: true, attribute: 'small-menu'})
@@ -188,6 +180,6 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
 
   _toggleSmallMenu() {
     this.smallMenu = !this.smallMenu;
-    fireEvent(this, 'toggle-small-menu');
+    fireEvent(this, 'toggle-small-menu', {value: this.smallMenu});
   }
 }

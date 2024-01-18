@@ -6,7 +6,7 @@ export const tabInputsStyles = html`
     *[hidden] {
       display: none !important;
     }
-    paper-icon-button[hidden] {
+    etools-icon-button[hidden] {
       display: inline-block !important;
       visibility: hidden;
     }
@@ -75,8 +75,8 @@ export const tabInputsStyles = html`
 
     etools-dropdown,
     etools-dropdown-multi,
-    paper-input,
-    paper-textarea,
+    etools-input,
+    etools-textarea,
     paper-dropdown-menu,
     datepicker-lite,
     etools-currency-amount-input {
@@ -132,7 +132,7 @@ export const tabInputsStyles = html`
       }
     }
 
-    paper-textarea {
+    etools-textarea {
       --paper-input-container-input: {
         white-space: normal;
         display: block !important;
@@ -149,7 +149,7 @@ export const tabInputsStyles = html`
 
     etools-dropdown.no-data-fetched,
     etools-dropdown-multi.no-data-fetched,
-    paper-input.no-data-fetched {
+    etools-input.no-data-fetched {
       --esmm-placeholder-color: var(--gray-dark);
       --paper-input-container-color: var(--gray-dark);
     }
@@ -158,8 +158,8 @@ export const tabInputsStyles = html`
     etools-dropdown.required:not([disabled]),
     etools-currency-amount-input.required:not([disabled]),
     paper-dropdown-menu.required:not([disabled]),
-    paper-textarea.required:not([disabled]),
-    paper-input.required:not([disabled]),
+    etools-textarea.required:not([disabled]),
+    etools-input.required:not([disabled]),
     datepicker-lite.required:not([disabled]) {
       --paper-input-container-label: {
         background: url('${basePath}images/required.svg') no-repeat 98% 14%/7px;
@@ -173,7 +173,7 @@ export const tabInputsStyles = html`
 
     etools-dropdown-multi.bold,
     etools-dropdown.bold,
-    paper-input.bold {
+    etools-input.bold {
       --paper-input-container-input: {font-weight: 500};
       --paper-input-container-underline-focus: {display: none} !important;
       --paper-input-container-underline-disabled: {display: none} !important;
@@ -181,16 +181,16 @@ export const tabInputsStyles = html`
     }
     etools-dropdown-multi.deleted,
     etools-dropdown.deleted,
-    paper-input.deleted {
+    etools-input.deleted {
       --paper-input-container-input: {color: #b0b0b0};
     }
 
     etools-dropdown.readonly,
     etools-dropdown-multi.readonly,
     etools-currency-amount-input.readonly,
-    paper-input.readonly,
+    etools-input.readonly,
     paper-dropdown-menu.readonly,
-    paper-textarea.readonly {
+    etools-textarea.readonly {
       --paper-input-container-underline: {display: none} !important;
     }
 
@@ -335,9 +335,9 @@ export const tabInputsStyles = html`
     etools-dropdown-multi[disabled],
     etools-currency-amount-input[disabled],
     etools-dropdown[disabled],
-    paper-textarea[disabled],
+    etools-textarea[disabled],
     paper-dropdown-menu[disabled],
-    paper-input[disabled],
+    etools-input[disabled],
     datepicker-lite[disabled] {
       --paper-input-container-focus-color: var(
         --paper-input-container-label_-_color,
@@ -358,9 +358,9 @@ export const tabInputsStyles = html`
     etools-dropdown-multi[readonly],
     etools-currency-amount-input[readonly],
     etools-dropdown[readonly],
-    paper-textarea[readonly],
+    etools-textarea[readonly],
     paper-dropdown-menu[readonly],
-    paper-input[readonly],
+    etools-input[readonly],
     datepicker-lite[readonly] {
       --paper-input-container-focus-color: var(
         --paper-input-container-label_-_color,

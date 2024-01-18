@@ -72,7 +72,7 @@ export const moduleStyles = html`
       --paper-toggle-button-unchecked-bar-color: rgba(31, 31, 31, .26);
     }
     /* CHECKBOX */
-    paper-checkbox {
+    etools-checkbox {
       --paper-checkbox-unchecked-color: var(--gray-mid-dark);
       --paper-checkbox-checked-color: var(--module-primary);
       --paper-checkbox-label: {

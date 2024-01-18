@@ -1,15 +1,12 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
-import '@polymer/paper-listbox/paper-listbox';
-import '@polymer/paper-item/paper-item';
-import '@polymer/paper-menu-button/paper-menu-button';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/iron-icon/iron-icon.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
-import {EtoolsDropdownEl} from '@unicef-polymer/etools-dropdown/etools-dropdown';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
+import {EtoolsDropdownEl} from '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('countries-dropdown')
