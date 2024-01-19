@@ -31,9 +31,16 @@ import {
   clearSelectedValuesInFilters
 } from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
+import {RootState, store} from '../../../redux/store';
+import {connect} from 'pwa-helpers';
+import get from 'lodash-es/get';
+import {RouteQueryParam} from '@unicef-polymer/etools-types';
+import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
 
 @customElement('action-points-list')
-export class ActionPointsList extends PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
+export class ActionPointsList extends connect(store)(
+  PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement))))
+) {
   @property({type: Array}) // , notify: true
   actionPoints?: any[];
 
@@ -62,10 +69,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   queryParams: GenericObject;
 
   @property({type: Object}) // , notify: true
-  initialQueryParams: GenericObject;
+  initialQueryParams?: GenericObject;
 
   @property({type: Object})
-  prevQueryParams: GenericObject;
+  prevQueryParams?: GenericObject;
 
   @property({type: Array})
   totalResults: number;
@@ -115,7 +122,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           margin-top: 25px;
           background-color: white;
           margin: 24px 24px 0 24px;
-          width: calc(100% - 48px);
+          /*          width: calc(100% - 48px);*/
         }
         etools-data-table-row {
           --row-width_-_width: 100%;
@@ -378,7 +385,6 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   updated(changedProperties: PropertyValues) {
     if (changedProperties.has('staticDataLoaded')) {
-      console.log(changedProperties.get('staticDataLoaded'));
       if (!this.allFilters) {
         this.initFiltersForDisplay();
         setTimeout(() => {
@@ -392,22 +398,22 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     }
   }
 
-  pathChanged({detail}: CustomEvent) {
-    this._setPath(detail.value);
+  pathChanged(newPath: string) {
+    this._setPath(newPath);
   }
 
-  queryParamsChanged({detail}: CustomEvent) {
+  queryParamsChanged(detail: RouteQueryParam | null) {
     if (this.path?.includes('/list')) {
-      if (!detail.value || !Object.keys(detail.value).length) {
+      if (!detail || !Object.keys(detail).length) {
         if (this.prevQueryParams) {
           this.queryParams = this.prevQueryParams;
           this._updateQueries(this.queryParams);
         }
         return;
       }
-      if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
-        this.queryParams = detail.value;
-        this._updateQueries(detail.value);
+      if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail)) {
+        this.queryParams = detail;
+        this._updateQueries(detail);
       }
     }
   }
@@ -446,11 +452,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _updateQueries(queryParams: GenericObject) {
-    if (!this.path?.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
+    if (!queryParams || !Object.keys(queryParams).length) {
       return;
     }
-
-    queryParams = Object.keys(queryParams).reduce((acc, key) => {
+    queryParams = Object.keys(queryParams).reduce((acc: any, key) => {
       if (queryParams[key]) {
         acc[key] = String(queryParams[key]);
       }
@@ -480,11 +485,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
       return;
     }
 
-    updateQueries(this, queryParams, null, true);
+    updateQueries(this, queryParams, undefined, true);
 
-    const listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
-    listElements.forEach((element: any) => (element.detailsOpened = false));
-
+    const listElements = this.shadowRoot?.querySelectorAll(`etools-data-table-row`);
+    listElements?.forEach((element: any) => (element.detailsOpened = false));
     this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(100), () => {
       this._requestData();
     });
@@ -558,8 +562,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _requestData() {
-    const actionPointData = this.shadowRoot.querySelector('action-points-data');
-    actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
+    const actionPointData = this.shadowRoot?.querySelector('action-points-data');
+    actionPointData?.dispatchEvent(new CustomEvent('request-action-points'));
   }
 
   _setExportLinks() {
@@ -583,5 +587,16 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   _showTooltip(value: string, list?: [], field?: string) {
     return this.getStringValue(value, list, field) !== '-';
+  }
+
+  stateChanged(state: RootState) {
+    const routeDetails = get(state, 'app.routeDetails');
+    if (!(routeDetails?.routeName === 'action-points' && routeDetails?.subRouteName === 'list')) {
+      return; // Avoid code execution while on a different page
+    }
+    const stateRouteDetails = {...state.app!.routeDetails};
+    this.pathChanged(stateRouteDetails.path);
+    EtoolsRouter.replaceAppLocation(this.path, EtoolsRouter.encodeQueryParams(this.queryParams));
+    this.queryParamsChanged(stateRouteDetails.queryParams);
   }
 }

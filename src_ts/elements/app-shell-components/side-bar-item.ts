@@ -49,15 +49,15 @@ export class SideBarItem extends LitElement {
           display: block;
         }
 
-        .selected #main {
+        .selected#main {
           background-color: #eeeeee;
         }
 
-        .selected #main:active {
+        .selected#main:active {
           background-color: #eeeeee;
         }
 
-        .selected:not([nested-nav]) #main > * {
+        .selected:not([nested-nav])#main > * {
           color: #0b67e9;
         }
 
@@ -66,7 +66,7 @@ export class SideBarItem extends LitElement {
         }
 
         #main {
-          position: relative;
+          position: inherit;
           height: 48px;
           cursor: pointer;
           text-decoration: none;
@@ -80,7 +80,7 @@ export class SideBarItem extends LitElement {
           margin-left: 16px;
         }
 
-        :host a#main iron-icon#icon {
+        :host a#main etools-icon#icon {
           margin: 0 16px;
           min-width: 24px;
           min-height: 24px;
@@ -106,23 +106,19 @@ export class SideBarItem extends LitElement {
           display: block;
           white-space: nowrap;
         }
-
-        sl-tooltip {
-          white-space: nowrap;
-        }
       </style>
-      <sl-tooltip position="right" content="${this.name}">
-        <a
-          id="main"
-          class="layout-horizontal align-items-center ${this.selected ? 'selected' : ''}"
-          target="${this._setTarget()}"
-          href="${this.sideBarLink}"
-          @click="${this._handleMainTap}"
-        >
-          <etools-icon .icon="${this.icon}" id="icon"></etools-icon>
+      <a
+        id="main"
+        class="layout-horizontal align-items-center ${this.selected ? 'selected' : ''}"
+        target="${this._setTarget()}"
+        href="${this.sideBarLink}"
+        @click="${this._handleMainTap}"
+      >
+        <sl-tooltip placement="right" content="${this.name}">
+          <etools-icon name="${this.icon}" id="icon"></etools-icon>
           <div id="name">${this.name}</div>
-        </a>
-      </sl-tooltip>
+        </sl-tooltip>
+      </a>
 
       <etools-collapse id="collapse" .opened="${this.opened}">
         <div class="content-wrapper">
@@ -137,6 +133,6 @@ export class SideBarItem extends LitElement {
   }
 
   _setTarget() {
-    return this.external ? '_blank' : '_self';
+    return this.external ? '_blank' : null;
   }
 }

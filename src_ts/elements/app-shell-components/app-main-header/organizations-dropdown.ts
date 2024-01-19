@@ -5,6 +5,7 @@ import {EtoolsDropdownEl} from '@unicef-polymer/etools-unicef/src/etools-dropdow
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
+import {headerDropdownStyles} from './header-dropdown-styles';
 
 /**
  * @polymer
@@ -14,43 +15,11 @@ import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 class OrganizationsDropdown extends LitElement {
   render() {
     return html`
-      <style>
-        #organizationSelector {
-          width: 170px;
-        }
-        etools-dropdown.warning {
-          --paper-input-container: {
-            padding-left: 3px;
-            box-sizing: border-box;
-            box-shadow: inset 0px 0px 0px 1.5px red;
-          }
-        }
-        etools-dropdown {
-          --esmm-icons: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-          }
-          --paper-input-container-underline: {
-            display: none;
-          }
-          --paper-input-container-underline-focus: {
-            display: none;
-          }
-          --paper-input-container-underline-disabled: {
-            display: none;
-          }
-          --paper-input-container-shared-input-style: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-            font-size: 16px;
-            text-align: right;
-            width: 100%;
-          }
-        }
-      </style>
+      ${headerDropdownStyles}
       <etools-dropdown
+        transparent
         id="organizationSelector"
-        class="${this.checkMustSelectOrganization(this.user)}"
+        class="w100 ${this.checkMustSelectOrganization(this.user)}"
         .selected="${this.currentOrganizationId}"
         placeholder="Select Organization"
         .options="${this.organizations}"

@@ -73,15 +73,9 @@ export const moduleStyles = html`
     }
     /* CHECKBOX */
     etools-checkbox {
-      --paper-checkbox-unchecked-color: var(--gray-mid-dark);
-      --paper-checkbox-checked-color: var(--module-primary);
-      --paper-checkbox-label: {
-        font-size: 17px;
-        padding-left: 15px;
-      };
-      --paper-checkbox-margin: 0;
-      --paper-checkbox-label-color: var(--gray-mid);
+      font-size: 17px;
     }
+
     paper-radio-button {
       --paper-radio-button-unchecked-color: var(--gray-mid-dark);
       --paper-radio-button-checked-color: var(--module-primary);

@@ -31,13 +31,13 @@ EtoolsRouter.addRoute(new RegExp('^action-points/list$'), (params: RouteCallback
       params: null
     };
   })
-  .addRoute(new RegExp('^action-points/details$'), (params: RouteCallbackParams): RouteDetails => {
+  .addRoute(new RegExp(`^action-points/detail\\/${routeParamRegex}$`), (params: RouteCallbackParams): RouteDetails => {
     return {
       routeName: 'action-points',
-      subRouteName: 'details',
+      subRouteName: 'detail',
       path: params.matchDetails[0],
       queryParams: params.queryParams,
-      params: null
+      params: {id: params.matchDetails[1]}
     };
   })
   .addRoute(

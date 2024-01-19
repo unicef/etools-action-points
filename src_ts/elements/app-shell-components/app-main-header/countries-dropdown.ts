@@ -8,6 +8,7 @@ import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-re
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {EtoolsDropdownEl} from '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {headerDropdownStyles} from './header-dropdown-styles';
 
 @customElement('countries-dropdown')
 export class CountriesDropdown extends LitElement {
@@ -27,60 +28,11 @@ export class CountriesDropdown extends LitElement {
 
   render() {
     return html`
-      <style>
-        *[hidden] {
-          display: none !important;
-        }
-        :host {
-          display: block;
-        }
-        :host(:hover) {
-          cursor: pointer;
-        }
-        etools-dropdown {
-          --paper-listbox: {
-            max-height: 600px;
-          }
-
-          --esmm-icons: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-          }
-
-          --paper-input-container-underline: {
-            display: none;
-          }
-
-          --paper-input-container-underline-focus: {
-            display: none;
-          }
-
-          --paper-input-container-underline-disabled: {
-            display: none;
-          }
-
-          --paper-input-container-shared-input-style: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-            font-size: 16px;
-            text-align: right;
-            width: 100px;
-          }
-
-          --paper-menu-button-dropdown: {
-            max-height: 380px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          etools-dropdown {
-            width: 130px;
-          }
-        }
-      </style>
-
+      ${headerDropdownStyles}
       <etools-dropdown
+        transparent
         id="countrySelector"
+        class="w100"
         .selected="${this.countryId}"
         placeholder="Country"
         allow-outside-scroll

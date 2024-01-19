@@ -22,6 +22,11 @@ export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
     this.addEventListener('request-action-points', () => this._loadList());
   }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('request-action-points', () => this._loadList());
+  }
+
   _loadList() {
     fireEvent(this, 'global-loading', {
       loadingSource: 'action-points-list',

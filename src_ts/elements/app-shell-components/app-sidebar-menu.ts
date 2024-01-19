@@ -65,7 +65,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         }
 
         .nav-menu,
-        .nav-menu iron-selector[role='navigation'] {
+        .nav-menu side-bar-item[role='navigation'] {
           flex: 1;
         }
 
@@ -88,12 +88,12 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
       </style>
 
       <div class="menu-header">
-        <sl-tooltip for="menu-header-top-icon" position="right" content="Action Points">
-          <span id="app-name" main-title>Action Points</span>
+        <span id="app-name" main-title>Action Points</span>
 
+        <sl-tooltip for="menu-header-top-icon" placement="right" content="Action Points">
           <span class="ripple-wrapper main menu-header">
-          <etools-icon id="menu-header-top-icon" name="flag" @click="${() => this._toggleSmallMenu()}"></etools-icon>
-        </span>
+            <etools-icon id="menu-header-top-icon" name="flag" @click="${() => this._toggleSmallMenu()}"></etools-icon>
+          </span>
         </sl-tooltip>
 
         <span class="chev-right">
@@ -106,22 +106,22 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
       </div>
 
       <div class="nav-menu">
-          <side-bar-item
-            view="action-points"
-            name="Action Points"
-            icon="av:playlist-add-check"
-            side-bar-link="action-points/list"
-            selected="${this.page === 'action-points'}"
-          >
-        </iron-selector>
-
+        <side-bar-item
+          role="navigation"
+          view="action-points"
+          name="Action Points"
+          icon="av:playlist-add-check"
+          side-bar-link="action-points/list"
+          selected="${this.page === 'action-points'}"
+        >
+        </side-bar-item>
         <div class="secondary-header nav-menu-item section-title">eTools Community Channels</div>
 
         <side-bar-item
           class="lighter-item no-transform"
           name="Implementation Intelligence"
-          icon="apd-icons:power-bi"
-          @tap="${this.trackAnalytics}"
+          icon="power-bi"
+          @click="${this.trackAnalytics}"
           tracker="Implementation Intelligence"
           side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/9726e9e7-c72f-4153-9fd2-7b418a1e426c/ReportSection?ctid=77410195-14e1-4fb8-904b-ab1892023667"
           external
@@ -131,7 +131,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         <side-bar-item
           class="lighter-item"
           name="Knowledge Base"
-          @tap="${this.trackAnalytics}"
+          @click="${this.trackAnalytics}"
           tracker="Knowledge Base"
           icon="maps:local-library"
           side-bar-link="http://etools.zendesk.com"
@@ -142,8 +142,8 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         <side-bar-item
           class="lighter-item"
           name="Discussion"
-          icon="icons:question-answer"
-          @tap="${this.trackAnalytics}"
+          icon="question-answer"
+          @click="${this.trackAnalytics}"
           tracker="Discussion"
           external
           side-bar-link="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"
@@ -153,8 +153,8 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         <side-bar-item
           class="lighter-item"
           name="Information"
-          icon="icons:info"
-          @tap="${this.trackAnalytics}"
+          icon="info"
+          @click="${this.trackAnalytics}"
           tracker="Information"
           external
           side-bar-link="/landing/"

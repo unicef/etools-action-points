@@ -94,23 +94,9 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           font-size: 14px;
         }
 
-        .side-heading .grey-buttons iron-icon {
+        .side-heading .grey-buttons etools-icon {
           margin-right: 8px;
         }
-
-        .side-heading etools-button.add-btn {
-          background-color: var(--module-primary);
-          color: white;
-          height: 36px;
-          font-weight: 500;
-          padding-left: 10px;
-          padding-right: 15px;
-        }
-
-        .side-heading etools-button.add-btn span {
-          margin-left: 4px;
-        }
-
         .side-heading .add-btn {
           margin: 11px 4px 12px 18px;
           background-color: var(--module-primary);
@@ -135,7 +121,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
               <etools-button-group
                 id="dropdown"
                 ?hidden="${!this._isDropDown(this.exportLinks)}"
-                @tap="${this._toggleOpened}"
+                @click="${this._toggleOpened}"
                 horizontal-align="right"
               >
                 <etools-button slot="dropdown-trigger" class="grey-buttons">
@@ -161,7 +147,8 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
                 </sl-dropdown>
               </etools-button-group>
               <etools-button
-                class="grey-buttons"
+                class="neutral"
+                variant="text"
                 tracker="Export"
                 ?hidden="${!this.showExportButton || this._isDropDown(this.exportLinks)}"
                 @click="${this.exportData}"
@@ -173,14 +160,14 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
 
             <etools-button
               class="add-btn"
-              raised
+              variant="primary"
               tracker="Add Action Point"
               ?hidden="${this._hideAddButton(this.showAddButton)}"
               @click="${this.addNewTap}"
+              href="${this.link}"
             >
-              <a href="${this.link}" class="btn-link" ?hidden="${!this._showLink(this.link)}"></a>
-              <etools-icon name="add"></etools-icon>
-              <span>${this.btnText}</span>
+              <etools-icon name="add" slot="prefix"></etools-icon>
+              ${this.btnText}
             </etools-button>
             <slot></slot>
           </div>
