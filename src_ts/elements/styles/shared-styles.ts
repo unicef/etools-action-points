@@ -4,6 +4,9 @@ import {html} from 'lit';
 
 export const sharedStyles = html`
   <style>
+    * {
+      font-family: 'Roboto', 'Noto', sans-serif;
+    }
     h1 {
       font-size: 25px;
       margin: 16px 0;
@@ -60,12 +63,12 @@ export const sharedStyles = html`
       background-color: var(--light-theme-content-color);
     }
 
-    iron-icon.dark {
-      --iron-icon-fill-color: var(--dark-icon-color);
+    etools-icon.dark {
+      --etools-icon-fill-color: var(--dark-icon-color);
     }
 
-    iron-icon.light {
-      --iron-icon-fill-color: var(--light-icon-color);
+    etools-icon.light {
+      --etools-icon-fill-color: var(--light-icon-color);
     }
 
     etools-icon-button.dark {

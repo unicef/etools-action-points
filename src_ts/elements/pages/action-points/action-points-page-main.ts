@@ -60,7 +60,7 @@ export class ActionPointsPageMain extends connect(store)(LitElement) {
     }
     if (state.app.routeDetails && !isJsonStrMatch(state.app.routeDetails, this.routeData)) {
       this.routeData = state.app.routeDetails;
-      this.route = this.route.path;
+      this.route = this.routeData.path;
       this.routeDataChanged(this.routeData.subRouteName);
       fireEvent(this, 'global-loading', {
         loadingSource: 'action-points'

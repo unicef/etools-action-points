@@ -109,7 +109,7 @@ export const mainPageStyles = html`
       -o-transform: scale(0.9, 1.5);
       transform: scale(0.9, 1.5);
     }
-    div[slot='panel-btns'].bookmark iron-icon {
+    div[slot='panel-btns'].bookmark etools-icon {
       width: 70px !important;
       height: 70px !important;
     }

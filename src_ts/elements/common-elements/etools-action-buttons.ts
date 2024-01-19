@@ -89,6 +89,7 @@ export class EtoolsActionButton extends LitElement {
       </style>
 
       <etools-button
+        variant="primary"
         raised
         @click="${this._btnClicked}"
         class="main-action status-tab-button ${this.withActionsMenu(this.actions?.length)}"
@@ -108,8 +109,10 @@ export class EtoolsActionButton extends LitElement {
               (item) => html`
                 <div
                   class="other-options"
-                  @tap="${this._btnClicked}"
-                  @click="${this.closeMenu}"
+                  @click="${(e: any) => {
+                    this._btnClicked(e);
+                    this.closeMenu();
+                  }}"
                   action-code="${this._setActionCode(item)}"
                 >
                   <etools-icon name="${this._setIcon(item, this.icons)}" class="option-icon"></etools-icon>

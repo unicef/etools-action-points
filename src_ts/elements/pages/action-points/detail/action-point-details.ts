@@ -152,9 +152,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           line-height: 16px;
           color: var(--paper-input-container-color, var(--gray-20));
         }
-        .pl-12 {
-          padding-left: 12px;
-        }
       </style>
 
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
@@ -208,7 +205,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.assigned_by}"
               .errorMessage="${this.errors.assigned_by}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('assigned_by', this.permissionPath)}"
@@ -236,7 +233,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.category}"
                 .errorMessage="${this.errors.category}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('category', this.permissionPath)}"
@@ -264,7 +261,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.partner}"
                 .errorMessage="${this.errors.partner}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('partner', this.permissionPath)}"
@@ -279,7 +276,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               html`<etools-input
                 label="${this.getLabel('partner', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('partner', this.permissionPath, true)}"
-                value="${this.getStringValueOrEmpty(this.originalActionPoint.partner?.name)}"
+                value="${this.getStringValueOrEmpty(this.originalActionPoint?.partner?.name)}"
                 readonly
               ></etools-input>`) ||
             ''}
@@ -308,7 +305,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.intervention}"
                 .errorMessage="${this.errors.intervention}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('intervention', this.permissionPath)}"
@@ -362,7 +359,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.cp_output}"
                 .errorMessage="${this.errors.cp_output}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('cp_output', this.permissionPath)}"
@@ -378,7 +375,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               html` <etools-input
                 .label="${this.getLabel('cp_output', this.permissionPath)}"
                 .placeholder="${this.getPlaceholderText('cp_output', this.permissionPath, true)}"
-                .value="${this.getStringValueOrEmpty(this.originalActionPoint.cp_output?.name)}"
+                .value="${this.getStringValueOrEmpty(this.originalActionPoint?.cp_output?.name)}"
                 readonly
               ></etools-input>`) ||
             ''}
@@ -399,7 +396,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.location}"
               .errorMessage="${this.errors.location}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('location', this.permissionPath)}"
@@ -424,7 +421,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.description}"
               .errorMessage="${this.errors.description}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               @value-changed="${({detail}: CustomEvent) => this.updateField('description', detail.value)}"
               no-title-attr
             >
@@ -448,7 +445,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.assigned_to}"
               .errorMessage="${this.errors.assigned_to}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('assigned_to', this.permissionPath)}"
@@ -472,7 +469,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.section}"
               .errorMessage="${this.errors.section}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('section', this.permissionPath)}"
@@ -497,7 +494,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.office}"
               .errorMessage="${this.errors.office}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('office', this.permissionPath)}"
@@ -514,7 +511,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <etools-checkbox
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
-              @checked-changed=${({detail}) => {
+              @sl-changed=${({detail}: any) => {
                 if (this.editedItem && Object.keys(this.editedItem).length) {
                   this.updateField('high_priority', detail.value);
                 }
@@ -537,7 +534,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?required="${this._setRequired('due_date', this.permissionPath)}"
               ?readonly="${this.isReadOnly('due_date', this.permissionPath)}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               .errorMessage="${this.errors.due_date}"
               .value="${this.editedItem?.due_date}"
               fire-date-has-changed

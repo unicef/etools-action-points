@@ -75,8 +75,9 @@ export const tabInputsStyles = html`
 
     etools-dropdown,
     etools-dropdown-multi,
-    etools-input,
-    etools-textarea,
+    etools-input::part(sl-input),
+    etools-input::part(readonly-input),
+    etools-textarea::part(form-control),
     paper-dropdown-menu,
     datepicker-lite,
     etools-currency-amount-input {

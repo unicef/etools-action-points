@@ -3,13 +3,17 @@ documentContainer.innerHTML = `
   <custom-style>
     <style>
       html {
+        --sl-font-mono: Roboto, Noto, sans-serif;
+        --sl-font-sans: Roboto, Noto, sans-serif;
+        --sl-font-serif: Roboto, Noto, sans-serif;
+        
         --primary-color: #0099ff;
         --primary-background-color: white;
         --secondary-text-color: rgba(0, 0, 0, 0.54);
         --secondary-background-color: var(--paper-indigo-700);
         --ternary-background-color: var(--paper-indigo-800);
         --accent-color: var(--paper-light-blue-a200);
-        --error-color: var(--paper-deep-orange-a700);
+        --error-color: #ea4022;
         --dark-primary-text-color: rgba(0, 0, 0, 0.87);
         --light-primary-text-color: rgba(255, 255, 255, 1);
         --dark-secondary-text-color: rgba(0, 0, 0, 0.54);
@@ -29,6 +33,16 @@ documentContainer.innerHTML = `
         --light-theme-background-color: var(--paper-grey-50);
         --light-theme-content-color: #FFFFFF;
         --dark-theme-background-color: #233944;
+        --primary-text-color: rgba(0, 0, 0, 0.87);
+        --default-btn-bg-color: rgba(0, 0, 0, 0.45);
+        --error-box-heading-color: var(--error-color);
+        --error-box-bg-color: #f2dede;
+        --error-box-border-color: #ebccd1;
+        --error-box-text-color: var(--error-color);
+        --primary-color-hover: #027ac9;
+        --default-btn-bg-hover-color: rgba(0, 0, 0, 0.55);
+        --error-hover-color: #d1391e;
+
 
         --nonprod-header-color: #a94442;
         --nonprod-text-warn-color: #e6e600;
@@ -49,27 +63,39 @@ documentContainer.innerHTML = `
         };
 
         /* etools-action-button styles*/
-        --etools-action-button-main-color: var(--primary-color);
-        --etools-action-button-text-color: var(--light-primary-text-color);
-        --etools-action-button-dropdown-higlight-bg: var(--list-second-bg-color);
-        --etools-action-button-divider-color: var(--light-divider-color);
-
-        /* etools-status styles */
+        /*--etools-action-button-main-color: var(--primary-color);*/
+        /*--etools-action-button-text-color: var(--light-primary-text-color);*/
+        /*--etools-action-button-dropdown-higlight-bg: var(--list-second-bg-color);*/
+        /*--etools-action-button-divider-color: var(--light-divider-color);*/
+        
+        /*!* etools-status styles *!*/
         --etools-status-divider-color: var(--dark-divider-color);
-        --etools-status-icon-inactive-color: var(--medium-icon-color);
-        --etools-status-icon-pending-color: var(--primary-color);
-        --etools-status-icon-completed-color: var(--success-color);
-        --etools-status-icon-text-color: var(--light-primary-text-color);
-        --etools-status-text-color: var(--medium-primary-text-color);
-        --etools-status-inactive-text-color: var(--primary-text-color);
+        /*--etools-status-icon-inactive-color: var(--medium-icon-color);*/
+        /*--etools-status-icon-pending-color: var(--primary-color);*/
+        /*--etools-status-icon-completed-color: var(--success-color);*/
+        /*--etools-status-icon-text-color: var(--light-primary-text-color);*/
+        /*--etools-status-text-color: var(--medium-primary-text-color);*/
+        /*--etools-status-inactive-text-color: var(--primary-text-color);*/
 
-          --paper-input-container-label-floating: {
-          color: var(--secondary-text-color, #737373);
-        };
-
-        --paper-input-prefix: {
-          color: var(--secondary-text-color, #737373);
-        };
+           /* sl-tooltip styles */
+        --sl-tooltip-background-color: rgba(97, 97, 97, 0.9);
+      
+        /* etools-dialog styles */
+        --etools-dialog-primary-color: #ffffff;
+        --etools-dialog-contrast-text-color: var(--primary-text-color);
+        --epd-profile-dialog-border-b: solid 1px var(--dark-divider-color);
+      
+        /* global loading box content */
+        --etools-loading-border-color: rgba(255, 255, 255, 0.12);
+        --etools-loading-shadow-color: #333333;
+      
+        --required-star-style: {
+          background: url('./assets/images/required.svg') no-repeat 99% 20%/8px;
+          width: auto !important;
+          max-width: 100%;
+          right: auto;
+          padding-inline-end: 15px;
+        }
       }
     </style>
   </custom-style>

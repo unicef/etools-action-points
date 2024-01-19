@@ -67,14 +67,14 @@ export const etoolsStatusStyles = html`
       font-size: 12px;
     }
 
-    .icon-wrapper iron-icon {
+    .icon-wrapper etools-icon {
       --iron-icon-height: 16px;
       --iron-icon-width: 16px;
       color: white;
       display: none;
     }
 
-    .icon-wrapper iron-icon,
+    .icon-wrapper etools-icon,
     .icon-wrapper span {
       align-self: center;
     }
@@ -143,7 +143,7 @@ export const etoolsStatusStyles = html`
       display: none;
     }
 
-    .completed .icon-wrapper iron-icon.done-icon {
+    .completed .icon-wrapper etools-icon.done-icon {
       display: block;
       width: 18px;
     }

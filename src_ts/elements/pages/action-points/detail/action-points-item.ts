@@ -22,9 +22,12 @@ import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {connect} from 'pwa-helpers';
+import {RootState, store} from '../../../../redux/store';
+import get from 'lodash-es/get';
 
 @customElement('action-points-item')
-export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement))) {
+export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement)))) {
   @property({type: Object}) // , notify: true
   route: any;
 
@@ -60,13 +63,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           margin-bottom: 25px;
         }
 
-        .header-btn {
-          color: var(--gray-mid);
-          font-weight: 500;
-          font-size: 14px;
-        }
-
-        .header-btn iron-icon {
+        .header-btn etools-icon {
           margin-right: 8px;
         }
       </style>
@@ -78,7 +75,8 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
         >
           <etools-button
             icon="history"
-            class="header-btn"
+            class="neutral"
+            variant="text"
             @click="${this.showHistory}"
             ?hidden="${!this.hasHistory(this.actionPoint.history)}"
           >
@@ -100,10 +98,12 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           </div>
 
           <div id="sidebar">
-            <status-element
-              .actionPoint="${this.actionPoint}"
-              .permissionPath="${this.permissionPath}"
-            ></status-element>
+            ${this.actionPoint.id
+              ? html`<status-element
+                  .actionPoint="${this.actionPoint}"
+                  .permissionPath="${this.permissionPath}"
+                ></status-element>`
+              : ''}
           </div>
         </div>
       </div>
@@ -139,13 +139,22 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     document.querySelector('body').appendChild(this.historyDialog);
   }
 
+  stateChanged(state: RootState) {
+    const routeDetails = get(state, 'app.routeDetails');
+    if (!(routeDetails?.routeName === 'action-points' && routeDetails?.subRouteName === 'detail')) {
+      return; // Avoid code execution while on a different page
+    }
+    const stateRouteDetails = {...state.app!.routeDetails};
+    this._routeDataChanged(stateRouteDetails.params!.id as number);
+  }
+
   _routeChanged({detail}: CustomEvent) {
     this._changeRoutePath(detail.value.path);
   }
 
-  _routeDataChanged({detail}: CustomEvent) {
+  _routeDataChanged(id: number) {
     this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(200), () => {
-      this._changeActionPointId(detail.value);
+      this._changeActionPointId(id);
     });
   }
 
@@ -166,8 +175,8 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
   }
 
-  _changeActionPointId(data: any) {
-    this.actionPointId = data.id;
+  _changeActionPointId(id: number) {
+    this.actionPointId = id;
     if (!this.actionPointId) {
       return;
     }

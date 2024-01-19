@@ -151,6 +151,12 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
   connectedCallback() {
     super.connectedCallback();
     installMediaQueryWatcher(`(min-width: 460px)`, () => fireEvent(this, 'change-drawer-state'));
+    const eventData = {
+      message: 'Loading...',
+      active: true,
+      loadingSource: 'initialisation'
+    };
+    fireEvent(this, 'global-loading', eventData);
     this.addEventListener('404', () => this._pageNotFound());
     this.addEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
@@ -163,12 +169,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     installRouter((location) =>
       store.dispatch(handleUrlChange(decodeURIComponent(location.pathname + location.search)))
     );
-    const eventData = {
-      message: 'Loading...',
-      active: true,
-      loadingSource: 'initialisation'
-    };
-    fireEvent(this, 'global-loading', eventData);
   }
 
   public disconnectedCallback() {
@@ -176,6 +176,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     this.removeEventListener('change-drawer-state', this.changeDrawerState);
     this.removeEventListener('404', () => this._pageNotFound());
     this.removeEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
+    this.removeEventListener('global-loading', (e: any) => this.handleLoading(e));
   }
 
   public stateChanged(state: RootState) {
@@ -187,6 +188,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
       (!this.routeDetails || !this.routeDetails.path.includes('/new'))
     )
       fireEvent(this, 'global-loading', {
+        message: 'Loading...',
         active: true,
         loadingSource: state.app.routeDetails.routeName
       });
@@ -209,11 +211,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     }
     if (this.staticDataLoaded) {
       this.user = this.getUserData();
-      const eventData = {
-        active: false,
-        loadingSource: 'initialisation'
-      };
-      fireEvent(this, 'global-loading', eventData);
     }
   }
 

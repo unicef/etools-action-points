@@ -15,6 +15,7 @@ import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-re
 import {basePath} from '../../../config/config';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {headerDropdownStyles} from './header-dropdown-styles';
 
 /**
  * @polymer
@@ -46,7 +47,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
 
   public render() {
     return html`
-      ${sharedStyles}
+      ${sharedStyles} ${headerDropdownStyles}
       <style>
         app-toolbar {
           background-color: var(--header-bg-color);

@@ -12,6 +12,7 @@ export const navMenuStyles = css`
     overflow-y: var(--side-bar-scrolling);
     overflow-x: hidden;
     border-right: 1px solid var(--light-divider-color);
+    --sl-tooltip-arrow-size: 0;
   }
 
   :host([small-menu]) {
@@ -97,8 +98,7 @@ export const navMenuStyles = css`
   }
 
   #menu-header-top-icon {
-    --iron-icon-height: 36px;
-    --iron-icon-width: 36px;
+    --etools-icon-font-size: 36px;
   }
 
   .divider {
@@ -153,22 +153,22 @@ export const navMenuStyles = css`
     color: var(--primary-text-color);
   }
 
-  .nav-menu-item iron-icon {
+  .nav-menu-item etools-icon {
     margin: 0 16px;
     color: var(--dark-icon-color);
   }
 
-  :host([small-menu]) .nav-menu-item iron-icon {
+  :host([small-menu]) .nav-menu-item etools-icon {
     margin: 0;
   }
 
   .nav-menu-item.iron-selected .name,
-  .nav-menu-item.iron-selected iron-icon {
+  .nav-menu-item.iron-selected etools-icon {
     color: var(--primary-color);
   }
 
   .nav-menu-item.lighter-item .name,
-  .nav-menu-item.lighter-item iron-icon {
+  .nav-menu-item.lighter-item etools-icon {
     color: var(--secondary-text-color);
   }
 

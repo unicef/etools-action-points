@@ -20,12 +20,12 @@ export class SupportBtn extends MatomoMixin(LitElement) {
           text-decoration: none;
           font-size: 16px;
         }
-        iron-icon {
+        etools-icon {
           margin-right: 4px;
         }
       </style>
 
-      <a href="${this.url}" target="_blank" @tap="${this.trackAnalytics}" tracker="Support">
+      <a href="${this.url}" target="_blank" @click="${this.trackAnalytics}" tracker="Support">
         <etools-icon name="communication:textsms"></etools-icon>
         Support
       </a>

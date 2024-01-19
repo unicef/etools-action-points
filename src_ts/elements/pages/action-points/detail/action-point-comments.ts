@@ -65,7 +65,7 @@ export class ActionPointComments extends PaginationMixin(
             class="panel-button"
             ?hidden="${this.noActionsAllowed(this.permissionPath)}"
             name="add-box"
-            @tap="${this._openAddComment}"
+            @click="${this._openAddComment}"
           ></etools-icon-button>
         </div>
         <div class="comments-list">
