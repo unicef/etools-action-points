@@ -22,7 +22,7 @@ export const etoolsStatusStyles = html`
     }
 
     [hidden] {
-      display: none !important;GF
+      display: none !important;
     }
 
     etools-content-panel {
