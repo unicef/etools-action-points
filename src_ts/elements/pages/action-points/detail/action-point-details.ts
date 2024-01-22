@@ -152,6 +152,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           line-height: 16px;
           color: var(var(--gray-20));
         }
+        datepicker-lite {
+          --etools-icon-fill-color: var(--secondary-text-color);
+        }
       </style>
 
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
