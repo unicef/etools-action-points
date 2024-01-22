@@ -40,7 +40,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
         keep-dialog-open
         ok-btn-text="SAVE"
         @confirm-btn-clicked="${this.saveComment}"
-        @iron-overlay-closed="${this._resetInputs}"
+        @close="${this._resetInputs}"
         ?show-spinner="${this.requestInProcess}"
         spinner-text="Save comment"
       >

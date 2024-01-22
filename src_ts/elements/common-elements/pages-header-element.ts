@@ -57,10 +57,6 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           white-space: nowrap;
         }
 
-        paper-item {
-          cursor: pointer;
-        }
-
         .export-buttons:not([hidden]) {
           display: inline-block;
         }

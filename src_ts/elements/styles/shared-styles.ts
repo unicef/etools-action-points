@@ -30,37 +30,11 @@ export const sharedStyles = html`
       height: 48px;
     }
 
-    paper-tabs {
-      color: var(--light-primary-text-color);
-      --paper-tabs-selection-bar-color: var(--accent-color);
-      --paper-tabs: {
-        font-size: 14px;
-        font-weight: 500;
-        text-transform: uppercase;
-      }
-    }
-
-    paper-tabs > * {
-      --paper-tab-ink: var(--accent-color);
-      --paper-tab-content-unselected: {
-        color: var(--light-secondary-text-color);
-      }
-    }
-
     .tab-link {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-    }
-
-    iron-pages[hidden] {
-      display: none;
-    }
-
-    paper-material {
-      padding: 15px 20px;
-      background-color: var(--light-theme-content-color);
     }
 
     etools-icon.dark {
@@ -73,12 +47,12 @@ export const sharedStyles = html`
 
     etools-icon-button.dark {
       color: var(--dark-icon-color);
-      --paper-icon-button-ink-color: var(--dark-ink-color);
+      --etools-icon-fill-color: var(--dark-ink-color);
     }
 
     etools-icon-button.light {
       color: var(--light-icon-color);
-      --paper-icon-button-ink-color: var(--light-ink-color);
+      --etools-icon-fill-color: var(--light-ink-color);
     }
   </style>
 `;
