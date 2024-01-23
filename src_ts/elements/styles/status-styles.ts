@@ -68,8 +68,7 @@ export const etoolsStatusStyles = html`
     }
 
     .icon-wrapper etools-icon {
-      --iron-icon-height: 16px;
-      --iron-icon-width: 16px;
+      --etools-icon-font-size: 16px;
       color: white;
       display: none;
     }
@@ -110,8 +109,6 @@ export const etoolsStatusStyles = html`
     }
 
     .custom .status-icon .icon-wrapper .custom-icon {
-      --iron-icon-height: 100%;
-      --iron-icon-width: 100%;
       width: 100%;
       height: 100%;
     }

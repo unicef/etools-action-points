@@ -136,7 +136,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           width: 133%;
           transform: scale(0.75);
           transform-origin: left top;
-          color: var(--paper-input-container-color, var(--secondary-text-color));
+          color: var(var(--secondary-text-color));
         }
 
         .reference-link > a {
@@ -150,7 +150,10 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         .reference-link > span {
           font-size: 16px;
           line-height: 16px;
-          color: var(--paper-input-container-color, var(--gray-20));
+          color: var(var(--gray-20));
+        }
+        datepicker-lite {
+          --etools-icon-fill-color: var(--secondary-text-color);
         }
       </style>
 

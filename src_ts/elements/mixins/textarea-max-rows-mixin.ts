@@ -13,19 +13,19 @@ export function TextAreaMaxRows<T extends Constructor<LitElement>>(superClass: T
     connectedCallback() {
       super.connectedCallback();
       flush();
-      const paperTextareas = this.shadowRoot.querySelectorAll('etools-textarea') || [];
+      const etoolsTextareas = this.shadowRoot.querySelectorAll('etools-textarea') || [];
 
-      paperTextareas.forEach((paperTextarea: any) => {
-        this.setMaxHeight(paperTextarea);
+      etoolsTextareas.forEach((etoolsTextarea: any) => {
+        this.setMaxHeight(etoolsTextarea);
       });
     }
 
-    setMaxHeight(paperTextarea: any) {
-      if (!paperTextarea) {
+    setMaxHeight(etoolsTextarea: any) {
+      if (!etoolsTextarea) {
         return false;
       }
 
-      const paperInputContainer = paperTextarea.shadowRoot.querySelector('etools-input-container');
+      const paperInputContainer = etoolsTextarea.shadowRoot.querySelector('etools-input-container');
       const textareaAutogrow = paperInputContainer.querySelector('.etools-input-input');
       const mirror = textareaAutogrow.shadowRoot.querySelector('#mirror');
 
@@ -34,7 +34,7 @@ export function TextAreaMaxRows<T extends Constructor<LitElement>>(superClass: T
       }
 
       const textareaAutogrowStyles = window.getComputedStyle(textareaAutogrow, null) || {};
-      const maxRows = +paperTextarea.getAttribute('max-rows');
+      const maxRows = +etoolsTextarea.getAttribute('max-rows');
 
       if (!maxRows || maxRows <= 1) {
         return false;

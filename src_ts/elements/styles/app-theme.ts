@@ -10,9 +10,7 @@ documentContainer.innerHTML = `
         --primary-color: #0099ff;
         --primary-background-color: white;
         --secondary-text-color: rgba(0, 0, 0, 0.54);
-        --secondary-background-color: var(--paper-indigo-700);
-        --ternary-background-color: var(--paper-indigo-800);
-        --accent-color: var(--paper-light-blue-a200);
+        --secondary-background-color: #eeeeee;
         --error-color: #ea4022;
         --dark-primary-text-color: rgba(0, 0, 0, 0.87);
         --light-primary-text-color: rgba(255, 255, 255, 1);
@@ -30,7 +28,6 @@ documentContainer.innerHTML = `
         --light-hover-color: rgba(255, 255, 255, 0.01);
         --dark-ink-color: rgba(0, 0, 0, 0.3);
         --light-ink-color: rgba(255, 255, 255, 0.30);
-        --light-theme-background-color: var(--paper-grey-50);
         --light-theme-content-color: #FFFFFF;
         --dark-theme-background-color: #233944;
         --primary-text-color: rgba(0, 0, 0, 0.87);
@@ -49,8 +46,6 @@ documentContainer.innerHTML = `
         --header-bg-color: var(--dark-theme-background-color);
 
         --partnership-management-color: var(--primary-background-color);
-        --work-planning-color: var(--paper-light-green-500);
-        --field-monitering-color: var(--paper-green-500);
 
         --title-toolbar-secondary-text-color : #C7CED2;
 

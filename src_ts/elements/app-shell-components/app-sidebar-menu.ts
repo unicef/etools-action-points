@@ -2,7 +2,6 @@ import {html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
-import '@polymer/iron-selector/iron-selector.js';
 import './side-bar-item';
 import {moduleStyles} from '../styles/module-styles';
 import {navMenuStyles} from '../styles/nav-menu-styles';

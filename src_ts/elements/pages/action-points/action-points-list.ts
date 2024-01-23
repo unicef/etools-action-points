@@ -146,7 +146,7 @@ export class ActionPointsList extends connect(store)(
           width: 176px;
           margin-left: 12px;
           margin-right: 12px;
-          --iron-icon-fill-color: var(--gray-mid-dark);
+          --etools-icon-fill-color: var(--gray-mid-dark);
         }
 
         .filter-dropdown {

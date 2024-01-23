@@ -79,14 +79,6 @@ export const navMenuStyles = css`
     display: block;
   }
 
-  .menu-header etools-icon-button {
-    --paper-icon-button: {
-      width: 24px;
-      height: 24px;
-      padding: 0;
-    }
-  }
-
   #menu-header-top-icon,
   #minimize-menu,
   #expand-menu {
@@ -112,8 +104,7 @@ export const navMenuStyles = css`
     min-height: 550px;
     padding: 8px 0 0;
   }
-  .nav-menu,
-  .nav-menu iron-selector[role='navigation'] {
+  .nav-menu {
     flex: 1;
   }
 
@@ -140,14 +131,6 @@ export const navMenuStyles = css`
     height: 0;
   }
 
-  .nav-menu-item.iron-selected {
-    background-color: var(--secondary-background-color);
-  }
-
-  .nav-menu-item.iron-selected:active {
-    background-color: var(--light-divider-color);
-  }
-
   .nav-menu-item .name {
     margin-left: 16px;
     color: var(--primary-text-color);
@@ -160,11 +143,6 @@ export const navMenuStyles = css`
 
   :host([small-menu]) .nav-menu-item etools-icon {
     margin: 0;
-  }
-
-  .nav-menu-item.iron-selected .name,
-  .nav-menu-item.iron-selected etools-icon {
-    color: var(--primary-color);
   }
 
   .nav-menu-item.lighter-item .name,

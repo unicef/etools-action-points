@@ -7,9 +7,6 @@ export const mainPageStyles = html`
     :host {
       position: relative;
       display: block;
-      --paper-tab-content-unselected: {
-        color: var(--gray-light);
-      }
       --ecp-header-bg: var(--module-primary);
     }
     :host .view-container {
@@ -34,14 +31,6 @@ export const mainPageStyles = html`
       box-sizing: border-box;
       background-color: #fff;
       box-shadow: 1px -3px 9px 0 #000;
-    }
-    :host .tab-selector paper-tabs {
-      color: var(--module-primary);
-      font-size: 14px;
-      font-weight: bold;
-    }
-    :host .tab-selector paper-tabs span {
-      text-transform: uppercase;
     }
     :host .tab-selector .tab-content {
       padding: 0 13px;
@@ -112,12 +101,6 @@ export const mainPageStyles = html`
     div[slot='panel-btns'].bookmark etools-icon {
       width: 70px !important;
       height: 70px !important;
-    }
-    paper-tab {
-      margin-right: 10px;
-      --paper-tab-content: {
-        width: auto;
-      }
     }
   </style>
 `;
