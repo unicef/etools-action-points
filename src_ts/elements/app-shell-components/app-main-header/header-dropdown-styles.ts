@@ -54,10 +54,72 @@ export const headerDropdownStyles: TemplateResult = html`
       color: var(--sl-input-color);
     }
 
-    @media (max-width: 768px) {
+    #menuButton {
+      display: block;
+      color: var(--header-color);
+    }
+
+    @media (max-width: 1024px) {
+      .envWarning {
+        display: none;
+      }
+      .envLong {
+        display: none;
+      }
+      .titlebar img {
+        margin: 0 8px 0 12px;
+      }
+      etools-profile-dropdown {
+        margin-left: 12px;
+        width: 40px;
+      }
       etools-dropdown {
         min-width: 130px;
         width: 130px;
+      }
+      organizations-dropdown {
+        width: 130px;
+      }
+
+      countries-dropdown {
+        width: 130px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      #app-logo {
+        display: none;
+      }
+      etools-dropdown {
+        min-width: auto;
+      }
+      organizations-dropdown {
+        width: 120px;
+      }
+
+      countries-dropdown {
+        width: 120px;
+      }
+      .titlebar img {
+        margin: 0 8px 0 4px;
+      }
+      .envWarning {
+        font-size: 10px;
+        line-height: 12px;
+        white-space: nowrap;
+        margin-left: 2px;
+      }
+      app-toolbar {
+        --toolbar-height: auto;
+        padding-inline-end: 0px;
+      }
+      .column-r {
+        flex-direction: column-reverse !important;
+      }
+    }
+    @media (min-width: 850px) {
+      #menuButton {
+        display: none;
       }
     }
   </style>

@@ -91,38 +91,47 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
 
       <app-toolbar sticky class="layout-horizontal align-items-center">
         <div class="titlebar layout-horizontal align-items-center">
+          <etools-icon-button
+            id="menuButton"
+            name="menu"
+            class="nav-menu-button"
+            @click="${() => this.openDrawer()}"
+          ></etools-icon-button>
           <etools-app-selector .user="${this.user}"></etools-app-selector>
 
-          <img src="${basePath}/images/etools-logo-color-white.svg" />
+          <img id="app-logo" src="${basePath}/images/etools-logo-color-white.svg" />
           <div class="envWarning" .hidden="${!this.environment}">- ${this.environment} TESTING ENVIRONMENT</div>
         </div>
 
-        <div class="layout-horizontal align-items-center">
-          <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
-          </countries-dropdown>
+        <div class="column-r layout-horizontal align-items-center">
+          <div class="layout-horizontal align-items-center">
+            <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
+            </countries-dropdown>
 
-          <organizations-dropdown .user="${this.user}"></organizations-dropdown>
+            <organizations-dropdown .user="${this.user}"></organizations-dropdown>
+          </div>
+          <div class="layout-horizontal align-items-center">
+            <support-btn title="Support"></support-btn>
 
-          <support-btn title="Support"></support-btn>
+            <etools-profile-dropdown
+              title="Profile and Sign out"
+              .profile="${this.user}"
+              .users="${this.allUsers}"
+              .offices="${this.offices}"
+              .sections="${this.sections}"
+            >
+            </etools-profile-dropdown>
 
-          <etools-profile-dropdown
-            title="Profile and Sign out"
-            .profile="${this.user}"
-            .users="${this.allUsers}"
-            .offices="${this.offices}"
-            .sections="${this.sections}"
-          >
-          </etools-profile-dropdown>
-
-          <etools-icon-button
-            title="Refresh"
-            id="pageRefresh"
-            name="refresh"
-            tracker="Refresh"
-            @click="${this.onRefreshClick}"
-            ?disabled="${this.refreshInProgress}"
-          >
-          </etools-icon-button>
+            <etools-icon-button
+              title="Refresh"
+              id="pageRefresh"
+              name="refresh"
+              tracker="Refresh"
+              @click="${this.onRefreshClick}"
+              ?disabled="${this.refreshInProgress}"
+            >
+            </etools-icon-button>
+          </div>
         </div>
       </app-toolbar>
     `;

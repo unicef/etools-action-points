@@ -2,6 +2,7 @@ import {LitElement, html, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
+import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
 import {EtoolsDataTableColumn} from '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table-column.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
@@ -153,6 +154,12 @@ export class ActionPointsList extends connect(store)(
           width: 200px;
         }
       </style>
+      <etools-media-query
+        query="(max-width: 767px)"
+        @query-matches-changed="${(e: CustomEvent) => {
+          this.lowResolutionLayout = e.detail.value;
+        }}"
+      ></etools-media-query>
       <pages-header-element
         hide-print-button
         link="action-points/new"
