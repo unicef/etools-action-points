@@ -54,7 +54,6 @@ export function AppMenuMixin<T extends Constructor<LitElement>>(baseClass: T) {
 
     public changeDrawerState() {
       this.drawerOpened = !this.drawerOpened;
-      console.log(this.drawerOpened);
     }
     private _toggleMenu(e: CustomEvent): void {
       // e.stopImmediatePropagation();
