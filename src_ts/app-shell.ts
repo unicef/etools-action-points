@@ -18,7 +18,6 @@ import './elements/data-elements/static-data';
 import './elements/app-shell-components/page-footer';
 import './routing/routes.js';
 import {basePath} from './config/config';
-import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import '@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
