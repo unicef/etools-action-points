@@ -18,28 +18,27 @@ import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {headerDropdownStyles} from './header-dropdown-styles';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('app-main-header')
 export class AppMainHeader extends MatomoMixin(LitElement) {
   @property({type: Object})
-  user: GenericObject;
+  user!: GenericObject;
 
   @property({type: String, reflect: true, attribute: 'environment'})
-  environment: string;
+  environment = '';
 
   @property({type: Array})
-  allUsers: any[];
+  allUsers: any[] = [];
 
   @property({type: Array})
-  offices: any[];
+  offices: any[] = [];
 
   @property({type: Array})
-  sections: any[];
+  sections: any[] = [];
 
   @property({type: Boolean})
-  refreshInProgress: boolean;
+  refreshInProgress = false;
 
   static get styles() {
     return [gridLayoutStylesLit];
@@ -93,7 +92,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         <div class="titlebar layout-horizontal align-items-center">
           <etools-app-selector .user="${this.user}"></etools-app-selector>
 
-          <img src="${basePath}/images/etools-logo-color-white.svg" />
+          <img src="${basePath}assets/images/etools-logo-color-white.svg" alt="ETools" />
           <div class="envWarning" .hidden="${!this.environment}">- ${this.environment} TESTING ENVIRONMENT</div>
         </div>
 
@@ -118,6 +117,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
             title="Refresh"
             id="pageRefresh"
             name="refresh"
+            label="refresh"
             tracker="Refresh"
             @click="${this.onRefreshClick}"
             ?disabled="${this.refreshInProgress}"
