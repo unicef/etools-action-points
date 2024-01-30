@@ -33,18 +33,6 @@ const copyConfig = {
     { src: 'manifest.json', dest: 'src' },
     { src: 'version.json', dest: 'src' },
     { src: 'upgrade-browser.html', dest: 'src' },
-    { src: 'node_modules/@webcomponents/webcomponentsjs/**', dest: 'src/node_modules/@webcomponents/webcomponentsjs' },
-    {
-      src: 'node_modules/web-animations-js/web-animations-next-lite.min.js',
-      dest: 'src/node_modules/web-animations-js'
-    },
-    { src: 'node_modules/dayjs/dayjs.min.js', dest: 'src/node_modules/dayjs' },
-    { src: 'node_modules/dayjs/plugin/utc.js', dest: 'src/node_modules/dayjs/plugin' },
-    {
-      src: 'node_modules/linkifyjs/**',
-      dest: 'src/node_modules/linkifyjs'
-    },
-    { src: 'images', dest: 'src' },
     { src: 'assets', dest: 'src' },
     { src: 'index.html', dest: 'src' }
   ]

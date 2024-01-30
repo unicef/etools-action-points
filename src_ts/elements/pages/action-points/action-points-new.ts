@@ -13,7 +13,6 @@ import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('action-points-new')
@@ -51,7 +50,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   @property({type: String})
   permissionPath = 'action_points';
 
-  updated(changedProperties) {
+  updated(changedProperties: any) {
     if (changedProperties.has('route')) {
       this._changeRoutePath();
     }
@@ -63,7 +62,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   }
 
   _changeRoutePath() {
-    const details: any = this.shadowRoot.querySelector('action-point-details');
+    const details: any = this.shadowRoot!.querySelector('action-point-details');
     this.actionPoint = {};
     details.dispatchEvent(new CustomEvent('reset-validation'));
     fireEvent(this, 'route-changed', {
@@ -72,7 +71,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   }
 
   _createAP() {
-    const detailsElement: ActionPointDetails = this.shadowRoot.querySelector('#ap-details');
+    const detailsElement: ActionPointDetails | null = this.shadowRoot!.querySelector('#ap-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
     }

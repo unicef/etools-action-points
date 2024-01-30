@@ -1,11 +1,9 @@
 import {Constructor} from '../../typings/globals.types';
 import {LitElement} from 'lit';
-
-declare const dayjs: any;
+import dayjs from 'dayjs';
 
 /**
  * Mixin for parsing and format date by pattern
- * @polymer
  * @mixinFunction
  */
 export function DateMixin<T extends Constructor<LitElement>>(superClass: T) {

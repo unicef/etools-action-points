@@ -11,7 +11,6 @@ import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('static-data')

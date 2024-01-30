@@ -9,7 +9,6 @@ import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('app-sidebar-menu')

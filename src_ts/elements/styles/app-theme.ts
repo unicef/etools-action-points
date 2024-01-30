@@ -15,7 +15,7 @@ documentContainer.innerHTML = `
         --dark-primary-text-color: rgba(0, 0, 0, 0.87);
         --light-primary-text-color: rgba(255, 255, 255, 1);
         --dark-secondary-text-color: rgba(0, 0, 0, 0.54);
-        --light-secondary-text-color: rgba(255, 255, 255, 0.7);
+        --light-secondary-text-color: rgba(255, 255, 255, 1);
         --dark-disabled-text-color: rgba(0, 0, 0, 0.38);
         --light-disabled-text-color: rgba(255, 255, 255, 0.5);
         --dark-icon-color: rgba(0, 0, 0, 0.54);
@@ -42,7 +42,7 @@ documentContainer.innerHTML = `
 
 
         --nonprod-header-color: #a94442;
-        --nonprod-text-warn-color: #e6e600;
+        --nonprod-text-warn-color: #ffffff;
         --header-bg-color: var(--dark-theme-background-color);
 
         --partnership-management-color: var(--primary-background-color);

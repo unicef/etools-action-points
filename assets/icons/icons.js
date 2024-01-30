@@ -1,4 +1,4 @@
-export const apdIcons = {
+module.exports = {
   powerBi: `<path
         clip-path="url(#SVGID_2_)"
         fill="rgba(0,0,0,0.54)"

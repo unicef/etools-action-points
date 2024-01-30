@@ -11,6 +11,7 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "outDir": "src",
