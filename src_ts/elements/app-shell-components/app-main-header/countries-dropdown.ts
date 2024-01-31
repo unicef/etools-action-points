@@ -6,7 +6,6 @@ import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import {EtoolsDropdownEl} from '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {headerDropdownStyles} from './header-dropdown-styles';
 
@@ -24,7 +23,7 @@ export class CountriesDropdown extends LitElement {
   }
 
   @property({type: Number})
-  countryId: number;
+  countryId?: number;
 
   render() {
     return html`
@@ -64,11 +63,6 @@ export class CountriesDropdown extends LitElement {
 
   public connectedCallback() {
     super.connectedCallback();
-
-    setTimeout(() => {
-      const fitInto = document.querySelector('app-shell')!.shadowRoot!.querySelector('#appHeadLayout');
-      (this.shadowRoot?.querySelector('#countrySelector') as EtoolsDropdownEl).fitInto = fitInto;
-    }, 0);
   }
 
   _changeCountry(countryId: any) {

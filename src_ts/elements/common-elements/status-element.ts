@@ -59,13 +59,13 @@ export class StatusElement extends LitElement {
   actionPoint: any;
 
   @property({type: Array})
-  actions: any[];
+  actions: any[] = [];
 
   @property({type: String})
-  permissionPath: string;
+  permissionPath = '';
 
   @property({type: Array}) // notify: true
-  statuses: any[];
+  statuses: any[] = [];
 
   firstUpdated() {
     this.statuses = getData('statuses') || [];

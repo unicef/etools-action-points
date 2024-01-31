@@ -4,7 +4,6 @@ import {basePath} from '../../config/config';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 
 /**
- * @polymer
  * @extends HTMLElement
  */
 @customElement('page-footer')
@@ -55,7 +54,7 @@ export class PageFooter extends LitElement {
       <footer>
         <div id="footer-content" class="layout-horizontal">
           <span id="unicef-logo" class="layout-horizontal layout-inline">
-            <img src="${basePath}images/UNICEF_logo.png" alt="UNICEF logo" />
+            <img src="${basePath}assets/images/UNICEF_logo.webp" alt="UNICEF logo" />
           </span>
         </div>
       </footer>

@@ -16,10 +16,10 @@ import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 @customElement('pages-header-element')
 export class PagesHeaderElement extends MatomoMixin(LitElement) {
   @property({type: String, attribute: 'page-title'})
-  pageTitle: string;
+  pageTitle = '';
 
   @property({type: String, attribute: 'btn-text'})
-  btnText: string;
+  btnText = '';
 
   @property({type: Boolean, attribute: 'show-add-button'})
   showAddButton = false;
@@ -34,7 +34,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   pageData: any;
 
   @property({type: String})
-  exportLinks: GenericObject[];
+  exportLinks: GenericObject[] = [];
 
   @property({type: String})
   downloadLetterUrl = '';

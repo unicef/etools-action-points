@@ -126,7 +126,7 @@ export class EtoolsActionButton extends LitElement {
   }
 
   @property({type: Array})
-  actions: GenericObject[];
+  actions: GenericObject[] = [];
 
   @property({type: Object})
   icons = () => {
@@ -138,7 +138,7 @@ export class EtoolsActionButton extends LitElement {
   };
 
   @property({type: Boolean})
-  statusBtnMenuOpened: boolean;
+  statusBtnMenuOpened = false;
 
   closeMenu() {
     this.statusBtnMenuOpened = false;

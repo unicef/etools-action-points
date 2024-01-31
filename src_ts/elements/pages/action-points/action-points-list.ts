@@ -19,8 +19,6 @@ import {dataTableStylesLit} from '@unicef-polymer/etools-unicef/src/etools-data-
 import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
 import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
-import {timeOut} from '@polymer/polymer/lib/utils/async.js';
-import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query.js';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
@@ -37,6 +35,7 @@ import {connect} from 'pwa-helpers';
 import get from 'lodash-es/get';
 import {RouteQueryParam} from '@unicef-polymer/etools-types';
 import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
+import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
 
 @customElement('action-points-list')
 export class ActionPointsList extends connect(store)(
@@ -64,10 +63,10 @@ export class ActionPointsList extends connect(store)(
   allFilters!: EtoolsFilter[];
 
   @property({type: Array})
-  filters: any[];
+  filters: any[] = [];
 
   @property({type: Object}) // , notify: true
-  queryParams: GenericObject;
+  queryParams: GenericObject = {};
 
   @property({type: Object}) // , notify: true
   initialQueryParams?: GenericObject;
@@ -76,7 +75,7 @@ export class ActionPointsList extends connect(store)(
   prevQueryParams?: GenericObject;
 
   @property({type: Array})
-  totalResults: number;
+  totalResults?: number;
 
   @property({type: Object}) // , notify: true
   route: any;
@@ -88,22 +87,19 @@ export class ActionPointsList extends connect(store)(
   exportParams: any;
 
   @property({type: Array}) // , notify: true
-  exportLinks: any[];
+  exportLinks: any[] = [];
 
   @property({type: Boolean})
   staticDataLoaded?: boolean;
 
   @property({type: String})
-  path: string;
-
-  @property({type: Object})
-  _debounceLoadData: Debouncer;
+  path = '';
 
   @property({type: Object})
   searchParams: any;
 
   @property({type: String})
-  rootPath: string;
+  rootPath = '';
 
   static get styles() {
     // language=CSS
@@ -287,9 +283,9 @@ export class ActionPointsList extends connect(store)(
                 <div
                   class="col-data col-1"
                   data-col-header-label="${this.getLabel('due_date', this.basePermissionPath)}"
-                  title="${this.prettyDate(entry.due_date, null, '-')}"
+                  title="${this.prettyDate(entry.due_date, undefined, '-')}"
                 >
-                  <span class="truncate">${this.prettyDate(entry.due_date, null, '-')}</span>
+                  <span class="truncate">${this.prettyDate(entry.due_date, undefined, '-')}</span>
                 </div>
                 <div
                   class="col-data col-1"
@@ -386,8 +382,13 @@ export class ActionPointsList extends connect(store)(
     `;
   }
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this._requestData = debounce(this._requestData.bind(this), 100);
+  }
+
   firstUpdated() {
-    this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
+    this.addEventListener('sort-changed', (e: any) => this._sort(e));
   }
 
   updated(changedProperties: PropertyValues) {
@@ -434,7 +435,9 @@ export class ActionPointsList extends connect(store)(
     if (!sortParams) return;
     const field = sortParams.replace(/^-/, '');
     const direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
-    const column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
+    const column: EtoolsDataTableColumn | null = this.shadowRoot!.querySelector(
+      `etools-data-table-column[field="${field}"]`
+    );
     if (!column) return;
     column.setAttribute('selected', 'true');
     column.setAttribute('direction', direction);
@@ -496,9 +499,7 @@ export class ActionPointsList extends connect(store)(
 
     const listElements = this.shadowRoot?.querySelectorAll(`etools-data-table-row`);
     listElements?.forEach((element: any) => (element.detailsOpened = false));
-    this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(100), () => {
-      this._requestData();
-    });
+    this._requestData();
   }
 
   filtersChange(e: CustomEvent) {
@@ -507,8 +508,8 @@ export class ActionPointsList extends connect(store)(
 
   paginatorChanged() {
     if (
-      String(this.prevQueryParams.page) !== String(this.paginator.page) ||
-      String(this.prevQueryParams.page_size) !== String(this.paginator.page_size)
+      String(this.prevQueryParams?.page) !== String(this.paginator.page) ||
+      String(this.prevQueryParams?.page_size) !== String(this.paginator.page_size)
     ) {
       const queryParams = {
         ...this.prevQueryParams,
@@ -523,7 +524,7 @@ export class ActionPointsList extends connect(store)(
     let ordering = detail.field;
     const prevQueryParams = this.prevQueryParams ? this.prevQueryParams : {};
     if (prevQueryParams.ordering && prevQueryParams.ordering === ordering) {
-      ordering = this.prevQueryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
+      ordering = this.prevQueryParams?.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
     }
     const queryParams = {...prevQueryParams, ordering: ordering};
     this._updateQueries(queryParams);

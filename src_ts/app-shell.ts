@@ -1,4 +1,3 @@
-import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer-layout';
@@ -19,14 +18,12 @@ import './elements/data-elements/static-data';
 import './elements/app-shell-components/page-footer';
 import './routing/routes.js';
 import {basePath} from './config/config';
-import './elements/styles/app-theme';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import '@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts';
 import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {setBasePath} from '@shoelace-style/shoelace/dist/utilities/base-path.js';
-import {EtoolsIconSet, initializeIcons} from '@unicef-polymer/etools-unicef/src/etools-icons/etools-icons';
-import {apdIcons} from './elements/styles/apd-icons';
+import {initializeIcons} from '@unicef-polymer/etools-unicef/src/etools-icons/etools-icons';
 import {connect, installMediaQueryWatcher, installRouter} from 'pwa-helpers';
 import {RootState, store} from './redux/store';
 import {handleUrlChange} from './redux/actions/app.js';
@@ -34,23 +31,10 @@ import {RouteDetails} from '@unicef-polymer/etools-types';
 import {setStore} from '@unicef-polymer/etools-utils/dist/store.util';
 
 setStore(store as any);
-declare const dayjs: any;
-declare const dayjs_plugin_utc: any;
-dayjs.extend(dayjs_plugin_utc);
 window.EtoolsLanguage = 'en';
 
 setBasePath(basePath);
-initializeIcons(
-  [
-    EtoolsIconSet.communication,
-    EtoolsIconSet.device,
-    EtoolsIconSet.social,
-    EtoolsIconSet.av,
-    EtoolsIconSet.image,
-    EtoolsIconSet.maps
-  ],
-  apdIcons
-);
+initializeIcons();
 @customElement('app-shell')
 export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(AppMenuMixin(LitElement)))) {
   static get styles() {
@@ -126,17 +110,19 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
           </app-header>
 
           <main role="main" id="page-container">
-            <action-points-page-main
-              ?hidden="${!this.isActivePage(this.mainPage, 'action-points')}"
-              id="action-points"
-              .staticDataLoaded="${this.staticDataLoaded}"
-              .route="${this.actionPointsRoute}"
-            >
-            </action-points-page-main>
-            <not-found-page-view
-              ?hidden="${!this.isActivePage(this.page, 'not-found')}"
-              id="not-found"
-            ></not-found-page-view>
+            ${this.isActivePage(this.mainPage, 'action-points')
+              ? html` <action-points-page-main
+                  id="action-points"
+                  .staticDataLoaded="${this.staticDataLoaded}"
+                  .route="${this.actionPointsRoute}"
+                ></action-points-page-main>`
+              : html``}
+            ${this.isActivePage(this.page, 'not-found')
+              ? html`<not-found-page-view
+                  ?hidden="${!this.isActivePage(this.page, 'not-found')}"
+                  id="not-found"
+                ></not-found-page-view>`
+              : ``}
           </main>
 
           <page-footer ?small-menu="${this.smallMenu}"></page-footer>

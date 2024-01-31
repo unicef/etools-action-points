@@ -8,7 +8,6 @@ import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {headerDropdownStyles} from './header-dropdown-styles';
 
 /**
- * @polymer
  * @customElement
  * @appliesMixin EtoolsAjaxRequestMixin
  */
@@ -56,13 +55,6 @@ class OrganizationsDropdown extends LitElement {
 
   public connectedCallback() {
     super.connectedCallback();
-
-    setTimeout(() => {
-      const fitInto = document.querySelector('app-shell')!.shadowRoot!.querySelector('#appHeadLayout');
-      if (fitInto && this.organizationSelectorDropdown) {
-        this.organizationSelectorDropdown.fitInto = fitInto;
-      }
-    }, 500);
   }
 
   public onUserChange(user: any) {
@@ -74,7 +66,7 @@ class OrganizationsDropdown extends LitElement {
     this.currentOrganizationId = this.user.organization?.id || null;
   }
 
-  checkMustSelectOrganization(user) {
+  checkMustSelectOrganization(user: any) {
     if (user && user.user && !user.organization) {
       setTimeout(() => {
         this.dispatchEvent(
@@ -105,7 +97,7 @@ class OrganizationsDropdown extends LitElement {
     }
   }
 
-  triggerOrganizationChangeRequest(organizationId) {
+  triggerOrganizationChangeRequest(organizationId: number) {
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {

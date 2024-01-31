@@ -2,8 +2,6 @@ import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
-import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
@@ -25,6 +23,7 @@ import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {connect} from 'pwa-helpers';
 import {RootState, store} from '../../../../redux/store';
 import get from 'lodash-es/get';
+import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement)))) {
@@ -32,7 +31,7 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
   route: any;
 
   @property({type: String})
-  routeData: string;
+  routeData?: string;
 
   @property({type: Object})
   actionPoint: any = {};
@@ -44,15 +43,13 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
   originalActionPoint: any = {};
 
   @property({type: Object}) // , notify: true
-  permissionPath: string;
+  permissionPath!: string;
 
   @property({type: Object})
   historyDialog: any;
 
   @property({type: Number})
-  actionPointId: number;
-
-  private _debounceLoadData: Debouncer;
+  actionPointId!: number;
 
   render() {
     return html`
@@ -112,6 +109,8 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
 
   connectedCallback(): void {
     super.connectedCallback();
+    this._changeActionPointId = debounce(this._changeActionPointId.bind(this), 300);
+
     this._createHistoryDialog();
     this.addEventListener('action-activated', ({detail}: any) => {
       if (detail.type === 'save') {
@@ -136,7 +135,7 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
 
   _createHistoryDialog() {
     this.historyDialog = document.createElement('open-view-history');
-    document.querySelector('body').appendChild(this.historyDialog);
+    document.querySelector('body')?.appendChild(this.historyDialog);
   }
 
   stateChanged(state: RootState) {
@@ -153,9 +152,7 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
   }
 
   _routeDataChanged(id: number) {
-    this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(200), () => {
-      this._changeActionPointId(id);
-    });
+    this._changeActionPointId(id);
   }
 
   _updateHistoryProp() {
@@ -172,7 +169,7 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
     if (!path.match(/[^\\/]/g)) {
       fireEvent(this, '404');
     }
-    this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
+    this.shadowRoot!.querySelector('action-point-details')?.dispatchEvent(new CustomEvent('reset-validation'));
   }
 
   _changeActionPointId(id: number) {
