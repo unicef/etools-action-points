@@ -71,9 +71,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
   staticDataLoaded?: boolean;
 
   @property({type: Boolean})
-  smallMenu = false;
-
-  @property({type: Boolean})
   initLoadingComplete = false;
 
   render() {
@@ -147,7 +144,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     this.addEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this.environment = _checkEnvironment();
-    this.addEventListener('change-drawer-state', this.changeDrawerState);
+    // this.addEventListener('change-drawer-state', this.changeDrawerState);
     this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.shadowRoot
       ?.querySelector('#appHeadLayout')
@@ -159,7 +156,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
 
   public disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('change-drawer-state', this.changeDrawerState);
+    // this.removeEventListener('change-drawer-state', this.changeDrawerState);
     this.removeEventListener('404', () => this._pageNotFound());
     this.removeEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.removeEventListener('global-loading', (e: any) => this.handleLoading(e));

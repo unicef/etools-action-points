@@ -4,6 +4,7 @@ import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button'
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
 import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
+import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
@@ -53,7 +54,6 @@ export class ActionPointComments extends PaginationMixin(
 
       <etools-media-query
         query="(max-width: 767px)"
-        .queryMatches="${this.lowResolutionLayout}"
         @query-matches-changed="${(e: CustomEvent) => {
           this.lowResolutionLayout = e.detail.value;
         }}"

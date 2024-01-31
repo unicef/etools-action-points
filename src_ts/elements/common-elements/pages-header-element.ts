@@ -39,6 +39,9 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   @property({type: String})
   downloadLetterUrl = '';
 
+  @property({type: Boolean})
+  lowResolutionLayout = false;
+
   static get styles() {
     return [gridLayoutStylesLit];
   }
@@ -95,7 +98,18 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
         }
         .side-heading .add-btn {
           margin: 11px 4px 12px 18px;
-          background-color: var(--module-primary);
+        }
+        @media (max-width: 576px) {
+          .side-heading .add-btn {
+            margin: unset;
+          }
+          etools-button {
+            --sl-spacing-medium: 0px;
+            min-width: var(--sl-input-height-medium);
+          }
+          .side-heading {
+            padding: 0 20px;
+          }
         }
 
         .btn-link {
@@ -107,7 +121,12 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           z-index: 10;
         }
       </style>
-
+      <etools-media-query
+        query="(max-width: 576px)"
+        @query-matches-changed="${(e: CustomEvent) => {
+          this.lowResolutionLayout = e.detail.value;
+        }}"
+      ></etools-media-query>
       <div class="header-wrapper">
         <div class="side-heading layout-horizontal align-items-center around-justified">
           <span class="flex-c title">${this._setTitle(this.pageData, this.pageTitle)}</span>
@@ -150,7 +169,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
                 @click="${this.exportData}"
               >
                 <etools-icon name="file-download"></etools-icon>
-                Export
+                ${this.lowResolutionLayout ? '' : 'Export'}
               </etools-button>
             </div>
 
@@ -163,7 +182,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
               href="${this.link}"
             >
               <etools-icon name="add" slot="prefix"></etools-icon>
-              ${this.btnText}
+              ${this.lowResolutionLayout ? '' : this.btnText}
             </etools-button>
             <slot></slot>
           </div>

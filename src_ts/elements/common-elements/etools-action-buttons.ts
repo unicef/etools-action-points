@@ -26,7 +26,6 @@ export class EtoolsActionButton extends LitElement {
         :host etools-button {
           height: 34px;
           color: #fff;
-          background-color: var(--module-primary);
           margin: 0;
           width: 100%;
         }
