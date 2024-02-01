@@ -4,6 +4,7 @@ import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js';
+import '@shoelace-style/shoelace/dist/components/menu/menu.js';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
@@ -32,8 +33,10 @@ export class EtoolsActionButton extends LitElement {
         :host etools-button span {
           padding: 0 29px;
         }
-        :host etools-button.with-menu {
-          padding-right: calc(0.57em + 41px);
+
+        etools-icon[slot='trigger'] {
+          padding: 4px 10px;
+          border-inline-start: 1px solid rgba(255, 255, 255, 0.12);
         }
         :host etools-button-group {
           padding: 0;
@@ -60,20 +63,15 @@ export class EtoolsActionButton extends LitElement {
         }
         :host .other-options {
           outline: none;
-          min-width: 150px;
-          text-align: left;
-          padding: 13px;
-          color: var(--gray-dark);
+          text-align: center;
+          padding: 6px;
           font-weight: 500;
+          color: var(--gray-mid);
           white-space: nowrap;
-        }
-        :host .other-options:hover {
-          background-color: rgba(0, 0, 0, 0.1);
         }
         :host .other-options .option-icon {
           width: 22px;
           height: 22px;
-          margin-right: 15px;
           margin-left: 5px;
           color: var(--gray-mid);
           vertical-align: top;
@@ -83,7 +81,6 @@ export class EtoolsActionButton extends LitElement {
           margin-top: 1px;
           padding: 0;
           display: inline-block;
-          height: 22px;
         }
       </style>
 
@@ -95,18 +92,18 @@ export class EtoolsActionButton extends LitElement {
       >
         <span class="main-action text">${this._setButtonText(this.actions?.[0])}</span>
 
-        <etools-button-group
+        <sl-dropdown
           dynamic-align
           .opened="${this.statusBtnMenuOpened}"
           class="option-button"
           ?hidden="${!this._showOtherActions(this.actions?.length)}"
         >
-          <etools-icon-button name="expand-more" slot="dropdown-trigger" class="option-button"></etools-icon-button>
+          <etools-icon name="expand-more" slot="trigger" class="option-button"></etools-icon>
 
-          <sl-dropdown placement="bottom-end" @click="${(event: MouseEvent) => event.stopImmediatePropagation()}">
+          <sl-menu placement="bottom-end" @click="${(event: MouseEvent) => event.stopImmediatePropagation()}">
             ${this.actions?.filter(this._filterActions.bind(this)).map(
               (item) => html`
-                <div
+                <sl-menu-item
                   class="other-options"
                   @click="${(e: any) => {
                     this._btnClicked(e);
@@ -116,11 +113,11 @@ export class EtoolsActionButton extends LitElement {
                 >
                   <etools-icon name="${this._setIcon(item, this.icons)}" class="option-icon"></etools-icon>
                   <span>${this._setButtonText(item)}</span>
-                </div>
+                </sl-menu-item>
               `
             )}
-          </sl-dropdown>
-        </etools-button-group>
+          </sl-menu>
+        </sl-dropdown>
       </etools-button>
     `;
   }

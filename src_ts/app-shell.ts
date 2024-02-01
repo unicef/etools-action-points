@@ -110,7 +110,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
           </app-header>
 
           <main role="main" id="page-container">
-            ${this.isActivePage(this.mainPage, 'action-points')
+            ${this.isActivePage(this.mainPage, 'action-points') && this.staticDataLoaded
               ? html` <action-points-page-main
                   id="action-points"
                   .staticDataLoaded="${this.staticDataLoaded}"
@@ -144,7 +144,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     this.addEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
     this.environment = _checkEnvironment();
-    // this.addEventListener('change-drawer-state', this.changeDrawerState);
     this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.shadowRoot
       ?.querySelector('#appHeadLayout')
@@ -156,7 +155,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
 
   public disconnectedCallback() {
     super.disconnectedCallback();
-    // this.removeEventListener('change-drawer-state', this.changeDrawerState);
     this.removeEventListener('404', () => this._pageNotFound());
     this.removeEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.removeEventListener('global-loading', (e: any) => this.handleLoading(e));
@@ -191,6 +189,10 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
   _staticDataLoaded(e: CustomEvent) {
     if (e && e.type === 'static-data-loaded') {
       this.staticDataLoaded = true;
+      fireEvent(this, 'global-loading', {
+        active: false,
+        loadingSource: 'initialisation'
+      });
     }
     if (this.staticDataLoaded) {
       this.user = this.getUserData();

@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit';
+import {html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
@@ -20,6 +20,7 @@ import {moduleStyles} from '../../../styles/module-styles';
 import {GenericObject} from '../../../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
+
 @customElement('action-point-details')
 export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
   @property({type: Array}) // notify: true
@@ -560,7 +561,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     document.addEventListener('static-data-loaded', () => this.setData());
     document.addEventListener('locations-loaded', () => this._updateLocations());
     this.addEventListener('reset-validation', ({detail}: any) => {
-      const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+      const elements: NodeList = this.shadowRoot!.querySelectorAll('.validate-input');
       elements.forEach((element: GenericObject) => {
         element.invalid = false;
         if (detail && detail.resetValues) {
@@ -573,7 +574,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     }
   }
 
-  updated(changedProperties) {
+  updated(changedProperties: any) {
     if (changedProperties.has('actionPoint')) {
       this._updateEditedItem(this.actionPoint);
     }
@@ -802,7 +803,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   validate() {
-    const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+    const elements: NodeList = this.shadowRoot!.querySelectorAll('.validate-input');
     let valid = true;
     elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
@@ -829,8 +830,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   _dueDateChanged(e: CustomEvent) {
-    const selDate = e.detail.date;
-    this.editedItem.due_date = selDate;
+    this.editedItem.due_date = e.detail.date;
   }
 
   isRequestInProcess(field: string, basePermissionPath: string, isRequestInProcess: boolean) {

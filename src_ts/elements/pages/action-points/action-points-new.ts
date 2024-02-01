@@ -11,6 +11,7 @@ import {mainPageStyles} from '../../styles/main-page-styles';
 import {ActionPointDetails} from './detail/action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
 
 /**
  * @customElement
@@ -95,11 +96,12 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
         fireEvent(this, 'toast', {
           text: ' Action Point successfully created.'
         });
-        this.route.path = `/detail/${data.id}`;
+        this.route.path = `action-points/detail/${data.id}`;
         fireEvent(this, 'global-loading', {
           loadingSource: 'ap-creation'
         });
         this.route = {...this.route};
+        EtoolsRouter.replaceAppLocation(this.route.path);
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);

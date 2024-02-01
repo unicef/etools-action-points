@@ -16,7 +16,6 @@ import {isJsonStrMatch} from '@unicef-polymer/etools-utils/dist/equality-compari
 import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
 import {EtoolsRedirectPath} from '@unicef-polymer/etools-utils/dist/enums/router.enum';
 import {EtoolsRouteDetails} from '@unicef-polymer/etools-utils/dist/interfaces/router.interfaces';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 export interface AppActionUpdateDrawerState extends Action<'UPDATE_DRAWER_STATE'> {
   opened: boolean;
@@ -52,7 +51,6 @@ const loadPageComponents = (routeDetails: EtoolsRouteDetails) => (_dispatch: any
   }
 
   let imported: Promise<any> | undefined;
-  const appShell = document.body.querySelector('app-shell');
   switch (routeDetails.routeName) {
     case 'action-points':
       imported = import(`../../elements/pages/action-points/action-points-page-main.js`);
@@ -64,18 +62,10 @@ const loadPageComponents = (routeDetails: EtoolsRouteDetails) => (_dispatch: any
   }
 
   if (imported) {
-    imported
-      .then()
-      .catch((err) => {
-        console.log(err);
-        EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-      })
-      .finally(() =>
-        fireEvent(appShell, 'global-loading', {
-          active: false,
-          loadingSource: 'initialisation'
-        })
-      );
+    imported.then().catch((err) => {
+      console.log(err);
+      EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
+    });
   }
 };
 

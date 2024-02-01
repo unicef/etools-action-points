@@ -108,8 +108,8 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
   }
 
   connectedCallback(): void {
-    super.connectedCallback();
     this._changeActionPointId = debounce(this._changeActionPointId.bind(this), 300);
+    super.connectedCallback();
 
     this._createHistoryDialog();
     this.addEventListener('action-activated', ({detail}: any) => {
