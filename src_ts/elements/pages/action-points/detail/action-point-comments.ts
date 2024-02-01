@@ -15,6 +15,7 @@ import {DateMixin} from '../../../mixins/date-mixin';
 import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
+import linkifyStr from 'linkify-string';
 
 @customElement('action-point-comments') // Actions Taken
 export class ActionPointComments extends PaginationMixin(
@@ -165,8 +166,7 @@ export class ActionPointComments extends PaginationMixin(
 
   checkLinks(comment) {
     comment = this.getStringValue(comment);
-    // @ts-ignore
-    comment = linkifyStr(comment); // eslint-disable-line
+    comment = linkifyStr(comment);
     comment = comment.trim();
     return comment;
   }

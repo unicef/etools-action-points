@@ -1,5 +1,5 @@
 import {LitElement, html, PropertyValues} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {customElement, property, query} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
 import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
@@ -101,9 +101,14 @@ export class ActionPointsList extends connect(store)(
   @property({type: String})
   rootPath = '';
 
+  @query('action-points-data') private actionPointsData!: LitElement;
   static get styles() {
     // language=CSS
     return [gridLayoutStylesLit];
+  }
+  constructor() {
+    super();
+    this._requestData = debounce(this._requestData.bind(this), 50);
   }
 
   render() {
@@ -382,11 +387,6 @@ export class ActionPointsList extends connect(store)(
     `;
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-    this._requestData = debounce(this._requestData.bind(this), 100);
-  }
-
   firstUpdated() {
     this.addEventListener('sort-changed', (e: any) => this._sort(e));
   }
@@ -570,8 +570,7 @@ export class ActionPointsList extends connect(store)(
   }
 
   _requestData() {
-    const actionPointData = this.shadowRoot?.querySelector('action-points-data');
-    actionPointData?.dispatchEvent(new CustomEvent('request-action-points'));
+    this.actionPointsData.dispatchEvent(new CustomEvent('request-action-points'));
   }
 
   _setExportLinks() {
