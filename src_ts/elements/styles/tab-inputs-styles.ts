@@ -8,49 +8,11 @@ export const tabInputsStyles = html`
       display: inline-block !important;
       visibility: hidden;
     }
-    .group:after {
-      visibility: hidden;
-      display: block;
-      font-size: 0;
-      content: ' ';
-      clear: both;
-      height: 0;
-    }
-    .input-container {
-      position: relative;
-      float: left;
-      margin-right: 0;
-      width: 33.33%;
-    }
-    .input-container:last-of-type {
-      margin-right: 0;
-    }
-    .input-container.input-container-s {
-      width: 30%;
-    }
-    .input-container.input-container-40 {
-      width: 35%;
-    }
-    .input-container.input-container-m {
-      width: 66.66%;
-    }
-    .input-container.input-container-45 {
-      width: 45%;
-    }
-    .input-container.input-container-ms {
-      width: 50%;
-    }
-    .input-container.input-container-l {
-      width: 100%;
-    }
-    .input-container.input-checkbox-container {
+    .row .input-checkbox-container {
       height: 62px;
       line-height: 62px;
-      padding: 12px 12px 0 12px;
+      padding-left: 27px;
       box-sizing: border-box;
-    }
-    .row-h {
-      margin-bottom: 8px;
     }
     .edit-icon {
       padding: 5px;

@@ -4,7 +4,7 @@ import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax/ajax-request';
 import EtoolsDialog from '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog.js';
-import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
@@ -24,15 +24,8 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
 
   @property({type: Boolean})
   requestInProcess = false;
-
   render() {
     return html`
-      ${tabInputsStyles}
-      <style>
-        .group {
-          padding: 16px 0px;
-        }
-      </style>
       <etools-dialog
         id="commentDialog"
         size="md"
@@ -44,8 +37,8 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
         ?show-spinner="${this.requestInProcess}"
         spinner-text="Save comment"
       >
-        <div class="row-h group">
-          <div class="input-container input-container-l">
+        <div class="row">
+          <div class="col-12">
             <etools-input
               class="validate-input ${this._setRequired('comments.comment', this.permissionPath)}"
               .value="${this.commentText}"
@@ -68,6 +61,10 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
     `;
   }
 
+  static get styles() {
+    // language=CSS
+    return [layoutStyles];
+  }
   open() {
     const dialog = this.shadowRoot!.querySelector<any>('#commentDialog') as EtoolsDialog;
     this.commentText = '';

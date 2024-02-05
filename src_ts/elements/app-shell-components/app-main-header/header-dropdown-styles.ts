@@ -56,7 +56,7 @@ export const headerDropdownStyles: TemplateResult = html`
 
     #menuButton {
       display: block;
-      color: var(--header-color);
+      color: var(--light-secondary-text-color);
     }
 
     @media (max-width: 1024px) {

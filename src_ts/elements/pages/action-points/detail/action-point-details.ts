@@ -17,6 +17,7 @@ import {pageLayoutStyles} from '../../../styles/page-layout-styles';
 import {sharedStyles} from '../../../styles/shared-styles';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {GenericObject} from '../../../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
@@ -96,7 +97,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
 
   @property({type: Object})
   datepickerModal: any;
-
   render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${tabInputsStyles} ${moduleStyles}
@@ -159,8 +159,8 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
       </style>
 
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
-        <div class="row-h group" ?hidden=${this.actionAllowed(this.permissionPath, 'create')}>
-          <div class="input-container">
+        <div class="row" ?hidden=${this.actionAllowed(this.permissionPath, 'create')}>
+          <div class="col-md-4 col-12">
             <etools-dropdown
               class="validate-input readonly
                 without-border ${this._setRequired('related_module', this.permissionPath)}"
@@ -180,7 +180,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <div class="reference-link">
               <label>${this.getLabel('related_object_str', this.permissionPath)}</label>
               <a
@@ -195,7 +195,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               >
             </div>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <etools-dropdown
               class="validate-input ${this._setRequired('assigned_by', this.permissionPath)}"
               .selected="${this.editedItem?.assigned_by}"
@@ -220,9 +220,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           </div>
         </div>
 
-        <div class="row-h group">
+        <div class="row">
           ${(this.showCategory(this.categories) &&
-            html` <div class="input-container input-container-l">
+            html` <div class="col-12">
               <!-- Category -->
               <etools-dropdown
                 class="validate-input ${this._setRequired('category', this.permissionPath)}"
@@ -247,10 +247,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>
             </div>`) ||
           ''}
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- Implementing Partner -->
             ${(!this.isReadOnly('partner', this.permissionPath) &&
               html`<etools-dropdown
@@ -294,7 +291,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-loading>
           </div>
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- PD/SSFA -->
             ${(!this.isReadOnly('intervention', this.permissionPath) &&
               html` <etools-dropdown
@@ -345,10 +342,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-loading>
           </div>
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- CP Output -->
             ${(!this.isReadOnly('cp_output', this.permissionPath) &&
               html` <etools-dropdown
@@ -384,8 +378,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ></etools-input>`) ||
             ''}
           </div>
-
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- Locations -->
             <etools-dropdown
               class="validate-input ${this._setRequired('location', this.permissionPath)}"
@@ -409,10 +402,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container input-container-l">
+          <div class="col-12">
             <!-- Description -->
             <etools-textarea
               class="validate-input ${this._setRequired('description', this.permissionPath)}"
@@ -431,10 +421,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-textarea>
           </div>
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Assigned To -->
             <etools-dropdown
               class="validate-input ${this._setRequired('assigned_to', this.permissionPath)}"
@@ -458,7 +445,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Section -->
             <etools-dropdown
               class="validate-input ${this._setRequired('section', this.permissionPath)}"
@@ -482,7 +469,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Office -->
             <etools-dropdown
               class="validate-input ${this._setRequired('office', this.permissionPath)}"
@@ -507,10 +494,8 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-        </div>
 
-        <div class="row-h group">
-          <div class="input-container input-checkbox-container">
+          <div class="col-md-4 col-12 input-checkbox-container">
             <!-- Priority -->
             <etools-checkbox
               ?checked="${this.editedItem?.high_priority}"
@@ -524,7 +509,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ${this.getLabel('high_priority', this.permissionPath)}</etools-checkbox
             >
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"
@@ -556,6 +541,10 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     `;
   }
 
+  static get styles() {
+    // language=CSS
+    return [layoutStyles];
+  }
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener('static-data-loaded', () => this.setData());

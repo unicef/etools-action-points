@@ -20,7 +20,7 @@ import './routing/routes.js';
 import {basePath} from './config/config';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import '@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {setBasePath} from '@shoelace-style/shoelace/dist/utilities/base-path.js';
 import {initializeIcons} from '@unicef-polymer/etools-unicef/src/etools-icons/etools-icons';
@@ -38,7 +38,7 @@ initializeIcons();
 @customElement('app-shell')
 export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(AppMenuMixin(LitElement)))) {
   static get styles() {
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
 
   @property({type: Object})

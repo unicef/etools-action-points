@@ -21,7 +21,7 @@ import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
 import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query.js';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {EtoolsFilter} from '@unicef-polymer/etools-unicef/src/etools-filters/etools-filters';
 import {
   updateFilterSelectionOptions,
@@ -104,7 +104,7 @@ export class ActionPointsList extends connect(store)(
   @query('action-points-data') private actionPointsData!: LitElement;
   static get styles() {
     // language=CSS
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
   constructor() {
     super();
@@ -224,7 +224,7 @@ export class ActionPointsList extends connect(store)(
         </etools-data-table-header>
 
         <etools-data-table-row no-collapse ?hidden="${this.actionPoints?.length}">
-          <div slot="row-data" class="layout-horizontal">
+          <div slot="row-data" class="row">
             <div class="col-data col-1">-</div>
             <div class="col-data col-2">-</div>
             <div class="col-data col-2">-</div>
@@ -240,7 +240,7 @@ export class ActionPointsList extends connect(store)(
         ${this.actionPoints?.map(
           (entry) => html`
             <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
-              <div slot="row-data">
+              <div slot="row-data" class="row">
                 <div
                   class="col-data col-1"
                   data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
@@ -307,15 +307,15 @@ export class ActionPointsList extends connect(store)(
                   <span class="truncate">${this._getPriorityValue(entry.high_priority)}</span>
                 </div>
               </div>
-              <div slot="row-data-details">
-                <div class="row-details-content flex-c">
+              <div slot="row-data-details" class="row">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
                   <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
                   <sl-tooltip fit-to-visible-bounds offset="0" ?hidden="${!this._showTooltip(entry.description)}">
                     ${this.getStringValue(entry.description)}
                   </sl-tooltip>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
@@ -324,7 +324,7 @@ export class ActionPointsList extends connect(store)(
                     >
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
@@ -333,7 +333,7 @@ export class ActionPointsList extends connect(store)(
                     >
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('related_module', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">
@@ -347,7 +347,7 @@ export class ActionPointsList extends connect(store)(
                     </sl-tooltip>
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
                   <div>
                     <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
@@ -356,7 +356,7 @@ export class ActionPointsList extends connect(store)(
                     >
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div ?hidden="${!entry.date_of_completion?.length}">
                     <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
                     <div>

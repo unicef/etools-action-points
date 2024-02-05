@@ -13,7 +13,7 @@ import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {basePath} from '../../../config/config';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {headerDropdownStyles} from './header-dropdown-styles';
 
@@ -41,7 +41,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
   refreshInProgress = false;
 
   static get styles() {
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
 
   public render() {
@@ -58,7 +58,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         }
 
         #pageRefresh {
-          color: #bcc1c6;
+          color: var(--light-secondary-text-color);
           margin-left: 8px;
         }
 

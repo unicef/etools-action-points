@@ -9,7 +9,7 @@ import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {sharedStyles} from '../styles/shared-styles';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
@@ -43,7 +43,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   lowResolutionLayout = false;
 
   static get styles() {
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
 
   render() {
@@ -129,7 +129,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
       ></etools-media-query>
       <div class="header-wrapper">
         <div class="side-heading layout-horizontal align-items-center around-justified">
-          <span class="flex-c title">${this._setTitle(this.pageData, this.pageTitle)}</span>
+          <span class="title">${this._setTitle(this.pageData, this.pageTitle)}</span>
 
           <div class="layout-horizontal align-items-center">
             <div class="export-buttons" ?hidden="${!this.exportLinks?.length}">
