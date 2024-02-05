@@ -4,7 +4,7 @@ import '@unicef-polymer/etools-unicef/src/etools-collapse/etools-collapse';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import {moduleStyles} from '../styles/module-styles';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('side-bar-item')
@@ -28,7 +28,7 @@ export class SideBarItem extends LitElement {
   opened = false;
 
   static get styles() {
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
 
   render() {

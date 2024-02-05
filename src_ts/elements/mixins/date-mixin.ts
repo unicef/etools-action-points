@@ -15,7 +15,7 @@ export function DateMixin<T extends Constructor<LitElement>>(superClass: T) {
       format = this._getFormat(format);
       const date: any = this._getDayjsDate(dateString);
       const ph = placeholder ? placeholder : '';
-      return date ? date.utc().format(format) : ph;
+      return date ? date.format(format) : ph;
     }
 
     public formatDateInLocal(dateString: string, format: string) {
