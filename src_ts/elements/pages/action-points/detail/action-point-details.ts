@@ -500,9 +500,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <etools-checkbox
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
-              @sl-changed=${({detail}: any) => {
+              @sl-change=${(e: any) => {
                 if (this.editedItem && Object.keys(this.editedItem).length) {
-                  this.updateField('high_priority', detail.value);
+                  this.updateField('high_priority', e.target.checked);
                 }
               }}
             >
