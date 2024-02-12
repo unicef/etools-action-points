@@ -17,7 +17,7 @@ export class SupportBtn extends MatomoMixin(LitElement) {
         a {
           color: inherit;
           text-decoration: none;
-          font-size: 16px;
+          font-size: var(--etools-font-size-16, 16px);
         }
         etools-icon {
           margin-right: 4px;

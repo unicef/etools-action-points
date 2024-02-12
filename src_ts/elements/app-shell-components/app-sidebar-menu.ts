@@ -35,7 +35,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           background-color: var(--module-color);
           color: white;
           min-height: 60px;
-          font-size: 14px;
+          font-size: var(--etools-font-size-14, 14px);
           line-height: 18px;
           text-transform: uppercase;
         }
@@ -72,7 +72,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           height: 48px;
           line-height: 49px;
           text-align: center;
-          font-size: 13px;
+          font-size: var(--etools-font-size-13, 13px);
           font-weight: 500;
         }
 

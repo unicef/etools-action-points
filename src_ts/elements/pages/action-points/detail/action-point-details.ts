@@ -117,7 +117,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           padding: 19px 12px 17px;
           opacity: 0.8;
           text-align: right;
-          font-size: 12px;
+          font-size: var(--etools-font-size-12, 12px);
           color: var(--list-secondary-text-color, #757575);
         }
 
@@ -133,7 +133,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         }
 
         .reference-link > label {
-          font-size: 16px;
+          font-size: var(--etools-font-size-16, 16px);
           width: 133%;
           transform: scale(0.75);
           transform-origin: left top;
@@ -149,7 +149,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         }
 
         .reference-link > span {
-          font-size: 16px;
+          font-size: var(--etools-font-size-16, 16px);
           line-height: 16px;
           color: var(var(--gray-20));
         }

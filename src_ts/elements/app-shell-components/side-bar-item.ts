@@ -37,7 +37,7 @@ export class SideBarItem extends LitElement {
       <style>
         :host {
           display: block;
-          font-size: 14px;
+          font-size: var(--etools-font-size-14, 14px);
           font-weight: 500;
         }
 
@@ -58,7 +58,7 @@ export class SideBarItem extends LitElement {
         }
 
         .selected:not([nested-nav])#main > * {
-          color: #0b67e9;
+          color: var(--primary-color);
         }
 
         :host(.lighter-item:not([nested-nav])) #main > * {

@@ -104,7 +104,7 @@ export const headerDropdownStyles: TemplateResult = html`
         margin: 0 8px 0 4px;
       }
       .envWarning {
-        font-size: 10px;
+        font-size: var(--etools-font-size-10, 10px);
         line-height: 12px;
         white-space: nowrap;
         margin-left: 2px;
