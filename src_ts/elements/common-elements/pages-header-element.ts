@@ -80,7 +80,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
         }
 
         .side-heading span.title {
-          font-size: 24px;
+          font-size: var(--etools-font-size-24, 24px);
           width: 100%;
           white-space: nowrap;
           overflow: hidden;
@@ -90,7 +90,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
         .side-heading .grey-buttons {
           color: var(--gray-mid);
           font-weight: 500;
-          font-size: 14px;
+          font-size: var(--etools-font-size-14, 14px);
         }
 
         .side-heading .grey-buttons etools-icon {

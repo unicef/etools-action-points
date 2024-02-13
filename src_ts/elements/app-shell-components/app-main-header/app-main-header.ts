@@ -4,6 +4,7 @@ import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-toolbar';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import '@unicef-polymer/etools-unicef/src/etools-app-selector/etools-app-selector';
 import '@unicef-polymer/etools-unicef/src/etools-profile-dropdown/etools-profile-dropdown';
+import '@unicef-polymer/etools-unicef/src/etools-accesibility/etools-accesibility';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
@@ -69,7 +70,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
 
         .titlebar {
           flex: 1;
-          font-size: 28px;
+          font-size: var(--etools-font-size-28, 28px);
           font-weight: 300;
         }
 
@@ -84,7 +85,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         .envWarning {
           color: var(--nonprod-text-warn-color);
           font-weight: 700;
-          font-size: 18px;
+          font-size: var(--etools-font-size-18, 18px);
         }
       </style>
 
@@ -131,6 +132,8 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
               ?disabled="${this.refreshInProgress}"
             >
             </etools-icon-button>
+
+            <etools-accesibility></etools-accesibility>
           </div>
         </div>
       </app-toolbar>

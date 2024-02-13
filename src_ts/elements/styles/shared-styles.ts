@@ -5,10 +5,10 @@ import {html} from 'lit';
 export const sharedStyles = html`
   <style>
     * {
-      font-family: 'Roboto', 'Noto', sans-serif;
+      font-family: var(--sl-font-sans);
     }
     h1 {
-      font-size: 25px;
+      font-size: var(--etools-font-size-24, 24px);
       margin: 16px 0;
       color: var(--primary-text-color);
     }

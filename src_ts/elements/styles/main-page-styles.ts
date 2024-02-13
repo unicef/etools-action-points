@@ -47,7 +47,7 @@ export const mainPageStyles = html`
       line-height: 48px;
       background-color: var(--gray-08);
       color: var(--gray-28);
-      font-size: 14px;
+      font-size: var(--etools-font-size-14, 14px);
       font-weight: 600;
     }
     etools-content-panel.cancellation-tab::part(ecp-header-title) {
@@ -74,14 +74,14 @@ export const mainPageStyles = html`
     }
     etools-content-panel.cancellation-tab .cancellation-title {
       font-weight: 500;
-      font-size: 19px;
+      font-size: var(--etools-font-size-18, 18px);
       text-transform: uppercase;
       color: var(--module-warning);
       margin: 15px 0 26px;
       padding-left: 80px;
     }
     etools-content-panel.cancellation-tab .cancellation-text {
-      font-size: 17px;
+      font-size: var(--etools-font-size-16, 16px);
       white-space: pre-wrap;
       color: var(--gray-darkest);
       padding-left: 80px;

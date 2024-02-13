@@ -51,7 +51,7 @@ export const tabInputsStyles = html`
         transform: none;
         top: -21px;
         width: 100%;
-        font-size: 12px;
+        font-size: var(--etools-font-size-12, 12px);
       }
     }
 
@@ -179,11 +179,11 @@ export const tabInputsStyles = html`
       background-color: var(--gray-light);
       text-align: center;
       color: #fff;
-      font-size: 13px;
+      font-size: var(--etools-font-size-13, 13px);
     }
     etools-checkable-input {
       --etools-checkable-input-label: {
-        font-size: 16px;
+        font-size: var(--etools-font-size-16, 16px);
         font-weight: 400;
         line-height: 21px;
       }

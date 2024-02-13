@@ -42,7 +42,7 @@ export const navMenuStyles = css`
     color: white;
     min-height: 60px;
     padding: 0 16px;
-    font-size: 14px;
+    font-size: var(--etools-font-size-14, 14px);
     line-height: 18px;
     text-transform: uppercase;
   }
@@ -90,7 +90,7 @@ export const navMenuStyles = css`
   }
 
   #menu-header-top-icon {
-    --etools-icon-font-size: 36px;
+    --etools-icon-font-size: var(--etools-font-size-36, 36px);
   }
 
   .divider {
@@ -110,7 +110,7 @@ export const navMenuStyles = css`
 
   .nav-menu-item {
     width: 100%;
-    font-size: 14px;
+    font-size: var(--etools-font-size-14, 14px);
     font-weight: 500;
     position: relative;
     height: 48px;
@@ -121,7 +121,7 @@ export const navMenuStyles = css`
 
   .nav-menu-item.section-title {
     color: var(--primary-text-color);
-    font-size: 13px;
+    font-size: var(--etools-font-size-13, 13px);
     font-weight: 500;
     text-transform: none;
     border-top: 1px solid var(--dark-divider-color);

@@ -39,12 +39,12 @@ export class ActionPointComments extends PaginationMixin(
         }
 
         .comment-item__user {
-          font-size: 13px;
+          font-size: var(--etools-font-size-13, 13px);
           margin-right: 5px;
           font-weight: bold;
         }
         .comment-item__date {
-          font-size: 11px;
+          font-size: var(--etools-font-size-11, 11px);
           color: var(--list-secondary-text-color, #757575);
         }
 
