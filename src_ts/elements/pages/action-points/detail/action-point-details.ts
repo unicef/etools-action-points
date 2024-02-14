@@ -652,7 +652,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     if (!verification_date) {
       return '';
     }
-    const verificationText = is_adequate ? 'Ok' : 'Not Adequate';
+    const verificationText = is_adequate ? 'OK' : 'Not Adequate';
     return `${verificationText} (${this.formatDateInLocal(verification_date, 'D MMM YYYY h:mm A')})`;
   }
 
