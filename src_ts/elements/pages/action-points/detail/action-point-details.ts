@@ -28,7 +28,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   partners: any[] = [];
 
   @property({type: String}) // notify: true
-  permissionPath: string;
+  permissionPath!: string;
 
   @property({type: Array})
   locations: any[] = [];
@@ -40,16 +40,16 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   editedItem: GenericObject = {};
 
   @property({type: Array}) // notify: true
-  cpOutputs: any[];
+  cpOutputs!: any[];
 
   @property({type: Array}) // notify: true
   interventions: any[] = [];
 
   @property({type: Array}) // notify: true
-  modules: any[];
+  modules!: any[];
 
   @property({type: Array}) // notify: true
-  unicefUsers: any[];
+  unicefUsers!: any[];
 
   private _apUnicefUsers!: any[];
   @property({type: Array})
@@ -63,13 +63,13 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   @property({type: Array}) // notify: true
-  offices: any[];
+  offices!: any[];
 
   @property({type: Array}) // notify: true
-  sectionsCovered: any[];
+  sectionsCovered!: any[];
 
   @property({type: Object}) // notify: true
-  originalActionPoint: GenericObject;
+  originalActionPoint!: GenericObject;
 
   @property({type: Object})
   interventionsData: GenericObject = {};
@@ -81,13 +81,13 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   dataIsSet = false;
 
   @property({type: Boolean})
-  partnerRequestInProcess: boolean;
+  partnerRequestInProcess!: boolean;
 
   @property({type: Number})
-  lastPartnerId: number;
+  lastPartnerId!: number;
 
   @property({type: Array})
-  categories: any[];
+  categories!: any[];
 
   @property({type: Object})
   partner: any;
@@ -501,9 +501,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
               @sl-change=${(e: any) => {
-                if (this.editedItem && Object.keys(this.editedItem).length) {
-                  this.updateField('high_priority', e.target.checked);
-                }
+                this.updateField('high_priority', e.target.checked);
               }}
             >
               ${this.getLabel('high_priority', this.permissionPath)}</etools-checkbox
@@ -530,6 +528,44 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               @date-has-changed="${this._dueDateChanged}"
             >
             </datepicker-lite>
+          </div>
+
+          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.potential_verifier?.id}">
+            <!-- Selected Verifier -->
+            <etools-dropdown
+              class="validate-input ${this._setRequired('potential_verifier', this.permissionPath)}"
+              .selected="${this.editedItem?.potential_verifier?.id}"
+              label="${this.getLabel('potential_verifier', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('potential_verifier', this.permissionPath, true)}"
+              .options="${this.unicefUsers}"
+              option-label="name"
+              option-value="id"
+              readonly
+              allow-outside-scroll
+              dynamic-align
+            >
+            </etools-dropdown>
+          </div>
+
+          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.verified_by}">
+            <!-- Verifier -->
+            <etools-input
+              label="${this.getLabel('verified_by', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('verified_by', this.permissionPath, true)}"
+              value="${this.getStringValueOrEmpty(this.editedItem?.verified_by?.name)}"
+              readonly
+            ></etools-input>
+          </div>
+          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.verified_by}">
+            <!-- Verification -->
+            <etools-input
+              label="Verification result"
+              value="${this.getVerificationWithTimestamp(
+                this.editedItem?.is_adequate,
+                this.editedItem?.date_of_verification
+              )}"
+              readonly
+            ></etools-input>
           </div>
         </div>
         <div class="last-modify" ?hidden="${!this.editedItem.history?.[0]}">
@@ -612,7 +648,15 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.unicefUsers = users;
   }
 
-  addUsersNoLongerAssignedToCurrentCountry(availableUsers, savedUsers) {
+  getVerificationWithTimestamp(is_adequate: boolean, verification_date: string) {
+    if (!verification_date) {
+      return '';
+    }
+    const verificationText = is_adequate ? 'Ok' : 'Not Adequate';
+    return `${verificationText} (${this.formatDateInLocal(verification_date, 'D MMM YYYY h:mm A')})`;
+  }
+
+  addUsersNoLongerAssignedToCurrentCountry(availableUsers: any[], savedUsers: any[]) {
     if (!(savedUsers && savedUsers.length > 0 && availableUsers && availableUsers.length > 0)) {
       return false;
     }

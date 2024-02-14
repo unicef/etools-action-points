@@ -7,7 +7,7 @@ import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-pa
 import {getData} from '../mixins/static-data-mixin';
 import './etools-action-buttons';
 import {etoolsStatusStyles} from '../styles/status-styles';
-import {noActionsAllowed, getActions} from '../mixins/permission-controller';
+import {noActionsAllowed, getActions, hasVerifyAction} from '../mixins/permission-controller';
 
 @customElement('status-element')
 export class StatusElement extends LitElement {
@@ -103,6 +103,9 @@ export class StatusElement extends LitElement {
   }
 
   getActions(path: string) {
+    if (this.actionPoint?.status === 'completed' && hasVerifyAction(path)) {
+      return ['verify'];
+    }
     return getActions(path);
   }
 }

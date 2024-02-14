@@ -143,6 +143,14 @@ export const isReadOnly = (path: string) => {
   return !collectionExists(path, 'POST') && !collectionExists(path, 'PUT');
 };
 
+export const hasVerifyAction = (path: string) => {
+  const putCollection = _getCollection(`${path}.PUT`, '');
+  if (putCollection) {
+    return putCollection['is_adequate'];
+  }
+  return false;
+};
+
 export const isRequired = (path: string) => {
   return getFieldAttribute(path, 'required', 'POST') || getFieldAttribute(path, 'required', 'PUT');
 };
