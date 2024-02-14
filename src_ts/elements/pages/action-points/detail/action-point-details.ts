@@ -559,7 +559,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           <div class="col-md-4 col-12" ?hidden="${!this.editedItem.verified_by}">
             <!-- Verification -->
             <etools-input
-              label="Verification result"
+              label="Verification Result"
               value="${this.getVerificationWithTimestamp(
                 this.editedItem?.is_adequate,
                 this.editedItem?.date_of_verification
