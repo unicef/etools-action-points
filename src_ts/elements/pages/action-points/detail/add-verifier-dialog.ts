@@ -18,10 +18,18 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
 
   render() {
     return html`
+      <style>
+        .info {
+          background-color: #f9f9f9;
+          color: var(--primary-color);
+          padding: 12px;
+          font-weight: 500;
+        }
+      </style>
       <etools-dialog
         id="commentDialog"
         size="md"
-        dialog-title="Add Potential Verifier"
+        dialog-title="Person to verify required"
         keep-dialog-open
         ok-btn-text="SAVE"
         @confirm-btn-clicked="${this.addVerifier}"
@@ -30,10 +38,17 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
       >
         <div class="row">
           <div class="col-12">
+            <p class="info">
+              Due to the fact that this action point is being closed by the same person that raised it, the following
+              selected verifier will be notified to check that the information is correct and the actions taken were
+              adequate in order to close.
+            </p>
+          </div>
+          <div class="col-12">
             <etools-dropdown
               class="validate-input ${this._setRequired('potential_verifier', this.permissionPath)}"
               .selected="${this.verifierId}"
-              label="${this.getLabel('potential_verifier', this.permissionPath)}"
+              label="Select Verifier"
               placeholder="${this.getPlaceholderText('potential_verifier', this.permissionPath, true)}"
               .options="${this.unicefUsers}"
               option-label="name"
@@ -41,7 +56,7 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
               required
               @focus=${this._resetFieldError}
               @click=${this._resetFieldError}
-              error-message="Potential verifier is required"
+              error-message="Verifier is required"
               allow-outside-scroll
               dynamic-align
               trigger-value-change-event

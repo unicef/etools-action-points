@@ -535,7 +535,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             <etools-dropdown
               class="validate-input ${this._setRequired('potential_verifier', this.permissionPath)}"
               .selected="${this.editedItem?.potential_verifier?.id}"
-              label="${this.getLabel('potential_verifier', this.permissionPath)}"
+              label="Selected Verifier"
               placeholder="${this.getPlaceholderText('potential_verifier', this.permissionPath, true)}"
               .options="${this.unicefUsers}"
               option-label="name"
@@ -652,7 +652,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     if (!verification_date) {
       return '';
     }
-    const verificationText = is_adequate ? 'OK' : 'Not Adequate';
+    const verificationText = is_adequate ? 'Adequate' : 'Not Adequate';
     return `${verificationText} (${this.formatDateInLocal(verification_date, 'D MMM YYYY h:mm A')})`;
   }
 

@@ -22,11 +22,29 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
           color: #ea4022;
           font-size: 12px;
         }
+        .col-sm-6, col-12 {
+          background-color: #f9f9f9;
+          text-align: center;
+          border: solid 12px #ffffff;
+          padding: 12px 24px;
+        }
+        sl-radio::part(base) {
+          --sl-input-label-color: var(--primary-color);
+          font-weight: 500;
+          margin-top: 10px;
+          margin-bottom: 6px;
+        }
+        etools-radio-group::part(form-control-input) {
+          width: 100%;
+          margin-left: -6px;
+          display: flex;
+          flex-wrap: wrap;
+        }
       </style>
       <etools-dialog
         id="commentDialog"
         size="md"
-        dialog-title="Add Verification result"
+        dialog-title="Verification result"
         keep-dialog-open
         ok-btn-text="SAVE"
         @confirm-btn-clicked="${this.addVerifier}"
@@ -35,20 +53,33 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
       >
         <div class="row">
           <div class="col-12">
-            <label class="label">Verification result</label>
-            <etools-radio-group
-              required
-              .value="${this.isAdequate}"
-              @sl-change="${(e: any) => {
-                this.isAdequate = e.target.value;
-              }}"
-            >
-              <sl-radio value="true">OK</sl-radio>
-              <sl-radio value="false">Not Adequate</sl-radio>
-            </etools-radio-group>
-            <label class="error" ?hidden="${!this.showError}">Please select verification result</label>
+            <label class="label">Select Verification result</label>
           </div>
         </div>
+        <etools-radio-group
+          required
+          .value="${this.isAdequate}"
+          @sl-change="${(e: any) => {
+            this.isAdequate = e.target.value;
+          }}"
+        >          
+            <div class="col-sm-6 col-12 layout-vertical">
+              <div>                
+              </div>
+              <div>
+                <sl-radio value="true">Adequate</sl-radio>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 layout-vertical">
+              <div>
+              </div>
+              <div>
+                <sl-radio value="false">Not Adequate</sl-radio>
+              </div>
+            </div>
+            <label class="error" ?hidden="${!this.showError}">Verification result is required</label>
+          
+        </etools-radio-group>
       </etools-dialog>
     `;
   }
