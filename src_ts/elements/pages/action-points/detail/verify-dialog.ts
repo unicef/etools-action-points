@@ -22,7 +22,8 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
           color: #ea4022;
           font-size: 12px;
         }
-        .col-sm-6, col-12 {
+        .col-sm-6,
+        col-12 {
           background-color: #f9f9f9;
           text-align: center;
           border: solid 12px #ffffff;
@@ -62,23 +63,20 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
           @sl-change="${(e: any) => {
             this.isAdequate = e.target.value;
           }}"
-        >          
-            <div class="col-sm-6 col-12 layout-vertical">
-              <div>                
-              </div>
-              <div>
-                <sl-radio value="true">Adequate</sl-radio>
-              </div>
+        >
+          <div class="col-sm-6 col-12 layout-vertical">
+            <div></div>
+            <div>
+              <sl-radio value="true">Adequate</sl-radio>
             </div>
-            <div class="col-sm-6 col-12 layout-vertical">
-              <div>
-              </div>
-              <div>
-                <sl-radio value="false">Not Adequate</sl-radio>
-              </div>
+          </div>
+          <div class="col-sm-6 col-12 layout-vertical">
+            <div></div>
+            <div>
+              <sl-radio value="false">Not Adequate</sl-radio>
             </div>
-            <label class="error" ?hidden="${!this.showError}">Verification result is required</label>
-          
+          </div>
+          <label class="error" ?hidden="${!this.showError}">Verification result is required</label>
         </etools-radio-group>
       </etools-dialog>
     `;
