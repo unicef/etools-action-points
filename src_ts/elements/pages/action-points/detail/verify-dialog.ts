@@ -23,11 +23,13 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
           font-size: 12px;
         }
         .col-sm-6,
-        col-12 {
+        .col-12 {
           background-color: #f9f9f9;
-          text-align: center;
           border: solid 12px #ffffff;
           padding: 12px 24px;
+        }
+        .centered {
+          margin: 0 auto;
         }
         sl-radio::part(base) {
           --sl-input-label-color: var(--primary-color);
@@ -45,18 +47,13 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
       <etools-dialog
         id="commentDialog"
         size="md"
-        dialog-title="Verification result"
+        dialog-title="Select Verification result"
         keep-dialog-open
         ok-btn-text="SAVE"
         @confirm-btn-clicked="${this.addVerifier}"
         @close="${this.onClose}"
         spinner-text="Saving..."
       >
-        <div class="row">
-          <div class="col-12">
-            <label class="label">Select Verification result</label>
-          </div>
-        </div>
         <etools-radio-group
           required
           .value="${this.isAdequate}"
@@ -65,14 +62,19 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
           }}"
         >
           <div class="col-sm-6 col-12 layout-vertical">
-            <div></div>
             <div>
+              I confirm that the implementation of this Action Point is evidenced by supporting documents and/or
+              satisfactory justification.
+            </div>
+            <div class="centered">
               <sl-radio value="true">Adequate</sl-radio>
             </div>
           </div>
           <div class="col-sm-6 col-12 layout-vertical">
-            <div></div>
             <div>
+              The implementation of AP is not evidenced by supporting documents and/or satisfactory justification.
+            </div>
+            <div class="centered">
               <sl-radio value="false">Not Adequate</sl-radio>
             </div>
           </div>
