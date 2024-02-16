@@ -119,6 +119,9 @@ export class ActionPointsList extends connect(store)(
           position: relative;
           display: block;
         }
+        .no-data {
+          justify-content: center;
+        }
         section {
           display: block;
           margin-top: 25px;
@@ -128,9 +131,6 @@ export class ActionPointsList extends connect(store)(
         }
         etools-data-table-row {
           --row-width_-_width: 100%;
-        }
-        *[slot='row-data'] {
-          max-width: calc(100% - 56px);
         }
         section.page-content.filters {
           padding: 8px 24px;
@@ -225,15 +225,7 @@ export class ActionPointsList extends connect(store)(
 
         <etools-data-table-row no-collapse ?hidden="${this.actionPoints?.length}">
           <div slot="row-data" class="row">
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-2">-</div>
-            <div class="col-data col-2">-</div>
-            <div class="col-data col-2">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1"></div>
+            <div class="col-data col-12 no-data">No records found.</div>
           </div>
         </etools-data-table-row>
 
