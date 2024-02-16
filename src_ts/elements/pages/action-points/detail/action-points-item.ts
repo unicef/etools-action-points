@@ -13,6 +13,8 @@ import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
 import '../../../common-elements/status-element';
+import './add-verifier-dialog';
+import './verify-dialog';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles';
 import {sharedStyles} from '../../../styles/shared-styles';
 import {mainPageStyles} from '../../../styles/main-page-styles';
@@ -24,9 +26,14 @@ import {connect} from 'pwa-helpers';
 import {RootState, store} from '../../../../redux/store';
 import get from 'lodash-es/get';
 import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
+import {UserControllerMixin} from '../../../mixins/user-controller';
+import {GenericObject} from '@unicef-polymer/etools-types';
+import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
 
 @customElement('action-points-item')
-export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement)))) {
+export class ActionPointsItem extends connect(store)(
+  ErrorHandlerMixin(InputAttrsMixin(DateMixin(UserControllerMixin(LitElement))))
+) {
   @property({type: Object}) // , notify: true
   route: any;
 
@@ -47,6 +54,9 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
 
   @property({type: Object})
   historyDialog: any;
+
+  @property({type: Object})
+  profile!: GenericObject;
 
   @property({type: Number})
   actionPointId!: number;
@@ -111,6 +121,8 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
     this._changeActionPointId = debounce(this._changeActionPointId.bind(this), 300);
     super.connectedCallback();
 
+    this.profile = this.getUserData();
+
     this._createHistoryDialog();
     this.addEventListener('action-activated', ({detail}: any) => {
       if (detail.type === 'save') {
@@ -122,13 +134,48 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
             })
             .catch((err: any) => console.log(err));
       } else if (detail.type === 'complete') {
-        const request = this._complete();
-        request &&
-          request
-            .then(() => {
-              this._loadOptions(this.actionPointId);
-            })
-            .catch((err: any) => console.log(err));
+        this._processCompleteAction();
+      } else if (detail.type === 'verify') {
+        this._processVerifyAction();
+      }
+    });
+  }
+
+  async _processCompleteAction() {
+    let confirmed = true;
+    let verifierId = null;
+    if (this.actionPoint.high_priority && String(this.profile.user) === String(this.actionPoint.author)) {
+      const resp = await openDialog({
+        dialog: 'add-verifier-dialog',
+        dialogData: {
+          permissionPath: this.permissionPath
+        }
+      }).then(({confirmed, response}) => {
+        return {confirmed: confirmed, verifierId: response};
+      });
+      ({confirmed, verifierId} = resp);
+    }
+
+    if (!confirmed) {
+      return;
+    }
+
+    this._complete(verifierId)
+      .then(() => {
+        this._loadOptions(this.actionPointId);
+      })
+      .catch((err: any) => console.log(err));
+  }
+
+  async _processVerifyAction() {
+    openDialog({
+      dialog: 'verify-dialog',
+      dialogData: {}
+    }).then(({confirmed, response}) => {
+      if (confirmed) {
+        this._makeUpdateRequest({is_adequate: response}).then(() => {
+          this._loadOptions(this.actionPointId);
+        });
       }
     });
   }
@@ -258,7 +305,7 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
     });
   }
 
-  _complete() {
+  _complete(verifierId?: number) {
     const endpoint = getEndpoint('actionPointComplete', this.actionPointId);
 
     fireEvent(this, 'global-loading', {
@@ -266,11 +313,15 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
       active: true,
       message: 'Completing Action Point...'
     });
-
-    return sendRequest({
+    const options = {
       method: 'POST',
       endpoint
-    })
+    };
+    if (verifierId && Number(verifierId) > 0) {
+      Object.assign(options, {body: {potential_verifier: verifierId}});
+    }
+
+    return sendRequest(options)
       .then((data: any) => {
         fireEvent(this, 'toast', {
           text: ' Action Point successfully completed.'
@@ -309,6 +360,10 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
 
     const editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     const data = this._getChangedData(this.actionPoint, editedData);
+    this._makeUpdateRequest(data);
+  }
+
+  _makeUpdateRequest(updateData: any) {
     const endpoint = getEndpoint('actionPoint', this.actionPointId);
 
     fireEvent(this, 'global-loading', {
@@ -320,7 +375,7 @@ export class ActionPointsItem extends connect(store)(ErrorHandlerMixin(InputAttr
     return sendRequest({
       method: 'PATCH',
       endpoint,
-      body: data
+      body: updateData
     })
       .then((data: any) => {
         fireEvent(this, 'toast', {

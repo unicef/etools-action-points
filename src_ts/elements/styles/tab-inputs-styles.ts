@@ -193,7 +193,7 @@ export const tabInputsStyles = html`
       box-sizing: border-box;
     }
     etools-content-panel:not([list])::part(ecp-content) {
-      padding: 8px 12px;
+      padding: 16px 12px;
     }
     etools-currency-amount-input {
       --etools-currency-container-input: {
