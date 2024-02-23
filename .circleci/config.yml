@@ -80,5 +80,3 @@ workflows:
                 - master
                 - staging
                 - develop
-                - 28656_detail_page
-                - shoelace-migration
