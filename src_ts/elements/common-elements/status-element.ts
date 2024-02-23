@@ -1,14 +1,13 @@
-import {LitElement, property, html, customElement} from 'lit-element';
-import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/iron-icons/iron-icons.js';
-import '@polymer/iron-icons/av-icons.js';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-menu-button/paper-menu-button.js';
-import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
+import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
 import {getData} from '../mixins/static-data-mixin';
 import './etools-action-buttons';
 import {etoolsStatusStyles} from '../styles/status-styles';
-import {noActionsAllowed, getActions} from '../mixins/permission-controller';
+import {noActionsAllowed, getActions, hasVerifyAction} from '../mixins/permission-controller';
 
 @customElement('status-element')
 export class StatusElement extends LitElement {
@@ -24,8 +23,8 @@ export class StatusElement extends LitElement {
                 <div class="status-icon">
                   <span class="icon-wrapper">
                     <span class="status-nr">${index + 1}</span>
-                    <iron-icon icon="done"></iron-icon>
-                    <iron-icon icon="cancel"></iron-icon>
+                    <etools-icon name="done"></etools-icon>
+                    <etools-icon name="cancel"></etools-icon>
                   </span>
                 </div>
 
@@ -60,13 +59,13 @@ export class StatusElement extends LitElement {
   actionPoint: any;
 
   @property({type: Array})
-  actions: any[];
+  actions: any[] = [];
 
   @property({type: String})
-  permissionPath: string;
+  permissionPath = '';
 
   @property({type: Array}) // notify: true
-  statuses: any[];
+  statuses: any[] = [];
 
   firstUpdated() {
     this.statuses = getData('statuses') || [];
@@ -104,6 +103,9 @@ export class StatusElement extends LitElement {
   }
 
   getActions(path: string) {
+    if (this.actionPoint?.status === 'completed' && hasVerifyAction(path)) {
+      return ['verify'];
+    }
     return getActions(path);
   }
 }

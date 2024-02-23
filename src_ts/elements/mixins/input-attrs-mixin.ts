@@ -1,9 +1,9 @@
 import {isRequired, getFieldAttribute, isReadOnly} from './permission-controller.js';
 import {Constructor, GenericObject} from '../../typings/globals.types.js';
-import {LitElement, property} from 'lit-element';
+import {LitElement} from 'lit';
+import {property} from 'lit/decorators.js';
 /*
  * Mixin for input field functionality.
- * @polymer
  * @mixinFunction
  */
 export function InputAttrsMixin<T extends Constructor<LitElement>>(superClass: T) {
@@ -99,7 +99,7 @@ export function InputAttrsMixin<T extends Constructor<LitElement>>(superClass: T
     }
 
     public _resetInputs() {
-      const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+      const elements: NodeList = this.shadowRoot!.querySelectorAll('.validate-input');
       elements.forEach((element: GenericObject) => {
         element.invalid = false;
         element.value = '';

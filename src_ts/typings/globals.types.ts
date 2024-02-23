@@ -1,4 +1,4 @@
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 
 /*
  * The type Constructor<T> is an alias for the construct signature

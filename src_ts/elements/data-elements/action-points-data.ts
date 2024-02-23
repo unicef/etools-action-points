@@ -1,24 +1,30 @@
-import {LitElement, customElement, property} from 'lit-element';
+import {LitElement} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import {getQueriesString} from '../mixins/query-params-helper';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('action-points-data')
 export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
   @property({type: Array}) // notify: true
-  public actionPoints: any[];
+  public actionPoints: any[] = [];
 
   @property({type: Object})
   public requestQueries: any;
 
   @property({type: Number}) // notify: true
-  public listLength: number;
+  public listLength?: number;
 
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('request-action-points', () => this._loadList());
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('request-action-points', () => this._loadList());
   }
 
   _loadList() {

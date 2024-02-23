@@ -1,15 +1,13 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
-import '@polymer/paper-listbox/paper-listbox';
-import '@polymer/paper-item/paper-item';
-import '@polymer/paper-menu-button/paper-menu-button';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/iron-icon/iron-icon.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
-import {EtoolsDropdownEl} from '@unicef-polymer/etools-dropdown/etools-dropdown';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {headerDropdownStyles} from './header-dropdown-styles';
 
 @customElement('countries-dropdown')
 export class CountriesDropdown extends LitElement {
@@ -25,64 +23,15 @@ export class CountriesDropdown extends LitElement {
   }
 
   @property({type: Number})
-  countryId: number;
+  countryId?: number;
 
   render() {
     return html`
-      <style>
-        *[hidden] {
-          display: none !important;
-        }
-        :host {
-          display: block;
-        }
-        :host(:hover) {
-          cursor: pointer;
-        }
-        etools-dropdown {
-          --paper-listbox: {
-            max-height: 600px;
-          }
-
-          --esmm-icons: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-          }
-
-          --paper-input-container-underline: {
-            display: none;
-          }
-
-          --paper-input-container-underline-focus: {
-            display: none;
-          }
-
-          --paper-input-container-underline-disabled: {
-            display: none;
-          }
-
-          --paper-input-container-shared-input-style: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-            font-size: 16px;
-            text-align: right;
-            width: 100px;
-          }
-
-          --paper-menu-button-dropdown: {
-            max-height: 380px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          etools-dropdown {
-            width: 130px;
-          }
-        }
-      </style>
-
+      ${headerDropdownStyles}
       <etools-dropdown
+        transparent
         id="countrySelector"
+        class="w100"
         .selected="${this.countryId}"
         placeholder="Country"
         allow-outside-scroll
@@ -114,11 +63,6 @@ export class CountriesDropdown extends LitElement {
 
   public connectedCallback() {
     super.connectedCallback();
-
-    setTimeout(() => {
-      const fitInto = document.querySelector('app-shell')!.shadowRoot!.querySelector('#appHeadLayout');
-      (this.shadowRoot?.querySelector('#countrySelector') as EtoolsDropdownEl).fitInto = fitInto;
-    }, 0);
   }
 
   _changeCountry(countryId: any) {

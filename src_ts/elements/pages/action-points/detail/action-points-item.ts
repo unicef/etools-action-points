@@ -1,11 +1,8 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-
-import '@polymer/app-route/app-route.js';
-import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/paper-button/paper-button.js';
-import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {timeOut} from '@polymer/polymer/lib/utils/async.js';
-import '@unicef-polymer/etools-dialog/etools-dialog.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {_addToCollection, _updateCollection, collectionExists} from '../../../mixins/permission-controller';
@@ -16,21 +13,32 @@ import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
 import '../../../common-elements/status-element';
+import './add-verifier-dialog';
+import './verify-dialog';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles';
 import {sharedStyles} from '../../../styles/shared-styles';
 import {mainPageStyles} from '../../../styles/main-page-styles';
 import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {connect} from 'pwa-helpers';
+import {RootState, store} from '../../../../redux/store';
+import get from 'lodash-es/get';
+import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
+import {UserControllerMixin} from '../../../mixins/user-controller';
+import {GenericObject} from '@unicef-polymer/etools-types';
+import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
 
 @customElement('action-points-item')
-export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixin(LitElement))) {
+export class ActionPointsItem extends connect(store)(
+  ErrorHandlerMixin(InputAttrsMixin(DateMixin(UserControllerMixin(LitElement))))
+) {
   @property({type: Object}) // , notify: true
   route: any;
 
   @property({type: String})
-  routeData: string;
+  routeData?: string;
 
   @property({type: Object})
   actionPoint: any = {};
@@ -42,15 +50,16 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   originalActionPoint: any = {};
 
   @property({type: Object}) // , notify: true
-  permissionPath: string;
+  permissionPath!: string;
 
   @property({type: Object})
   historyDialog: any;
 
-  @property({type: Number})
-  actionPointId: number;
+  @property({type: Object})
+  profile!: GenericObject;
 
-  private _debounceLoadData: Debouncer;
+  @property({type: Number})
+  actionPointId!: number;
 
   render() {
     return html`
@@ -61,40 +70,26 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           margin-bottom: 25px;
         }
 
-        .header-btn {
-          color: var(--gray-mid);
-          font-weight: 500;
-          font-size: 14px;
-        }
-
-        .header-btn iron-icon {
+        .header-btn etools-icon {
           margin-right: 8px;
         }
       </style>
-
-      <app-route
-        .route="${this.route}"
-        @route-changed="${this._routeChanged}"
-        pattern="/:id"
-        .data="${this.routeData}"
-        @data-changed="${this._routeDataChanged}"
-      >
-      </app-route>
 
       <div .hidden="${!this.actionPoint.id}">
         <pages-header-element
           page-title="${this.actionPoint.reference_number}"
           export-links="${this._setExportLinks(this.actionPoint)}"
         >
-          <paper-button
+          <etools-button
             icon="history"
-            class="header-btn"
-            @tap="${this.showHistory}"
+            class="neutral"
+            variant="text"
+            @click="${this.showHistory}"
             ?hidden="${!this.hasHistory(this.actionPoint.history)}"
           >
-            <iron-icon icon="history"></iron-icon>
+            <etools-icon name="history"></etools-icon>
             History
-          </paper-button>
+          </etools-button>
         </pages-header-element>
 
         <div class="view-container" id="main">
@@ -110,10 +105,12 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
           </div>
 
           <div id="sidebar">
-            <status-element
-              .actionPoint="${this.actionPoint}"
-              .permissionPath="${this.permissionPath}"
-            ></status-element>
+            ${this.actionPoint.id
+              ? html`<status-element
+                  .actionPoint="${this.actionPoint}"
+                  .permissionPath="${this.permissionPath}"
+                ></status-element>`
+              : ''}
           </div>
         </div>
       </div>
@@ -121,7 +118,11 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
   }
 
   connectedCallback(): void {
+    this._changeActionPointId = debounce(this._changeActionPointId.bind(this), 300);
     super.connectedCallback();
+
+    this.profile = this.getUserData();
+
     this._createHistoryDialog();
     this.addEventListener('action-activated', ({detail}: any) => {
       if (detail.type === 'save') {
@@ -133,30 +134,72 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
             })
             .catch((err: any) => console.log(err));
       } else if (detail.type === 'complete') {
-        const request = this._complete();
-        request &&
-          request
-            .then(() => {
-              this._loadOptions(this.actionPointId);
-            })
-            .catch((err: any) => console.log(err));
+        this._processCompleteAction();
+      } else if (detail.type === 'verify') {
+        this._processVerifyAction();
+      }
+    });
+  }
+
+  async _processCompleteAction() {
+    let confirmed = true;
+    let verifierId = null;
+    if (this.actionPoint.high_priority && String(this.profile.user) === String(this.actionPoint.author)) {
+      const resp = await openDialog({
+        dialog: 'add-verifier-dialog',
+        dialogData: {
+          permissionPath: this.permissionPath
+        }
+      }).then(({confirmed, response}) => {
+        return {confirmed: confirmed, verifierId: response};
+      });
+      ({confirmed, verifierId} = resp);
+    }
+
+    if (!confirmed) {
+      return;
+    }
+
+    this._complete(verifierId)
+      .then(() => {
+        this._loadOptions(this.actionPointId);
+      })
+      .catch((err: any) => console.log(err));
+  }
+
+  async _processVerifyAction() {
+    openDialog({
+      dialog: 'verify-dialog',
+      dialogData: {}
+    }).then(({confirmed, response}) => {
+      if (confirmed) {
+        this._makeUpdateRequest({is_adequate: response}).then(() => {
+          this._loadOptions(this.actionPointId);
+        });
       }
     });
   }
 
   _createHistoryDialog() {
     this.historyDialog = document.createElement('open-view-history');
-    document.querySelector('body').appendChild(this.historyDialog);
+    document.querySelector('body')?.appendChild(this.historyDialog);
+  }
+
+  stateChanged(state: RootState) {
+    const routeDetails = get(state, 'app.routeDetails');
+    if (!(routeDetails?.routeName === 'action-points' && routeDetails?.subRouteName === 'detail')) {
+      return; // Avoid code execution while on a different page
+    }
+    const stateRouteDetails = {...state.app!.routeDetails};
+    this._routeDataChanged(stateRouteDetails.params!.id as number);
   }
 
   _routeChanged({detail}: CustomEvent) {
     this._changeRoutePath(detail.value.path);
   }
 
-  _routeDataChanged({detail}: CustomEvent) {
-    this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(200), () => {
-      this._changeActionPointId(detail.value);
-    });
+  _routeDataChanged(id: number) {
+    this._changeActionPointId(id);
   }
 
   _updateHistoryProp() {
@@ -173,11 +216,11 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     if (!path.match(/[^\\/]/g)) {
       fireEvent(this, '404');
     }
-    this.shadowRoot.querySelector('action-point-details').dispatchEvent(new CustomEvent('reset-validation'));
+    this.shadowRoot!.querySelector('action-point-details')?.dispatchEvent(new CustomEvent('reset-validation'));
   }
 
-  _changeActionPointId(data: any) {
-    this.actionPointId = data.id;
+  _changeActionPointId(id: number) {
+    this.actionPointId = id;
     if (!this.actionPointId) {
       return;
     }
@@ -262,7 +305,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     });
   }
 
-  _complete() {
+  _complete(verifierId?: number) {
     const endpoint = getEndpoint('actionPointComplete', this.actionPointId);
 
     fireEvent(this, 'global-loading', {
@@ -270,11 +313,15 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
       active: true,
       message: 'Completing Action Point...'
     });
-
-    return sendRequest({
+    const options = {
       method: 'POST',
       endpoint
-    })
+    };
+    if (verifierId && Number(verifierId) > 0) {
+      Object.assign(options, {body: {potential_verifier: verifierId}});
+    }
+
+    return sendRequest(options)
       .then((data: any) => {
         fireEvent(this, 'toast', {
           text: ' Action Point successfully completed.'
@@ -313,6 +360,10 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
 
     const editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     const data = this._getChangedData(this.actionPoint, editedData);
+    this._makeUpdateRequest(data);
+  }
+
+  _makeUpdateRequest(updateData: any) {
     const endpoint = getEndpoint('actionPoint', this.actionPointId);
 
     fireEvent(this, 'global-loading', {
@@ -324,7 +375,7 @@ export class ActionPointsItem extends ErrorHandlerMixin(InputAttrsMixin(DateMixi
     return sendRequest({
       method: 'PATCH',
       endpoint,
-      body: data
+      body: updateData
     })
       .then((data: any) => {
         fireEvent(this, 'toast', {

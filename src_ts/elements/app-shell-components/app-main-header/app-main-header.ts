@@ -1,8 +1,10 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-import '@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@unicef-polymer/etools-app-selector/dist/etools-app-selector';
-import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-toolbar';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import '@unicef-polymer/etools-unicef/src/etools-app-selector/etools-app-selector';
+import '@unicef-polymer/etools-unicef/src/etools-profile-dropdown/etools-profile-dropdown';
+import '@unicef-polymer/etools-unicef/src/etools-accesibility/etools-accesibility';
 import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../../styles/shared-styles';
 import './countries-dropdown';
@@ -12,40 +14,40 @@ import {GenericObject} from '../../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {basePath} from '../../../config/config';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {headerDropdownStyles} from './header-dropdown-styles';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('app-main-header')
 export class AppMainHeader extends MatomoMixin(LitElement) {
   @property({type: Object})
-  user: GenericObject;
+  user!: GenericObject;
 
   @property({type: String, reflect: true, attribute: 'environment'})
-  environment: string;
+  environment = '';
 
   @property({type: Array})
-  allUsers: any[];
+  allUsers: any[] = [];
 
   @property({type: Array})
-  offices: any[];
+  offices: any[] = [];
 
   @property({type: Array})
-  sections: any[];
+  sections: any[] = [];
 
   @property({type: Boolean})
-  refreshInProgress: boolean;
+  refreshInProgress = false;
 
   static get styles() {
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
 
   public render() {
     return html`
-      ${sharedStyles}
+      ${sharedStyles} ${headerDropdownStyles}
       <style>
         app-toolbar {
           background-color: var(--header-bg-color);
@@ -57,7 +59,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         }
 
         #pageRefresh {
-          color: #bcc1c6;
+          color: var(--light-secondary-text-color);
           margin-left: 8px;
         }
 
@@ -68,7 +70,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
 
         .titlebar {
           flex: 1;
-          font-size: 28px;
+          font-size: var(--etools-font-size-28, 28px);
           font-weight: 300;
         }
 
@@ -83,44 +85,56 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         .envWarning {
           color: var(--nonprod-text-warn-color);
           font-weight: 700;
-          font-size: 18px;
+          font-size: var(--etools-font-size-18, 18px);
         }
       </style>
 
       <app-toolbar sticky class="layout-horizontal align-items-center">
         <div class="titlebar layout-horizontal align-items-center">
+          <etools-icon-button
+            id="menuButton"
+            name="menu"
+            class="nav-menu-button"
+            @click="${() => this.openDrawer()}"
+          ></etools-icon-button>
           <etools-app-selector .user="${this.user}"></etools-app-selector>
 
-          <img src="${basePath}/images/etools-logo-color-white.svg" />
+          <img id="app-logo" src="${basePath}assets/images/etools-logo-color-white.svg" alt="ETools" />
           <div class="envWarning" .hidden="${!this.environment}">- ${this.environment} TESTING ENVIRONMENT</div>
         </div>
 
-        <div class="layout-horizontal align-items-center">
-          <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
-          </countries-dropdown>
+        <div class="column-r layout-horizontal align-items-center">
+          <div class="layout-horizontal align-items-center">
+            <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
+            </countries-dropdown>
 
-          <organizations-dropdown .user="${this.user}"></organizations-dropdown>
+            <organizations-dropdown .user="${this.user}"></organizations-dropdown>
+          </div>
+          <div class="layout-horizontal align-items-center">
+            <support-btn title="Support"></support-btn>
 
-          <support-btn title="Support"></support-btn>
+            <etools-profile-dropdown
+              title="Profile and Sign out"
+              .profile="${this.user}"
+              .users="${this.allUsers}"
+              .offices="${this.offices}"
+              .sections="${this.sections}"
+            >
+            </etools-profile-dropdown>
 
-          <etools-profile-dropdown
-            title="Profile and Sign out"
-            .profile="${this.user}"
-            .users="${this.allUsers}"
-            .offices="${this.offices}"
-            .sections="${this.sections}"
-          >
-          </etools-profile-dropdown>
+            <etools-icon-button
+              title="Refresh"
+              id="pageRefresh"
+              name="refresh"
+              label="refresh"
+              tracker="Refresh"
+              @click="${this.onRefreshClick}"
+              ?disabled="${this.refreshInProgress}"
+            >
+            </etools-icon-button>
 
-          <paper-icon-button
-            title="Refresh"
-            id="pageRefresh"
-            icon="refresh"
-            tracker="Refresh"
-            @click="${this.onRefreshClick}"
-            ?disabled="${this.refreshInProgress}"
-          >
-          </paper-icon-button>
+            <etools-accesibility></etools-accesibility>
+          </div>
         </div>
       </app-toolbar>
     `;
@@ -132,7 +146,7 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
   }
 
   openDrawer() {
-    fireEvent(this, 'drawer');
+    fireEvent(this, 'change-drawer-state');
   }
 
   _logout() {

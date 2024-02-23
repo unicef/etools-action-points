@@ -1,4 +1,5 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import {_setData} from '../mixins/static-data-mixin';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
 import {_addToCollection, getChoices, isValidCollection} from '../mixins/permission-controller';
@@ -6,11 +7,10 @@ import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import './user-data';
 import {GenericObject} from '../../typings/globals.types';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('static-data')
@@ -27,7 +27,7 @@ export class StaticData extends ErrorHandlerMixin(UserControllerMixin(LitElement
   };
 
   render() {
-    return html`<user-data @user-profile-loaded="${this.loadStaticData}}"></user-data>`;
+    return html`<user-data @user-profile-loaded="${this.loadStaticData}"></user-data>`;
   }
 
   loadStaticData() {

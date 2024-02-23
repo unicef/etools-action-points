@@ -4,7 +4,7 @@ jobs:
     working_directory: ~/code
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
-      - image: node:12.22.7
+      - image: node:14.21
     steps:
       - checkout
       - restore_cache:
@@ -22,15 +22,11 @@ jobs:
       - run:
           name: EsLint
           command: npm run lint
-      - run:
-          name: Polymer3 Build
-          command: npm run build
-          no_output_timeout: 25m
 
   build_and_deploy:
     working_directory: ~/code
     docker:
-      - image: node:12.22.7
+      - image: node:14.21
     steps:
       - checkout
       - setup_remote_docker
@@ -42,6 +38,7 @@ jobs:
             sed -i "0,/revNo/s//$REVNO/" index.html
             sed -i "0,/revNo/s//$REVNO/" version.json
             sed -i "0,/bDate/s//$BUILDDATE/" version.json
+            sed -i "0,/bDate/s//$BUILDDATE/" index.html
       - run:
           name: Install Docker client
           command: |
@@ -75,6 +72,8 @@ workflows:
                 - staging
                 - develop
       - build_and_deploy:
+          requires:
+            - lint
           filters:
             branches:
               only:
@@ -82,3 +81,4 @@ workflows:
                 - staging
                 - develop
                 - 28656_detail_page
+                - shoelace-migration
