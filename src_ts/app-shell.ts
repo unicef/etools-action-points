@@ -241,15 +241,15 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     }
   }
 
-  clearAllCaches(){
-     if (navigator.serviceWorker) {
-       caches.keys().then((cacheNames) => {
-         cacheNames.forEach((cacheName) => {
-           caches.delete(cacheName);
-         });
-         location.reload();
-       });
-     }
+  clearAllCaches() {
+    if (navigator.serviceWorker) {
+      caches.keys().then((cacheNames) => {
+        cacheNames.forEach((cacheName) => {
+          caches.delete(cacheName);
+        });
+        location.reload();
+      });
+    }
   }
 
   isActivePage(activeModule: string, expectedModule: string) {
