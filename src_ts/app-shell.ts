@@ -200,6 +200,11 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
   }
 
   checkAppVersion() {
+    if (!document.getElementById('buildDate')!.innerText) {
+      this.clearAllCaches();
+      return;
+    }
+
     fetch('version.json')
       .then((res) => res.json())
       .then((version) => {
@@ -232,15 +237,19 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
 
   _onConfirmNewVersion(e: CustomEvent) {
     if (e.detail.confirmed) {
-      if (navigator.serviceWorker) {
-        caches.keys().then((cacheNames) => {
-          cacheNames.forEach((cacheName) => {
-            caches.delete(cacheName);
-          });
-          location.reload();
-        });
-      }
+      this.clearAllCaches();
     }
+  }
+
+  clearAllCaches(){
+     if (navigator.serviceWorker) {
+       caches.keys().then((cacheNames) => {
+         cacheNames.forEach((cacheName) => {
+           caches.delete(cacheName);
+         });
+         location.reload();
+       });
+     }
   }
 
   isActivePage(activeModule: string, expectedModule: string) {
