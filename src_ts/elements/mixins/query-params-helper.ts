@@ -1,5 +1,13 @@
 import {basePath} from '../../config/config';
 
+export const getLocationProperty = (property: string) => {
+  // @ts-ignore
+  return (window && window.location && window.location[property]) || '';
+};
+
+export const getQueriesString = () => {
+  return getLocationProperty('search');
+};
 export const parseQueries = () => {
   const queriesObj: any = {};
   const queries = getQueriesString().slice(1).split('&');
@@ -11,15 +19,6 @@ export const parseQueries = () => {
   });
 
   return queriesObj;
-};
-
-export const getLocationProperty = (property: string) => {
-  // @ts-ignore
-  return (window && window.location && window.location[property]) || '';
-};
-
-export const getQueriesString = () => {
-  return getLocationProperty('search');
 };
 
 export const getPath = () => {

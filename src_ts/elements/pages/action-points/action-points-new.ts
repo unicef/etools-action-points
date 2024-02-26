@@ -1,4 +1,5 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import {ErrorHandlerMixin} from '../../mixins/error-handler-mixin';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
@@ -8,11 +9,11 @@ import {pageLayoutStyles} from '../../styles/page-layout-styles';
 import {sharedStyles} from '../../styles/shared-styles';
 import {mainPageStyles} from '../../styles/main-page-styles';
 import {ActionPointDetails} from './detail/action-point-details';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
 
 /**
- * @polymer
  * @customElement
  */
 @customElement('action-points-new')
@@ -50,7 +51,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   @property({type: String})
   permissionPath = 'action_points';
 
-  updated(changedProperties) {
+  updated(changedProperties: any) {
     if (changedProperties.has('route')) {
       this._changeRoutePath();
     }
@@ -62,7 +63,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   }
 
   _changeRoutePath() {
-    const details: any = this.shadowRoot.querySelector('action-point-details');
+    const details: any = this.shadowRoot!.querySelector('action-point-details');
     this.actionPoint = {};
     details.dispatchEvent(new CustomEvent('reset-validation'));
     fireEvent(this, 'route-changed', {
@@ -71,7 +72,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
   }
 
   _createAP() {
-    const detailsElement: ActionPointDetails = this.shadowRoot.querySelector('#ap-details');
+    const detailsElement: ActionPointDetails | null = this.shadowRoot!.querySelector('#ap-details');
     if (!detailsElement || !detailsElement.validate()) {
       return;
     }
@@ -95,11 +96,12 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
         fireEvent(this, 'toast', {
           text: ' Action Point successfully created.'
         });
-        this.route.path = `/detail/${data.id}`;
+        this.route.path = `action-points/detail/${data.id}`;
         fireEvent(this, 'global-loading', {
           loadingSource: 'ap-creation'
         });
         this.route = {...this.route};
+        EtoolsRouter.replaceAppLocation(this.route.path);
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);

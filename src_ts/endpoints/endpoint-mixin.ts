@@ -2,7 +2,6 @@ import * as config from '../config/config';
 
 /**
  * App global configuration
- * @polymer
  * @mixinFunction
  */
 

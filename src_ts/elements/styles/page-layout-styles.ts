@@ -1,6 +1,6 @@
 // This file will be dedicated to page layout and related layout elements
 
-import {html} from 'lit-element';
+import {html} from 'lit';
 
 export const pageLayoutStyles = html`
   <style>

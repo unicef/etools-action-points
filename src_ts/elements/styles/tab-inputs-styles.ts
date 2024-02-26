@@ -1,58 +1,18 @@
-import {html} from 'lit-element';
-import {basePath} from '../../config/config';
-
+import {html} from 'lit';
 export const tabInputsStyles = html`
   <style>
     *[hidden] {
       display: none !important;
     }
-    paper-icon-button[hidden] {
+    etools-icon-button[hidden] {
       display: inline-block !important;
       visibility: hidden;
     }
-    .group:after {
-      visibility: hidden;
-      display: block;
-      font-size: 0;
-      content: " ";
-      clear: both;
-      height: 0;
-    }
-    .input-container {
-      position: relative;
-      float: left;
-      margin-right: 0;
-      width: 33.33%;
-    }
-    .input-container:last-of-type {
-      margin-right: 0;
-    }
-    .input-container.input-container-s {
-      width: 30%;
-    }
-    .input-container.input-container-40 {
-      width: 35%;
-    }
-    .input-container.input-container-m {
-      width: 66.66%;
-    }
-    .input-container.input-container-45 {
-      width: 45%;
-    }
-    .input-container.input-container-ms {
-      width: 50%;
-    }
-    .input-container.input-container-l {
-      width: 100%;
-    }
-    .input-container.input-checkbox-container {
+    .row .input-checkbox-container {
       height: 62px;
       line-height: 62px;
-      padding: 12px 12px 0 12px;
+      padding-left: 27px;
       box-sizing: border-box;
-    }
-    .row-h {
-      margin-bottom: 8px;
     }
     .edit-icon {
       padding: 5px;
@@ -75,51 +35,14 @@ export const tabInputsStyles = html`
 
     etools-dropdown,
     etools-dropdown-multi,
-    paper-input,
-    paper-textarea,
-    paper-dropdown-menu,
+    etools-input::part(sl-input),
+    etools-input::part(readonly-input),
+    etools-textarea::part(form-control),
     datepicker-lite,
     etools-currency-amount-input {
       box-sizing: border-box;
       padding: 0 12px;
       outline: none !important;
-
-      --paper-input-container-input-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
-
-      --paper-input-container-input: {
-        font-size: 15px;
-        box-sizing: border-box;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-right: 3px;
-      }
-
-      --paper-input-container-label: {
-        color: var(--gray-50);
-      }
-      --paper-input-container-label-floating: {
-        color: var(--gray-50);
-      }
-      --paper-input-container-invalid-color: var(--module-error);
-
-      --paper-input-container-disabled: {
-        color: var(--gray-light);
-        opacity: 1;
-      }
-      --paper-input-char-counter: {
-        color: var(--gray-light);
-      }
-
-      --paper-input-prefix: {
-        margin-right: 10px;
-        color: var(--gray-mid);
-      }
-
-      --paper-input-error: {
-        overflow: hidden;
-      }
-
       --etools-currency-container-label-floating: {
         -webkit-transform: none;
         -moz-transform: none;
@@ -128,70 +51,14 @@ export const tabInputsStyles = html`
         transform: none;
         top: -21px;
         width: 100%;
-        font-size: 12px;
-      }
-    }
-
-    paper-textarea {
-      --paper-input-container-input: {
-        white-space: normal;
-        display: block !important;
-      }
-
-      --iron-autogrow-textarea-placeholder: {
-        color: var(--gray-20) !important;
-      }
-      --iron-autogrow-textarea: {
-        overflow: hidden;
-        padding: 0;
+        font-size: var(--etools-font-size-12, 12px);
       }
     }
 
     etools-dropdown.no-data-fetched,
     etools-dropdown-multi.no-data-fetched,
-    paper-input.no-data-fetched {
+    etools-input.no-data-fetched {
       --esmm-placeholder-color: var(--gray-dark);
-      --paper-input-container-color: var(--gray-dark);
-    }
-
-    etools-dropdown-multi.required:not([disabled]),
-    etools-dropdown.required:not([disabled]),
-    etools-currency-amount-input.required:not([disabled]),
-    paper-dropdown-menu.required:not([disabled]),
-    paper-textarea.required:not([disabled]),
-    paper-input.required:not([disabled]),
-    datepicker-lite.required:not([disabled]) {
-      --paper-input-container-label: {
-        background: url('${basePath}images/required.svg') no-repeat 98% 14%/7px;
-        width: auto !important;
-        max-width: 90%;
-        right: auto;
-        padding-right: 15px;
-        color: var(--gray-50);
-      }
-    }
-
-    etools-dropdown-multi.bold,
-    etools-dropdown.bold,
-    paper-input.bold {
-      --paper-input-container-input: {font-weight: 500};
-      --paper-input-container-underline-focus: {display: none} !important;
-      --paper-input-container-underline-disabled: {display: none} !important;
-      --paper-input-container-underline: {display: none} !important;
-    }
-    etools-dropdown-multi.deleted,
-    etools-dropdown.deleted,
-    paper-input.deleted {
-      --paper-input-container-input: {color: #b0b0b0};
-    }
-
-    etools-dropdown.readonly,
-    etools-dropdown-multi.readonly,
-    etools-currency-amount-input.readonly,
-    paper-input.readonly,
-    paper-dropdown-menu.readonly,
-    paper-textarea.readonly {
-      --paper-input-container-underline: {display: none} !important;
     }
 
     #bottom-actions {
@@ -312,11 +179,11 @@ export const tabInputsStyles = html`
       background-color: var(--gray-light);
       text-align: center;
       color: #fff;
-      font-size: 13px;
+      font-size: var(--etools-font-size-13, 13px);
     }
     etools-checkable-input {
       --etools-checkable-input-label: {
-        font-size: 16px;
+        font-size: var(--etools-font-size-16, 16px);
         font-weight: 400;
         line-height: 21px;
       }
@@ -326,58 +193,11 @@ export const tabInputsStyles = html`
       box-sizing: border-box;
     }
     etools-content-panel:not([list])::part(ecp-content) {
-      padding: 8px 12px;
+      padding: 16px 12px;
     }
     etools-currency-amount-input {
-      --etools-currency-container-input: {line-height: 0};
-    }
-
-    etools-dropdown-multi[disabled],
-    etools-currency-amount-input[disabled],
-    etools-dropdown[disabled],
-    paper-textarea[disabled],
-    paper-dropdown-menu[disabled],
-    paper-input[disabled],
-    datepicker-lite[disabled] {
-      --paper-input-container-focus-color: var(
-        --paper-input-container-label_-_color,
-        var(--paper-input-container-color, var(--secondary-text-color))
-      );
-      --paper-input-container: {
-        opacity: 1 !important;
-      }
-      --paper-input-container-underline: {
-        border-bottom: 1px dashed var(--gray-20, rgba(0, 0, 0, 0.2));
-        display: block !important;
-      }
-      --paper-input-container-underline-focus: {
-        display: none;
-      }
-    }
-
-    etools-dropdown-multi[readonly],
-    etools-currency-amount-input[readonly],
-    etools-dropdown[readonly],
-    paper-textarea[readonly],
-    paper-dropdown-menu[readonly],
-    paper-input[readonly],
-    datepicker-lite[readonly] {
-      --paper-input-container-focus-color: var(
-        --paper-input-container-label_-_color,
-        var(--paper-input-container-color, var(--secondary-text-color))
-      );
-      --paper-input-container: {
-        opacity: 1 !important;
-      }
-      --paper-input-container-underline: {
-        border-bottom: none !important;
-        display: none !important;
-      }
-      --paper-input-container-underline-focus: {
-        display: none;
-      }
-      --paper-input-container-underline-disabled: {
-        display: none;
+      --etools-currency-container-input: {
+        line-height: 0;
       }
     }
   </style>
