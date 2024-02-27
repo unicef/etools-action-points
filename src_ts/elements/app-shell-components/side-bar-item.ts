@@ -27,6 +27,9 @@ export class SideBarItem extends LitElement {
   @property({type: Boolean})
   opened = false;
 
+  @property({type: Boolean, attribute: 'disabled'})
+  disabled = true;
+
   static get styles() {
     return [layoutStyles];
   }
@@ -114,7 +117,7 @@ export class SideBarItem extends LitElement {
         href="${this.sideBarLink}"
         @click="${this._handleMainTap}"
       >
-        <sl-tooltip placement="right" content="${this.name}">
+        <sl-tooltip placement="right" ?disabled="${this.disabled}" content="${this.name}">
           <etools-icon name="${this.icon}" id="icon"></etools-icon>
           <div id="name">${this.name}</div>
         </sl-tooltip>

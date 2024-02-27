@@ -1,4 +1,4 @@
-import {html, LitElement} from 'lit';
+import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
@@ -7,6 +7,7 @@ import {moduleStyles} from '../styles/module-styles';
 import {navMenuStyles} from '../styles/nav-menu-styles';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from '../../config/config';
 
 /**
  * @customElement
@@ -90,16 +91,16 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
 
         <sl-tooltip for="menu-header-top-icon" placement="right" content="Action Points">
           <span class="ripple-wrapper main menu-header">
-            <etools-icon id="menu-header-top-icon" name="flag" @click="${() => this._toggleSmallMenu()}"></etools-icon>
+            <etools-icon id="menu-header-top-icon" name="flag" @click="${this._toggleSmallMenu}"></etools-icon>
           </span>
         </sl-tooltip>
 
         <span class="chev-right">
-          <etools-icon id="expand-menu" name="chevron-right" @click="${() => this._toggleSmallMenu()}"></etools-icon>
+          <etools-icon id="expand-menu" name="chevron-right" @click="${this._toggleSmallMenu}"></etools-icon>
         </span>
 
         <span class="ripple-wrapper">
-          <etools-icon id="minimize-menu" name="chevron-left" @click="${() => this._toggleSmallMenu()}"></etools-icon>
+          <etools-icon id="minimize-menu" name="chevron-left" @click="${this._toggleSmallMenu}"></etools-icon>
         </span>
       </div>
 
@@ -108,6 +109,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           role="navigation"
           view="action-points"
           name="Action Points"
+          ?disabled="${!this.smallMenu}"
           icon="av:playlist-add-check"
           side-bar-link="action-points/list"
           selected="${this.page === 'action-points'}"
@@ -119,6 +121,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           class="lighter-item no-transform"
           name="Implementation Intelligence"
           icon="power-bi"
+          ?disabled="${!this.smallMenu}"
           @click="${this.trackAnalytics}"
           tracker="Implementation Intelligence"
           side-bar-link="https://app.powerbi.com/groups/me/apps/2c83563f-d6fc-4ade-9c10-bbca57ed1ece/reports/9726e9e7-c72f-4153-9fd2-7b418a1e426c/ReportSection?ctid=77410195-14e1-4fb8-904b-ab1892023667"
@@ -129,6 +132,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
         <side-bar-item
           class="lighter-item"
           name="Knowledge Base"
+          ?disabled="${!this.smallMenu}"
           @click="${this.trackAnalytics}"
           tracker="Knowledge Base"
           icon="maps:local-library"
@@ -141,6 +145,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           class="lighter-item"
           name="Discussion"
           icon="question-answer"
+          ?disabled="${!this.smallMenu}"
           @click="${this.trackAnalytics}"
           tracker="Discussion"
           external
@@ -152,6 +157,7 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
           class="lighter-item"
           name="Information"
           icon="info"
+          ?disabled="${!this.smallMenu}"
           @click="${this.trackAnalytics}"
           tracker="Information"
           external
@@ -165,19 +171,25 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
   @property({type: String})
   page?: string = '';
 
-  _smallMenu = false;
   @property({type: Boolean, reflect: true, attribute: 'small-menu'})
-  get smallMenu() {
-    return this._smallMenu;
-  }
+  smallMenu = false;
 
-  set smallMenu(newVal) {
-    this._smallMenu = newVal;
-    setTimeout(() => fireEvent(this, 'resize-main-layout'));
+  updated(changedProperties: PropertyValues): void {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('smallMenu')) {
+      this._smallMenuChanged();
+    }
   }
 
   _toggleSmallMenu() {
     this.smallMenu = !this.smallMenu;
+    const localStorageVal: number = this.smallMenu ? 1 : 0;
+    localStorage.setItem(SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY, String(localStorageVal));
     fireEvent(this, 'toggle-small-menu', {value: this.smallMenu});
+  }
+
+  _smallMenuChanged() {
+    setTimeout(() => fireEvent(this, 'resize-main-layout'));
   }
 }

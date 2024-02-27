@@ -22,10 +22,6 @@ export const sharedStyles = html`
       outline: inherit;
     }
 
-    app-toolbar {
-      height: var(--toolbar-height);
-    }
-
     #tabs {
       height: 48px;
     }

@@ -29,6 +29,9 @@ class OrganizationsDropdown extends LitElement {
         allow-outside-scroll
         no-label-float
         hide-search
+        min-width="160px"
+        placement="bottom-end"
+        .syncWidth="${false}"
       >
       </etools-dropdown>
     `;

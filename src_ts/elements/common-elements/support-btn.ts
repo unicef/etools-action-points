@@ -26,7 +26,6 @@ export class SupportBtn extends MatomoMixin(LitElement) {
 
       <a href="${this.url}" target="_blank" @click="${this.trackAnalytics}" tracker="Support">
         <etools-icon name="communication:textsms"></etools-icon>
-        Support
       </a>
     `;
   }

@@ -1,7 +1,6 @@
 import {LitElement} from 'lit';
 import {property, query} from 'lit/decorators.js';
 import {Constructor} from '@unicef-polymer/etools-types';
-import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from '../../config/config';
 
 /**
  * App menu functionality mixin
@@ -21,7 +20,6 @@ export function AppMenuMixin<T extends Constructor<LitElement>>(baseClass: T) {
     public connectedCallback() {
       super.connectedCallback();
       this._initMenuListeners();
-      this._initMenuSize();
     }
 
     public disconnectedCallback() {
@@ -41,15 +39,6 @@ export function AppMenuMixin<T extends Constructor<LitElement>>(baseClass: T) {
       this.removeEventListener('toggle-small-menu', this._toggleMenu as any);
       this.removeEventListener('change-drawer-state', this.changeDrawerState);
       this.removeEventListener('app-drawer-transitioned', this.syncWithDrawerState);
-    }
-
-    private _initMenuSize(): void {
-      const menuTypeStoredVal: string | null = localStorage.getItem(SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY);
-      if (!menuTypeStoredVal) {
-        this.smallMenu = false;
-      } else {
-        this.smallMenu = !!parseInt(menuTypeStoredVal, 10);
-      }
     }
 
     public changeDrawerState() {
