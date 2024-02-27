@@ -17,7 +17,7 @@ import './elements/app-shell-components/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
 import './elements/app-shell-components/page-footer';
 import './routing/routes.js';
-import {basePath} from './config/config';
+import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY, basePath} from './config/config';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import '@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
@@ -130,6 +130,18 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
       </app-drawer-layout>
     `;
   }
+
+  constructor() {
+    super();
+
+    const menuTypeStoredVal: string | null = localStorage.getItem(SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY);
+    if (!menuTypeStoredVal) {
+      this.smallMenu = false;
+    } else {
+      this.smallMenu = !!parseInt(menuTypeStoredVal, 10);
+    }
+  }
+
 
   connectedCallback() {
     super.connectedCallback();
