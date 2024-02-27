@@ -42,6 +42,9 @@ export class CountriesDropdown extends LitElement {
         trigger-value-change-event
         @etools-selected-item-changed="${this._countrySelected}"
         .shownOptionsLimit="${250}"
+        min-width="160px"
+        placement="bottom-end"
+        .syncWidth="${false}"
         hide-search
         auto-width
       ></etools-dropdown>

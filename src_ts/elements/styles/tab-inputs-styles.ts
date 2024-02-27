@@ -9,9 +9,8 @@ export const tabInputsStyles = html`
       visibility: hidden;
     }
     .row .input-checkbox-container {
-      height: 62px;
-      line-height: 62px;
-      padding-left: 27px;
+      padding-inline-start: 26px;
+      padding-block-start: 24px;
       box-sizing: border-box;
     }
     .edit-icon {
