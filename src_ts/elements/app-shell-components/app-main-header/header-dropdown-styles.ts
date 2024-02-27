@@ -99,7 +99,7 @@ export const headerDropdownStyles: TemplateResult = html`
         margin-left: 2px;
       }
       app-toolbar {
-        padding-inline-end: 0px;        
+        padding-inline-end: 0px;
       }
     }
     @media (min-width: 850px) {

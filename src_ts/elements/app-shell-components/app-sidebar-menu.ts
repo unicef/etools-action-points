@@ -7,7 +7,7 @@ import {moduleStyles} from '../styles/module-styles';
 import {navMenuStyles} from '../styles/nav-menu-styles';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
-import { SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY } from '../../config/config';
+import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from '../../config/config';
 
 /**
  * @customElement
@@ -182,10 +182,10 @@ export class AppSidebarMenu extends MatomoMixin(LitElement) {
     }
   }
 
-  _toggleSmallMenu() {   
+  _toggleSmallMenu() {
     this.smallMenu = !this.smallMenu;
     const localStorageVal: number = this.smallMenu ? 1 : 0;
-    localStorage.setItem(SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY, String(localStorageVal))
+    localStorage.setItem(SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY, String(localStorageVal));
     fireEvent(this, 'toggle-small-menu', {value: this.smallMenu});
   }
 

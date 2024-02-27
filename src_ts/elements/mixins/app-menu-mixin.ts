@@ -1,7 +1,6 @@
 import {LitElement} from 'lit';
 import {property, query} from 'lit/decorators.js';
 import {Constructor} from '@unicef-polymer/etools-types';
-import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from '../../config/config';
 
 /**
  * App menu functionality mixin
@@ -20,7 +19,7 @@ export function AppMenuMixin<T extends Constructor<LitElement>>(baseClass: T) {
 
     public connectedCallback() {
       super.connectedCallback();
-      this._initMenuListeners();    
+      this._initMenuListeners();
     }
 
     public disconnectedCallback() {

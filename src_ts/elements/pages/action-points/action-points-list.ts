@@ -301,62 +301,82 @@ export class ActionPointsList extends connect(store)(
               </div>
               <div slot="row-data-details" class="row">
                 <div class="row-details-content col-md-2 col-12">
-                  <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>                  
-                  <sl-tooltip distance="0" placement="top" ?hidden="${!this._showTooltip(entry.description)}"                  
-                    content="${this.getStringValue(entry.description)}">
-                    <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content> 
+                  <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
+                  <sl-tooltip
+                    distance="0"
+                    placement="top"
+                    ?hidden="${!this._showTooltip(entry.description)}"
+                    content="${this.getStringValue(entry.description)}"
+                  >
+                    <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
                   </sl-tooltip>
                 </div>
                 <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
-                  <div>                    
-                    <sl-tooltip ?hidden="${!this._showTooltip(entry.intervention?.number)}" distance="0" placement="top"
-                      content="${this.getStringValue(entry.intervention?.number)}">
+                  <div>
+                    <sl-tooltip
+                      ?hidden="${!this._showTooltip(entry.intervention?.number)}"
+                      distance="0"
+                      placement="top"
+                      content="${this.getStringValue(entry.intervention?.number)}"
+                    >
                       <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
                     </sl-tooltip>
                   </div>
                 </div>
                 <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
-                  <div>                    
-                    <sl-tooltip ?hidden="${!this._showTooltip(entry.location?.name)}" distance="0" placement="top"
-                      content="${this.getStringValue(entry.location?.name)}">
+                  <div>
+                    <sl-tooltip
+                      ?hidden="${!this._showTooltip(entry.location?.name)}"
+                      distance="0"
+                      placement="top"
+                      content="${this.getStringValue(entry.location?.name)}"
+                    >
                       <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
                     </sl-tooltip>
                   </div>
                 </div>
                 <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('related_module', this.basePermissionPath)}</div>
-                  <div>                    
+                  <div>
                     <sl-tooltip
-                      distance="0" placement="top"
+                      distance="0"
+                      placement="top"
                       ?hidden="${!this._showTooltip(entry.related_module, this.modules, 'display_name')}"
-                      content="${this.getStringValue(entry.related_module, this.modules, 'display_name')}">
-                        <div class="truncate">
-                          ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
-                        </div>
+                      content="${this.getStringValue(entry.related_module, this.modules, 'display_name')}"
+                    >
+                      <div class="truncate">
+                        ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
+                      </div>
                     </sl-tooltip>
                   </div>
                 </div>
                 <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
-                  <div>                    
-                    <sl-tooltip ?hidden="${!this._showTooltip(entry.assigned_by?.name)}" distance="0" placement="top"
-                      content="${this.getStringValue(entry.assigned_by?.name)}">
-                      <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>  
+                  <div>
+                    <sl-tooltip
+                      ?hidden="${!this._showTooltip(entry.assigned_by?.name)}"
+                      distance="0"
+                      placement="top"
+                      content="${this.getStringValue(entry.assigned_by?.name)}"
+                    >
+                      <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
                     </sl-tooltip>
                   </div>
                 </div>
                 <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
-                  <div ?hidden="${!entry.date_of_completion?.length}">                    
+                  <div ?hidden="${!entry.date_of_completion?.length}">
                     <div>
-                     
-                      <sl-tooltip ?hidden="${!this._showTooltip(entry.date_of_completion)}" distance="0" placement="top"
-                        content="${this.prettyDate(entry.date_of_completion)}">                        
-                        <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>     
-                      </sl-tooltip
+                      <sl-tooltip
+                        ?hidden="${!this._showTooltip(entry.date_of_completion)}"
+                        distance="0"
+                        placement="top"
+                        content="${this.prettyDate(entry.date_of_completion)}"
                       >
+                        <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
+                      </sl-tooltip>
                     </div>
                   </div>
                 </div>

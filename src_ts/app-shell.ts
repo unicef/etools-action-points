@@ -142,7 +142,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     }
   }
 
-
   connectedCallback() {
     super.connectedCallback();
     installMediaQueryWatcher(`(min-width: 460px)`, () => fireEvent(this, 'change-drawer-state'));
