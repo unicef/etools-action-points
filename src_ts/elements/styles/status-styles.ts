@@ -32,6 +32,8 @@ export const etoolsStatusStyles = html`
     .divider-line {
       flex: 1;
       flex-basis: 0.000000001px;
+      margin-inline-start: 8px;
+      margin-inline-end: 8px;
     }
 
     .divider-line:first-child {

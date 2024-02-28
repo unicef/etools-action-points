@@ -30,7 +30,7 @@ export const pageLayoutStyles = html`
     #main {
       display: flex;
       flex-direction: row;
-      flex-wrap: wrap;
+      flex-wrap: no-wrap;
       padding: 24px;
     }
 
@@ -41,6 +41,7 @@ export const pageLayoutStyles = html`
     #sidebar {
       display: flex;
       width: 224px;
+      min-width: 224px;
       padding-left: 24px;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
