@@ -30,7 +30,7 @@ export const pageLayoutStyles = html`
     #main {
       display: flex;
       flex-direction: row;
-      flex-wrap: no-wrap;
+      flex-wrap: nowrap;
       padding: 24px;
     }
 
