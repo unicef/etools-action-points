@@ -148,7 +148,8 @@ export class ActionPointsItem extends connect(store)(
       const resp = await openDialog({
         dialog: 'add-verifier-dialog',
         dialogData: {
-          permissionPath: this.permissionPath
+          permissionPath: this.permissionPath,
+          actionPoint: this.actionPoint
         }
       }).then(({confirmed, response}) => {
         return {confirmed: confirmed, verifierId: response};
