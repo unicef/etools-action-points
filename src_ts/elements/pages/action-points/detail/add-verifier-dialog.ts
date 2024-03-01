@@ -83,7 +83,8 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
     }
 
     const {permissionPath, actionPoint} = data;
-    const assignedId = typeof actionPoint.assigned_by === 'object' ? actionPoint.assigned_by?.id : actionPoint.assigned_by;
+    const assignedId =
+      typeof actionPoint.assigned_by === 'object' ? actionPoint.assigned_by?.id : actionPoint.assigned_by;
     this.permissionPath = permissionPath;
     this.unicefUsers = (getData('unicefUsers') || []).filter((x: any) => x.id !== assignedId);
   }
