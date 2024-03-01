@@ -677,6 +677,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
       if (actionPoint.intervention) {
         this._updateCpOutputs(actionPoint.intervention);
       }
+      if (this.editedItem?.partner !== actionPoint?.partner) {
+        this._requestPartner(actionPoint?.partner);
+      }
       this.editedItem = {...actionPoint};
     }
   }
@@ -818,8 +821,8 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.interventionRequestInProcess = false;
   }
 
-  // @observe('originalActionPoint.intervention, originalActionPoint.partner.id, partner')
-  _updateInterventions(intervention: any, originalId: number, partner: any) {
+  // 'originalActionPoint.intervention, originalActionPoint.partner.id, this.partner'
+  _updateInterventions(intervention: any, partnerId: number, partner: any) {
     const interventions = (partner && partner.interventions) || [];
     const id = partner && partner.id;
     const exists =
@@ -828,7 +831,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         return item.id === intervention.id;
       });
 
-    if (intervention && id === originalId && !exists) {
+    if (intervention && (!id || id === partnerId) && !exists) {
       interventions.push(intervention);
     }
 
