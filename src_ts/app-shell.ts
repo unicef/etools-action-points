@@ -24,7 +24,7 @@ import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styl
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {setBasePath} from '@shoelace-style/shoelace/dist/utilities/base-path.js';
 import {initializeIcons} from '@unicef-polymer/etools-unicef/src/etools-icons/etools-icons';
-import {connect, installMediaQueryWatcher, installRouter} from 'pwa-helpers';
+import {connect, installMediaQueryWatcher, installRouter} from '@unicef-polymer/etools-utils/dist/pwa.utils';
 import {RootState, store} from './redux/store';
 import {handleUrlChange} from './redux/actions/app.js';
 import {RouteDetails} from '@unicef-polymer/etools-types';
