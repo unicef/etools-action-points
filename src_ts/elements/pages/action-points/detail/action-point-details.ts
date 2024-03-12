@@ -1,12 +1,12 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-input/paper-textarea.js';
-import '@polymer/paper-checkbox/paper-checkbox.js';
-import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
-import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import '@unicef-polymer/etools-loading/etools-loading.js';
-import '@unicef-polymer/etools-date-time/datepicker-lite.js';
+import {html, LitElement} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
+import '@unicef-polymer/etools-unicef/src/etools-checkbox/etools-checkbox';
+import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown.js';
+import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
+import '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading.js';
+import '@unicef-polymer/etools-unicef/src/etools-date-time/datepicker-lite.js';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
@@ -17,16 +17,18 @@ import {pageLayoutStyles} from '../../../styles/page-layout-styles';
 import {sharedStyles} from '../../../styles/shared-styles';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {GenericObject} from '../../../../typings/globals.types';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
+
 @customElement('action-point-details')
 export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
   @property({type: Array}) // notify: true
   partners: any[] = [];
 
   @property({type: String}) // notify: true
-  permissionPath: string;
+  permissionPath!: string;
 
   @property({type: Array})
   locations: any[] = [];
@@ -38,16 +40,16 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   editedItem: GenericObject = {};
 
   @property({type: Array}) // notify: true
-  cpOutputs: any[];
+  cpOutputs!: any[];
 
   @property({type: Array}) // notify: true
   interventions: any[] = [];
 
   @property({type: Array}) // notify: true
-  modules: any[];
+  modules!: any[];
 
   @property({type: Array}) // notify: true
-  unicefUsers: any[];
+  unicefUsers!: any[];
 
   private _apUnicefUsers!: any[];
   @property({type: Array})
@@ -61,13 +63,13 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   @property({type: Array}) // notify: true
-  offices: any[];
+  offices!: any[];
 
   @property({type: Array}) // notify: true
-  sectionsCovered: any[];
+  sectionsCovered!: any[];
 
   @property({type: Object}) // notify: true
-  originalActionPoint: GenericObject;
+  originalActionPoint!: GenericObject;
 
   @property({type: Object})
   interventionsData: GenericObject = {};
@@ -79,13 +81,13 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   dataIsSet = false;
 
   @property({type: Boolean})
-  partnerRequestInProcess: boolean;
+  partnerRequestInProcess!: boolean;
 
   @property({type: Number})
-  lastPartnerId: number;
+  lastPartnerId!: number;
 
   @property({type: Array})
-  categories: any[];
+  categories!: any[];
 
   @property({type: Object})
   partner: any;
@@ -95,7 +97,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
 
   @property({type: Object})
   datepickerModal: any;
-
   render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${tabInputsStyles} ${moduleStyles}
@@ -116,7 +117,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           padding: 19px 12px 17px;
           opacity: 0.8;
           text-align: right;
-          font-size: 12px;
+          font-size: var(--etools-font-size-12, 12px);
           color: var(--list-secondary-text-color, #757575);
         }
 
@@ -132,11 +133,11 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         }
 
         .reference-link > label {
-          font-size: 16px;
+          font-size: var(--etools-font-size-16, 16px);
           width: 133%;
           transform: scale(0.75);
           transform-origin: left top;
-          color: var(--paper-input-container-color, var(--secondary-text-color));
+          color: var(var(--secondary-text-color));
         }
 
         .reference-link > a {
@@ -148,18 +149,18 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         }
 
         .reference-link > span {
-          font-size: 16px;
+          font-size: var(--etools-font-size-16, 16px);
           line-height: 16px;
-          color: var(--paper-input-container-color, var(--gray-20));
+          color: var(var(--gray-20));
         }
-        .pl-12 {
-          padding-left: 12px;
+        datepicker-lite {
+          --etools-icon-fill-color: var(--secondary-text-color);
         }
       </style>
 
       <etools-content-panel class="content-section clearfix" panel-title="Action Points Details">
-        <div class="row-h group" ?hidden=${this.actionAllowed(this.permissionPath, 'create')}>
-          <div class="input-container">
+        <div class="row" ?hidden=${this.actionAllowed(this.permissionPath, 'create')}>
+          <div class="col-md-4 col-12">
             <etools-dropdown
               class="validate-input readonly
                 without-border ${this._setRequired('related_module', this.permissionPath)}"
@@ -179,7 +180,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <div class="reference-link">
               <label>${this.getLabel('related_object_str', this.permissionPath)}</label>
               <a
@@ -194,7 +195,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               >
             </div>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <etools-dropdown
               class="validate-input ${this._setRequired('assigned_by', this.permissionPath)}"
               .selected="${this.editedItem?.assigned_by}"
@@ -208,7 +209,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.assigned_by}"
               .errorMessage="${this.errors.assigned_by}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('assigned_by', this.permissionPath)}"
@@ -219,9 +220,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
           </div>
         </div>
 
-        <div class="row-h group">
+        <div class="row">
           ${(this.showCategory(this.categories) &&
-            html` <div class="input-container input-container-l">
+            html` <div class="col-12">
               <!-- Category -->
               <etools-dropdown
                 class="validate-input ${this._setRequired('category', this.permissionPath)}"
@@ -236,7 +237,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.category}"
                 .errorMessage="${this.errors.category}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('category', this.permissionPath)}"
@@ -246,10 +247,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>
             </div>`) ||
           ''}
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- Implementing Partner -->
             ${(!this.isReadOnly('partner', this.permissionPath) &&
               html`<etools-dropdown
@@ -264,7 +262,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.partner}"
                 .errorMessage="${this.errors.partner}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('partner', this.permissionPath)}"
@@ -276,12 +274,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>`) ||
             ''}
             ${(this.isReadOnly('partner', this.permissionPath) &&
-              html`<paper-input
+              html`<etools-input
                 label="${this.getLabel('partner', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('partner', this.permissionPath, true)}"
-                value="${this.getStringValueOrEmpty(this.originalActionPoint.partner?.name)}"
+                value="${this.getStringValueOrEmpty(this.originalActionPoint?.partner?.name)}"
                 readonly
-              ></paper-input>`) ||
+              ></etools-input>`) ||
             ''}
 
             <etools-loading
@@ -293,7 +291,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-loading>
           </div>
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- PD/SSFA -->
             ${(!this.isReadOnly('intervention', this.permissionPath) &&
               html` <etools-dropdown
@@ -308,7 +306,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.intervention}"
                 .errorMessage="${this.errors.intervention}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('intervention', this.permissionPath)}"
@@ -323,12 +321,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>`) ||
             ''}
             ${(this.isReadOnly('intervention', this.permissionPath) &&
-              html`<paper-input
+              html`<etools-input
                 label="${this.getLabel('intervention', this.permissionPath)}"
                 placeholder="${this.getPlaceholderText('intervention', this.permissionPath, true)}"
                 value="${this.getStringValueOrEmpty(this.originalActionPoint?.intervention?.title)}"
                 readonly
-              ></paper-input>`) ||
+              ></etools-input>`) ||
             ''}
 
             <etools-loading
@@ -344,10 +342,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-loading>
           </div>
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- CP Output -->
             ${(!this.isReadOnly('cp_output', this.permissionPath) &&
               html` <etools-dropdown
@@ -362,7 +357,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?invalid="${this.errors.cp_output}"
                 .errorMessage="${this.errors.cp_output}"
                 @focus=${this._resetFieldError}
-                @tap=${this._resetFieldError}
+                @click=${this._resetFieldError}
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('cp_output', this.permissionPath)}"
@@ -375,16 +370,15 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               </etools-dropdown>`) ||
             ''}
             ${(this.isReadOnly('cp_output', this.permissionPath) &&
-              html` <paper-input
+              html` <etools-input
                 .label="${this.getLabel('cp_output', this.permissionPath)}"
                 .placeholder="${this.getPlaceholderText('cp_output', this.permissionPath, true)}"
-                .value="${this.getStringValueOrEmpty(this.originalActionPoint.cp_output?.name)}"
+                .value="${this.getStringValueOrEmpty(this.originalActionPoint?.cp_output?.name)}"
                 readonly
-              ></paper-input>`) ||
+              ></etools-input>`) ||
             ''}
           </div>
-
-          <div class="input-container input-container-ms">
+          <div class="col-md-6 col-12">
             <!-- Locations -->
             <etools-dropdown
               class="validate-input ${this._setRequired('location', this.permissionPath)}"
@@ -399,7 +393,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.location}"
               .errorMessage="${this.errors.location}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('location', this.permissionPath)}"
@@ -408,12 +402,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container input-container-l">
+          <div class="col-12">
             <!-- Description -->
-            <paper-textarea
+            <etools-textarea
               class="validate-input ${this._setRequired('description', this.permissionPath)}"
               .value="${this.editedItem?.description}"
               label="${this.getLabel('description', this.permissionPath)}"
@@ -424,16 +415,13 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.description}"
               .errorMessage="${this.errors.description}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               @value-changed="${({detail}: CustomEvent) => this.updateField('description', detail.value)}"
               no-title-attr
             >
-            </paper-textarea>
+            </etools-textarea>
           </div>
-        </div>
-
-        <div class="row-h group">
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Assigned To -->
             <etools-dropdown
               class="validate-input ${this._setRequired('assigned_to', this.permissionPath)}"
@@ -448,7 +436,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.assigned_to}"
               .errorMessage="${this.errors.assigned_to}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('assigned_to', this.permissionPath)}"
@@ -457,7 +445,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Section -->
             <etools-dropdown
               class="validate-input ${this._setRequired('section', this.permissionPath)}"
@@ -472,7 +460,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.section}"
               .errorMessage="${this.errors.section}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('section', this.permissionPath)}"
@@ -481,7 +469,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Office -->
             <etools-dropdown
               class="validate-input ${this._setRequired('office', this.permissionPath)}"
@@ -497,7 +485,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?invalid="${this.errors.office}"
               .errorMessage="${this.errors.office}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               allow-outside-scroll
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('office', this.permissionPath)}"
@@ -506,24 +494,20 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
             >
             </etools-dropdown>
           </div>
-        </div>
 
-        <div class="row-h group">
-          <div class="input-container input-checkbox-container">
+          <div class="col-md-4 col-12 input-checkbox-container">
             <!-- Priority -->
-            <paper-checkbox
+            <etools-checkbox
               ?checked="${this.editedItem?.high_priority}"
               ?disabled="${this.isReadOnly('high_priority', this.permissionPath)}"
-              @checked-changed=${({detail}) => {
-                if (this.editedItem && Object.keys(this.editedItem).length) {
-                  this.updateField('high_priority', detail.value);
-                }
+              @sl-change=${(e: any) => {
+                this.updateField('high_priority', e.target.checked);
               }}
             >
-              ${this.getLabel('high_priority', this.permissionPath)}</paper-checkbox
+              ${this.getLabel('high_priority', this.permissionPath)}</etools-checkbox
             >
           </div>
-          <div class="input-container">
+          <div class="col-md-4 col-12">
             <!-- Due Date -->
             <datepicker-lite
               id="dueDate"
@@ -537,13 +521,51 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ?required="${this._setRequired('due_date', this.permissionPath)}"
               ?readonly="${this.isReadOnly('due_date', this.permissionPath)}"
               @focus=${this._resetFieldError}
-              @tap=${this._resetFieldError}
+              @click=${this._resetFieldError}
               .errorMessage="${this.errors.due_date}"
               .value="${this.editedItem?.due_date}"
               fire-date-has-changed
               @date-has-changed="${this._dueDateChanged}"
             >
             </datepicker-lite>
+          </div>
+
+          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.potential_verifier?.id}">
+            <!-- Selected Verifier -->
+            <etools-dropdown
+              class="validate-input ${this._setRequired('potential_verifier', this.permissionPath)}"
+              .selected="${this.editedItem?.potential_verifier?.id}"
+              label="Selected Verifier"
+              placeholder="${this.getPlaceholderText('potential_verifier', this.permissionPath, true)}"
+              .options="${this.unicefUsers}"
+              option-label="name"
+              option-value="id"
+              readonly
+              allow-outside-scroll
+              dynamic-align
+            >
+            </etools-dropdown>
+          </div>
+
+          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.verified_by}">
+            <!-- Verifier -->
+            <etools-input
+              label="${this.getLabel('verified_by', this.permissionPath)}"
+              placeholder="${this.getPlaceholderText('verified_by', this.permissionPath, true)}"
+              value="${this.getStringValueOrEmpty(this.editedItem?.verified_by?.name)}"
+              readonly
+            ></etools-input>
+          </div>
+          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.verified_by}">
+            <!-- Verification -->
+            <etools-input
+              label="Verification Result"
+              value="${this.getVerificationWithTimestamp(
+                this.editedItem?.is_adequate,
+                this.editedItem?.date_of_verification
+              )}"
+              readonly
+            ></etools-input>
           </div>
         </div>
         <div class="last-modify" ?hidden="${!this.editedItem.history?.[0]}">
@@ -555,12 +577,16 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     `;
   }
 
+  static get styles() {
+    // language=CSS
+    return [layoutStyles];
+  }
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener('static-data-loaded', () => this.setData());
     document.addEventListener('locations-loaded', () => this._updateLocations());
     this.addEventListener('reset-validation', ({detail}: any) => {
-      const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+      const elements: NodeList = this.shadowRoot!.querySelectorAll('.validate-input');
       elements.forEach((element: GenericObject) => {
         element.invalid = false;
         if (detail && detail.resetValues) {
@@ -573,7 +599,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     }
   }
 
-  updated(changedProperties) {
+  updated(changedProperties: any) {
     if (changedProperties.has('actionPoint')) {
       this._updateEditedItem(this.actionPoint);
     }
@@ -622,7 +648,15 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.unicefUsers = users;
   }
 
-  addUsersNoLongerAssignedToCurrentCountry(availableUsers, savedUsers) {
+  getVerificationWithTimestamp(is_adequate: boolean, verification_date: string) {
+    if (!verification_date) {
+      return '';
+    }
+    const verificationText = is_adequate ? 'Adequate' : 'Not Adequate';
+    return `${verificationText} (${this.formatDateInLocal(verification_date, 'D MMM YYYY h:mm A')})`;
+  }
+
+  addUsersNoLongerAssignedToCurrentCountry(availableUsers: any[], savedUsers: any[]) {
     if (!(savedUsers && savedUsers.length > 0 && availableUsers && availableUsers.length > 0)) {
       return false;
     }
@@ -642,6 +676,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     if (actionPoint && JSON.stringify(actionPoint) !== JSON.stringify(this.editedItem)) {
       if (actionPoint.intervention) {
         this._updateCpOutputs(actionPoint.intervention);
+      }
+      if (this.editedItem?.partner !== actionPoint?.partner) {
+        this._requestPartner(actionPoint?.partner);
       }
       this.editedItem = {...actionPoint};
     }
@@ -784,8 +821,8 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     this.interventionRequestInProcess = false;
   }
 
-  // @observe('originalActionPoint.intervention, originalActionPoint.partner.id, partner')
-  _updateInterventions(intervention: any, originalId: number, partner: any) {
+  // 'originalActionPoint.intervention, originalActionPoint.partner.id, this.partner'
+  _updateInterventions(intervention: any, partnerId: number, partner: any) {
     const interventions = (partner && partner.interventions) || [];
     const id = partner && partner.id;
     const exists =
@@ -794,7 +831,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         return item.id === intervention.id;
       });
 
-    if (intervention && id === originalId && !exists) {
+    if (intervention && (!id || id === partnerId) && !exists) {
       interventions.push(intervention);
     }
 
@@ -802,7 +839,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   validate() {
-    const elements: NodeList = this.shadowRoot.querySelectorAll('.validate-input');
+    const elements: NodeList = this.shadowRoot!.querySelectorAll('.validate-input');
     let valid = true;
     elements.forEach((element: GenericObject) => {
       if (element.required && !element.disabled && !element.validate()) {
@@ -829,8 +866,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   }
 
   _dueDateChanged(e: CustomEvent) {
-    const selDate = e.detail.date;
-    this.editedItem.due_date = selDate;
+    this.editedItem.due_date = e.detail.date;
   }
 
   isRequestInProcess(field: string, basePermissionPath: string, isRequestInProcess: boolean) {

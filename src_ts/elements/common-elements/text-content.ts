@@ -1,7 +1,7 @@
-import {LitElement, html, property, customElement} from 'lit-element';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 
 /**
- * @polymer
  * @extends HTMLElement
  */
 @customElement('text-content')
@@ -19,5 +19,5 @@ export class TextContent extends LitElement {
   }
 
   @property({type: String})
-  text: string;
+  text = '';
 }

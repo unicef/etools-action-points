@@ -1,6 +1,6 @@
 import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
 
 /**
@@ -79,7 +79,7 @@ export function ErrorHandlerMixin<T extends Constructor<LitElement>>(superClass:
       return `${fieldLabel}: ${error}`;
     }
 
-    protected _getNonFieldsMessage(errorObj: any) {
+    protected _getNonFieldsMessage(errorObj: any): any {
       if (typeof errorObj != 'object') {
         return null;
       }
@@ -104,7 +104,7 @@ export function ErrorHandlerMixin<T extends Constructor<LitElement>>(superClass:
     }
 
     public _responseError(message: string, type?: string, eventType = 'error') {
-      console[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
+      (console as any)[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
     }
   }
   return ErrorHandlerClass as typeof ErrorHandlerClass & T;

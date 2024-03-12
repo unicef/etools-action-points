@@ -1,26 +1,25 @@
-import {LitElement, property, html, customElement} from 'lit-element';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-menu-button/paper-menu-button.js';
-import '@polymer/paper-tooltip/paper-tooltip.js';
-import '@polymer/paper-listbox/paper-listbox.js';
-import {PaperListboxElement} from '@polymer/paper-listbox/paper-listbox.js';
-import '@polymer/paper-item/paper-item.js';
-import '@polymer/iron-icon/iron-icon.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button-group';
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
+import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js';
+import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {sharedStyles} from '../styles/shared-styles';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 
 @customElement('pages-header-element')
 export class PagesHeaderElement extends MatomoMixin(LitElement) {
   @property({type: String, attribute: 'page-title'})
-  pageTitle: string;
+  pageTitle = '';
 
   @property({type: String, attribute: 'btn-text'})
-  btnText: string;
+  btnText = '';
 
   @property({type: Boolean, attribute: 'show-add-button'})
   showAddButton = false;
@@ -35,13 +34,16 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   pageData: any;
 
   @property({type: String})
-  exportLinks: GenericObject[];
+  exportLinks: GenericObject[] = [];
 
   @property({type: String})
   downloadLetterUrl = '';
 
+  @property({type: Boolean})
+  lowResolutionLayout = false;
+
   static get styles() {
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
   }
 
   render() {
@@ -53,13 +55,9 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           display: block;
         }
 
-        paper-menu-button.mw-150 {
+        etools-button-group.mw-150 {
           min-width: 150px;
           white-space: nowrap;
-        }
-
-        paper-item {
-          cursor: pointer;
         }
 
         .export-buttons:not([hidden]) {
@@ -82,7 +80,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
         }
 
         .side-heading span.title {
-          font-size: 24px;
+          font-size: var(--etools-font-size-24, 24px);
           width: 100%;
           white-space: nowrap;
           overflow: hidden;
@@ -92,29 +90,26 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
         .side-heading .grey-buttons {
           color: var(--gray-mid);
           font-weight: 500;
-          font-size: 14px;
+          font-size: var(--etools-font-size-14, 14px);
         }
 
-        .side-heading .grey-buttons iron-icon {
+        .side-heading .grey-buttons etools-icon {
           margin-right: 8px;
         }
-
-        .side-heading paper-button.add-btn {
-          background-color: var(--module-primary);
-          color: white;
-          height: 36px;
-          font-weight: 500;
-          padding-left: 10px;
-          padding-right: 15px;
-        }
-
-        .side-heading paper-button.add-btn span {
-          margin-left: 4px;
-        }
-
         .side-heading .add-btn {
           margin: 11px 4px 12px 18px;
-          background-color: var(--module-primary);
+        }
+        @media (max-width: 576px) {
+          .side-heading .add-btn {
+            margin: unset;
+          }
+          etools-button {
+            --sl-spacing-medium: 0px;
+            min-width: var(--sl-input-height-medium);
+          }
+          .side-heading {
+            padding: 0 20px;
+          }
         }
 
         .btn-link {
@@ -126,55 +121,69 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
           z-index: 10;
         }
       </style>
-
+      <etools-media-query
+        query="(max-width: 576px)"
+        @query-matches-changed="${(e: CustomEvent) => {
+          this.lowResolutionLayout = e.detail.value;
+        }}"
+      ></etools-media-query>
       <div class="header-wrapper">
         <div class="side-heading layout-horizontal align-items-center around-justified">
-          <span class="flex-c title">${this._setTitle(this.pageData, this.pageTitle)}</span>
+          <span class="title">${this._setTitle(this.pageData, this.pageTitle)}</span>
 
           <div class="layout-horizontal align-items-center">
             <div class="export-buttons" ?hidden="${!this.exportLinks?.length}">
-              <paper-menu-button
+              <etools-button-group
                 id="dropdown"
                 ?hidden="${!this._isDropDown(this.exportLinks)}"
-                @tap="${this._toggleOpened}"
+                @click="${this._toggleOpened}"
                 horizontal-align="right"
               >
-                <paper-button slot="dropdown-trigger" class="grey-buttons">
-                  <iron-icon icon="file-download"></iron-icon>
+                <etools-button slot="dropdown-trigger" class="grey-buttons">
+                  <etools-icon name="file-download"></etools-icon>
                   Export
-                </paper-button>
+                </etools-button>
 
-                <paper-listbox id="dropdownMenu" slot="dropdown-content">
-                  ${this.exportLinks?.map(
-                    (item) =>
-                      html`
-                        <paper-item tracker="Export ${item.name}" @tap="${this.exportData}">${item.name}</paper-item>
-                      `
-                  )}
-                </paper-listbox>
-              </paper-menu-button>
-              <paper-button
-                class="grey-buttons"
+                <sl-dropdown
+                  id="dropdownMenu"
+                  placement="bottom-end"
+                  @click="${(event: MouseEvent) => event.stopImmediatePropagation()}"
+                >
+                  <sl-menu>
+                    ${this.exportLinks?.map(
+                      (item) =>
+                        html`
+                          <sl-menu-item tracker="Export ${item.name}" @tap="${this.exportData}"
+                            >${item.name}</sl-menu-item
+                          >
+                        `
+                    )}
+                  </sl-menu>
+                </sl-dropdown>
+              </etools-button-group>
+              <etools-button
+                class="neutral"
+                variant="text"
                 tracker="Export"
                 ?hidden="${!this.showExportButton || this._isDropDown(this.exportLinks)}"
-                @tap="${this.exportData}"
+                @click="${this.exportData}"
               >
-                <iron-icon icon="file-download"></iron-icon>
-                Export
-              </paper-button>
+                <etools-icon name="file-download"></etools-icon>
+                ${this.lowResolutionLayout ? '' : 'Export'}
+              </etools-button>
             </div>
 
-            <paper-button
+            <etools-button
               class="add-btn"
-              raised
+              variant="primary"
               tracker="Add Action Point"
               ?hidden="${this._hideAddButton(this.showAddButton)}"
-              @tap="${this.addNewTap}"
+              @click="${this.addNewTap}"
+              href="${this.link}"
             >
-              <a href="${this.link}" class="btn-link" ?hidden="${!this._showLink(this.link)}"></a>
-              <iron-icon icon="add"></iron-icon>
-              <span>${this.btnText}</span>
-            </paper-button>
+              <etools-icon name="add" slot="prefix"></etools-icon>
+              ${this.lowResolutionLayout ? '' : this.btnText}
+            </etools-button>
             <slot></slot>
           </div>
         </div>
@@ -183,7 +192,7 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
   }
 
   _toggleOpened() {
-    const dropdown: PaperListboxElement = this.shadowRoot.querySelector('#dropdownMenu');
+    const dropdown: any = this.shadowRoot?.querySelector('#dropdownMenu');
     dropdown.select(null);
   }
 

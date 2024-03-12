@@ -1,4 +1,4 @@
-import {html} from 'lit-element';
+import {html} from 'lit';
 import {moduleStyles} from './module-styles';
 
 export const mainPageStyles = html`
@@ -7,9 +7,6 @@ export const mainPageStyles = html`
     :host {
       position: relative;
       display: block;
-      --paper-tab-content-unselected: {
-        color: var(--gray-light);
-      }
       --ecp-header-bg: var(--module-primary);
     }
     :host .view-container {
@@ -35,14 +32,6 @@ export const mainPageStyles = html`
       background-color: #fff;
       box-shadow: 1px -3px 9px 0 #000;
     }
-    :host .tab-selector paper-tabs {
-      color: var(--module-primary);
-      font-size: 14px;
-      font-weight: bold;
-    }
-    :host .tab-selector paper-tabs span {
-      text-transform: uppercase;
-    }
     :host .tab-selector .tab-content {
       padding: 0 13px;
     }
@@ -58,7 +47,7 @@ export const mainPageStyles = html`
       line-height: 48px;
       background-color: var(--gray-08);
       color: var(--gray-28);
-      font-size: 14px;
+      font-size: var(--etools-font-size-14, 14px);
       font-weight: 600;
     }
     etools-content-panel.cancellation-tab::part(ecp-header-title) {
@@ -85,14 +74,14 @@ export const mainPageStyles = html`
     }
     etools-content-panel.cancellation-tab .cancellation-title {
       font-weight: 500;
-      font-size: 19px;
+      font-size: var(--etools-font-size-18, 18px);
       text-transform: uppercase;
       color: var(--module-warning);
       margin: 15px 0 26px;
       padding-left: 80px;
     }
     etools-content-panel.cancellation-tab .cancellation-text {
-      font-size: 17px;
+      font-size: var(--etools-font-size-16, 16px);
       white-space: pre-wrap;
       color: var(--gray-darkest);
       padding-left: 80px;
@@ -109,15 +98,9 @@ export const mainPageStyles = html`
       -o-transform: scale(0.9, 1.5);
       transform: scale(0.9, 1.5);
     }
-    div[slot='panel-btns'].bookmark iron-icon {
+    div[slot='panel-btns'].bookmark etools-icon {
       width: 70px !important;
       height: 70px !important;
-    }
-    paper-tab {
-      margin-right: 10px;
-      --paper-tab-content: {
-        width: auto;
-      }
     }
   </style>
 `;

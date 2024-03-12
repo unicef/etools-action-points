@@ -1,9 +1,8 @@
 node_modules/
 bower_components/
-build/
+src/
 .vscode/
 .tmp
 .idea
 *.sublime-project
 *.sublime-workspace
-src/**/*.js

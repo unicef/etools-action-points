@@ -1,4 +1,4 @@
-import {html} from 'lit-element';
+import {html} from 'lit';
 
 export const etoolsStatusStyles = html`
   <style>
@@ -32,6 +32,8 @@ export const etoolsStatusStyles = html`
     .divider-line {
       flex: 1;
       flex-basis: 0.000000001px;
+      margin-inline-start: 8px;
+      margin-inline-end: 8px;
     }
 
     .divider-line:first-child {
@@ -64,17 +66,16 @@ export const etoolsStatusStyles = html`
       -moz-border-radius: 50%;
       border-radius: 50%;
       color: var(--etools-status-icon-text-color, #ffffff);
-      font-size: 12px;
+      font-size: var(--etools-font-size-12, 12px);
     }
 
-    .icon-wrapper iron-icon {
-      --iron-icon-height: 16px;
-      --iron-icon-width: 16px;
+    .icon-wrapper etools-icon {
+      --etools-icon-font-size: var(--etools-font-size-16, 16px);
       color: white;
       display: none;
     }
 
-    .icon-wrapper iron-icon,
+    .icon-wrapper etools-icon,
     .icon-wrapper span {
       align-self: center;
     }
@@ -110,8 +111,6 @@ export const etoolsStatusStyles = html`
     }
 
     .custom .status-icon .icon-wrapper .custom-icon {
-      --iron-icon-height: 100%;
-      --iron-icon-width: 100%;
       width: 100%;
       height: 100%;
     }
@@ -143,7 +142,7 @@ export const etoolsStatusStyles = html`
       display: none;
     }
 
-    .completed .icon-wrapper iron-icon.done-icon {
+    .completed .icon-wrapper etools-icon.done-icon {
       display: block;
       width: 18px;
     }

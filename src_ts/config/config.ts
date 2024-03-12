@@ -34,3 +34,8 @@ export const productionDomain = 'etools.unicef.org';
 export const demoDomain = 'etools-demo.unicef.org';
 export const devDomain = 'etools-dev.unicef.org';
 export const localDomain = 'localhost';
+export const SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY = 'etoolsAppSmallMenuIsActive';
+export const ROOT_PATH = '/' + getBasePath().replace(window.location.origin, '').slice(1, -1) + '/';
+function getBasePath() {
+  return document.getElementsByTagName('base')[0].href;
+}

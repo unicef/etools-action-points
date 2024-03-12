@@ -1,8 +1,10 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/paper-input/paper-textarea.js';
-import '@unicef-polymer/etools-content-panel/etools-content-panel.js';
-import '@unicef-polymer/etools-data-table/etools-data-table.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
+import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
+import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
+import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
@@ -13,6 +15,7 @@ import {DateMixin} from '../../../mixins/date-mixin';
 import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
+import linkifyStr from 'linkify-string';
 
 @customElement('action-point-comments') // Actions Taken
 export class ActionPointComments extends PaginationMixin(
@@ -36,12 +39,12 @@ export class ActionPointComments extends PaginationMixin(
         }
 
         .comment-item__user {
-          font-size: 13px;
+          font-size: var(--etools-font-size-13, 13px);
           margin-right: 5px;
           font-weight: bold;
         }
         .comment-item__date {
-          font-size: 11px;
+          font-size: var(--etools-font-size-11, 11px);
           color: var(--list-secondary-text-color, #757575);
         }
 
@@ -50,22 +53,21 @@ export class ActionPointComments extends PaginationMixin(
         }
       </style>
 
-      <iron-media-query
+      <etools-media-query
         query="(max-width: 767px)"
-        .queryMatches="${this.lowResolutionLayout}"
         @query-matches-changed="${(e: CustomEvent) => {
           this.lowResolutionLayout = e.detail.value;
         }}"
-      ></iron-media-query>
+      ></etools-media-query>
 
       <etools-content-panel panel-title="${this.getLabel('comments', this.permissionPath)}">
         <div slot="panel-btns">
-          <paper-icon-button
+          <etools-icon-button
             class="panel-button"
             ?hidden="${this.noActionsAllowed(this.permissionPath)}"
-            icon="add-box"
-            @tap="${this._openAddComment}"
-          ></paper-icon-button>
+            name="add-box"
+            @click="${this._openAddComment}"
+          ></etools-icon-button>
         </div>
         <div class="comments-list">
           <span ?hidden=${this.filteredComments?.length}>No actions taken</span>
@@ -116,7 +118,7 @@ export class ActionPointComments extends PaginationMixin(
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('new-comment-added', (e: CustomEvent) => this._newCommentAdded(e));
+    document.addEventListener('new-comment-added', (e: any) => this._newCommentAdded(e));
   }
 
   firstUpdated() {
@@ -140,7 +142,7 @@ export class ActionPointComments extends PaginationMixin(
 
   _createCommentDialog() {
     this.commentDialog = document.createElement('open-add-comments') as OpenAddComments;
-    document.querySelector('body').appendChild(this.commentDialog);
+    document.querySelector('body')?.appendChild(this.commentDialog);
   }
 
   _updateCommentProp() {
@@ -164,8 +166,7 @@ export class ActionPointComments extends PaginationMixin(
 
   checkLinks(comment) {
     comment = this.getStringValue(comment);
-    // @ts-ignore
-    comment = linkifyStr(comment); // eslint-disable-line
+    comment = linkifyStr(comment);
     comment = comment.trim();
     return comment;
   }

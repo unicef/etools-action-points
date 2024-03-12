@@ -1,55 +1,24 @@
-import {LitElement, html, property, query} from 'lit-element';
-import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
-import {EtoolsDropdownEl} from '@unicef-polymer/etools-dropdown/etools-dropdown';
+import {LitElement, html} from 'lit';
+import {query, property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown.js';
+import {EtoolsDropdownEl} from '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
-import {sendRequest} from '@unicef-polymer/etools-ajax';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
+import {headerDropdownStyles} from './header-dropdown-styles';
 
 /**
- * @polymer
  * @customElement
  * @appliesMixin EtoolsAjaxRequestMixin
  */
 class OrganizationsDropdown extends LitElement {
   render() {
     return html`
-      <style>
-        #organizationSelector {
-          width: 170px;
-        }
-        etools-dropdown.warning {
-          --paper-input-container: {
-            padding-left: 3px;
-            box-sizing: border-box;
-            box-shadow: inset 0px 0px 0px 1.5px red;
-          }
-        }
-        etools-dropdown {
-          --esmm-icons: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-          }
-          --paper-input-container-underline: {
-            display: none;
-          }
-          --paper-input-container-underline-focus: {
-            display: none;
-          }
-          --paper-input-container-underline-disabled: {
-            display: none;
-          }
-          --paper-input-container-shared-input-style: {
-            color: var(--light-secondary-text-color);
-            cursor: pointer;
-            font-size: 16px;
-            text-align: right;
-            width: 100%;
-          }
-        }
-      </style>
+      ${headerDropdownStyles}
       <etools-dropdown
+        transparent
         id="organizationSelector"
-        class="${this.checkMustSelectOrganization(this.user)}"
+        class="w100 ${this.checkMustSelectOrganization(this.user)}"
         .selected="${this.currentOrganizationId}"
         placeholder="Select Organization"
         .options="${this.organizations}"
@@ -60,6 +29,9 @@ class OrganizationsDropdown extends LitElement {
         allow-outside-scroll
         no-label-float
         hide-search
+        min-width="160px"
+        placement="bottom-end"
+        .syncWidth="${false}"
       >
       </etools-dropdown>
     `;
@@ -86,13 +58,6 @@ class OrganizationsDropdown extends LitElement {
 
   public connectedCallback() {
     super.connectedCallback();
-
-    setTimeout(() => {
-      const fitInto = document.querySelector('app-shell')!.shadowRoot!.querySelector('#appHeadLayout');
-      if (fitInto && this.organizationSelectorDropdown) {
-        this.organizationSelectorDropdown.fitInto = fitInto;
-      }
-    }, 500);
   }
 
   public onUserChange(user: any) {
@@ -104,7 +69,7 @@ class OrganizationsDropdown extends LitElement {
     this.currentOrganizationId = this.user.organization?.id || null;
   }
 
-  checkMustSelectOrganization(user) {
+  checkMustSelectOrganization(user: any) {
     if (user && user.user && !user.organization) {
       setTimeout(() => {
         this.dispatchEvent(
@@ -135,7 +100,7 @@ class OrganizationsDropdown extends LitElement {
     }
   }
 
-  triggerOrganizationChangeRequest(organizationId) {
+  triggerOrganizationChangeRequest(organizationId: number) {
     this.dispatchEvent(
       new CustomEvent('global-loading', {
         detail: {

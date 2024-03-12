@@ -1,11 +1,9 @@
-import {LitElement, html, customElement, property} from 'lit-element';
-import '@polymer/paper-card/paper-card.js';
-import '@polymer//app-route/app-location';
-import '@polymer/iron-location/iron-query-params.js';
-import '@polymer/paper-tooltip/paper-tooltip.js';
-import '@polymer/paper-toggle-button/paper-toggle-button.js';
-import '@unicef-polymer/etools-data-table/etools-data-table.js';
-import {EtoolsDataTableColumn} from '@unicef-polymer/etools-data-table/etools-data-table-column.js';
+import {LitElement, html, PropertyValues} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
+import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
+import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
+import {EtoolsDataTableColumn} from '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table-column.js';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../data-elements/action-points-data';
@@ -17,28 +15,34 @@ import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles/module-styles';
 import {sharedStyles} from '@unicef-polymer/etools-modules-common/dist/styles/shared-styles-lit';
-import {dataTableStylesLit} from '@unicef-polymer/etools-data-table/data-table-styles-lit';
+import {dataTableStylesLit} from '@unicef-polymer/etools-unicef/src/etools-data-table/styles/data-table-styles';
 import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
 import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
-import {timeOut} from '@polymer/polymer/lib/utils/async.js';
-import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import '@polymer/iron-media-query/iron-media-query.js';
+import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query.js';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
-import {gridLayoutStylesLit} from '@unicef-polymer/etools-modules-common/dist/styles/grid-layout-styles-lit';
-import {EtoolsFilter} from '@unicef-polymer/etools-filters/src/etools-filters';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
+import {EtoolsFilter} from '@unicef-polymer/etools-unicef/src/etools-filters/etools-filters';
 import {
   updateFilterSelectionOptions,
   updateFiltersSelectedValues,
   setselectedValueTypeByFilterKey,
   clearSelectedValuesInFilters
-} from '@unicef-polymer/etools-filters/src/filters';
+} from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
+import {RootState, store} from '../../../redux/store';
+import {connect} from 'pwa-helpers';
+import get from 'lodash-es/get';
+import {RouteQueryParam} from '@unicef-polymer/etools-types';
+import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
+import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
 
 @customElement('action-points-list')
-export class ActionPointsList extends PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
+export class ActionPointsList extends connect(store)(
+  PaginationMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement))))
+) {
   @property({type: Array}) // , notify: true
-  actionPoints: any[];
+  actionPoints?: any[];
 
   @property({type: Object}) // , notify: true
   labels: any;
@@ -47,10 +51,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   createLink = '/new';
 
   @property({type: Array}) // , notify: true
-  statuses: any[];
+  statuses?: any[];
 
   @property({type: Array})
-  modules: [];
+  modules?: [];
 
   @property({type: Boolean})
   lowResolutionLayout = false;
@@ -59,19 +63,19 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   allFilters!: EtoolsFilter[];
 
   @property({type: Array})
-  filters: any[];
+  filters: any[] = [];
 
   @property({type: Object}) // , notify: true
-  queryParams: GenericObject;
+  queryParams: GenericObject = {};
 
   @property({type: Object}) // , notify: true
-  initialQueryParams: GenericObject;
+  initialQueryParams?: GenericObject;
 
   @property({type: Object})
-  prevQueryParams: GenericObject;
+  prevQueryParams?: GenericObject;
 
   @property({type: Array})
-  totalResults: number;
+  totalResults?: number;
 
   @property({type: Object}) // , notify: true
   route: any;
@@ -83,26 +87,28 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   exportParams: any;
 
   @property({type: Array}) // , notify: true
-  exportLinks: any[];
+  exportLinks: any[] = [];
 
   @property({type: Boolean})
-  staticDataLoaded: boolean;
+  staticDataLoaded?: boolean;
 
   @property({type: String})
-  path: string;
-
-  @property({type: Object})
-  _debounceLoadData: Debouncer;
+  path = '';
 
   @property({type: Object})
   searchParams: any;
 
   @property({type: String})
-  rootPath: string;
+  rootPath = '';
 
+  @query('action-points-data') private actionPointsData!: LitElement;
   static get styles() {
     // language=CSS
-    return [gridLayoutStylesLit];
+    return [layoutStyles];
+  }
+  constructor() {
+    super();
+    this._requestData = debounce(this._requestData.bind(this), 50);
   }
 
   render() {
@@ -113,18 +119,18 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           position: relative;
           display: block;
         }
-        paper-card {
+        .no-data {
+          justify-content: center;
+        }
+        section {
           display: block;
           margin-top: 25px;
           background-color: white;
           margin: 24px 24px 0 24px;
-          width: calc(100% - 48px);
+          /*          width: calc(100% - 48px);*/
         }
         etools-data-table-row {
           --row-width_-_width: 100%;
-        }
-        *[slot='row-data'] {
-          max-width: calc(100% - 56px);
         }
         section.page-content.filters {
           padding: 8px 24px;
@@ -142,35 +148,19 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           width: 176px;
           margin-left: 12px;
           margin-right: 12px;
-          --iron-icon-fill-color: var(--gray-mid-dark);
+          --etools-icon-fill-color: var(--gray-mid-dark);
         }
 
         .filter-dropdown {
           width: 200px;
-
-          --esmm-list-wrapper: {
-            margin-top: 0;
-            padding-top: 12px;
-            -ms-overflow-style: auto;
-          }
         }
       </style>
-      <iron-media-query
+      <etools-media-query
         query="(max-width: 767px)"
-        .queryMatches="${this.lowResolutionLayout}"
         @query-matches-changed="${(e: CustomEvent) => {
           this.lowResolutionLayout = e.detail.value;
         }}"
-      ></iron-media-query>
-      <app-location
-        .path="${this.path}"
-        .queryParams="${this.queryParams}"
-        url-space-regex="^${this.rootPath}"
-        @path-changed=${this.pathChanged}
-        @query-params-changed=${this.queryParamsChanged}
-      >
-      </app-location>
-
+      ></etools-media-query>
       <pages-header-element
         hide-print-button
         link="action-points/new"
@@ -198,7 +188,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
         <etools-filters .filters="${this.allFilters}" @filter-change="${this.filtersChange}"></etools-filters>
       </section>
 
-      <paper-card>
+      <section class="elevation page-content card-container" elevation="1">
         <etools-data-table-header
           id="listHeader"
           ?no-collapse="${!this.actionPoints?.length}"
@@ -234,23 +224,15 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
         </etools-data-table-header>
 
         <etools-data-table-row no-collapse ?hidden="${this.actionPoints?.length}">
-          <div slot="row-data" class="layout-horizontal">
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-2">-</div>
-            <div class="col-data col-2">-</div>
-            <div class="col-data col-2">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1">-</div>
-            <div class="col-data col-1"></div>
+          <div slot="row-data" class="row">
+            <div class="col-data col-12 no-data">No records found.</div>
           </div>
         </etools-data-table-row>
 
         ${this.actionPoints?.map(
           (entry) => html`
             <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
-              <div slot="row-data">
+              <div slot="row-data" class="row">
                 <div
                   class="col-data col-1"
                   data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
@@ -298,9 +280,9 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                 <div
                   class="col-data col-1"
                   data-col-header-label="${this.getLabel('due_date', this.basePermissionPath)}"
-                  title="${this.prettyDate(entry.due_date, null, '-')}"
+                  title="${this.prettyDate(entry.due_date, undefined, '-')}"
                 >
-                  <span class="truncate">${this.prettyDate(entry.due_date, null, '-')}</span>
+                  <span class="truncate">${this.prettyDate(entry.due_date, undefined, '-')}</span>
                 </div>
                 <div
                   class="col-data col-1"
@@ -317,63 +299,84 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
                   <span class="truncate">${this._getPriorityValue(entry.high_priority)}</span>
                 </div>
               </div>
-              <div slot="row-data-details">
-                <div class="row-details-content flex-c">
+              <div slot="row-data-details" class="row">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('description', this.basePermissionPath)}</div>
-                  <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
-                  <paper-tooltip fit-to-visible-bounds offset="0" ?hidden="${!this._showTooltip(entry.description)}">
-                    ${this.getStringValue(entry.description)}
-                  </paper-tooltip>
+                  <sl-tooltip
+                    distance="0"
+                    placement="top"
+                    ?hidden="${!this._showTooltip(entry.description)}"
+                    content="${this.getStringValue(entry.description)}"
+                  >
+                    <text-content rows="3" text="${this.getStringValue(entry.description)}"></text-content>
+                  </sl-tooltip>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('intervention', this.basePermissionPath)}</div>
                   <div>
-                    <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
-                    <paper-tooltip ?hidden="${!this._showTooltip(entry.intervention?.number)}" offset="0"
-                      >${this.getStringValue(entry.intervention?.number)}</paper-tooltip
+                    <sl-tooltip
+                      ?hidden="${!this._showTooltip(entry.intervention?.number)}"
+                      distance="0"
+                      placement="top"
+                      content="${this.getStringValue(entry.intervention?.number)}"
                     >
+                      <div class="truncate">${this.getStringValue(entry.intervention?.number)}</div>
+                    </sl-tooltip>
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('location', this.basePermissionPath)}</div>
                   <div>
-                    <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
-                    <paper-tooltip ?hidden="${!this._showTooltip(entry.location?.name)}" offset="0"
-                      >${this.getStringValue(entry.location?.name)}</paper-tooltip
+                    <sl-tooltip
+                      ?hidden="${!this._showTooltip(entry.location?.name)}"
+                      distance="0"
+                      placement="top"
+                      content="${this.getStringValue(entry.location?.name)}"
                     >
+                      <div class="truncate">${this.getStringValue(entry.location?.name)}</div>
+                    </sl-tooltip>
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('related_module', this.basePermissionPath)}</div>
                   <div>
-                    <div class="truncate">
-                      ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
-                    </div>
-                    <paper-tooltip
-                      offset="0"
+                    <sl-tooltip
+                      distance="0"
+                      placement="top"
                       ?hidden="${!this._showTooltip(entry.related_module, this.modules, 'display_name')}"
+                      content="${this.getStringValue(entry.related_module, this.modules, 'display_name')}"
                     >
-                      ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
-                    </paper-tooltip>
+                      <div class="truncate">
+                        ${this.getStringValue(entry.related_module, this.modules, 'display_name')}
+                      </div>
+                    </sl-tooltip>
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
                   <div class="rdc-title">${this.getLabel('assigned_by', this.basePermissionPath)}</div>
                   <div>
-                    <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
-                    <paper-tooltip ?hidden="${!this._showTooltip(entry.assigned_by?.name)}" offset="0"
-                      >${this.getStringValue(entry.assigned_by?.name)}</paper-tooltip
+                    <sl-tooltip
+                      ?hidden="${!this._showTooltip(entry.assigned_by?.name)}"
+                      distance="0"
+                      placement="top"
+                      content="${this.getStringValue(entry.assigned_by?.name)}"
                     >
+                      <div class="truncate">${this.getStringValue(entry.assigned_by?.name)}</div>
+                    </sl-tooltip>
                   </div>
                 </div>
-                <div class="row-details-content flex-c">
+                <div class="row-details-content col-md-2 col-12">
+                  <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
                   <div ?hidden="${!entry.date_of_completion?.length}">
-                    <div class="rdc-title">${this.getLabel('date_of_completion', this.basePermissionPath)}</div>
                     <div>
-                      <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
-                      <paper-tooltip ?hidden="${!this._showTooltip(entry.date_of_completion)}" offset="0"
-                        >${this.prettyDate(entry.date_of_completion)}</paper-tooltip
+                      <sl-tooltip
+                        ?hidden="${!this._showTooltip(entry.date_of_completion)}"
+                        distance="0"
+                        placement="top"
+                        content="${this.prettyDate(entry.date_of_completion)}"
                       >
+                        <div class="truncate">${this.prettyDate(entry.date_of_completion)}</div>
+                      </sl-tooltip>
                     </div>
                   </div>
                 </div>
@@ -393,15 +396,15 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
           @page-number-changed="${this.pageNumberChanged}"
         >
         </etools-data-table-footer>
-      </paper-card>
+      </section>
     `;
   }
 
   firstUpdated() {
-    this.addEventListener('sort-changed', (e: CustomEvent) => this._sort(e));
+    this.addEventListener('sort-changed', (e: any) => this._sort(e));
   }
 
-  updated(changedProperties) {
+  updated(changedProperties: PropertyValues) {
     if (changedProperties.has('staticDataLoaded')) {
       if (!this.allFilters) {
         this.initFiltersForDisplay();
@@ -416,22 +419,22 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     }
   }
 
-  pathChanged({detail}: CustomEvent) {
-    this._setPath(detail.value);
+  pathChanged(newPath: string) {
+    this._setPath(newPath);
   }
 
-  queryParamsChanged({detail}: CustomEvent) {
+  queryParamsChanged(detail: RouteQueryParam | null) {
     if (this.path?.includes('/list')) {
-      if (!detail.value || !Object.keys(detail.value).length) {
+      if (!detail || !Object.keys(detail).length) {
         if (this.prevQueryParams) {
           this.queryParams = this.prevQueryParams;
           this._updateQueries(this.queryParams);
         }
         return;
       }
-      if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail.value)) {
-        this.queryParams = detail.value;
-        this._updateQueries(detail.value);
+      if (!this.prevQueryParams || JSON.stringify(this.queryParams) !== JSON.stringify(detail)) {
+        this.queryParams = detail;
+        this._updateQueries(detail);
       }
     }
   }
@@ -445,7 +448,9 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     if (!sortParams) return;
     const field = sortParams.replace(/^-/, '');
     const direction = sortParams.charAt(0) === '-' ? 'desc' : 'asc';
-    const column: EtoolsDataTableColumn = this.shadowRoot.querySelector(`etools-data-table-column[field="${field}"]`);
+    const column: EtoolsDataTableColumn | null = this.shadowRoot!.querySelector(
+      `etools-data-table-column[field="${field}"]`
+    );
     if (!column) return;
     column.setAttribute('selected', 'true');
     column.setAttribute('direction', direction);
@@ -470,11 +475,10 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _updateQueries(queryParams: GenericObject) {
-    if (!this.path?.indexOf('action-points/list') || !queryParams || !Object.keys(queryParams).length) {
+    if (!queryParams || !Object.keys(queryParams).length) {
       return;
     }
-
-    queryParams = Object.keys(queryParams).reduce((acc, key) => {
+    queryParams = Object.keys(queryParams).reduce((acc: any, key) => {
       if (queryParams[key]) {
         acc[key] = String(queryParams[key]);
       }
@@ -504,14 +508,11 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
       return;
     }
 
-    updateQueries(this, queryParams, null, true);
+    updateQueries(this, queryParams, undefined, true);
 
-    const listElements = this.shadowRoot.querySelectorAll(`etools-data-table-row`);
-    listElements.forEach((element: any) => (element.detailsOpened = false));
-
-    this._debounceLoadData = Debouncer.debounce(this._debounceLoadData, timeOut.after(100), () => {
-      this._requestData();
-    });
+    const listElements = this.shadowRoot?.querySelectorAll(`etools-data-table-row`);
+    listElements?.forEach((element: any) => (element.detailsOpened = false));
+    this._requestData();
   }
 
   filtersChange(e: CustomEvent) {
@@ -520,8 +521,8 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   paginatorChanged() {
     if (
-      String(this.prevQueryParams.page) !== String(this.paginator.page) ||
-      String(this.prevQueryParams.page_size) !== String(this.paginator.page_size)
+      String(this.prevQueryParams?.page) !== String(this.paginator.page) ||
+      String(this.prevQueryParams?.page_size) !== String(this.paginator.page_size)
     ) {
       const queryParams = {
         ...this.prevQueryParams,
@@ -536,7 +537,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
     let ordering = detail.field;
     const prevQueryParams = this.prevQueryParams ? this.prevQueryParams : {};
     if (prevQueryParams.ordering && prevQueryParams.ordering === ordering) {
-      ordering = this.prevQueryParams.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
+      ordering = this.prevQueryParams?.ordering.charAt(0) !== '-' ? `-${ordering}` : ordering.slice(1);
     }
     const queryParams = {...prevQueryParams, ordering: ordering};
     this._updateQueries(queryParams);
@@ -582,8 +583,7 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
   }
 
   _requestData() {
-    const actionPointData = this.shadowRoot.querySelector('action-points-data');
-    actionPointData.dispatchEvent(new CustomEvent('request-action-points'));
+    this.actionPointsData.dispatchEvent(new CustomEvent('request-action-points'));
   }
 
   _setExportLinks() {
@@ -607,5 +607,16 @@ export class ActionPointsList extends PaginationMixin(InputAttrsMixin(Localizati
 
   _showTooltip(value: string, list?: [], field?: string) {
     return this.getStringValue(value, list, field) !== '-';
+  }
+
+  stateChanged(state: RootState) {
+    const routeDetails = get(state, 'app.routeDetails');
+    if (!(routeDetails?.routeName === 'action-points' && routeDetails?.subRouteName === 'list')) {
+      return; // Avoid code execution while on a different page
+    }
+    const stateRouteDetails = {...state.app!.routeDetails};
+    this.pathChanged(stateRouteDetails.path);
+    EtoolsRouter.replaceAppLocation(this.path, EtoolsRouter.encodeQueryParams(this.queryParams));
+    this.queryParamsChanged(stateRouteDetails.queryParams);
   }
 }

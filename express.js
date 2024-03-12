@@ -1,8 +1,12 @@
-var express = require('express'); // eslint-disable-line
+const express = require('express'); // eslint-disable-line
+const compression = require('compression'); // eslint-disable-line
 var browserCapabilities = require('browser-capabilities'); // eslint-disable-line
 
 const app = express();
-const basedir = __dirname + '/build/'; // eslint-disable-line
+const basedir = __dirname + '/src/'; // eslint-disable-line
+
+app.use(compression());
+
 
 function getSourcesPath(request) {
   let clientCapabilities = browserCapabilities.browserCapabilities(
@@ -10,9 +14,9 @@ function getSourcesPath(request) {
 
   clientCapabilities = new Set(clientCapabilities); // eslint-disable-line
   if (clientCapabilities.has('modules')) {
-    return basedir + 'esm-bundled/';
+    return basedir;
   } else {
-    return basedir + 'es6-bundled/';
+    return basedir;
   }
 }
 
@@ -31,6 +35,9 @@ app.get(/.*manifest\.json/, function(req, res) {
 
 app.use((req, res) => {
   // handles app access using a different state path than index (otherwise it will not return any file)
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
   res.sendFile(getSourcesPath(req) + 'index.html');
 });
 
