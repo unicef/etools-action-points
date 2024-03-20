@@ -196,7 +196,7 @@ export class ActionPointsList extends connect(store)(
           label="${this.paginator.visible_range[0]} - ${this.paginator.visible_range[1]} of ${this.paginator
             .count} results to show"
         >
-          <etools-data-table-column class="col-1" field="reference_number" sortable>
+          <etools-data-table-column class="col-2" field="reference_number" sortable>
             ${this.getLabel('reference_number', this.basePermissionPath)}
           </etools-data-table-column>
           <etools-data-table-column class="col-2" field="cp_output__name" sortable>
@@ -205,7 +205,7 @@ export class ActionPointsList extends connect(store)(
           <etools-data-table-column class="col-2" field="partner__name" sortable>
             ${this.getLabel('partner', this.basePermissionPath)}
           </etools-data-table-column>
-          <etools-data-table-column class="col-2" field="office__name" sortable>
+          <etools-data-table-column class="col-1" field="office__name" sortable>
             ${this.getLabel('office', this.basePermissionPath)}
           </etools-data-table-column>
           <etools-data-table-column class="col-1" field="section__name" sortable>
@@ -232,15 +232,13 @@ export class ActionPointsList extends connect(store)(
         ${this.actionPoints?.map(
           (entry) => html`
             <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
-              <div slot="row-data" class="row">
+              <div slot="row-data" class="layout-horizontal">
                 <div
-                  class="col-data col-1"
+                  class="col-data col-2"
                   data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
                   title="${this.getStringValue(entry.reference_number)}"
                 >
-                  <a href="${this._getLink(entry.id)}" class="truncate"
-                    >${this.getStringValue(entry.reference_number)}</a
-                  >
+                  <a href="${this._getLink(entry.id)}">${this.getStringValue(entry.reference_number)}</a>
                 </div>
                 <div
                   class="col-data col-2"
@@ -257,7 +255,7 @@ export class ActionPointsList extends connect(store)(
                   <span class="truncate">${this.getStringValue(entry.partner?.name)}</span>
                 </div>
                 <div
-                  class="col-data col-2"
+                  class="col-data col-1"
                   data-col-header-label="${this.getLabel('office', this.basePermissionPath)}"
                   title="${this.getStringValue(entry.office?.name)}"
                 >

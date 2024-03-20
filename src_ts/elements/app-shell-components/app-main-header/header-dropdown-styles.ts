@@ -102,7 +102,7 @@ export const headerDropdownStyles: TemplateResult = html`
         padding-inline-end: 0px;
       }
     }
-    @media (min-width: 850px) {
+    @media (min-width: 950px) {
       #menuButton {
         display: none;
       }

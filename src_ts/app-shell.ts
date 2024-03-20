@@ -84,7 +84,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
 
       <app-drawer-layout
         id="layout"
-        responsive-width="850px"
+        responsive-width="950px"
         fullbleed
         .narrow="${this.narrow}"
         ?small-menu="${this.smallMenu}"
