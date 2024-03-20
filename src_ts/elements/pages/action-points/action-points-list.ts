@@ -122,6 +122,12 @@ export class ActionPointsList extends connect(store)(
         .no-data {
           justify-content: center;
         }
+        etools-data-table-header::part(edt-data-table-header) {
+          padding: 0 10px 0 8px;
+        }
+        etools-data-table-header::part(edt-header-title) {
+          padding-inline-start: 10px;
+        }
         section {
           display: block;
           margin-top: 25px;
@@ -232,7 +238,7 @@ export class ActionPointsList extends connect(store)(
         ${this.actionPoints?.map(
           (entry) => html`
             <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
-              <div slot="row-data" class="layout-horizontal">
+              <div slot="row-data" class="row">
                 <div
                   class="col-data col-2"
                   data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
