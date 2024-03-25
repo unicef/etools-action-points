@@ -43,7 +43,14 @@ export class ActionPointsData extends ErrorHandlerMixin(LitElement) {
       }
     })
       .then((resp: any) => this._actionPointsLoaded(resp))
-      .catch((err: any) => this._responseError(err));
+      .catch((err: any) => {
+        // request aborted, prevent showing toast errors
+        if (err.status === 0) {
+          return;
+        }
+
+        this._responseError(err);
+      });
   }
 
   _actionPointsLoaded(detail: any) {
