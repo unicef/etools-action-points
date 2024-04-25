@@ -35,15 +35,17 @@ export class ActionPointsHistory extends DateMixin(InputAttrsMixin(LitElement)) 
         }}"
       ></etools-media-query>
       <etools-data-table-header no-title no-collapse .lowResolutionLayout="${this.lowResolutionLayout}">
-          <etools-data-table-column class="col-md-4 col-12" field="date">Date</etools-data-table-column>
-          <etools-data-table-column class="col-md-4 col-12"
-            field="${this.getLabel('history.by_user_display', this.permissionPath)}"
-            >${this.getLabel('history.by_user_display', this.permissionPath)}
-          </etools-data-table-column>
-          <etools-data-table-column class="col-md-4 col-12"
-            field="${this.getLabel('history.action', this.permissionPath)}"
-            >${this.getLabel('history.action', this.permissionPath)}
-          </etools-data-table-column>
+        <etools-data-table-column class="col-md-4 col-12" field="date">Date</etools-data-table-column>
+        <etools-data-table-column
+          class="col-md-4 col-12"
+          field="${this.getLabel('history.by_user_display', this.permissionPath)}"
+          >${this.getLabel('history.by_user_display', this.permissionPath)}
+        </etools-data-table-column>
+        <etools-data-table-column
+          class="col-md-4 col-12"
+          field="${this.getLabel('history.action', this.permissionPath)}"
+          >${this.getLabel('history.action', this.permissionPath)}
+        </etools-data-table-column>
       </etools-data-table-header>
       ${this.history?.map(
         (historyItem) => html`
