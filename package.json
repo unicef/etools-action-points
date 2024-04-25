@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.7",
+    "@shoelace-style/shoelace": "2.10.0",
     "@unicef-polymer/etools-modules-common": "^5.0.0-rc.48",
     "@unicef-polymer/etools-piwik-analytics": "4.0.1-rc.3",
     "@unicef-polymer/etools-types": "^1.11.17",
