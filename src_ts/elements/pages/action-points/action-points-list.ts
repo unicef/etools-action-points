@@ -31,7 +31,7 @@ import {
 } from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 import {RootState, store} from '../../../redux/store';
-import {connect} from 'pwa-helpers';
+import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
 import get from 'lodash-es/get';
 import {RouteQueryParam} from '@unicef-polymer/etools-types';
 import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
@@ -122,6 +122,12 @@ export class ActionPointsList extends connect(store)(
         .no-data {
           justify-content: center;
         }
+        etools-data-table-header::part(edt-data-table-header) {
+          padding: 0 10px 0 8px;
+        }
+        etools-data-table-header::part(edt-header-title) {
+          padding-inline-start: 10px;
+        }
         section {
           display: block;
           margin-top: 25px;
@@ -196,7 +202,7 @@ export class ActionPointsList extends connect(store)(
           label="${this.paginator.visible_range[0]} - ${this.paginator.visible_range[1]} of ${this.paginator
             .count} results to show"
         >
-          <etools-data-table-column class="col-1" field="reference_number" sortable>
+          <etools-data-table-column class="col-2" field="reference_number" sortable>
             ${this.getLabel('reference_number', this.basePermissionPath)}
           </etools-data-table-column>
           <etools-data-table-column class="col-2" field="cp_output__name" sortable>
@@ -205,7 +211,7 @@ export class ActionPointsList extends connect(store)(
           <etools-data-table-column class="col-2" field="partner__name" sortable>
             ${this.getLabel('partner', this.basePermissionPath)}
           </etools-data-table-column>
-          <etools-data-table-column class="col-2" field="office__name" sortable>
+          <etools-data-table-column class="col-1" field="office__name" sortable>
             ${this.getLabel('office', this.basePermissionPath)}
           </etools-data-table-column>
           <etools-data-table-column class="col-1" field="section__name" sortable>
@@ -234,13 +240,11 @@ export class ActionPointsList extends connect(store)(
             <etools-data-table-row .lowResolutionLayout="${this.lowResolutionLayout}">
               <div slot="row-data" class="row">
                 <div
-                  class="col-data col-1"
+                  class="col-data col-2"
                   data-col-header-label="${this.getLabel('reference_number', this.basePermissionPath)}"
                   title="${this.getStringValue(entry.reference_number)}"
                 >
-                  <a href="${this._getLink(entry.id)}" class="truncate"
-                    >${this.getStringValue(entry.reference_number)}</a
-                  >
+                  <a href="${this._getLink(entry.id)}">${this.getStringValue(entry.reference_number)}</a>
                 </div>
                 <div
                   class="col-data col-2"
@@ -257,7 +261,7 @@ export class ActionPointsList extends connect(store)(
                   <span class="truncate">${this.getStringValue(entry.partner?.name)}</span>
                 </div>
                 <div
-                  class="col-data col-2"
+                  class="col-data col-1"
                   data-col-header-label="${this.getLabel('office', this.basePermissionPath)}"
                   title="${this.getStringValue(entry.office?.name)}"
                 >

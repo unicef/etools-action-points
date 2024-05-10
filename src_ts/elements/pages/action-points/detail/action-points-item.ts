@@ -22,7 +22,7 @@ import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
-import {connect} from 'pwa-helpers';
+import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
 import {RootState, store} from '../../../../redux/store';
 import get from 'lodash-es/get';
 import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';

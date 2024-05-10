@@ -27,9 +27,6 @@ export class ActionPointsHistory extends DateMixin(InputAttrsMixin(LitElement)) 
         .w-100 {
           width: 100%;
         }
-        /*etools-data-table-row::part(edt-list-row-wrapper) {*/
-        /*  height: 48px;*/
-        /*}*/
       </style>
       <etools-media-query
         query="(max-width: 767px)"
@@ -38,24 +35,22 @@ export class ActionPointsHistory extends DateMixin(InputAttrsMixin(LitElement)) 
         }}"
       ></etools-media-query>
       <etools-data-table-header no-title no-collapse .lowResolutionLayout="${this.lowResolutionLayout}">
-        <div class="row w-100">
-          <etools-data-table-column class="col-md-4 col-12" field="date">Date</etools-data-table-column>
-          <etools-data-table-column
-            class="col-md-4 col-12"
-            field="${this.getLabel('history.by_user_display', this.permissionPath)}"
-            >${this.getLabel('history.by_user_display', this.permissionPath)}
-          </etools-data-table-column>
-          <etools-data-table-column
-            class="col-md-4 col-12"
-            field="${this.getLabel('history.action', this.permissionPath)}"
-            >${this.getLabel('history.action', this.permissionPath)}
-          </etools-data-table-column>
-        </div>
+        <etools-data-table-column class="col-md-4 col-12" field="date">Date</etools-data-table-column>
+        <etools-data-table-column
+          class="col-md-4 col-12"
+          field="${this.getLabel('history.by_user_display', this.permissionPath)}"
+          >${this.getLabel('history.by_user_display', this.permissionPath)}
+        </etools-data-table-column>
+        <etools-data-table-column
+          class="col-md-4 col-12"
+          field="${this.getLabel('history.action', this.permissionPath)}"
+          >${this.getLabel('history.action', this.permissionPath)}
+        </etools-data-table-column>
       </etools-data-table-header>
       ${this.history?.map(
         (historyItem) => html`
           <etools-data-table-row no-collapse .lowResolutionLayout="${this.lowResolutionLayout}">
-            <div slot="row-data" class="row">
+            <div slot="row-data">
               <span class="col-data col-md-4 col-12" data-col-header-label="date"
                 >${this.prettyDate(historyItem.created)}</span
               >
