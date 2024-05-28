@@ -7,7 +7,7 @@ import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
-import {headerDropdownStyles} from './header-dropdown-styles';
+import {toolbarDropdownStyles} from '@unicef-polymer/etools-unicef/src/styles/toolbar-dropdown-styles';
 
 @customElement('countries-dropdown')
 export class CountriesDropdown extends LitElement {
@@ -27,7 +27,7 @@ export class CountriesDropdown extends LitElement {
 
   render() {
     return html`
-      ${headerDropdownStyles}
+      ${toolbarDropdownStyles}
       <etools-dropdown
         transparent
         id="countrySelector"

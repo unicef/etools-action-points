@@ -1,7 +1,7 @@
 import {LitElement, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
-import {basePath} from '../../config/config';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
+import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
 
 /**
  * @extends HTMLElement
@@ -54,7 +54,7 @@ export class PageFooter extends LitElement {
       <footer>
         <div id="footer-content" class="layout-horizontal">
           <span id="unicef-logo" class="layout-horizontal layout-inline">
-            <img src="${basePath}assets/images/UNICEF_logo.webp" alt="UNICEF logo" />
+            <img src="${Environment.basePath}assets/images/UNICEF_logo.webp" alt="UNICEF logo" />
           </span>
         </div>
       </footer>

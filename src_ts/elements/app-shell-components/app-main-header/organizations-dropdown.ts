@@ -5,8 +5,7 @@ import {EtoolsDropdownEl} from '@unicef-polymer/etools-unicef/src/etools-dropdow
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import {headerDropdownStyles} from './header-dropdown-styles';
-
+import {toolbarDropdownStyles} from '@unicef-polymer/etools-unicef/src/styles/toolbar-dropdown-styles';
 /**
  * @customElement
  * @appliesMixin EtoolsAjaxRequestMixin
@@ -14,7 +13,7 @@ import {headerDropdownStyles} from './header-dropdown-styles';
 class OrganizationsDropdown extends LitElement {
   render() {
     return html`
-      ${headerDropdownStyles}
+      ${toolbarDropdownStyles}
       <etools-dropdown
         transparent
         id="organizationSelector"
