@@ -4,20 +4,18 @@ import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer-layout';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-header-layout';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-header';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-footer';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import {createDynamicDialog} from '@unicef-polymer/etools-unicef/src/etools-dialog/dynamic-dialog';
 import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
 import {LoadingMixin} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin';
-import {_checkEnvironment} from './endpoints/endpoint-mixin';
 import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
-import './elements/app-shell-components/app-main-header/app-main-header';
+import './elements/app-shell-components/app-main-header';
 import './elements/app-shell-components/app-sidebar-menu';
-import './elements/app-shell-components/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
-import './elements/app-shell-components/page-footer';
 import './routing/routes.js';
-import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY, basePath} from './config/config';
+import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from './config/config';
 import {appShellStyles} from './elements/styles/app-shell-styles';
 import '@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
@@ -25,6 +23,7 @@ import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {setBasePath} from '@shoelace-style/shoelace/dist/utilities/base-path.js';
 import {initializeIcons} from '@unicef-polymer/etools-unicef/src/etools-icons/etools-icons';
 import {connect, installMediaQueryWatcher, installRouter} from '@unicef-polymer/etools-utils/dist/pwa.utils';
+import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
 import {RootState, store} from './redux/store';
 import {handleUrlChange} from './redux/actions/app.js';
 import {RouteDetails} from '@unicef-polymer/etools-types';
@@ -33,7 +32,7 @@ import {setStore} from '@unicef-polymer/etools-utils/dist/store.util';
 setStore(store as any);
 window.EtoolsLanguage = 'en';
 
-setBasePath(basePath);
+setBasePath(Environment.basePath);
 initializeIcons();
 @customElement('app-shell')
 export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(AppMenuMixin(LitElement)))) {
@@ -63,9 +62,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
 
   @property({type: Object})
   queryParams: any;
-
-  @property({type: String})
-  environment: string | null = null;
 
   @property({type: Boolean})
   staticDataLoaded?: boolean;
@@ -106,7 +102,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
 
         <app-header-layout id="appHeadLayout" fullbleed has-scrolling-region>
           <app-header id="header" slot="header" fixed shadow>
-            <app-main-header id="pageheader" .user="${this.user}" .environment="${this.environment}"></app-main-header>
+            <app-main-header id="pageheader" .user="${this.user}"></app-main-header>
           </app-header>
 
           <main role="main" id="page-container">
@@ -125,7 +121,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
               : ``}
           </main>
 
-          <page-footer ?small-menu="${this.smallMenu}"></page-footer>
+          <app-footer ?small-menu="${this.smallMenu}"></app-footer>
         </app-header-layout>
       </app-drawer-layout>
     `;
@@ -154,7 +150,6 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
     this.addEventListener('404', () => this._pageNotFound());
     this.addEventListener('static-data-loaded', (e: any) => this._staticDataLoaded(e));
     this.addEventListener('global-loading', (e: any) => this.handleLoading(e));
-    this.environment = _checkEnvironment();
     this.checkAppVersion();
     window.EtoolsEsmmFitIntoEl = this.shadowRoot
       ?.querySelector('#appHeadLayout')

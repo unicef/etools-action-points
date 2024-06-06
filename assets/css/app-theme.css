@@ -108,6 +108,7 @@
   --nonprod-header-color: #a94442;
   --nonprod-text-warn-color: #ffffff;
   --header-bg-color: var(--dark-theme-background-color);
+  --header-color: #ffffff;
   --partnership-management-color: var(--primary-background-color);
   --work-planning-color: var(--paper-light-green-500);
   --field-monitering-color: var(--paper-green-500);
