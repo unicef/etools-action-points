@@ -4,17 +4,16 @@ import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer-layout';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-header-layout';
 import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-header';
+import '@unicef-polymer/etools-unicef/src/etools-app-layout/app-footer';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import {createDynamicDialog} from '@unicef-polymer/etools-unicef/src/etools-dialog/dynamic-dialog';
 import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
 import {LoadingMixin} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin';
 import {UserControllerMixin} from './elements/mixins/user-controller';
 import {AppMenuMixin} from './elements/mixins/app-menu-mixin';
-import './elements/app-shell-components/app-main-header/app-main-header';
+import './elements/app-shell-components/app-main-header';
 import './elements/app-shell-components/app-sidebar-menu';
-import './elements/app-shell-components/app-main-header/countries-dropdown';
 import './elements/data-elements/static-data';
-import './elements/app-shell-components/page-footer';
 import './routing/routes.js';
 import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from './config/config';
 import {appShellStyles} from './elements/styles/app-shell-styles';
@@ -122,7 +121,7 @@ export class AppShell extends connect(store)(LoadingMixin(UserControllerMixin(Ap
               : ``}
           </main>
 
-          <page-footer ?small-menu="${this.smallMenu}"></page-footer>
+          <app-footer ?small-menu="${this.smallMenu}"></app-footer>
         </app-header-layout>
       </app-drawer-layout>
     `;

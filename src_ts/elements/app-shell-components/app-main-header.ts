@@ -5,16 +5,18 @@ import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button'
 import '@unicef-polymer/etools-unicef/src/etools-app-selector/etools-app-selector';
 import '@unicef-polymer/etools-unicef/src/etools-profile-dropdown/etools-profile-dropdown';
 import '@unicef-polymer/etools-unicef/src/etools-accesibility/etools-accesibility';
-import {resetOldUserData} from '../../../endpoints/endpoint-mixin';
-import {sharedStyles} from '../../styles/shared-styles';
-import './countries-dropdown';
-import './organizations-dropdown';
-import '../../common-elements/support-btn';
-import {GenericObject} from '../../../typings/globals.types';
+import '@unicef-polymer/etools-modules-common/dist/components/dropdowns/countries-dropdown';
+import '@unicef-polymer/etools-modules-common/dist/components/dropdowns/organizations-dropdown';
+import '@unicef-polymer/etools-modules-common/dist/components/buttons/support-button';
+import {resetOldUserData} from '../../endpoints/endpoint-mixin';
+import {sharedStyles} from '../styles/shared-styles';
+import {GenericObject} from '../../typings/globals.types';
 import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
 import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import apdEndpoints from '../../endpoints/endpoints';
+import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
 
 /**
  * @customElement
@@ -56,12 +58,21 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
         @menu-button-clicked="${this.openDrawer}"
         .profile=${this.user}>
           <div slot="dropdowns">
-            <countries-dropdown .countries="${this.user?.countries_available}" .countryId="${this.user?.country.id}">
+            <countries-dropdown
+              id="countries"
+              .profile="${this.user}"
+              .changeCountryEndpoint="${apdEndpoints.changeCountry}"
+              @country-changed="${this.countryOrOrganizationChanged}"
+            >
             </countries-dropdown>
-            <organizations-dropdown .user="${this.user}"></organizations-dropdown>
+            <organizations-dropdown
+              .profile="${this.user}"
+              .changeOrganizationEndpoint="${apdEndpoints.changeOrganization}"
+              @organization-changed="${this.countryOrOrganizationChanged}"
+            ></organizations-dropdown>
           </div>
           <div slot="icons">
-            <support-btn title="Support"></support-btn>
+            <support-btn></support-btn>
 
             <etools-profile-dropdown
               title="Profile and Sign out"
@@ -93,6 +104,13 @@ export class AppMainHeader extends MatomoMixin(LitElement) {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('sign-out', this._logout);
+  }
+
+  public countryOrOrganizationChanged() {
+    DexieRefresh.refreshInProgress = true;
+    DexieRefresh.clearDexieDbs();
+    DexieRefresh.refreshInProgress = false;
+    document.location.assign(window.location.origin + Environment.basePath);
   }
 
   openDrawer() {
