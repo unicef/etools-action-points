@@ -1,4 +1,4 @@
-import {basePath} from '../../config/config';
+import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
 
 export const getLocationProperty = (property: string) => {
   // @ts-ignore
@@ -42,7 +42,7 @@ export const updateQueries = (element: HTMLElement, newQueries: any, path?: stri
   });
 
   try {
-    window.history.replaceState({}, '', `${basePath}${path}?${newQueries.join('&')}`);
+    window.history.replaceState({}, '', `${Environment.basePath}${path}?${newQueries.join('&')}`);
   } catch (err) {
     console.warn(err);
   }

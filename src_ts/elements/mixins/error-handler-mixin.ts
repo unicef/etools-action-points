@@ -105,6 +105,13 @@ export function ErrorHandlerMixin<T extends Constructor<LitElement>>(superClass:
 
     public _responseError(message: string, type?: string, eventType = 'error') {
       (console as any)[eventType](`Can not load initial data: ${message || '?'}. Reason: ${type || '?'}`);
+      fireEvent(this, 'global-loading', {
+        active: false,
+        loadingSource: 'initialisation'
+      });
+      fireEvent(this, 'toast', {
+        text: ` Failed loading ${message}`
+      });
     }
   }
   return ErrorHandlerClass as typeof ErrorHandlerClass & T;
