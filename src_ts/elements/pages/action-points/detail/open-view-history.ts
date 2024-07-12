@@ -24,13 +24,13 @@ export class OpenViewHistory extends LitElement {
   }
 
   @property({type: Boolean})
-  isOpenedHistory: boolean;
+  isOpenedHistory!: boolean;
 
   @property({type: Object})
   actionPoint: any;
 
   @property({type: String})
-  permissionPath: string;
+  permissionPath!: string;
 
   open() {
     const dialog = this.shadowRoot!.querySelector<any>('#historyDialog') as EtoolsDialog;

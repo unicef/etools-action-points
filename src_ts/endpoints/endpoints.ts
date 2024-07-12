@@ -67,6 +67,9 @@ const apdEndpoints = {
     url: '/api/action-points/categories/',
     exp: 60 * 60 * 1000, // 1h
     cacheTableName: 'categories'
+  },
+  attachmentsUpload: {
+    url: '/api/v2/attachments/upload/'
   }
 };
 
