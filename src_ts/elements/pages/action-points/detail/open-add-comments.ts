@@ -62,22 +62,25 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
             </etools-input>
           </div>
         </div>
-        <div class="row">
-          <div class="col-12">
-            <etools-upload
-              id="uploadFile"
-              label="${this.getLabel('comments.supporting_document', this.permissionPath)}"
-              .fileUrl="${this.attachment}"
-              .uploadEndpoint="${apdEndpoints.attachmentsUpload.url}"
-              @upload-started="${this._onUploadStarted}"
-              @upload-finished="${this._attachmentUploadFinished}"
-              ?required="${this._setRequired('comments.supporting_document', this.permissionPath)}"
-              ?invalid="${this.errors.file}"
-              .errorMessage="${this.errors.file}"
-            >
-            </etools-upload>
-          </div>
-        </div>
+        ${this.actionPoint?.high_priority
+          ? html`<div class="row">
+              <div class="col-12">
+                <etools-upload
+                  id="uploadFile"
+                  label="${this.getLabel('comments.supporting_document', this.permissionPath)}"
+                  .fileUrl="${this.attachment}"
+                  .uploadEndpoint="${apdEndpoints.attachmentsUpload.url}"
+                  @upload-started="${this._onUploadStarted}"
+                  @upload-finished="${this._attachmentUploadFinished}"
+                  ?required="${this._setRequired('comments.supporting_document', this.permissionPath)}"
+                  ?disabled="${this.isReadOnly('comments.supporting_document', this.permissionPath)}"
+                  ?invalid="${this.errors.file}"
+                  .errorMessage="${this.errors.file}"
+                >
+                </etools-upload>
+              </div>
+            </div>`
+          : ``}
       </etools-dialog>
     `;
   }
