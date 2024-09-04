@@ -366,6 +366,8 @@ export class ActionPointsItem extends connect(store)(
 
   _makeUpdateRequest(updateData: any) {
     const endpoint = getEndpoint('actionPoint', this.actionPointId);
+    // no need to save again comments (saved in the popup)
+    delete updateData['comments'];
 
     fireEvent(this, 'global-loading', {
       loadingSource: 'ap-update',
@@ -392,6 +394,9 @@ export class ActionPointsItem extends connect(store)(
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
+        fireEvent(this, 'global-loading', {
+          loadingSource: 'ap-update'
+        });
       });
   }
 

@@ -1,10 +1,11 @@
-import {LitElement, html} from 'lit';
+import {LitElement, PropertyValues, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
 import '@unicef-polymer/etools-unicef/src/etools-content-panel/etools-content-panel.js';
 import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
 import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
@@ -16,11 +17,16 @@ import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
 import linkifyStr from 'linkify-string';
+import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
 
 @customElement('action-point-comments') // Actions Taken
 export class ActionPointComments extends PaginationMixin(
   LocalizationMixin(DateMixin(ErrorHandlerMixin(InputAttrsMixin(LitElement))))
 ) {
+  static get styles() {
+    return [layoutStyles];
+  }
+
   render() {
     return html`
       ${tabInputsStyles} ${moduleStyles}
@@ -51,6 +57,15 @@ export class ActionPointComments extends PaginationMixin(
         etools-dialog {
           --etools-dialog-default-btn-bg: var(--module-primary);
         }
+        .wrap-text {
+          word-break: break-word;
+        }
+        .ml-6 {
+          margin-left: 6px;
+        }
+        .layout-horizontal {
+          align-items: flex-start;
+        }
       </style>
 
       <etools-media-query
@@ -78,7 +93,21 @@ export class ActionPointComments extends PaginationMixin(
                   <span class="comment-item__user">${item.user?.name}</span>
                   <span class="comment-item__date">${this.prettyDate(item.submit_date)}</span>
                 </div>
-                <div class="comment-item__body" id="commentArea" .innerHTML="${this.checkLinks(item.comment)}"></div>
+                <div class="comment-item__body row" id="commentArea">
+                  <span class="col-sm-8 col-12 wrap-text">${this.checkLinks(item.comment)}</span>
+                  <span class="col-sm-4 col-12 layout-horizontal">
+                    ${item.supporting_document
+                      ? html` <etools-icon name="attachment" class="download-icon"> </etools-icon>
+                          <a
+                            href="${item.supporting_document.file}"
+                            class="ml-6 wrap-text"
+                            title="${item.supporting_document.filename}"
+                            target="_blank"
+                            >${item.supporting_document.filename}
+                          </a>`
+                      : ``}
+                  </span>
+                </div>
               </div>
             `
           )}
@@ -99,33 +128,29 @@ export class ActionPointComments extends PaginationMixin(
   }
 
   @property({type: String})
-  permissionPath: string;
+  permissionPath!: string;
 
   @property({type: Array}) // notify: true
   actionPoint: any;
 
   @property({type: Array})
-  filteredComments: any[];
+  filteredComments!: any[];
 
   @property({type: Boolean})
   lowResolutionLayout = false;
 
   @property({type: String})
-  commentText: string;
+  commentText!: string;
 
   @property({type: Object})
-  commentDialog: OpenAddComments;
+  commentDialog!: OpenAddComments;
 
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener('new-comment-added', (e: any) => this._newCommentAdded(e));
   }
 
-  firstUpdated() {
-    this._createCommentDialog();
-  }
-
-  updated(changedProperties) {
+  updated(changedProperties: PropertyValues) {
     if (changedProperties.has('actionPoint')) {
       this._resetPaginator();
       this.paginatorChanged();
@@ -139,23 +164,11 @@ export class ActionPointComments extends PaginationMixin(
   noActionsAllowed(path: string) {
     return noActionsAllowed(path);
   }
-
-  _createCommentDialog() {
-    this.commentDialog = document.createElement('open-add-comments') as OpenAddComments;
-    document.querySelector('body')?.appendChild(this.commentDialog);
-  }
-
   _updateCommentProp() {
     if (this.commentDialog) {
       this.commentDialog.actionPoint = this.actionPoint;
       this.commentDialog.permissionPath = this.permissionPath;
     }
-  }
-
-  _newCommentAdded(response) {
-    this.actionPoint.comments = response.detail.comments;
-    this.actionPoint.history = response.detail.history;
-    this.actionPoint = {...this.actionPoint};
   }
 
   _resetPaginator() {
@@ -164,7 +177,7 @@ export class ActionPointComments extends PaginationMixin(
     this.paginator.count = this.actionPoint?.comments?.length;
   }
 
-  checkLinks(comment) {
+  checkLinks(comment: any) {
     comment = this.getStringValue(comment);
     comment = linkifyStr(comment);
     comment = comment.trim();
@@ -172,7 +185,23 @@ export class ActionPointComments extends PaginationMixin(
   }
 
   _openAddComment() {
-    this.commentDialog.open();
+    openDialog({
+      dialog: 'open-add-comments',
+      dialogData: {
+        permissionPath: this.permissionPath,
+        actionPoint: {...this.actionPoint}
+      }
+    }).then(({confirmed, response}) => {
+      if (confirmed) {
+        this._newCommentAdded(response);
+      }
+    });
+  }
+
+  _newCommentAdded(actionPoint: any) {
+    this.actionPoint.comments = actionPoint.comments;
+    this.actionPoint.history = actionPoint.history;
+    this.actionPoint = {...this.actionPoint};
   }
 
   paginatorChanged() {
