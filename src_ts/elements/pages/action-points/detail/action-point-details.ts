@@ -255,10 +255,13 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 ?trigger-value-change-event="${!this.isReadOnly('category', this.permissionPath)}"
                 @etools-selected-item-changed="${({detail}: CustomEvent) => {
                   this.showHideCategoryWarning(detail.selectedItem?.id);
-                  this.updateField('category', detail.selectedItem?.id)}}"
+                  this.updateField('category', detail.selectedItem?.id);
+                }}"
               >
               </etools-dropdown>
-              <div class='category-warning' ?hidden="${!this.warningCategoryMessage}">${this.warningCategoryMessage}</div>
+              <div class="category-warning" ?hidden="${!this.warningCategoryMessage}">
+                ${this.warningCategoryMessage}
+              </div>
             </div>`) ||
           ''}
           <div class="col-md-6 col-12">
@@ -633,9 +636,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
 
   showHideCategoryWarning(categoryId: number) {
     if (categoryId === FM_OTHER || categoryId === AP_OTHER) {
-      this.warningCategoryMessage = "Are you sure that no other categories are suitable for this action point?";
+      this.warningCategoryMessage = 'Are you sure that no other categories are suitable for this action point?';
     } else {
-      this.warningCategoryMessage = "";
+      this.warningCategoryMessage = '';
     }
   }
 
