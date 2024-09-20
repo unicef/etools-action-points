@@ -22,6 +22,9 @@ import {GenericObject} from '../../../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
 
+const FM_OTHER = 16;
+const AP_OTHER = 15;
+
 @customElement('action-point-details')
 export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
   @property({type: Array}) // notify: true
@@ -92,6 +95,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
   @property({type: Object})
   partner: any;
 
+  @property({type: String})
+  warningCategoryMessage!: string;
+
   @property({type: Boolean})
   interventionRequestInProcess = false;
 
@@ -155,6 +161,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         }
         datepicker-lite {
           --etools-icon-fill-color: var(--secondary-text-color);
+        }
+        .category-warning {
+          color: #ea4022;
+          margin-top: -6px;
+          margin-left: 12px;
+          font-size: var(--etools-font-size-12, 12px);
         }
       </style>
 
@@ -241,10 +253,12 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
                 allow-outside-scroll
                 dynamic-align
                 ?trigger-value-change-event="${!this.isReadOnly('category', this.permissionPath)}"
-                @etools-selected-item-changed="${({detail}: CustomEvent) =>
-                  this.updateField('category', detail.selectedItem?.id)}"
+                @etools-selected-item-changed="${({detail}: CustomEvent) => {
+                  this.showHideCategoryWarning(detail.selectedItem?.id);
+                  this.updateField('category', detail.selectedItem?.id)}}"
               >
               </etools-dropdown>
+              <div class='category-warning' ?hidden="${!this.warningCategoryMessage}">${this.warningCategoryMessage}</div>
             </div>`) ||
           ''}
           <div class="col-md-6 col-12">
@@ -617,13 +631,24 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     }
   }
 
+  showHideCategoryWarning(categoryId: number) {
+    if (categoryId === FM_OTHER || categoryId === AP_OTHER) {
+      this.warningCategoryMessage = "Are you sure that no other categories are suitable for this action point?";
+    } else {
+      this.warningCategoryMessage = "";
+    }
+  }
+
   _setDrDOptions(editedItem: any) {
     const module = editedItem && editedItem.related_module;
     let categories = [];
-
     if (module) {
       const categoriesList = getData('categoriesList');
       categories = categoriesList.filter((category: any) => category.module === module);
+
+      setTimeout(() => {
+        this.showHideCategoryWarning(editedItem.category);
+      }, 100);
     }
 
     this.categories = categories;
