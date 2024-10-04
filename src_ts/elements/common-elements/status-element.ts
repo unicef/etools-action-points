@@ -103,7 +103,7 @@ export class StatusElement extends LitElement {
   }
 
   getActions(path: string) {
-    if (this.actionPoint?.status === 'completed' && hasVerifyAction(path)) {
+    if (hasVerifyAction(path)) {
       return ['verify'];
     }
     return getActions(path);

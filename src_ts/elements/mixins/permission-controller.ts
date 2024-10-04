@@ -20,6 +20,11 @@ export const _createAction = (action: string, existedAction: any) => {
   };
 };
 
+export const canAddComments = (collectionName: string) => {
+  const collection = _permissionCollection[collectionName];
+  return collection && isValidCollection(collection.PUT) && collection.PUT['comments'];
+};
+
 export const _manageActions = (collectionName: string) => {
   const collection = _permissionCollection[collectionName];
   if (!collection) {

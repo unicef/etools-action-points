@@ -13,7 +13,6 @@ import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
 import '../../../common-elements/status-element';
-import './add-verifier-dialog';
 import './verify-dialog';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles';
 import {sharedStyles} from '../../../styles/shared-styles';
@@ -100,7 +99,11 @@ export class ActionPointsItem extends connect(store)(
               .originalActionPoint="${this.originalActionPoint}"
               .permissionPath="${this.permissionPath}"
             ></action-point-details>
-            <action-point-comments .actionPoint="${this.actionPoint}" .permissionPath="${this.permissionPath}">
+            <action-point-comments
+              .actionPoint="${this.actionPoint}"
+              .permissionPath="${this.permissionPath}"
+              @load-options="${() => this._loadOptions(this.actionPointId)}"
+            >
             </action-point-comments>
           </div>
 
@@ -142,26 +145,7 @@ export class ActionPointsItem extends connect(store)(
   }
 
   async _processCompleteAction() {
-    let confirmed = true;
-    let verifierId = null;
-    if (this.actionPoint.high_priority && String(this.profile.user) === String(this.actionPoint.author)) {
-      const resp = await openDialog({
-        dialog: 'add-verifier-dialog',
-        dialogData: {
-          permissionPath: this.permissionPath,
-          actionPoint: this.actionPoint
-        }
-      }).then(({confirmed, response}) => {
-        return {confirmed: confirmed, verifierId: response};
-      });
-      ({confirmed, verifierId} = resp);
-    }
-
-    if (!confirmed) {
-      return;
-    }
-
-    this._complete(verifierId)
+    this._complete()
       .then(() => {
         this._loadOptions(this.actionPointId);
       })
@@ -171,7 +155,9 @@ export class ActionPointsItem extends connect(store)(
   async _processVerifyAction() {
     openDialog({
       dialog: 'verify-dialog',
-      dialogData: {}
+      dialogData: {
+        comments: this.actionPoint.comments
+      }
     }).then(({confirmed, response}) => {
       if (confirmed) {
         this._makeUpdateRequest({is_adequate: response}).then(() => {
@@ -245,6 +231,9 @@ export class ActionPointsItem extends connect(store)(
   }
 
   _loadOptions(id: number) {
+    if (isNaN(Number(id))) {
+      return;
+    }
     const permissionPath = `action_points_${id}`;
     const endpoint = getEndpoint('actionPoint', id);
     return sendRequest({
@@ -281,6 +270,7 @@ export class ActionPointsItem extends connect(store)(
       'section',
       'assigned_to',
       'assigned_by',
+      'potential_verifier',
       'cp_output',
       'author'
     ]);
@@ -358,7 +348,6 @@ export class ActionPointsItem extends connect(store)(
       // @ts-ignore
       return;
     }
-
     const editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     const data = this._getChangedData(this.actionPoint, editedData);
     this._makeUpdateRequest(data);

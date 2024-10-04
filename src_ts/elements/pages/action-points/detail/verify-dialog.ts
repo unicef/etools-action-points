@@ -43,6 +43,11 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
           display: flex;
           flex-wrap: wrap;
         }
+        .warning {
+          color: var(--error-color);
+          text-align: center;
+          margin-block-start: 2px;
+        }
       </style>
       <etools-dialog
         id="commentDialog"
@@ -67,7 +72,10 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
               satisfactory justification.
             </div>
             <div class="centered">
-              <sl-radio value="true">Adequate</sl-radio>
+              <sl-radio value="true" ?disabled="${!this.hasCommentAttachment(this.comments)}">Adequate</sl-radio>
+            </div>
+            <div class="warning centered" ?hidden="${this.hasCommentAttachment(this.comments)}">
+              Disabled due to missing at least one attachment
             </div>
           </div>
           <div class="col-sm-6 col-12 layout-vertical">
@@ -89,6 +97,21 @@ export class OpenAddComments extends ErrorHandlerMixin(InputAttrsMixin(LitElemen
 
   @property({type: Boolean})
   showError = false;
+
+  @property({type: Array})
+  comments!: any[];
+
+  set dialogData(data: any) {
+    if (!data) {
+      return;
+    }
+    const {comments} = data;
+    this.comments = comments || [];
+  }
+
+  hasCommentAttachment(comments: any[]) {
+    return comments.some((comm: any) => comm.supporting_document?.id);
+  }
 
   addVerifier(): void {
     if (typeof this.isAdequate === 'undefined') {

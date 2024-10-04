@@ -26,13 +26,13 @@ export function ErrorHandlerMixin<T extends Constructor<LitElement>>(superClass:
 
     public errorHandler(errorObject: any, permissionPath: string) {
       const errorMessages = errorObject ? this._getErrors(errorObject.response, permissionPath) : [];
-      const nonFieldMessage = this._getNonFieldsMessage(errorObject);
-      if (nonFieldMessage) {
-        errorMessages.push(nonFieldMessage);
-      }
+      // const nonFieldMessage = this._getNonFieldsMessage(errorObject);
+      // if (nonFieldMessage) {
+      //   errorMessages.push(nonFieldMessage);
+      // }
       for (const message of errorMessages) {
         fireEvent(this, 'toast', {
-          text: message
+          text: Array.isArray(message) ? message.join(', ') : message
         });
       }
     }
@@ -75,8 +75,13 @@ export function ErrorHandlerMixin<T extends Constructor<LitElement>>(superClass:
      * @private
      */
     public _getErrorMessage(field: string, error: string, permissionPath: string) {
-      const fieldLabel = getFieldAttribute(`${permissionPath}.${field}`, 'label');
-      return `${fieldLabel}: ${error}`;
+      let fieldLabel = getFieldAttribute(`${permissionPath}.${field}`, 'label');
+      if (fieldLabel) {
+        fieldLabel += ' :';
+      } else {
+        fieldLabel = '';
+      }
+      return `${fieldLabel} ${error}`;
     }
 
     protected _getNonFieldsMessage(errorObj: any): any {
