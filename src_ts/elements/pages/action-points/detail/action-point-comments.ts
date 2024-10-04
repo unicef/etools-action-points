@@ -19,6 +19,7 @@ import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/p
 import linkifyStr from 'linkify-string';
 import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {GenericObject} from '@unicef-polymer/etools-types';
 
 @customElement('action-point-comments') // Actions Taken
 export class ActionPointComments extends PaginationMixin(
@@ -67,6 +68,11 @@ export class ActionPointComments extends PaginationMixin(
         .layout-horizontal {
           align-items: flex-start;
         }
+        .warning {
+          color: var(--error-color);
+          margin-inline-start: 12px;
+          margin-block-start: 2px;
+        }
       </style>
 
       <etools-media-query
@@ -84,6 +90,9 @@ export class ActionPointComments extends PaginationMixin(
             name="add-box"
             @click="${this._openAddComment}"
           ></etools-icon-button>
+        </div>
+        <div class="warning" ?hidden="${!this.showAttachmentWarning(this.actionPoint, this.profile)}">
+          *At least one attachment is required to complete the high priority Action Point
         </div>
         <div class="comments-list">
           <span ?hidden=${this.filteredComments?.length}>No actions taken</span>
@@ -127,6 +136,9 @@ export class ActionPointComments extends PaginationMixin(
       </etools-content-panel>
     `;
   }
+
+  @property({type: Object})
+  profile!: GenericObject;
 
   @property({type: String})
   permissionPath!: string;
@@ -180,6 +192,18 @@ export class ActionPointComments extends PaginationMixin(
     comment = linkifyStr(comment);
     comment = comment.trim();
     return comment;
+  }
+
+  showAttachmentWarning(actionPoint: any, profile: any) {
+    if (!actionPoint || !profile) {
+      return false;
+    }
+    return (
+      actionPoint.high_priority &&
+      actionPoint.assigned_to === profile.user &&
+      (actionPoint.comments || []).length &&
+      !(actionPoint.comments || []).some((comm: any) => comm.supporting_document?.id)
+    );
   }
 
   _openAddComment() {
