@@ -13,7 +13,6 @@ import './action-point-details';
 import './action-point-comments';
 import './open-view-history';
 import '../../../common-elements/status-element';
-import './add-verifier-dialog';
 import './verify-dialog';
 import {pageLayoutStyles} from '../../../styles/page-layout-styles';
 import {sharedStyles} from '../../../styles/shared-styles';
@@ -29,6 +28,7 @@ import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
 import {UserControllerMixin} from '../../../mixins/user-controller';
 import {GenericObject} from '@unicef-polymer/etools-types';
 import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
+import {isJsonStrMatch} from '@unicef-polymer/etools-utils/dist/equality-comparisons.util';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends connect(store)(
@@ -100,7 +100,12 @@ export class ActionPointsItem extends connect(store)(
               .originalActionPoint="${this.originalActionPoint}"
               .permissionPath="${this.permissionPath}"
             ></action-point-details>
-            <action-point-comments .actionPoint="${this.actionPoint}" .permissionPath="${this.permissionPath}">
+            <action-point-comments
+              .actionPoint="${this.actionPoint}"
+              .permissionPath="${this.permissionPath}"
+              @data-changed="${({detail}: any) => this.updateActionPointObject(detail)}"
+              @load-options="${() => this._loadOptions(this.actionPointId)}"
+            >
             </action-point-comments>
           </div>
 
@@ -142,26 +147,7 @@ export class ActionPointsItem extends connect(store)(
   }
 
   async _processCompleteAction() {
-    let confirmed = true;
-    let verifierId = null;
-    if (this.actionPoint.high_priority && String(this.profile.user) === String(this.actionPoint.author)) {
-      const resp = await openDialog({
-        dialog: 'add-verifier-dialog',
-        dialogData: {
-          permissionPath: this.permissionPath,
-          actionPoint: this.actionPoint
-        }
-      }).then(({confirmed, response}) => {
-        return {confirmed: confirmed, verifierId: response};
-      });
-      ({confirmed, verifierId} = resp);
-    }
-
-    if (!confirmed) {
-      return;
-    }
-
-    this._complete(verifierId)
+    this._complete()
       .then(() => {
         this._loadOptions(this.actionPointId);
       })
@@ -171,7 +157,9 @@ export class ActionPointsItem extends connect(store)(
   async _processVerifyAction() {
     openDialog({
       dialog: 'verify-dialog',
-      dialogData: {}
+      dialogData: {
+        comments: this.actionPoint.comments
+      }
     }).then(({confirmed, response}) => {
       if (confirmed) {
         this._makeUpdateRequest({is_adequate: response}).then(() => {
@@ -245,6 +233,9 @@ export class ActionPointsItem extends connect(store)(
   }
 
   _loadOptions(id: number) {
+    if (isNaN(Number(id))) {
+      return;
+    }
     const permissionPath = `action_points_${id}`;
     const endpoint = getEndpoint('actionPoint', id);
     return sendRequest({
@@ -281,6 +272,7 @@ export class ActionPointsItem extends connect(store)(
       'section',
       'assigned_to',
       'assigned_by',
+      'potential_verifier',
       'cp_output',
       'author'
     ]);
@@ -345,7 +337,7 @@ export class ActionPointsItem extends connect(store)(
   _getChangedData(oldData: any, newData: any) {
     const obj: any = {};
     Object.keys(newData).forEach((key) => {
-      if (oldData[key] !== newData[key]) {
+      if (!isJsonStrMatch(oldData[key], newData[key])) {
         obj[key] = newData[key];
       }
     });
@@ -358,7 +350,6 @@ export class ActionPointsItem extends connect(store)(
       // @ts-ignore
       return;
     }
-
     const editedData = JSON.parse(JSON.stringify(detailsElement.editedItem));
     const data = this._getChangedData(this.actionPoint, editedData);
     this._makeUpdateRequest(data);
@@ -384,13 +375,11 @@ export class ActionPointsItem extends connect(store)(
         fireEvent(this, 'toast', {
           text: ' Action Point successfully updated.'
         });
-        this.originalActionPoint = JSON.parse(JSON.stringify(data));
-        const apData = this._prepareActionPoint(data);
-        this.actionPoint = apData.data;
-        this.apUnicefUsers = apData.apUnicefUsers;
+        this.updateActionPointObject(data);
         fireEvent(this, 'global-loading', {
           loadingSource: 'ap-update'
         });
+        this._loadOptions(this.actionPoint.id);
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
@@ -398,6 +387,13 @@ export class ActionPointsItem extends connect(store)(
           loadingSource: 'ap-update'
         });
       });
+  }
+
+  updateActionPointObject(data: any) {
+    this.originalActionPoint = JSON.parse(JSON.stringify(data));
+    const apData = this._prepareActionPoint(data);
+    this.actionPoint = apData.data;
+    this.apUnicefUsers = apData.apUnicefUsers;
   }
 
   showHistory() {

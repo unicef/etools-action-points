@@ -21,9 +21,12 @@ import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styl
 import {GenericObject} from '../../../../typings/globals.types';
 import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
+import {UserControllerMixin} from '../../../mixins/user-controller';
 
 @customElement('action-point-details')
-export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(LocalizationMixin(DateMixin(LitElement)))) {
+export class ActionPointDetails extends ComponentBaseMixin(
+  InputAttrsMixin(LocalizationMixin(UserControllerMixin(DateMixin(LitElement))))
+) {
   @property({type: Array}) // notify: true
   partners: any[] = [];
 
@@ -50,6 +53,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
 
   @property({type: Array}) // notify: true
   unicefUsers!: any[];
+
+  @property({type: Object})
+  profile!: GenericObject;
 
   private _apUnicefUsers!: any[];
   @property({type: Array})
@@ -97,6 +103,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
 
   @property({type: Object})
   datepickerModal: any;
+
   render() {
     return html`
       ${pageLayoutStyles} ${sharedStyles} ${tabInputsStyles} ${moduleStyles}
@@ -465,7 +472,7 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('section', this.permissionPath)}"
               @etools-selected-item-changed="${({detail}: CustomEvent) =>
-                this.updateField('section', detail.selectedItem?.id)}"
+                this.updateField('section', detail.selectedItem?.id ? Number(detail.selectedItem.id) : null)}"
             >
             </etools-dropdown>
           </div>
@@ -507,6 +514,40 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               ${this.getLabel('high_priority', this.permissionPath)}</etools-checkbox
             >
           </div>
+
+          <div
+            class="col-md-4 col-12"
+            ?hidden="${!this.showVerifier(
+              this.editedItem?.high_priority,
+              this.editedItem?.author,
+              this.editedItem?.assigned_to
+            )}"
+          >
+            <!-- Selected Verifier -->
+            <etools-dropdown
+              class="validate-input ${this._setRequired('potential_verifier', this.permissionPath)}"
+              .selected="${this.editedItem?.potential_verifier}"
+              label="Assigned Verifier"
+              placeholder="${this.getPlaceholderText('potential_verifier', this.permissionPath, true)}"
+              .options="${this.unicefUsers}"
+              option-label="name"
+              option-value="id"
+              update-selected
+              ?required="${this._setRequired('potential_verifier', this.permissionPath)}"
+              ?readonly="${this.isReadOnly('potential_verifier', this.permissionPath)}"
+              ?invalid="${this.errors.potential_verifier}"
+              .errorMessage="${this.errors.potential_verifier}"
+              @focus=${this._resetFieldError}
+              @click=${this._resetFieldError}
+              allow-outside-scroll
+              dynamic-align
+              ?trigger-value-change-event="${!this.isReadOnly('potential_verifier', this.permissionPath)}"
+              @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                this.updateField('potential_verifier', detail.selectedItem?.id)}"
+            >
+            </etools-dropdown>
+          </div>
+
           <div class="col-md-4 col-12">
             <!-- Due Date -->
             <datepicker-lite
@@ -528,23 +569,6 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
               @date-has-changed="${this._dueDateChanged}"
             >
             </datepicker-lite>
-          </div>
-
-          <div class="col-md-4 col-12" ?hidden="${!this.editedItem.potential_verifier?.id}">
-            <!-- Selected Verifier -->
-            <etools-dropdown
-              class="validate-input ${this._setRequired('potential_verifier', this.permissionPath)}"
-              .selected="${this.editedItem?.potential_verifier?.id}"
-              label="Selected Verifier"
-              placeholder="${this.getPlaceholderText('potential_verifier', this.permissionPath, true)}"
-              .options="${this.unicefUsers}"
-              option-label="name"
-              option-value="id"
-              readonly
-              allow-outside-scroll
-              dynamic-align
-            >
-            </etools-dropdown>
           </div>
 
           <div class="col-md-4 col-12" ?hidden="${!this.editedItem.verified_by}">
@@ -585,6 +609,9 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
     super.connectedCallback();
     document.addEventListener('static-data-loaded', () => this.setData());
     document.addEventListener('locations-loaded', () => this._updateLocations());
+
+    this.profile = this.getUserData();
+
     this.addEventListener('reset-validation', ({detail}: any) => {
       const elements: NodeList = this.shadowRoot!.querySelectorAll('.validate-input');
       elements.forEach((element: GenericObject) => {
@@ -793,6 +820,10 @@ export class ActionPointDetails extends ComponentBaseMixin(InputAttrsMixin(Local
         })) || [];
     }
     return this.cpOutputsData[cpIds];
+  }
+
+  showVerifier(high_priority: boolean, author: string, assigned_to: string) {
+    return high_priority && author === this.profile?.user && assigned_to === this.profile?.user;
   }
 
   _checkAndResetData(intervention: any) {
