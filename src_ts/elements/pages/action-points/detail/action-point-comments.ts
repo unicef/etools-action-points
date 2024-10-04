@@ -10,7 +10,7 @@ import {LocalizationMixin} from '../../../mixins/localization-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles';
-import {noActionsAllowed} from '../../../mixins/permission-controller';
+import {canAddComments} from '../../../mixins/permission-controller';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {DateMixin} from '../../../mixins/date-mixin';
 import './open-add-comments';
@@ -18,6 +18,8 @@ import {OpenAddComments} from './open-add-comments';
 import PaginationMixin from '@unicef-polymer/etools-modules-common/dist/mixins/pagination-mixin';
 import linkifyStr from 'linkify-string';
 import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {GenericObject} from '@unicef-polymer/etools-types';
 
 @customElement('action-point-comments') // Actions Taken
 export class ActionPointComments extends PaginationMixin(
@@ -66,6 +68,11 @@ export class ActionPointComments extends PaginationMixin(
         .layout-horizontal {
           align-items: flex-start;
         }
+        .warning {
+          color: var(--error-color);
+          margin-inline-start: 12px;
+          margin-block-start: 2px;
+        }
       </style>
 
       <etools-media-query
@@ -79,10 +86,13 @@ export class ActionPointComments extends PaginationMixin(
         <div slot="panel-btns">
           <etools-icon-button
             class="panel-button"
-            ?hidden="${this.noActionsAllowed(this.permissionPath)}"
+            ?hidden="${!canAddComments(this.permissionPath)}"
             name="add-box"
             @click="${this._openAddComment}"
           ></etools-icon-button>
+        </div>
+        <div class="warning" ?hidden="${!this.showAttachmentWarning(this.actionPoint, this.profile)}">
+          *At least one attachment is required to complete the high priority Action Point
         </div>
         <div class="comments-list">
           <span ?hidden=${this.filteredComments?.length}>No actions taken</span>
@@ -127,6 +137,9 @@ export class ActionPointComments extends PaginationMixin(
     `;
   }
 
+  @property({type: Object})
+  profile!: GenericObject;
+
   @property({type: String})
   permissionPath!: string;
 
@@ -161,9 +174,6 @@ export class ActionPointComments extends PaginationMixin(
     }
   }
 
-  noActionsAllowed(path: string) {
-    return noActionsAllowed(path);
-  }
   _updateCommentProp() {
     if (this.commentDialog) {
       this.commentDialog.actionPoint = this.actionPoint;
@@ -184,6 +194,18 @@ export class ActionPointComments extends PaginationMixin(
     return comment;
   }
 
+  showAttachmentWarning(actionPoint: any, profile: any) {
+    if (!actionPoint || !profile) {
+      return false;
+    }
+    return (
+      actionPoint.high_priority &&
+      actionPoint.assigned_to === profile.user &&
+      (actionPoint.comments || []).length &&
+      !(actionPoint.comments || []).some((comm: any) => comm.supporting_document?.id)
+    );
+  }
+
   _openAddComment() {
     openDialog({
       dialog: 'open-add-comments',
@@ -199,9 +221,8 @@ export class ActionPointComments extends PaginationMixin(
   }
 
   _newCommentAdded(actionPoint: any) {
-    this.actionPoint.comments = actionPoint.comments;
-    this.actionPoint.history = actionPoint.history;
-    this.actionPoint = {...this.actionPoint};
+    fireEvent(this, 'data-changed', actionPoint);
+    fireEvent(this, 'load-options');
   }
 
   paginatorChanged() {
