@@ -197,9 +197,7 @@ export class ActionPointComments extends PaginationMixin(
   }
 
   _newCommentAdded(actionPoint: any) {
-    this.actionPoint.comments = actionPoint.comments;
-    this.actionPoint.history = actionPoint.history;
-    this.actionPoint = {...this.actionPoint};
+    fireEvent(this, 'data-changed', actionPoint);
     fireEvent(this, 'load-options');
   }
 

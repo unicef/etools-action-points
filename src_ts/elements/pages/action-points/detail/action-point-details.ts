@@ -472,7 +472,7 @@ export class ActionPointDetails extends ComponentBaseMixin(
               dynamic-align
               ?trigger-value-change-event="${!this.isReadOnly('section', this.permissionPath)}"
               @etools-selected-item-changed="${({detail}: CustomEvent) =>
-                this.updateField('section', detail.selectedItem?.id)}"
+                this.updateField('section', detail.selectedItem?.id ? Number(detail.selectedItem.id) : null)}"
             >
             </etools-dropdown>
           </div>

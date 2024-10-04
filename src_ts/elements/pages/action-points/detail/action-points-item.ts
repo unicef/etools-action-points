@@ -28,6 +28,7 @@ import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
 import {UserControllerMixin} from '../../../mixins/user-controller';
 import {GenericObject} from '@unicef-polymer/etools-types';
 import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
+import {isJsonStrMatch} from '@unicef-polymer/etools-utils/dist/equality-comparisons.util';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends connect(store)(
@@ -102,6 +103,7 @@ export class ActionPointsItem extends connect(store)(
             <action-point-comments
               .actionPoint="${this.actionPoint}"
               .permissionPath="${this.permissionPath}"
+              @data-changed="${({detail}: any) => this.updateActionPointObject(detail)}"
               @load-options="${() => this._loadOptions(this.actionPointId)}"
             >
             </action-point-comments>
@@ -335,7 +337,7 @@ export class ActionPointsItem extends connect(store)(
   _getChangedData(oldData: any, newData: any) {
     const obj: any = {};
     Object.keys(newData).forEach((key) => {
-      if (oldData[key] !== newData[key]) {
+      if (!isJsonStrMatch(oldData[key], newData[key])) {
         obj[key] = newData[key];
       }
     });
@@ -373,13 +375,11 @@ export class ActionPointsItem extends connect(store)(
         fireEvent(this, 'toast', {
           text: ' Action Point successfully updated.'
         });
-        this.originalActionPoint = JSON.parse(JSON.stringify(data));
-        const apData = this._prepareActionPoint(data);
-        this.actionPoint = apData.data;
-        this.apUnicefUsers = apData.apUnicefUsers;
+        this.updateActionPointObject(data);
         fireEvent(this, 'global-loading', {
           loadingSource: 'ap-update'
         });
+        this._loadOptions(this.actionPoint.id);
       })
       .catch((err: any) => {
         this.errorHandler(err, this.permissionPath);
@@ -387,6 +387,13 @@ export class ActionPointsItem extends connect(store)(
           loadingSource: 'ap-update'
         });
       });
+  }
+
+  updateActionPointObject(data: any) {
+    this.originalActionPoint = JSON.parse(JSON.stringify(data));
+    const apData = this._prepareActionPoint(data);
+    this.actionPoint = apData.data;
+    this.apUnicefUsers = apData.apUnicefUsers;
   }
 
   showHistory() {

@@ -103,9 +103,10 @@ export class StatusElement extends LitElement {
   }
 
   getActions(path: string) {
+    const actions = getActions(path);
     if (hasVerifyAction(path)) {
-      return ['verify'];
+      actions.push('verify');
     }
-    return getActions(path);
+    return actions;
   }
 }
