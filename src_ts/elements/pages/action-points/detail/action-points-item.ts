@@ -103,6 +103,7 @@ export class ActionPointsItem extends connect(store)(
             <action-point-comments
               .actionPoint="${this.actionPoint}"
               .permissionPath="${this.permissionPath}"
+              .profile="${this.profile}"
               @data-changed="${({detail}: any) => this.updateActionPointObject(detail)}"
               @load-options="${() => this._loadOptions(this.actionPointId)}"
             >
