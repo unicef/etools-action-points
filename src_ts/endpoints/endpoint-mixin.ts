@@ -7,7 +7,7 @@ import * as config from '../config/config';
 
 export const getEndpoint = (endpointName: string, data?: any) => {
   const endpoint = config.epsData[endpointName];
-  // eslint-disable-next-line no-prototype-builtins
+
   if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
     endpoint.url =
       typeof endpoint.template === 'function'

@@ -793,7 +793,7 @@ export class ActionPointDetails extends ComponentBaseMixin(
       }
       this.cpOutputs = await this._getCpOutputs(cpIds.join(','));
       this.interventionRequestInProcess = false;
-    } catch (error) {
+    } catch {
       console.error('Can not load cpOutputs data');
       this._finishCpoRequest();
     }

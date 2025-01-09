@@ -51,7 +51,7 @@ export const tabInputsStyles = html`
         top: -21px;
         width: 100%;
         font-size: var(--etools-font-size-12, 12px);
-      }
+      };
     }
 
     etools-dropdown.no-data-fetched,
@@ -185,7 +185,7 @@ export const tabInputsStyles = html`
         font-size: var(--etools-font-size-16, 16px);
         font-weight: 400;
         line-height: 21px;
-      }
+      };
     }
     etools-currency-amount-input {
       padding: 0 12px;
@@ -197,7 +197,7 @@ export const tabInputsStyles = html`
     etools-currency-amount-input {
       --etools-currency-container-input: {
         line-height: 0;
-      }
+      };
     }
   </style>
 `;
