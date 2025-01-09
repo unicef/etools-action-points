@@ -23,7 +23,6 @@ import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
 import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
 import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
 import {RootState, store} from '../../../../redux/store';
-import get from 'lodash-es/get';
 import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
 import {UserControllerMixin} from '../../../mixins/user-controller';
 import {GenericObject} from '@unicef-polymer/etools-types';
@@ -176,7 +175,7 @@ export class ActionPointsItem extends connect(store)(
   }
 
   stateChanged(state: RootState) {
-    const routeDetails = get(state, 'app.routeDetails');
+    const routeDetails = state?.app?.routeDetails;
     if (!(routeDetails?.routeName === 'action-points' && routeDetails?.subRouteName === 'detail')) {
       return; // Avoid code execution while on a different page
     }
