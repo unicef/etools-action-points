@@ -151,12 +151,11 @@ export class PagesHeaderElement extends MatomoMixin(LitElement) {
                 >
                   <sl-menu>
                     ${this.exportLinks?.map(
-                      (item) =>
-                        html`
-                          <sl-menu-item tracker="Export ${item.name}" @tap="${this.exportData}"
-                            >${item.name}</sl-menu-item
-                          >
-                        `
+                      (item) => html`
+                        <sl-menu-item tracker="Export ${item.name}" @tap="${this.exportData}"
+                          >${item.name}</sl-menu-item
+                        >
+                      `
                     )}
                   </sl-menu>
                 </sl-dropdown>

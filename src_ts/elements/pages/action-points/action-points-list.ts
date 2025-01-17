@@ -32,7 +32,6 @@ import {
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 import {RootState, store} from '../../../redux/store';
 import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
-import get from 'lodash-es/get';
 import {RouteQueryParam} from '@unicef-polymer/etools-types';
 import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
 import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
@@ -614,8 +613,9 @@ export class ActionPointsList extends connect(store)(
   }
 
   stateChanged(state: RootState) {
-    const routeDetails = get(state, 'app.routeDetails');
-    if (!(routeDetails?.routeName === 'action-points' && routeDetails?.subRouteName === 'list')) {
+    if (
+      !(state?.app?.routeDetails?.routeName === 'action-points' && state?.app?.routeDetails?.subRouteName === 'list')
+    ) {
       return; // Avoid code execution while on a different page
     }
     const stateRouteDetails = {...state.app!.routeDetails};

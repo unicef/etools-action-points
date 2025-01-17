@@ -70,7 +70,7 @@ export const mainPageStyles = html`
         height: 4px;
         padding: 2px;
         background-color: var(--module-warning);
-      }
+      };
     }
     etools-content-panel.cancellation-tab .cancellation-title {
       font-weight: 500;
