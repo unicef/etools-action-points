@@ -43,29 +43,20 @@ export const updateStoreRouteDetails: ActionCreator<AppActionUpdateRouteDetails>
   };
 };
 
-const loadPageComponents = (routeDetails: EtoolsRouteDetails) => (_dispatch: any, _getState: any) => {
+const loadPageComponents = (routeDetails: EtoolsRouteDetails) => async (_dispatch: any, _getState: any) => {
   if (!routeDetails) {
     // invalid route => redirect to 404 page
     EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
     return;
   }
 
-  let imported: Promise<any> | undefined;
-  switch (routeDetails.routeName) {
-    case 'action-points':
-      imported = import(`../../elements/pages/action-points/action-points-page-main.js`);
-      break;
-    case 'not-found':
-    default:
-      imported = import(`../../elements/pages/not-found-page-view.js`);
-      break;
-  }
+  const page = routeDetails.routeName;
 
-  if (imported) {
-    imported.then().catch((err) => {
-      console.log(err);
-      EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-    });
+  try {
+    await import(`../../elements/pages/${page}/${page}-page-main.ts`);
+  } catch {
+    console.log(`No file imports configuration found: ${page}!`);
+    EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
   }
 };
 
