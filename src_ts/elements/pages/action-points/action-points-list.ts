@@ -501,8 +501,13 @@ export class ActionPointsList extends connect(store)(
       this.resetPageNumber();
       this.queryParams = Object.assign({}, {page: this.paginator.page, page_size: this.paginator.page_size});
       return;
-    } else if (queryParams.page) {
-      this.paginator.page = Number(queryParams.page);
+    } else if (queryParams.page || queryParams.page_size) {
+      if (queryParams.page) {
+        this.paginator.page = Number(queryParams.page);
+      }
+      if (queryParams.page_size) {
+        this.paginator.page_size = Number(queryParams.page_size);
+      }
     }
 
     if (!this.prevQueryParams || JSON.stringify(queryParams) !== JSON.stringify(this.prevQueryParams)) {
