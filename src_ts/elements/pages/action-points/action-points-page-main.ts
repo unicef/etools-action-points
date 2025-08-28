@@ -30,7 +30,7 @@ export class ActionPointsPageMain extends connect(store)(LitElement) {
   renderPage(view: string) {
     switch (view) {
       case 'new':
-        return html` <action-points-new .route="${this.route}" ?hidden="true"></action-points-new>`;
+        return html` <action-points-new .route="${this.routeData}" ?hidden="true"></action-points-new>`;
       case 'detail':
         return html` <action-points-item .route="${this.routeData}"></action-points-item>`;
       default:

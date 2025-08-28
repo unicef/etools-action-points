@@ -28,6 +28,7 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
         <div id="pageContent">
           <action-point-details
             id="ap-details"
+            .isAdd="${true}"
             .actionPoint="${this.actionPoint}"
             .permissionPath="${this.permissionPath}"
             .apUnicefUsers="${[]}"
@@ -96,14 +97,16 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
         fireEvent(this, 'toast', {
           text: ' Action Point successfully created.'
         });
-        this.route.path = `action-points/detail/${data.id}`;
+
         fireEvent(this, 'global-loading', {
-          loadingSource: 'ap-creation'
+          loadingSource: 'ap-creation',
+          active: false
         });
-        this.route = {...this.route};
-        EtoolsRouter.replaceAppLocation(this.route.path);
+
+        EtoolsRouter.replaceAppLocation(`action-points/detail/${data.id}`);
       })
       .catch((err: any) => {
+        console.log(err);
         this.errorHandler(err, this.permissionPath);
       });
   }
