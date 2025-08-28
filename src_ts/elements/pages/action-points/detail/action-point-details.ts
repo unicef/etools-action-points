@@ -30,6 +30,9 @@ export class ActionPointDetails extends ComponentBaseMixin(
   @property({type: Array}) // notify: true
   partners: any[] = [];
 
+  @property({type: Boolean})
+  isAdd = false;
+
   @property({type: String}) // notify: true
   permissionPath!: string;
 
@@ -392,7 +395,12 @@ export class ActionPointDetails extends ComponentBaseMixin(
               .selected="${this.editedItem?.location}"
               label="${this.getLabel('location', this.permissionPath)}"
               placeholder="${this.getPlaceholderText('location', this.permissionPath, true)}"
-              .options="${this.locations}"
+              .options="${this.locations
+                .filter((x) => !this.isAdd || (this.isAdd && x.is_active))
+                .map((x) => ({
+                  ...x,
+                  disabled: !x.is_active && this.editedItem?.location !== x.id
+                }))}"
               option-label="name"
               option-value="id"
               ?required="${this._setRequired('location', this.permissionPath)}"
