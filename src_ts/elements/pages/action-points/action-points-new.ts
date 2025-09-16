@@ -106,7 +106,10 @@ export class ActionPointsNew extends ErrorHandlerMixin(LitElement) {
         EtoolsRouter.replaceAppLocation(`action-points/detail/${data.id}`);
       })
       .catch((err: any) => {
-        console.log(err);
+        fireEvent(this, 'global-loading', {
+          loadingSource: 'ap-creation',
+          active: false
+        });
         this.errorHandler(err, this.permissionPath);
       });
   }
