@@ -157,9 +157,11 @@ stages:
               displayName: Configure kubeconfig
 
             - script: |
+                IMAGE="$(DOCKER_IMAGE):$(Build.SourceVersion)"
+                echo "Deploying image: $IMAGE"
                 kubectl -n etools-dev \
                   set image deployment/action-points-dev \
-                  action-points-dev=$(DOCKER_IMAGE):$(Build.SourceVersion)
+                  action-points-dev=$IMAGE
               displayName: Deploy application
 
             - script: |
@@ -203,9 +205,11 @@ stages:
               displayName: Configure kubeconfig
 
             - script: |
+                IMAGE="$(DOCKER_IMAGE):$(Build.SourceVersion)"
+                echo "Deploying image: $IMAGE"
                 kubectl -n etools-staging \
                   set image deployment/action-points-staging \
-                  action-points-staging=$(DOCKER_IMAGE):$(Build.SourceVersion)
+                  action-points-staging=$IMAGE
               displayName: Deploy application
 
             - script: |
@@ -252,9 +256,11 @@ stages:
 
             # Deploy sanitized tag (SAFE_BRANCH). For tag-triggered runs, SAFE_BRANCH == sanitized Git tag
             - script: |
+                IMAGE="$(DOCKER_IMAGE):$(SAFE_BRANCH)"
+                echo "Deploying image: $IMAGE"
                 kubectl -n etools-prod \
                   set image deployment/action-points-prod \
-                  action-points-prod=$(DOCKER_IMAGE):$(SAFE_BRANCH)
+                  action-points-prod=$IMAGE
               displayName: Deploy application
 
             - script: |
