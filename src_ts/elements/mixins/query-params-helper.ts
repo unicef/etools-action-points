@@ -1,4 +1,4 @@
-import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
+import {Environment} from '@unicef-polymer/etools-utils/src/singleton/environment';
 
 export const getLocationProperty = (property: string) => {
   // @ts-ignore

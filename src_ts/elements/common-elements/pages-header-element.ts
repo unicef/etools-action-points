@@ -10,8 +10,8 @@ import {sharedStyles} from '../styles/shared-styles';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
-import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/src/matomo-mixin';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 @customElement('pages-header-element')
 export class PagesHeaderElement extends MatomoMixin(LitElement) {

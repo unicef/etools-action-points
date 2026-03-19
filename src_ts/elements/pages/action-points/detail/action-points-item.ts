@@ -19,15 +19,15 @@ import {sharedStyles} from '../../../styles/shared-styles';
 import {mainPageStyles} from '../../../styles/main-page-styles';
 import {moduleStyles} from '../../../styles/module-styles';
 import {ActionPointDetails} from './action-point-details';
-import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
-import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
+import {sendRequest} from '@unicef-polymer/etools-utils/src/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
+import {connect} from '@unicef-polymer/etools-utils/src/pwa.utils';
 import {RootState, store} from '../../../../redux/store';
-import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
+import {debounce} from '@unicef-polymer/etools-utils/src/debouncer.util';
 import {UserControllerMixin} from '../../../mixins/user-controller';
 import {GenericObject} from '@unicef-polymer/etools-types';
-import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
-import {isJsonStrMatch} from '@unicef-polymer/etools-utils/dist/equality-comparisons.util';
+import {openDialog} from '@unicef-polymer/etools-utils/src/dialog.util';
+import {isJsonStrMatch} from '@unicef-polymer/etools-utils/src/equality-comparisons.util';
 
 @customElement('action-points-item')
 export class ActionPointsItem extends connect(store)(

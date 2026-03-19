@@ -4,8 +4,8 @@ import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
 import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
-import {validateRequiredFields} from '@unicef-polymer/etools-modules-common/dist/utils/validation-helper';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {validateRequiredFields} from '@unicef-polymer/etools-modules-common/src/utils/validation-helper';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {getData} from '../../../mixins/static-data-mixin';
 

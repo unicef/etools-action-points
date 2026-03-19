@@ -3,7 +3,7 @@ import {customElement, property, query} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table';
 import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query';
-import {EtoolsDataTableColumn} from '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table-column.js';
+import {EtoolsDataTableColumn} from '@unicef-polymer/etools-unicef/src/etools-data-table/etools-data-table-column';
 import {getEndpoint} from '../../../endpoints/endpoint-mixin';
 import '../../common-elements/pages-header-element';
 import '../../data-elements/action-points-data';
@@ -14,9 +14,9 @@ import {InputAttrsMixin} from '../../mixins/input-attrs-mixin';
 import {updateQueries, clearQueries} from '../../mixins/query-params-helper';
 import '../../common-elements/text-content';
 import {moduleStyles} from '../../styles/module-styles';
-import {sharedStyles} from '@unicef-polymer/etools-modules-common/dist/styles/shared-styles-lit';
+import {sharedStyles} from '@unicef-polymer/etools-modules-common/src/styles/shared-styles-lit';
 import {dataTableStylesLit} from '@unicef-polymer/etools-unicef/src/etools-data-table/styles/data-table-styles';
-import {elevationStyles} from '@unicef-polymer/etools-modules-common/dist/styles/elevation-styles';
+import {elevationStyles} from '@unicef-polymer/etools-modules-common/src/styles/elevation-styles';
 import {noActionsAllowed} from '../../mixins/permission-controller';
 import {GenericObject} from '../../../typings/globals.types';
 import '@unicef-polymer/etools-unicef/src/etools-media-query/etools-media-query.js';
@@ -31,10 +31,10 @@ import {
 } from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
 import {APFilterKeys, getAPFilters, selectedValueTypeByFilterKey} from './action-point-filters';
 import {RootState, store} from '../../../redux/store';
-import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
+import {connect} from '@unicef-polymer/etools-utils/src/pwa.utils';
 import {RouteQueryParam} from '@unicef-polymer/etools-types';
-import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
-import {debounce} from '@unicef-polymer/etools-utils/dist/debouncer.util';
+import {EtoolsRouter} from '@unicef-polymer/etools-utils/src/singleton/router';
+import {debounce} from '@unicef-polymer/etools-utils/src/debouncer.util';
 
 @customElement('action-points-list')
 export class ActionPointsList extends connect(store)(

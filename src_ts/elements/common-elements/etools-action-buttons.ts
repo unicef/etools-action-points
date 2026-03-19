@@ -8,7 +8,7 @@ import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button'
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import {moduleStyles} from '../styles/module-styles';
 import {GenericObject} from '../../typings/globals.types';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 @customElement('etools-action-button')
 export class EtoolsActionButton extends LitElement {

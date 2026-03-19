@@ -2,8 +2,8 @@ import {LitElement} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint, resetOldUserData} from '../../endpoints/endpoint-mixin';
-import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {sendRequest} from '@unicef-polymer/etools-utils/src/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 @customElement('user-data')
 export class UserData extends UserControllerMixin(LitElement) {

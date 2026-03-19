@@ -5,8 +5,8 @@ import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import './side-bar-item';
 import {moduleStyles} from '../styles/module-styles';
 import {navMenuStyles} from '../styles/nav-menu-styles';
-import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/src/matomo-mixin';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 import {SMALL_MENU_ACTIVE_LOCALSTORAGE_KEY} from '../../config/config';
 
 /**

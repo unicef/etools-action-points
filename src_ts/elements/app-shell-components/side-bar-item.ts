@@ -5,7 +5,7 @@ import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import {moduleStyles} from '../styles/module-styles';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 @customElement('side-bar-item')
 export class SideBarItem extends LitElement {

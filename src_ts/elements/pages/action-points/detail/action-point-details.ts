@@ -19,8 +19,8 @@ import {tabInputsStyles} from '../../../styles/tab-inputs-styles';
 import {moduleStyles} from '../../../styles/module-styles';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {GenericObject} from '../../../../typings/globals.types';
-import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/dist/mixins/component-base-mixin';
+import {sendRequest} from '@unicef-polymer/etools-utils/src/etools-ajax';
+import ComponentBaseMixin from '@unicef-polymer/etools-modules-common/src/mixins/component-base-mixin';
 import {UserControllerMixin} from '../../../mixins/user-controller';
 
 @customElement('action-point-details')

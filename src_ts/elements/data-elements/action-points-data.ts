@@ -3,8 +3,8 @@ import {customElement, property} from 'lit/decorators.js';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import {getQueriesString} from '../mixins/query-params-helper';
 import {ErrorHandlerMixin} from '../mixins/error-handler-mixin';
-import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {sendRequest} from '@unicef-polymer/etools-utils/src/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 @customElement('action-points-data')
 export class ActionPointsData extends ErrorHandlerMixin(LitElement) {

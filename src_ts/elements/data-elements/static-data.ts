@@ -7,8 +7,8 @@ import {UserControllerMixin} from '../mixins/user-controller';
 import {getEndpoint} from '../../endpoints/endpoint-mixin';
 import './user-data';
 import {GenericObject} from '../../typings/globals.types';
-import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {sendRequest} from '@unicef-polymer/etools-utils/src/etools-ajax';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 /**
  * @customElement

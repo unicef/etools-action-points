@@ -1,4 +1,4 @@
-import {AnyObject} from '@unicef-polymer/etools-types/dist/global.types';
+import {AnyObject} from '@unicef-polymer/etools-types/src/global.types';
 import {setselectedValueTypeByFilterKey} from '@unicef-polymer/etools-unicef/src/etools-filters/filters';
 import {EtoolsFilterTypes} from '@unicef-polymer/etools-unicef/src/etools-filters/etools-filters';
 

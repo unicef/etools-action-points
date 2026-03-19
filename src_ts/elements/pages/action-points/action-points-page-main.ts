@@ -1,9 +1,9 @@
 import {LitElement, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
-import {connect} from '@unicef-polymer/etools-utils/dist/pwa.utils';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
+import {connect} from '@unicef-polymer/etools-utils/src/pwa.utils';
 import {RootState, store} from '../../../redux/store';
-import {isJsonStrMatch} from '@unicef-polymer/etools-utils/dist/equality-comparisons.util';
+import {isJsonStrMatch} from '@unicef-polymer/etools-utils/src/equality-comparisons.util';
 
 @customElement('action-points-page-main')
 export class ActionPointsPageMain extends connect(store)(LitElement) {

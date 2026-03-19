@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import {createStore, compose, applyMiddleware, combineReducers, Reducer, StoreEnhancer} from 'redux';
 import thunk, {ThunkMiddleware} from 'redux-thunk';
-import {lazyReducerEnhancer} from '@unicef-polymer/etools-utils/dist/pwa.utils';
+import {lazyReducerEnhancer} from '@unicef-polymer/etools-utils/src/pwa.utils';
 
 import app, {AppState} from './reducers/app.js';
 import {AppAction} from './actions/app';

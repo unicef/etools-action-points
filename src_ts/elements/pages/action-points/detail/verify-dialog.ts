@@ -5,7 +5,7 @@ import '@unicef-polymer/etools-unicef/src/etools-radio/etools-radio-group';
 import '@shoelace-style/shoelace/dist/components/radio/radio.js';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 
 @customElement('verify-dialog')

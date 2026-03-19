@@ -3,13 +3,13 @@ import {customElement, property} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
 import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload';
-import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax/ajax-request';
+import {sendRequest} from '@unicef-polymer/etools-utils/src/etools-ajax/ajax-request';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 import {getEndpoint} from '../../../../endpoints/endpoint-mixin';
 import {ErrorHandlerMixin} from '../../../mixins/error-handler-mixin';
 import {InputAttrsMixin} from '../../../mixins/input-attrs-mixin';
 import {GenericObject} from '../../../../typings/globals.types';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 import apdEndpoints from '../../../../endpoints/endpoints';
 
 @customElement('open-add-comments')

@@ -17,8 +17,8 @@ import './open-add-comments';
 import {OpenAddComments} from './open-add-comments';
 import PaginationMixin from '@unicef-polymer/etools-unicef/src/mixins/pagination-mixin';
 import linkifyStr from 'linkify-string';
-import {openDialog} from '@unicef-polymer/etools-utils/dist/dialog.util';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {openDialog} from '@unicef-polymer/etools-utils/src/dialog.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 import {GenericObject} from '@unicef-polymer/etools-types';
 
 @customElement('action-point-comments') // Actions Taken

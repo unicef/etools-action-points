@@ -11,11 +11,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import {Action, ActionCreator} from 'redux';
 import {UPDATE_ROUTE_DETAILS} from './actionsConstants';
 export const RESET_CURRENT_ITEM = 'RESET_CURRENT_ITEM';
-import {isJsonStrMatch} from '@unicef-polymer/etools-utils/dist/equality-comparisons.util';
-import {EtoolsRouter} from '@unicef-polymer/etools-utils/dist/singleton/router';
-import {EtoolsRedirectPath} from '@unicef-polymer/etools-utils/dist/enums/router.enum';
-import {EtoolsRouteDetails} from '@unicef-polymer/etools-utils/dist/interfaces/router.interfaces';
-import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
+import {isJsonStrMatch} from '@unicef-polymer/etools-utils/src/equality-comparisons.util';
+import {EtoolsRouter} from '@unicef-polymer/etools-utils/src/singleton/router';
+import {EtoolsRedirectPath} from '@unicef-polymer/etools-utils/src/enums/router.enum';
+import {EtoolsRouteDetails} from '@unicef-polymer/etools-utils/src/interfaces/router.interfaces';
+import {Environment} from '@unicef-polymer/etools-utils/src/singleton/environment';
 
 export interface AppActionUpdateDrawerState extends Action<'UPDATE_DRAWER_STATE'> {
   opened: boolean;

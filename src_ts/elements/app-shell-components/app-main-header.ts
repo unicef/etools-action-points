@@ -5,18 +5,18 @@ import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button'
 import '@unicef-polymer/etools-unicef/src/etools-app-selector/etools-app-selector';
 import '@unicef-polymer/etools-unicef/src/etools-profile-dropdown/etools-profile-dropdown';
 import '@unicef-polymer/etools-unicef/src/etools-accesibility/etools-accesibility';
-import '@unicef-polymer/etools-modules-common/dist/components/dropdowns/countries-dropdown';
-import '@unicef-polymer/etools-modules-common/dist/components/dropdowns/organizations-dropdown';
-import '@unicef-polymer/etools-modules-common/dist/components/buttons/support-button';
+import '@unicef-polymer/etools-modules-common/src/components/dropdowns/countries-dropdown';
+import '@unicef-polymer/etools-modules-common/src/components/dropdowns/organizations-dropdown';
+import '@unicef-polymer/etools-modules-common/src/components/buttons/support-button';
 import {resetOldUserData} from '../../endpoints/endpoint-mixin';
 import {sharedStyles} from '../styles/shared-styles';
 import {GenericObject} from '../../typings/globals.types';
-import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/matomo-mixin';
-import {DexieRefresh} from '@unicef-polymer/etools-utils/dist/singleton/dexie-refresh';
+import MatomoMixin from '@unicef-polymer/etools-piwik-analytics/src/matomo-mixin';
+import {DexieRefresh} from '@unicef-polymer/etools-utils/src/singleton/dexie-refresh';
 import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 import apdEndpoints from '../../endpoints/endpoints';
-import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
+import {Environment} from '@unicef-polymer/etools-utils/src/singleton/environment';
 
 /**
  * @customElement

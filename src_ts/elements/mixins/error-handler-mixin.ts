@@ -1,7 +1,7 @@
 import {getFieldAttribute} from './permission-controller.js';
 import {Constructor} from '../../typings/globals.types.js';
 import {LitElement} from 'lit';
-import {fireEvent} from '@unicef-polymer/etools-utils/dist/fire-event.util.js';
+import {fireEvent} from '@unicef-polymer/etools-utils/src/fire-event.util';
 
 /**
  * Mixin error handling
